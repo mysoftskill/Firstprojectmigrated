@@ -1,0 +1,98 @@
+#################################################################################
+#                        OneBranch Pipelines - Buddy                            #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger:
+  branches:
+    include:
+    - develop
+  paths:
+    include:
+    - /*
+    - src/PXS/Product/Contracts/PCFContracts/*
+    exclude:
+    - src/PAF/*
+    - src/PCD/*
+    - src/PDMS/*
+    - src/PXS/*
+    - src/NGPProxy/*
+
+parameters:
+- name: debug
+  displayName: Enable debug output
+  type: boolean
+  default: false
+
+variables:
+- template: variables.yml
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates
+  parameters:
+    featureFlags:
+      ensureArtifactsDirExists: true
+    cloudvault:
+      enabled: true
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      sbom:
+        enabled: true
+      antimalwareScan:
+        enabled: false
+      binskim:
+        enabled: true
+        break: true
+        analyzeTargetGlob: 
+          '+:file|**\Microsoft.PrivacyServices*.exe;+:file|**\Microsoft.PrivacyServices*.dll;+:file|**\Pcf*.exe;+:file|**\Pcf*.dll;+:file|**\Microsoft.Azure.ComplianceServices*.exe;+:file|**\Microsoft.Azure.ComplianceServices*.dll;+:file|**\PrivacyCommand*.exe;+:file|**\PrivacyCommand*.dll;+:file|**\CertInstaller*.exe;+:file|**\CertInstaller*.dll'
+      credscan:
+        enabled: true
+        suppressionsFile: $(CREDSCAN_SUPPRESSIONFILE)
+      policheck:
+        enabled: false
+      tsa:
+        enabled: false
+        configFile: $(TSA_CONFIGFILE)
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows 
+        variables:
+          ob_outputDirectory: $(PCFOutputDirectory)
+          ob_sdl_binskim_break: true
+
+        steps:
+          - template: .pipelines/HelperTemplates/version.restore.build.test.yml@self
+            parameters:
+              buildConfiguration: Release
+              productName: PCF
+              pathToRestore: $(PCFSolution)
+              passedBuildParameters: "-p:CompileTestHooks=true"
+
+          - task: CmdLine@2
+            displayName: Restore packages for OpenApi generator
+            inputs:
+              script: $(Build.SourcesDirectory)\.build\restoreopenapi.cmd
+
+          - task: CmdLine@2
+            displayName: Build OpenApi
+            inputs:
+              script: $(Build.SourcesDirectory)\.build\buildopenapi.cmd Debug
+            env: 
+              CDP_BUILD_TAG: PCF
+
+          - template: .pipelines/HelperTemplates/pcf.package.yml@self

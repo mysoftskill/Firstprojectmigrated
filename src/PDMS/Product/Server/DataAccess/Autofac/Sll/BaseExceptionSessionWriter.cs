@@ -1,0 +1,44 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.DataAccess.Autofac.Sll
+{
+    using Microsoft.PrivacyServices.DataManagement.Client;
+    using Microsoft.PrivacyServices.DataManagement.Common.Configuration;
+    using Microsoft.PrivacyServices.DataManagement.Common.Instrumentation;
+    using Microsoft.Telemetry;
+
+    /// <summary>
+    /// Converts document client exception data into SLL events.
+    /// </summary>
+    public class BaseExceptionSessionWriter : BaseSessionWriter<BaseException>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseExceptionSessionWriter" /> class.
+        /// </summary>
+        /// <param name="log">The log object.</param>
+        /// <param name="properties">The session properties.</param>
+        public BaseExceptionSessionWriter(ILogger<Base> log, SessionProperties properties) : base(log, properties)
+        {
+        }
+
+        /// <summary>
+        /// Converts the response into an SLL event and logs it.
+        /// All sessions with a resource response will be success events.
+        /// </summary>
+        /// <param name="status">The parameter is not used.</param>
+        /// <param name="name">The name of the session.</param>
+        /// <param name="totalMilliseconds">The duration of the request.</param>
+        /// <param name="cv">The snapped CV value when the session was started.</param>
+        /// <param name="data">The data to convert.</param>
+        public override void WriteDone(SessionStatus status, string name, long totalMilliseconds, string cv, BaseException data)
+        {
+            var sllEvent = new IHttpResultEvent();
+            sllEvent.baseData.requestMethod = data.Result.RequestMethod.ToString();
+            sllEvent.baseData.targetUri = data.Result.RequestUrl;
+            sllEvent.requestBody = data.Result.RequestBody;
+            sllEvent.responseBody = data.Result.ResponseContent;
+
+            status = data is CallerError ? SessionStatus.Error : SessionStatus.Fault;
+
+            this.LogOutGoingEvent(sllEvent, status, $"{name}.{data.Result.OperationName}", data.Result.DurationMilliseconds, cv, data.Code);
+        }
+    }
+}

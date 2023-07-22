@@ -1,0 +1,12 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IKustoClientConfig 
+{
+    1   :   required    string          ClientId;
+    2   :   required    string          KeyVaultCertificateName;
+    3   :   required    string          Authority;
+    4   :   required    string          KustoCluster;
+    5   :   required    string          KustoDatabase;
+    6   :   required    string          KustoFunctionPendingCommands;
+    7   :   required    string          KustoFunctionListNGPAssetsAndAgents;
+};

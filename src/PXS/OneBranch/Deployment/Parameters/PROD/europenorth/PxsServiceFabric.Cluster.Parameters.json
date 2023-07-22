@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "northeurope"
+    },
+    "keyVaultManagedIdentityName": {
+      "value": "ADG-CS-PROD-UAMI"
+    },
+    "uamiResourceGroup": {
+      "value": "ADG-CS-USWEST-RG"
+    },
+    "clusterName": {
+      "value": "pxsprod"
+    },
+    "certificateCommonName": {
+      "value": "adg-cs.cluster.prod.microsoft.com"
+    },
+    "adminUserName": {
+      "value": "a803b4a25de1415fae6"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/4e261d67-9395-4cec-a519-14053c4765e3/resourceGroups/ADG-CS-PROD-RG/providers/Microsoft.KeyVault/vaults/ADG-CS-PROD-KV"
+        },
+        "secretName": "AdminPassword"
+      }
+    },
+    "durabilityLevel": {
+      "value": "Silver"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
+    },
+    "vmImageSku": {
+      "value": "2022-datacenter"
+    },
+    "maxBatchInstancePercent": {
+      "value": 20
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2_V2"
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType1Size": {
+      "value": "Standard_D11_v2"
+    },
+    "kvvmextPollingInterval": {
+      "value": "3600"
+    },
+    "kvvmextObservedCertificates": {
+      "value": [
+        "https://adg-cs-europenorth-kv.vault.azure.net/secrets/cluster",
+        "https://adg-cs-europenorth-kv.vault.azure.net/secrets/geneva"
+      ]
+    },
+    "allowedApplicationOutboundPorts": {
+      "value": [
+        "80",
+        "443"
+      ]
+    },
+    "monitoringTenant": {
+      "value": "ADGCS"
+    },
+    "monitoringRoleForNodeType1": {
+      "value": "PXS.Frontdoor"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>PDMS.DataGridService</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.DataGridService</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Library</OutputType>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\$(Platform)\Pdms.DataGridService.xml</DocumentationFile>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="DataGrid.Discovery.DiscoveryClient" />
+    <PackageReference Include="Elasticsearch.Net" />
+    <PackageReference Include="Microsoft.PrivacyServices.DataManagement.Models" />
+    <PackageReference Include="Microsoft.PrivacyServices.Identity" />
+    <!-- Newtonsoft.Json < v13.0.1 has a security issue. Enforcing versioning for the dependency here -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.Membership.MemberServices.AzureInfraCommon</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.AzureInfraCommon</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" /> 
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

@@ -1,0 +1,23 @@
+<main data-grid="col-12 pad-6x stack-2" class="app-content">
+    <div data-grid="col-8" class="left-content-pane">
+        <div data-grid="col-12">
+            <ng-transclude ng-transclude-slot="heading">
+            </ng-transclude>
+        </div>
+
+        <div class="pcd-default-page-layout-lede">
+            <ng-transclude ng-transclude-slot="lede">
+            </ng-transclude>
+        </div>
+
+        <div class="pcd-default-page-layout-content">
+            <ng-transclude ng-transclude-slot="content">
+            </ng-transclude>
+        </div>
+    </div>
+
+    <div data-grid="col-4" class="right-content-pane">
+        <ng-transclude ng-transclude-slot="sidebar">
+        </ng-transclude>
+    </div>
+</main>

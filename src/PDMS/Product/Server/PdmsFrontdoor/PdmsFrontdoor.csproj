@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>PdmsFrontdoor</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.Frontdoor</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Exe</OutputType>
+    <OutputPath>$(OutputPath)\..\ServiceFabricRelease\$(MSBuildProjectName)</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\$(Platform)\PdmsFrontdoor.xml</DocumentationFile>
+    <SignAssembly>false</SignAssembly>
+    <FlattenIniOneboxUnderVisualStudio>True</FlattenIniOneboxUnderVisualStudio>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="WebApi\Metadata\OpenApi.xml" />
+    <None Remove="WebApi\Metadata\Operations_V2.xml" />
+    <None Remove="WebApi\Metadata\Probe.xml" />
+    <None Remove="WebApi\Microsoft.PrivacyServices.DataManagement.Frontdoor.WebApi.AccessList.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Common\Owin\NoSniffXContentTypeOptionsMiddleware.cs" Link="Owin\NoSniffXContentTypeOptionsMiddleware.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebApi\Microsoft.PrivacyServices.DataManagement.Frontdoor.WebApi.AccessList.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebApi\Metadata\Operations_V2.xml" />
+    <EmbeddedResource Include="WebApi\Metadata\OpenApi.xml" />
+    <EmbeddedResource Include="WebApi\Metadata\Probe.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Autofac.Owin" />
+    <PackageReference Include="Autofac.WebApi2" />
+    <PackageReference Include="Autofac.WebApi2.Owin" />
+    <PackageReference Include="Microsoft.AspNet.OData" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Core" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" />
+    <PackageReference Include="Microsoft.Owin.Hosting" />
+    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="WebApiThrottle" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="OpenApiDocument.OpenApi3_0.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Import Project="$(ServiceRoot)\Build\core.common.targets" />
+  <Import Project="$(ServiceRoot)\Build\flattenini_onebox.targets" />
+</Project>

@@ -1,0 +1,85 @@
+// This query computes the Cosmos pending deletes rolled up at the division/organization level. The output includes ServiceTree org
+// structure for grouping.
+//
+// Date Constants
+let reportdate = toscalar(CosmosPendingDeletesFullRollupByDayHistory | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+//
+// Info on production agents
+let AgentOwnerInfo = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+    | where AgentReadiness == "ProdReady" // Filters to only ProdReady agents
+    | project AgentId, DivisionName, OrganizationName, DivisionOwner=tostring(split(DivisionOwners, ";")[0]), OrganizationOwner=tostring(split(OrganizationOwners, ";")[0]), GC, Email, AliasDict=toscalar(cluster("Ngpreporting").database('NgpInfo').GetNameByAlias())
+    | project AgentId, DivisionName, OrganizationName, DivisionOwner, GC, Email, DivLookup=AliasDict[DivisionOwner], OrganizationOwner, OrgLookup=AliasDict[OrganizationOwner]
+    | project AgentId, DivisionName=iif(DivisionName == "", "Unknown", DivisionName), OrganizationName=iif(OrganizationName == "", "Unknown", OrganizationName), GC, Email, DivisionVP=iif(DivLookup != "", DivLookup, DivisionOwner),OrganizationLeader=iif(OrgLookup != "", OrgLookup, OrganizationOwner)
+); 
+// Cosmos pending deletes data
+let AgentLevelData = materialize
+( 
+    CosmosPendingDeletesFullRollupByDayHistory 
+	| join kind=rightouter AgentOwnerInfo on AgentId 
+	| where SQLizerStreamDateId == reportdate
+	| where DivisionName != ""
+);
+// Total rollup
+let Total = materialize
+(
+    AgentLevelData
+    | summarize 
+        CommandsNeverCompleted=sum(PendingCount), 
+        AgentCount=countif(AgentId != "")
+    | project 
+        DisplayName = "Total", 
+        SortName = "z", 
+        AgentCount, 
+        CommandsNeverCompleted
+);
+// Division rollup
+let ByDivision = materialize
+(
+    AgentLevelData
+    | summarize 
+        CommandsNeverCompleted=sum(PendingCount), 
+        AgentCount=countif(AgentId != "") 
+        by DivisionName, DivisionVP
+    | project 
+        DisplayName = DivisionName, 
+        SortName = strcat(DivisionName, "."),
+        AgentCount, 
+        CommandsNeverCompleted, 
+        DivisionVP
+);
+// Org rollup
+let ByOrg = materialize
+(   
+    AgentLevelData
+    | summarize 
+        CommandsNeverCompleted=sum(PendingCount), 
+        AgentCount=countif(AgentId != "") 
+        by DivisionName, OrganizationName, GC, Email, OrganizationLeader
+    | project 
+        DisplayName = strcat("    ", OrganizationName), 
+        SortName = strcat(DivisionName, ".", OrganizationName), 
+        AgentCount, 
+        CommandsNeverCompleted,
+        GC,
+		Email,		
+        OrganizationLeader
+);
+// Report summary
+Total
+| union ByDivision 
+| union ByOrg 
+| order by SortName asc
+| project 
+    DisplayName, 
+    AgentCount,
+    CommandsNeverCompleted = iif(CommandsNeverCompleted >= 1000000000000, strcat(toint(round(CommandsNeverCompleted/1000000000000.0)), "T"),
+                             iif(CommandsNeverCompleted >= 1000000000, strcat(toint(round(CommandsNeverCompleted/1000000000.0)), "B"), 
+                             iif(CommandsNeverCompleted >= 1000000, strcat(toint(round(CommandsNeverCompleted/1000000.0)), "M"), 
+                             iif(CommandsNeverCompleted >= 1000, strcat(toint(round(CommandsNeverCompleted/1000.0)), "K"), tostring(CommandsNeverCompleted))))),
+    GC,
+	GCEmail = Email,
+	DivisionVP,
+	OrganizationLeader

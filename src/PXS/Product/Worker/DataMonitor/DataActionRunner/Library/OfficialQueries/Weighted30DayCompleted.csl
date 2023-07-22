@@ -1,0 +1,31 @@
+// Date Constants
+let reportdate = toscalar(CosmosAgentHealthFullRollupByDayHistory | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+let startdate = datetime_add('day', -30, reportdate);
+let enddate = datetime_add('day', -1, reportdate);
+// Agent Level information
+let NonCosmosAgents = NonCosmosAgentHealthFullRollupByDayHistory
+    | where SQLizerStreamDateId == reportdate
+    | where startofday(DeleteRequestDate) between (startdate..enddate)
+    | summarize Pending=sum(PendingDeleteWithinSLACount + PendingDeleteOutOfSLACount), Acknowledged=sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount) by AgentId, SignalDate=startofday(DeleteRequestDate), SQLizerStreamDateId
+    | project AgentId, SignalDate, Pending, Acknowledged, Total=Pending+Acknowledged, Age=toreal(datetime_diff("Day", SQLizerStreamDateId, SignalDate))
+    | project AgentId, SignalDate, Acknowledged, Total, Age, Weight=exp(Age/2)
+    | project AgentId, SignalDate, WeightedAcknowledged=toreal(Acknowledged)*Weight, WeightedTotal=toreal(Total)*Weight
+    | summarize WeightedAcknowledged=sum(WeightedAcknowledged), WeightedTotal=sum(WeightedTotal) by AgentId
+    | project AgentId, WeightedAcknowledged, WeightedTotal, WeightedAverage=WeightedAcknowledged / WeightedTotal*100;
+let CosmosAgents = CosmosAgentHealthFullRollupByDayHistory
+    | where SQLizerStreamDateId == reportdate
+    | where startofday(SignalDate) between (startdate..enddate)
+    // Acknowledged includes operations that apply to streams that have been deleted or that have been reported as empty
+    | summarize Pending=sum(PendingDeleteWithinSLACount + PendingDeleteOutOfSLACount + IntermediateEngineeringGT30DaysPendingCount), Acknowledged=sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount + DeletedStreamsRequestCount + EmptyStreamsRequestCount) by AgentId, startofday(SignalDate), SQLizerStreamDateId
+    | project AgentId, SignalDate, Pending, Acknowledged, Total=Pending+Acknowledged, Age=toreal(datetime_diff("Day", SQLizerStreamDateId, SignalDate))
+    | project AgentId, SignalDate, Acknowledged, Total, Age, Weight=exp(Age/2)
+    | project AgentId, SignalDate, WeightedAcknowledged=toreal(Acknowledged)*Weight, WeightedTotal=toreal(Total)*Weight
+    | summarize WeightedAcknowledged=sum(WeightedAcknowledged), WeightedTotal=sum(WeightedTotal) by AgentId
+    | project AgentId, WeightedAcknowledged, WeightedTotal, WeightedAverage=WeightedAcknowledged / WeightedTotal*100;
+NonCosmosAgents
+| union CosmosAgents
+| join kind=inner cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo() on AgentId
+| project DivisionName, OrganizationName, ServiceGroupName, ServiceName, AgentName, AgentId, WeightedAcknowledged, WeightedTotal, WeightedAverage, Protocol, AgentReadiness, GC, GCEmail=Email
+
+

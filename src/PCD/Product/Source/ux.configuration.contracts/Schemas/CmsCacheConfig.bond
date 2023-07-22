@@ -1,0 +1,18 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct ICmsCacheConfig
+{
+	10: required string Name;
+
+	20: required uint32 MemoryLimitMegaBytes;
+
+	30: required uint32 PhysicalMemoryLimitPercentage;
+
+	40: required string PollingIntervalTimeSpan;
+
+	50: required bool ExecuteSourceGetterInBackground;
+
+	60: required bool PersistOnFailures;
+
+	70: required bool AlwaysRefreshOnHit;
+}

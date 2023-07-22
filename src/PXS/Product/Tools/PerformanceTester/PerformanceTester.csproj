@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).Tools.PerformanceTester</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).Tools.PerformanceTester</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

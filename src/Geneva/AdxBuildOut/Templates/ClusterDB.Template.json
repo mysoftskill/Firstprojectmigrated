@@ -1,0 +1,233 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "defaultValue": "f3101802-8c4f-4e6e-819c-a3b5794d33dd",
+            "type": "String"
+        },
+        "resourceGroup": {
+            "defaultValue": "adxBuildOut",
+            "type": "String"
+        },
+        "clusterName": {
+            "defaultValue": "AdxCluster",
+            "type": "String"
+        },
+        "databaseNameNonProd": {
+            "defaultValue": "AdxCluster",
+            "type": "String"
+        },
+        "databaseNameProd": {
+            "defaultValue": "AdxCluster",
+            "type": "String"
+        },
+        "clusterLocation": {
+            "defaultValue": "North Europe",
+            "type": "String"
+        },
+        "principalIdForCluster": {
+            "type": "string",
+            "defaultValue": "e0331ea9-83fc-4409-a17d-6375364c3280",
+            "metadata": {
+                "description": "Specifies the id of the principal assignment"
+            }
+        },
+        "clusterPrincipalAssignmentName": {
+            "type": "string",
+            "defaultValue": "principalAssignment1",
+            "metadata": {
+                "description": "Specifies the name of the principal assignment"
+            }
+        },
+        "roleForClusterPrincipal": {
+            "type": "string",
+            "defaultValue": "AllDatabasesViewer",
+            "metadata": {
+                "description": "Specifies the cluster principal role. It can be 'AllDatabasesAdmin', 'AllDatabasesViewer'"
+            }
+        },
+        "tenantIdForClusterPrincipal": {
+            "type": "string",
+            "defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+            "metadata": {
+                "description": "Specifies the tenantId of the principal"
+            }
+        },
+        "principalTypeForCluster": {
+            "type": "string",
+            "defaultValue": "App",
+            "metadata": {
+                "description": "Specifies the principal type. It can be 'User', 'App', 'Group'"
+            }
+        },
+        "dataScanPrincipalIdForCluster": {
+            "type": "string",
+            "defaultValue": "e0331ea9-83fc-4409-a17d-6375364c3280",
+            "metadata": {
+                "description": "Specifies the id of the principal assignment"
+            }
+        },
+        "dataScanclusterPrincipalAssignmentName": {
+            "type": "string",
+            "defaultValue": "DataScanprincipalAssignment",
+            "metadata": {
+                "description": "Specifies the name of the principal assignment"
+            }
+        },
+        "dataScanRoleForClusterPrincipal": {
+            "type": "string",
+            "defaultValue": "AllDatabasesViewer",
+            "metadata": {
+                "description": "Specifies the cluster principal role. It can be 'AllDatabasesAdmin', 'AllDatabasesViewer'"
+            }
+        },
+        "dataScanTenantIdForClusterPrincipal": {
+            "type": "string",
+            "defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+            "metadata": {
+                "description": "Specifies the tenantId of the principal"
+            }
+        },
+        "dataScanPrincipalTypeForCluster": {
+            "type": "string",
+            "defaultValue": "App",
+            "metadata": {
+                "description": "Specifies the principal type. It can be 'User', 'App', 'Group'"
+            }
+        },
+        "clusterInstanceCount": {
+            "type": "string",
+            "defaultValue": "12",
+            "metadata": {
+                "description": "Number of instances to create"
+            }
+        },
+        "clusterInstanceSku": {
+            "type": "string",
+            "defaultValue": "Standard_D14_v2",
+            "metadata": {
+                "description": "SKU of instances to create"
+            }
+        },
+        "genevaEnvironment": {
+            "type": "string",
+            "defaultValue": "DiagnosticsProd",
+            "metadata": {
+                "description": "Specifies the Geneva Environment"
+            }
+        },
+        "mdsAccounts": {
+            "type": "array",
+            "defaultValue": ["ADGCSNonProdWarmPath", "ADGComplianceServices"],
+            "metadata": {
+                "description": "MDS accounts array"
+            }
+        },
+        "genevaConnectionName": {
+            "type": "string",
+            "defaultValue": "genevaConnectionName1",
+            "metadata": {
+                "description": "Specifies the Geneva data connection name"
+            }
+        },
+        "dataScanOptOut": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies if to opt out from datascan"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Kusto/Clusters",
+            "apiVersion": "2019-11-09",
+            "name": "[parameters('clusterName')]",
+            "location": "[parameters('clusterLocation')]",
+            "sku": {
+                "name": "[parameters('clusterInstanceSku')]",
+                "tier": "Standard",
+                "capacity": "[parameters('clusterInstanceCount')]"
+            },
+            "properties": {
+                "trustedExternalTenants": []
+            },
+            "tags": {
+                "DataMap.DataScan.OptOut": "[parameters('dataScanOptOut')]"
+            }
+        },
+        {
+            "type": "Microsoft.Kusto/Clusters/Databases",
+            "apiVersion": "2019-11-09",			
+            "name": "[concat(parameters('clusterName'), '/', parameters('databaseNameNonProd'))]",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Kusto/Clusters', parameters('clusterName'))]"
+            ],
+            "kind": "ReadWrite",
+            "properties": {
+                "softDeletePeriod": "P3650D",
+                "hotCachePeriod": "P31D"
+            }
+        },
+        {
+            "type": "Microsoft.Kusto/Clusters/Databases",
+            "apiVersion": "2019-11-09",			
+            "name": "[concat(parameters('clusterName'), '/', parameters('databaseNameProd'))]",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Kusto/Clusters', parameters('clusterName'))]"
+            ],
+            "kind": "ReadWrite",
+            "properties": {
+                "softDeletePeriod": "P30D",
+                "hotCachePeriod": "P7D"
+            }
+        },
+        {
+            "type": "Microsoft.Kusto/Clusters/principalAssignments",
+            "apiVersion": "2019-11-09",
+            "name": "[concat(parameters('clusterName'), '/', parameters('clusterPrincipalAssignmentName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Kusto/Clusters', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "principalId": "[parameters('principalIdForCluster')]",
+                "role": "[parameters('roleForClusterPrincipal')]",
+                "tenantId": "[parameters('tenantIdForClusterPrincipal')]",
+                "principalType": "[parameters('principalTypeForCluster')]"
+            }
+        },
+        {
+            "type": "Microsoft.Kusto/Clusters/principalAssignments",
+            "apiVersion": "2019-11-09",
+            "name": "[concat(parameters('clusterName'), '/', parameters('dataScanclusterPrincipalAssignmentName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Kusto/Clusters', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "principalId": "[parameters('dataScanPrincipalIdForCluster')]",
+                "role": "[parameters('dataScanRoleForClusterPrincipal')]",
+                "tenantId": "[parameters('dataScanTenantIdForClusterPrincipal')]",
+                "principalType": "[parameters('dataScanPrincipalTypeForCluster')]"
+            }
+        },
+        {
+            "name": "[concat(parameters('clusterName'), '/', parameters('genevaConnectionName'))]",
+            "type": "Microsoft.Kusto/Clusters/dataconnections",
+            "apiVersion": "2019-11-09",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Kusto/clusters', parameters('clusterName'))]"
+            ],
+            "kind": "GenevaLegacy",
+            "properties": {
+                "genevaEnvironment": "[parameters('genevaEnvironment')]",
+                "mdsAccounts": "[parameters('mdsAccounts')]",
+                "isScrubbed": false
+            }
+        }
+    ]
+}

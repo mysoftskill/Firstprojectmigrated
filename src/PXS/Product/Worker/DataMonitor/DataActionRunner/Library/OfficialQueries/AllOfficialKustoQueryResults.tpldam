@@ -1,0 +1,19 @@
+﻿let OfficialKustoQueryList = datatable(QueryName: string, QueryKey: string)
+[
+  "CosmosDeleteAgentPostSLAAlert", "AgentId",
+  "CosmosDeleteOperationalRollup", "DisplayName",
+  "CosmosDeleteOperationalRollup_ByRetention", "DisplayName",
+  "CosmosPendingDeleteOperationalRollup", "DisplayName",
+  "DeleteOperationalRollup", "DisplayName",
+  "ExportAgentPendingCommandStatus", "AgentId",
+  "ExportOperationalRollup", "DisplayName",
+  "missingDeleteAgentCommands", "AgentId",
+  "missingExportAgentCommands", "AgentId",
+  "NonCosmosContributionFactor", "DataOwnerAssetGroupId",
+  "NonCosmosDeleteOperationalRollup", "DisplayName",
+  "PostSLADeleteCompletionStatus",  "AgentId",
+  //"PostSLAExportForceCompleteStatus",  "AgentId",
+  "UnexpectedAcknowledgementsStatus", "AgentId",
+  "Weighted30DayCompleted", "AgentId"
+];
+OfficialKustoQueryList;

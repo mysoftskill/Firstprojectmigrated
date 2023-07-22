@@ -1,0 +1,29 @@
+<fieldset>
+    <legend class="c-label" data-use-cms>Select the supported privacy actions that will be applied to this data asset.</legend>
+    <div class="privacy-action-checkbox-group">
+        <mee-checkbox ng-model="$ctrl.privacyActionState.deleteAction"
+                      ng-disabled="!$ctrl.enabledActions.deleteAction"
+                      ng-click="$ctrl.actionClicked()"
+                      data-use-cms>
+            Delete / Account Close
+        </mee-checkbox>
+        <div ng-if="!!$ctrl.informationalText.deleteAction.length" class="disabled-informational-text">
+            <pcd-lede class="description">
+                <p ng-repeat="text in $ctrl.informationalText.deleteAction">{{text}}</p>
+            </pcd-lede>
+        </div>
+
+        <mee-checkbox ng-model="$ctrl.privacyActionState.exportAction"
+                      ng-disabled="!$ctrl.enabledActions.exportAction"
+                      ng-click="$ctrl.actionClicked()"
+                      data-use-cms>
+            Export
+        </mee-checkbox>
+        <div ng-if="!!$ctrl.informationalText.exportAction.length" class="disabled-informational-text">
+            <pcd-lede class="description">
+                <p ng-repeat="text in $ctrl.informationalText.exportAction">{{text}}</p>
+            </pcd-lede>
+        </div>
+    </div>
+</fieldset>
+<mee-inline-error error-id="{{$ctrl.errorId}}"></mee-inline-error>

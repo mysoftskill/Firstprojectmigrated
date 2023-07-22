@@ -1,0 +1,582 @@
+import "Microsoft.Telemetry.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+import "Ms.Security.Audit.bond"
+
+namespace Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation
+
+
+[Description("Structure to record exception details.")]
+struct ErrorDetails:Microsoft.Telemetry.Extension
+{
+    [Description("Error message")]
+    10: string ErrorMessage;
+
+    [Description("Exception HResult")]
+    20: int32 Hresult;
+
+    [Description("Exception type")]
+    30: string ExceptionType;
+
+    [Description("Stack trace")]
+    40: string StackTrace;
+
+    [Description("Optional exception data.")]
+    50: map<string, string> ExceptionData;
+    
+    [Description("Inner exception details, if available.")]
+    60: string InnerExceptionDetails;
+};
+
+[Description("Incoming Service QoS event schema")]
+struct IncomingServiceRequest:Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+    [Description("Request Component")]
+    10: string component;
+
+    [Description("Exception details")]
+    20: ErrorDetails ErrorDetails;
+
+    [Description("Properties about the operation.")]
+    30: map<string, string> Properties;
+
+    [Description("Properties about the operation. Packed into a single string.")]
+    40: string PackedProperties;
+};
+
+[Description("Outgoing Service QoS event schema")]
+struct OutgoingServiceRequest:Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest>
+{
+    [Description("Exception details")]
+    20: ErrorDetails ErrorDetails;
+
+    [Description("Properties about the operation.")]
+    30: map<string, string> Properties;
+
+    [Description("Properties about the operation. Packed into a single string.")]
+    40: string PackedProperties;
+};
+
+[Description("Exception events")]
+struct UnexpectedExceptionEvent:Microsoft.Telemetry.Base
+{
+    [Description("Error details")]
+    10: ErrorDetails ErrorDetails;
+};
+
+[Description("Logged when a request first enters the system.")]
+struct RequestFirstReceivedEvent:Microsoft.Telemetry.Base
+{
+    [Description("The request URI")]
+    10: string TargetUri;
+
+    [Description("The client IP")]
+    20: string ClientIp;
+
+    [Description("The CV.")]
+    30: string CV;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged when we make an outbound call to CosmosDB.")]
+struct CosmosDbOutgoingServiceRequest:OutgoingServiceRequest
+{
+    [Description("The database moniker.")]
+    10: string Moniker;
+
+    [Description("The collection.")]
+    20: string Collection;
+
+    [Description("The request charge of the operation.")]
+    30: double RequestCharge;
+
+    [Description("The number of rows affected by this operation.")]
+    40: int32 RowCount;
+
+    [Description("The partition key of the operation.")]
+    50: string PartitionKey;
+
+    [Description("Delimited list of command IDs returned.")]
+    60: string CommandIds;
+
+    [Description("Set when the request was throttled.")]
+    70: bool Throttled;
+};
+
+[Description("Logged for an async operation.")]
+struct InternalOperationEvent:Microsoft.Telemetry.Base
+{
+    [Description("The latency of the operation.")]
+    10: int32 LatencyMs;
+
+    [Description("The name of the operation.")]
+    20: string OperationName;
+
+    [Description("True if the operation succeeded, false otherse.")]
+    30: bool Succeeded;
+
+    [Description("Any exception details about the operation.")]
+    40: ErrorDetails ErrorDetails;
+};
+
+[Description("Logged when we work with PdmsCache Cosmos stream.")]
+struct PdmsCacheCosmosReaderRequest:OutgoingServiceRequest
+{
+    [Description("Pdms Cache Cosmos stream path.")]
+    10: string Stream;
+
+    [Description("The number of rows in Pdms Cache Cosmos stream.")]
+    20: int32 RowCount;
+};
+
+[Description("Logged when we work with PdmsCache DocumentDB.")]
+struct PdmsCacheDocDbRequest:OutgoingServiceRequest
+{
+    [Description("Pdms Cache DocumentDB URI.")]
+    10: string DocDbUri;
+
+    [Description("Pdms Cache DocumentDB Database ID.")]
+    20: string DatabaseId;
+
+    [Description("Pdms Cache DocumentDB Collection ID.")]
+    30: string CollectionId;
+
+    [Description("Pdms Cache DocumentDB event type. Update/Read")]
+    40: string EventTypeName;
+};
+
+[Description("Logged when Frontdoor updates Pdms cache.")]
+struct FrontdoorUpdatePdmsCacheRequest:OutgoingServiceRequest
+{
+    [Description("The number of rows Frontdoor read.")]
+    10: int32 RowCount;
+};
+
+
+[Description("Security Audit log schema")]
+struct ServiceAudit:Microsoft.Telemetry.Data<Ms.Security.Audit.OperationAudit>
+{
+};
+
+
+[Description("Security Alert log schema")]
+struct ServiceAlert:Microsoft.Telemetry.Data<Ms.Security.Audit.OperationAlert>
+{
+};
+
+[Description("Logged when a distributed lock is acquired.")]
+struct DistributedLockAcquiredEvent:Microsoft.Telemetry.Base
+{
+    10: int32 DurationMs;
+
+    20: string LockName;
+};
+
+[Description("Logged when a batch of commands is returned to an agent. One of these will be logged per GetCommands operation for each relevant asset group.")]
+struct GetCommandsEvent:Microsoft.Telemetry.Base
+{
+    [Description("Agent ID")]
+    10: string AgentId;
+    
+    [Description("Asset group ID.")]
+    20: string AssetGroupId;
+        
+    [Description("Asset group qualifier.")]
+    30: string AssetGroupQualifier;
+
+    [Description("Delimited list of command IDs.")]
+    40: string CommandIds;
+
+    [Description("Count for Account Close command")]
+    50: int32 AccountCloseCommandCount;
+
+    [Description("Count for Delete command")]
+    60: int32 DeleteCommandCount;
+
+    [Description("Count for Export command")]
+    70: int32 ExportCommandCount;
+};
+
+[Description("Logged when a command ingested to Agent Queue")]
+struct AddCommandEvent:Microsoft.Telemetry.Base
+{
+    [Description("Command ID")]
+    10: string CommandId;
+
+    [Description("Agent ID")]
+    20: string AgentId;
+
+    [Description("Asset Group ID")]
+    30: string AssetGroupId;
+
+    [Description("Command Type")]
+    40: string CommandType;
+
+    [Description("Subject Type")]
+    50: string SubjectType;
+};
+
+[Description("Logged when event grid validates our endpoint.")]
+struct AgentQueueStatisticsEvent:Microsoft.Telemetry.Base
+{    
+    [Description("The agent ID.")]
+    10: string AgentId;
+
+    [Description("The asset group ID.")]
+    20: string AssetGroupId;
+
+    [Description("The subject type.")]
+    30: string SubjectType;
+
+    [Description("The DocDB moniker.")]
+    40: string DbMoniker;
+
+    [Description("The oldest command created time")]
+    70: string MinPendingCommandCreationTime;
+
+    [Description("The oldest lease available time")]
+    80: string MinLeaseAvailableTime;
+};
+
+[Description("Logged when PXS sends us a null time range predicate.")]
+struct NullTimeRangePredicateEvent:Microsoft.Telemetry.Base
+{    
+    [Description("The command ID.")]
+    10: string CommandId;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged to show the age of the in-use PDMS dataset in hours.")]
+struct PdmsDataSetAgeEvent:Microsoft.Telemetry.Base
+{    
+    [Description("The source of the data.")]
+    10: string SourceStream;
+
+    [Description("The version of the data.")]
+    20: int64 Version;
+
+    [Description("The age of the data, in hours.")]
+    30: int32 AgeInHours;
+
+    [Description("The cosmos stream for VariantInfo")]
+    40: string VariantInfoStream;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged when we receive a command from Event Grid with an invalid verifier.")]
+struct CommandReceivedInvalidVerifierEvent:Microsoft.Telemetry.Base
+{
+    [Description("The ID of the command.")]
+    10: string CommandId;
+
+    [Description("The ID of the webhook's agent.")]
+    20: string AgentId;
+
+    [Description("Exception details")]
+    30: ErrorDetails ErrorDetails;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged when we report the depth of an Azure queue")]
+struct AzureQueueDepthEvent:Microsoft.Telemetry.Base
+{
+    [Description("The Azure storage account in question.")]
+    10: string StorageAccountName;
+
+    [Description("The name of the queue.")]
+    20: string QueueName;
+
+    [Description("The depth of the queue")]
+    30: int64 Depth;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged when we report Data Agent Validation errors")]
+struct SllDataAgentValidationErrorEvent:Microsoft.Telemetry.Base
+{
+      [Description("Command correlation vector")]
+    10: string Cv;
+
+      [Description("Request Batch ID")]
+    20: string CommandId;
+
+    [Description("Exception details")]
+    30: ErrorDetails ErrorDetails;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged when we report DataAgentUnrecognizedDataType in data agent")]
+struct SllDataAgentUnrecognizedDataType:Microsoft.Telemetry.Base
+{
+      [Description("Command correlation vector")]
+    10: string Cv;
+
+      [Description("Request Batch ID")]
+    20: string CommandId;
+
+    [Description("Exception details")]
+    30: string DataType;
+};
+
+// There is an XPert alert tied to this event. Please ensure that you will not
+// break the alert before making changes.
+[Description("Logged when we report DataAgentUnrecognizedCommandType in data agent")]
+struct SllDataAgentUnrecognizedCommandType:Microsoft.Telemetry.Base
+{
+    [Description("Command correlation vector")]
+    10: string Cv;
+
+    [Description("The command ID")]
+    20: string CommandId;
+
+    [Description("Command type")]
+    30: string CommandType;
+};
+
+// Details about export files
+struct ExportFileSizeEvent:Microsoft.Telemetry.Base
+{
+    [Description("The agent ID.")]
+    10: string AgentId;
+
+    [Description("The asset group ID.")]
+    20: string AssetGroupId;
+
+    [Description("The path within the zip file.")]
+    30: string Path;
+
+    [Description("The command ID.")]
+    40: string CommandId;
+
+    [Description("The uncompressed size of the file, in bytes.")]
+    50: int64 Length;
+
+    [Description("The compressed size of the file, in bytes.")]
+    60: int64 CompressedLength;
+
+    [Description("Indicates if the source was compressed.")]
+    70: bool IsSourceCompressed;
+
+    [Description("Indicates Subject Type.")]
+    80: string SubjectType;
+
+    [Description("Indicates Agent Type.")]
+    90: string AgentType;
+
+    [Description("Indicates Cloud Instance.")]
+    100: string CloudInstance;
+};
+
+// Details about a force complete command event
+struct ForceCompleteCommandEvent:Microsoft.Telemetry.Base
+{
+    [Description("The command ID.")]
+    10: string CommandId;
+
+    [Description("The agent ID.")]
+    20: string AgentId;
+
+    [Description("The asset group ID.")]
+    30: string AssetGroupId;
+
+    [Description("The reason this command was completed forcefully.")]
+    40: string ForceCompleteReason;
+
+    [Description("The command type.")]
+    50: string CommandType;
+
+    [Description("The command subject type.")]
+    60: string SubjectType;
+};
+
+// Logged when a command is force-completed but some of the agents/asset groups have not received the command.
+struct NotReceivedForceCompletedCommandEvent:Microsoft.Telemetry.Base
+{
+    [Description("The command ID.")]
+    10: string CommandId;
+
+    [Description("The agent ID.")]
+    20: string AgentId;
+
+    [Description("The asset group ID.")]
+    30: string AssetGroupId;
+
+    [Description("The command type.")]
+    50: string CommandType;
+
+    [Description("The command subject type.")]
+    60: string SubjectType;
+};
+
+[Description("Logged when update agent queue depth baseline.")]
+struct SllCommandQueueDepthBaseline:Microsoft.Telemetry.Base
+{    
+    [Description("Command queue baseline version.")]
+    10: string BaselineVersion;
+
+    [Description("Command queue db moniker.")]
+    20: string DbMoniker;
+
+    [Description("Command queue collection id.")]
+    30: string CollectionId;
+
+    [Description("The agent ID.")]
+    40: string AgentId;
+
+    [Description("The asset group ID.")]
+    50: string AssetGroupId;
+
+    [Description("Command type.")]
+    60: string CommandType;
+
+    [Description("Commands count")]
+    70: int64 QueueDepth;
+
+    [Description("RequestCharge")]
+    80: int64 RequestCharge;
+
+    [Description("Query duration in seconds")]
+    90: int64 DurationSeconds;
+};
+
+[Description("Logged to track the of commands in the system.")]
+struct CommandsTransferredEvent:Microsoft.Telemetry.Base
+{    
+    [Description("The point at which commands were transferred. This is free-form, but should include things like 'ToQueueReader', etc")]
+    10: string TransferPoint;
+
+    [Description("The number of commands transferred")]
+    20: int32 CommandCount;
+
+    [Description("The agent ID")]
+    30: string AgentId;
+
+    [Description("The asset group ID")]
+    40: string AssetGroupId;
+};
+
+[Description("Logged when PCF attempts to raise an alert for an agent without ICM connector details. PCF alerts off of this log statement.")]
+struct IcmConnectorDetailsNotRegisteredEvent:Microsoft.Telemetry.Base
+{    
+    [Description("The agent ID")]
+    10: string AgentId;
+
+    [Description("The asset group ID")]
+    20: string AssetGroupId;
+
+    [Description("The name of the alert we tried to raise")]
+    30: string EventName;
+};
+
+[Description("Logged when fail to parse lease receipt.")]
+struct LeaseReceiptFailedToParse:Microsoft.Telemetry.Base
+{    
+    [Description("LeaseReceipt")]
+    10: string LeaseReceipt;
+};
+
+[Description("Logs TelemetryLifecycleCheckpointInfo on TelemetryLifecycleCheckpointProcessor.Checkpoint call.")]
+struct SllTelemetryLifecycleCheckpointInfo:Microsoft.Telemetry.Base
+{    
+    [Description("CheckpointFrequency")]
+    10: string CheckpointFrequency;
+
+    [Description("LastCheckpointTime")]
+    20: string LastCheckpointTime;
+
+    [Description("Number of events in the TelemetryLifecycleCheckpointProcessor eventhub reciever.")]
+    30: int32 EventsCount;
+};
+
+[Description("Logs when a restart of the current process has been requested.")]
+struct RestartRequestedEvent:Microsoft.Telemetry.Base
+{    
+    [Description("The member name.")]
+    10: string MemberName;
+
+    [Description("The file name.")]
+    20: string FileName;
+
+    [Description("The line number.")]
+    30: int32 LineNumber;
+
+    [Description("The reason.")]
+    40: string Reason;
+};
+
+[Description("Logs when a restart of the current process has been requested.")]
+struct CommandFilteredEvent:Microsoft.Telemetry.Base
+{    
+    [Description("True or false, as a string.")]
+    10: string SentToAgent;
+
+    [Description("The SAL applicability code.")]
+    11: string ApplicabilityCode;
+
+    [Description("List of variants that were applied, in sorted order, semicolon delimited.")]
+    20: string VariantsApplied;
+
+    [Description("List of data types that were sent to the agent, in sorted order, semicolon delimited.")]
+    30: string DataTypes;
+
+    [Description("The subject type (msa/aad/etc)")]
+    40: string SubjectType;
+
+    [Description("The command type (delete/export/accountclose)")]
+    50: string CommandType;
+
+    [Description("Indicates if this is running in read-only mode or not.")]
+    60: string IsWhatIfMode;
+
+    [Description("The cloud instance of the command.")]
+    70: string CloudInstance;
+
+    [Description("The version of SAL used to make this determination.")]
+    80: string SALVersion;
+
+    [Description("The PDMS data set version number used to make this determination.")]
+    90: string PDMSVersion;
+    
+    [Description("The agent ID.")]
+    100: string AgentId;
+
+    [Description("The asset group ID.")]
+    110: string AssetGroupId;
+
+    [Description("The command ID.")]
+    120: string CommandId;
+
+    [Description("The names of all of the lifecycle events published for this agent/asset group combination for this command during filtering.")]
+    130: string LifecycleEventNames;
+
+    [Description("The AP environment name.")]
+    140: string EnvironmentName;
+
+    [Description("Command creation time")]
+    141: string commandCreationTimestamp;
+};
+
+[Description("Logs when a query returns too many results and gets truncated.")]
+struct CommandHistoryQueryTooLarge:Microsoft.Telemetry.Base
+{    
+    [Description("The subject type (msa/aad/etc) queried")]
+    10: string SubjectType;
+
+    [Description("The requester queried")]
+    20: string Requester;
+
+    [Description("The command types queries")]
+    30: string CommandTypes;
+
+    [Description("The oldest record query filter")]
+    40: string OldestRecord;
+
+    [Description("The fragments to query")]
+    50: string FragmentsToRead;
+};

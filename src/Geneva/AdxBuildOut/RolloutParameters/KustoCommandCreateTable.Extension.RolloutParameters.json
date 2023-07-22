@@ -1,0 +1,39 @@
+{
+    "$schema":"https://ev2schema.azure.net/schemas/2020-01-01/rolloutParameters.json",
+    "contentVersion": "1.0.0.0",
+    "extensions": [{
+        "Name": "createTable",
+        "Type": "Microsoft.Kusto/KustoExtension",
+        "Version": "2019-04-01",
+        "ConnectionProperties": {
+            "MaxExecutionTime": "PT90M",
+            "Authentication": {
+                "Type": "AadApplicationAuthentication",
+                "Reference": {
+                    "Provider": "AzureKeyVault",
+                    "Parameters": {
+                        "SecretId": "__CERTIFICATEPATH__"
+                    }
+                },
+                "Properties": {
+                    "ApplicationId": "__APPID__",
+                    "TenantId": "__TENANTID__"
+                }
+            }
+        },
+        "payloadProperties": {
+          "ConnectionString": { 
+             "Value": "__CLUSTERURL__" 
+          },
+          "Command": { 
+             "Value": ".create table ExampleTable( Timestamp:datetime, Field1:string, Field2:string ) "
+          },
+          "WaitForOperation": {
+            "Value": true
+          },
+          "DatabaseName": {
+            "Value": "__DBNAME__" 
+          }  
+        }
+    }]
+}

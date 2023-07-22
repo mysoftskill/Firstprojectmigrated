@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>PDMS.Common</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.Common</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <SignAssembly>false</SignAssembly>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="ClientShare\V2\**" />
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="ClientShare\V2\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="ClientShare\V2\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ParallaxInterface Include="Configuration\Bond\IAzureActiveDirectoryProviderConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IAzureKeyVaultConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\ICloudConfig.bond" />
+    <ParallaxInterface Include="ClientShare\IClientConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\ICoreConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IDataAccessConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IDocumentDatabaseConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\ITokenProviderConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IKustoClientConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\ILockConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IOwinConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IServicePointManagerConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\ISllConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IThrottlingConfiguration.bond" />
+  </ItemGroup>
+  <ItemGroup>
+    <BondCodegen Remove="Configuration\Bond\IAzureKeyVaultConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\ICloudConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\ICoreConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\IDataAccessConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\IDocumentDatabaseConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\IKustoClientConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\ILockConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\IOwinConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\ISllConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\IAzureActiveDirectoryProviderConfig.bond" />
+    <BondCodegen Remove="ClientShare\IClientConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\ITokenProviderConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\IServicePointManagerConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\IThrottlingConfiguration.bond" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" />
+    <PackageReference Include="Microsoft.Cloud.InstrumentationFramework" />
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.Identity.Client" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Ms.Qos.IncomingServiceRequest" />
+    <PackageReference Include="Ms.Qos.OutgoingServiceRequest" />
+    <PackageReference Include="Parallax" />
+    <!-- Newtonsoft.Json < v13.0.1 has a security issue. Enforcing versioning for the dependency here -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Deployment\Config\*.ini" Link="Configuration\Ini\%(Filename)%(Extension)" />
+  </ItemGroup>
+  <Import Project="$(ServiceRoot)\Build\core.common.targets" />
+</Project>

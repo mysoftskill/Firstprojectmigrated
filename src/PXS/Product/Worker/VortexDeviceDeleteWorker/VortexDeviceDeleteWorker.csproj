@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Microsoft.Membership.MemberServices.Privacy.VortexDeviceDeleteWorker</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.Privacy.VortexDeviceDeleteWorker</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>VortexDeviceDeleteWorker</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <FileAlignment>512</FileAlignment>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\AnaheimIdLib\AnaheimIdLib.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\PXF\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\PXF\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\PXF\Host\Source\PrivacyHost.csproj" />
+    <ProjectReference Include="..\..\PXF\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Documentation\DeviceDelete\README.md">
+      <Link>README.md</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+      <Link>AadIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Adapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+      <Link>MsaIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+      <Link>PrivacyExperienceService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\VortexDeviceDeleteWorker\VortexDeviceDeleteWorker.ini">
+      <Link>VortexDeviceDeleteWorker.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>GlobalConfiguration.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.ServiceBus.EventProcessorHost" />
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

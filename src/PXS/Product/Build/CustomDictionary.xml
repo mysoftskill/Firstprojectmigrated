@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+  <Words>
+    <Recognized>
+      <!--
+        This is a list of case-insensitive words that do not exist in the dictionary
+        but you still want to be considered as recognized by 
+        IdentifiersShouldBeSpelledCorrectly. Do not add compound words (e.g. 'FileName') 
+        to this list as this will cause CompoundWordsShouldBeCasedCorrectly to fire on 
+        usages of the compound word stating that they should be changed to their discrete equivalent 
+        (for example 'FileName' -> 'Filename').
+		Usage: <Word>xxx</Word>
+      -->
+      <!--<Word>3ds</Word>-->
+      <Word>Adyen</Word>
+      <Word>Alipay</Word>
+      <Word>AndroidPhone</Word>
+      <Word>AndroidTablet</Word>
+      <Word>AndroidUnk</Word>
+      <Word>Ap</Word>
+      <Word>Api</Word>
+      <Word>Apis</Word>
+      <Word>ATT</Word>
+      <Word>Auth</Word>
+      <Word>Blis</Word>
+      <Word>Caid</Word>
+      <Word>Cm</Word>
+      <Word>comm</Word>
+      <Word>Cortana</Word>
+      <Word>Cp</Word>
+      <Word>Csr</Word>
+      <Word>Cvv</Word>
+      <Word>Deserialize</Word>
+      <Word>Deserialized</Word>
+      <Word>Deserializing</Word>
+      <Word>Dds</Word>
+      <Word>Drs</Word>
+      <Word>Eds</Word>
+      <Word>Enf</Word>
+      <Word>Eso</Word>
+      <Word>Ia</Word>
+      <Word>Icc</Word>
+      <Word>in</Word>
+      <Word>incomm</Word>
+      <Word>Inicis</Word>
+      <Word>Ios</Word>
+      <Word>IosPhone</Word>
+      <Word>IosTablet</Word>
+      <Word>IosUnk</Word>
+      <Word>Ip</Word>
+      <Word>IPod</Word>
+      <Word>Is</Word>
+      <Word>Iws</Word>
+      <Word>Jcb</Word>
+      <Word>Jwt</Word>
+      <Word>Kin</Word>
+      <Word>Lkg</Word>
+      <Word>Lpo</Word>
+      <Word>ms</Word>
+      <Word>Msisdn</Word>
+      <Word>Mv</Word>
+      <Word>Nfc</Word>
+      <Word>Oem</Word>
+      <Word>Org</Word>
+      <Word>Payin</Word>
+      <Word>Paypal</Word>
+      <Word>Pdp</Word>
+      <Word>Pxf</Word>
+      <Word>Pidl</Word>
+      <Word>Pki</Word>
+      <Word>Puid</Word>
+      <Word>px</Word>
+      <Word>Posa</Word>
+      <Word>Qos</Word>
+      <Word>s2s</Word>
+      <Word>Sepa</Word>
+      <Word>Sku</Word>
+      <Word>Sll</Word>
+      <Word>Ssapi</Word>
+      <Word>Tv</Word>
+      <Word>Unk</Word>
+      <Word>urls</Word>
+      <Word>Usd</Word>
+      <Word>Ver</Word>
+      <Word>Web</Word>
+      <Word>Win</Word>
+      <Word>Win7</Word>
+      <Word>Win8</Word>
+      <Word>WinPhone7</Word>
+      <Word>WinPhone8</Word>
+      <Word>WinPhoneUnk</Word>
+      <Word>Xbox</Word>
+      <Word>Xbox360</Word>
+      <Word>XboxOne</Word>
+      <Word>Zune</Word>
+	  <Word>Owin</Word>
+	  <Word>Bn</Word>
+	  <Word>Cy</Word>
+	  <Word>Codings</Word>
+	  <Word>Mucp</Word>
+	  <Word>Aad</Word>
+    </Recognized>
+    <Deprecated>
+      <!-- 
+        This is a list of deprecated terms with their preferred alternates and is 
+        used by UsePreferredTerms. The deprecated terms are case-insensitive, 
+        however, make sure to Pascal-case the preferred alternates. If a word 
+        does not have a preferred alternate, simply leave it blank.
+		Usage: <Term PreferredAlternate="xxx">yyy</Term>
+      -->
+    </Deprecated>
+    <Compound>
+      <!-- 
+        This is a list of discrete terms with their compound alternates and is used by 
+        CompoundWordsShouldBeCasedCorrectly. These are words that exist in the 
+        dictionary as discrete terms, however, should actually be cased as compound words. 
+        For example, 'Filename' exists in the dictionary and hence the spelling rules will 
+        not see it as unrecognized but its actual preferred usage is 'FileName'; adding it
+        below causes CompoundWordsShouldBeCasedCorrectly to fire. The discrete terms are 
+        case-insensitive, however, be sure to Pascal-case the compound alternates.
+        Any discrete terms added below automatically get added to the list of discrete
+        exceptions to prevent CompoundWordsShouldBeCasedCorrectly from firing both on the
+        compound word (for example 'WhiteSpace') and its discrete alternate (for example 
+        'Whitespace').
+		Usage: <Term CompoundAlternate="xxx">yyy</Term>
+      -->
+      <Term>XboxOne</Term>
+      <Term>WinPhoneUnk</Term>
+      <Term>WinPhone7</Term>
+      <Term>WinPhone8</Term>
+      <Term>IosUnk</Term>
+      <Term>IosPhone</Term>
+      <Term>IosTablet</Term>
+      <Term>AndroidUnk</Term>
+      <Term>AndroidPhone</Term>
+      <Term>AndroidTablet</Term>
+      <Term>OrgPuid</Term>
+      <Term>AnonymousId</Term>
+      <Term>Cvv</Term>
+      <Term>3DS</Term>
+      <Term>Nint</Term>
+      <Term CompoundAlternate="AlipayBillingAgreement">alipaybillingagreement</Term>
+      <Term CompoundAlternate="incomm">InComm</Term>
+      <Term CompoundAlternate="paypal">PayPal</Term>
+      <Term CompoundAlternate="blackberry">BlackBerry</Term>
+      <Term CompoundAlternate="reauthfailure">ReauthFailure</Term>
+    </Compound>
+    <DiscreteExceptions>
+      <!--
+        This is a list of case-insensitive exceptions to the CompoundWordsShouldBeCasedCorrectly 
+        discrete term check. As this check works solely on the basis of whether two consecutive
+        tokens exists in the dictionary, it can have a high false positive rate. For example, 
+        'onset' exists in the dictionary but the user probably intended it to be 'OnSet'. 
+        Adding this word below prevents this rule from firing telling the user to change 'OnSet' 
+        to 'Onset'.
+		Usage: <Term>xxx</Term>
+      -->
+      <Term>iOS</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>BLI</Acronym>
+      <Acronym>BLIE</Acronym>
+      <Acronym>BLIEs</Acronym>
+      <Acronym>BLIS</Acronym>
+	  <Acronym>GST</Acronym>
+	  <Acronym>JSON</Acronym>
+      <Acronym>PDP</Acronym>
+	  <Acronym>VAT</Acronym>
+	  <Acronym>VIP</Acronym>
+      <!--
+	    Usage <Acronym>XXX</Acronym>
+	  -->
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

@@ -1,0 +1,12 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IAzureADConfig
+{
+    10: string Authority;
+
+    30: string AppId;
+
+    35: string CertSubjectName;
+
+    40: string PostLogoutUrl;
+}

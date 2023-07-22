@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.BackgroundTasks</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.BackgroundTasks</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <PostBuildEvent>del $(OutDir)\extracted.txt</PostBuildEvent>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\AuditLog\AuditLog.csproj" />
+    <ProjectReference Include="..\CommandLifecycle\CommandLifecycleNotifications.csproj" />
+    <ProjectReference Include="..\CommandQueue\CommandQueue.csproj" />
+    <ProjectReference Include="..\CommandReplay\CommandReplay.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\PdmsCache\PdmsCache.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Compression" />
+	<PackageReference Include="Azure.Identity" />
+  </ItemGroup>
+
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

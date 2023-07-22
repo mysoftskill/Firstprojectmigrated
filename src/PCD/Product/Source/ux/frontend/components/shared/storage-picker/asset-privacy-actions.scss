@@ -1,0 +1,14 @@
+pcd-asset-privacy-actions {
+    .privacy-action-checkbox-group {
+        & mee-checkbox:first-child > label {
+            margin-top: 10px;
+        }
+    }
+    .disabled-informational-text {
+        padding-top: 6px;
+
+        & pcd-lede {
+            padding: 0;
+        }
+    }
+}

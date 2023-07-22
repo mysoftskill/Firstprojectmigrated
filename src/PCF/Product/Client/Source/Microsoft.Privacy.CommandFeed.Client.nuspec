@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Microsoft.PrivacyServices.CommandFeed.Client</id>
+    <version>$version$</version>
+    <authors>MEE PrivacyServices (ngpcieng@microsoft.com)</authors>
+    <owners>MEE PrivacyServices (ngpcieng@microsoft.com)</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NGPX Privacy Command Feed Client SDK.</description>
+    <copyright>Copyright 2019</copyright>
+    <tags>ngp ngpx privacy pcf</tags>
+  </metadata>
+</package>

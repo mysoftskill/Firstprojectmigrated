@@ -1,0 +1,57 @@
+﻿import "CommonConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IRecurringDeleteQueueProcessorConfiguration
+{
+    1 : required int32 WaitOnQueueEmptyMilliseconds;
+    2 : required int32 ProcessorCount;
+    3 : required int32 GetMessagesDequeueCount;
+    4 : required IServicePointConfiguration ServicePointConfiguration;
+    5 : required list<IAzureStorageConfiguration> AzureQueueStorageConfigurations;
+}
+
+struct IDistributedLockConfiguration
+{
+    1 : required string StorageAccountName;
+    2 : required string ContainerName;
+    3 : required string ScheduleScannerBlobName;
+    4 : required string VerifierScannerBlobName;
+    5 : required int32 MinLeaseTimeSeconds;
+    6 : required int32 TaskRunFrequencyMintues;
+    7 : required int32 MaxExtensionTtlSeconds;
+    8 : required int32 ExtensionThresholdSeconds;
+    9 : optional bool UseEmulator = false;
+}
+
+struct ICloudQueueConfiguration
+{
+    1 : optional int32 MinVisibilityTimeoutInSeconds;
+    2 : optional int32 MaxVisibilityTimeoutInSeconds;
+    3 : optional int32 MaxCount;
+}
+
+struct IScheduleDbConfiguration
+{
+    1 : optional int32 MaxItemCountOfScheduleDbRecords;
+    2 : optional int32 MaxNumberOfRetries;
+    3 : optional int32 PreVerifierExpirationDaysOffset;
+    4 : optional string CosmosDbEndPoint;
+    5 : required string ContainerName;
+    6 : required string DataBaseName;
+    7 : optional bool UseEmulator = false;
+    8 : optional int32 RetryTimeDurationMinutes;
+}
+
+struct IRecurringDeleteWorkerConfiguration
+{
+    1 : optional bool EnableConsoleLogging = false;
+    2 : required IRecurringDeleteQueueProcessorConfiguration RecurringDeleteQueueProccessorConfig;
+    3 : required IDistributedLockConfiguration DistributedLockConfiguration;
+    4 : optional ICloudQueueConfiguration CloudQueueConfig;
+    5 : optional IScheduleDbConfiguration ScheduleDbConfig;
+    6 : optional string RecurringDeleteUamiId;
+    7 : optional bool EnablePreVerifierScanner = false;
+    8 : optional bool EnablePreVerifierWorker = false;
+};

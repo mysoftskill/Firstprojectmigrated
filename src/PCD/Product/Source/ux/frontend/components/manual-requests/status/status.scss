@@ -1,0 +1,14 @@
+pcd-manual-requests-status {
+    .export-destination-uri {
+        cursor: help;
+    }
+
+    .filter {
+        display: flex;
+        align-items: flex-end;
+
+        mee-select, mee-text-action {
+            display: inline-block;
+        }
+    }
+}

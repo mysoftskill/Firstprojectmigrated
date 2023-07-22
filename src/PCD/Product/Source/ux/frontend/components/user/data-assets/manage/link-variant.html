@@ -1,0 +1,24 @@
+<h2 data-use-cms>Link variant</h2>
+
+<mee-radio-group ng-model="$ctrl.radioGroup.model"
+                 ng-change="$ctrl.setSignalFiltering()"
+                 is-legend-visible="true"
+                 legend="Signal filtering"
+                 data-use-cms>
+    <mee-radio value="{{ option.value }}" ng-repeat="option in $ctrl.radioGroup.options">
+        {{ option.label }}<br />{{ option.description }}
+    </mee-radio>
+</mee-radio-group>
+
+<div class="c-group">
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.link-variant"></mee-inline-error>
+    <button mee-button="primary"
+            ng-click="$ctrl.linkVariant()"
+            ng-disabled="$ctrl.hasInputErrors"
+            mee-progress-disabled="modalOperation"
+            data-use-cms>Link</button>
+    <button mee-button
+            ng-click="$ctrl.cancel()"
+            mee-progress-disabled="modalOperation"
+            data-use-cms>Cancel</button>
+</div>

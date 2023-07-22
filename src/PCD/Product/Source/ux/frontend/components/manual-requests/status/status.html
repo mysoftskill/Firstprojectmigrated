@@ -1,0 +1,131 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page provides a summary of the manual requests submitted, as well as provides the information required to get the contents
+            from an export request.
+        </p>
+        <p mee-paragraph data-use-cms>
+            To validate the data in your export archive:
+        </p>
+        <ol mee-list>
+            <li>Download Microsoft Azure Storage Explorer <a mee-hyperlink href="https://azure.microsoft.com/en-us/features/storage-explorer/" target="_blank">here</a></li>
+            <li>Select "Use a connection string or a shared access signature URI"</li>
+            <li>Select "Use a SAS URI"</li>
+            <li>Copy and paste the "Export Destination" URI</li>
+        </ol>
+
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Request ID</span> corresponds to the IDs presented after submitting a manual request.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Context</span> describes general information about where the request originated from, if applicable.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Type</span> describes the privacy subject which the manual request was submitted on behalf of.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Submitted time</span> describes the time when the manual request was sent.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">State</span> describes the state of the request. The request will either be "Submitted" or "Completed". If request is completed, timestamp of completion will be shown.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Progress</span> indicates the progress of the operation, if available. It is calculated as a ratio of asset groups for which data agents reported completion of the command, to the total number of asset groups in scope of the command. Force-completed commands may have their progress displayed as less than 100%.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <div class="filter">
+            <mee-select ng-model="$ctrl.typeListPickerModel.selectedId"
+                        ng-change="$ctrl.loadStatuses()"
+                        i9n-select-request-type
+                        menu-style="border">
+                <select>
+                    <option ng-repeat="item in $ctrl.typeListPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+                </select>
+            </mee-select>
+
+            <mee-text-action mee-text-action-kind="search" i9n-search-request>
+                <input placeholder="{{$ctrl.searchPlaceholderLabel}}"
+                       ng-model="$ctrl.searchText">
+                <button aria-label="{{$ctrl.searchAriaLabel}}"></button>
+            </mee-text-action>
+        </div>
+        <mee-progress-view watch-operation="initializeRequestsStatus fetchRequestsStatus">
+            <inert-view></inert-view>
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+            <finished-view>
+                <div ng-if="$ctrl.hasRequestStatuses()" class="c-table f-divided" data-grid="col-12">
+                    <table data-f-sort="false">
+                        <thead>
+                            <tr>
+                                <th data-use-cms>Request ID</th>
+                                <th data-use-cms>Context</th>
+                                <th data-use-cms>Type</th>
+                                <th data-use-cms>Submitted time</th>
+                                <th data-use-cms>State</th>
+                                <th data-use-cms>Progress</th>
+                                <th data-use-cms></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="status in $ctrl.requestStatuses | filter:$ctrl.searchText" i9n-request-id="{{status.id}}">
+                                <td>{{ status.id }}</td>
+                                <td>
+                                    <div ng-if="status.context" ng-repeat="(label, value) in status.context">
+                                        <span class="view-label">{{ label }}:</span> {{ value }}
+                                    </div>
+                                </td>
+                                <td>{{ status.subjectType }}</td>
+                                <td>{{ status.submittedTime }}</td>
+                                <td>
+                                    <div>
+                                        {{ status.state }}
+                                    </div>
+                                    <div ng-if="status.isCompleted">
+                                        {{ status.completedTime }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div ng-if="status.progress">
+                                        {{ status.progress }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a mee-hyperlink
+                                       class="export-destination-uri"
+                                       ng-if="status.destinationUri"
+                                       ng-href="{{ status.destinationUri }}"
+                                       mee-tooltip-trigger="export-destination-{{$index}}"
+                                       ng-click="$event.preventDefault()"
+                                       data-use-cms>Export Destination</a>
+                                    <mee-tooltip tooltip-id="export-destination-{{$index}}" data-use-cms>
+                                        To view the contents, follow the steps on the sidebar. Copy this link to use in Microsoft Azure Storage Explorer.
+                                    </mee-tooltip>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-if="!$ctrl.hasRequestStatuses()">
+                    <p mee-paragraph data-use-cms>
+                        We could not find any requests of this type.
+                    </p>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

@@ -1,0 +1,80 @@
+@startuml AgentStorage
+
+node MSA
+
+node AQS {
+    folder "Account Notifications" {
+        database CloseNotifications
+    }
+}
+
+node [MSA RVS]
+
+node "NGP Components" {
+
+node "PXS Azure Storage" {
+    database AccountDeleteQueues #SeaGreen
+}
+
+    node "Worker Process" {
+        node [AQS Processor] #SeaGreen
+        node [AccountDelete Queue Processor] #SeaGreen
+    }
+
+    node PCF
+
+    cloud "Cosmos" {
+        database RawSignalStream
+        database RawAgeOutStream
+        database CookedSignalStream
+        database CookedAgeOutStream
+    }
+
+        folder "PCF Azure Storage" {
+        database AgentAzureQueues
+    }
+}
+
+node Xbox
+
+cloud "Agents" {
+    node DeleteAgents
+}
+
+cloud "Cosmos Agents" {
+    node CosmosDeleteAgents
+}
+
+MSA -> CloseNotifications : Add account close event
+MSA -> CloseNotifications : Add age out event
+
+CloseNotifications --> [AQS Processor] : Batch dequeue of events
+
+[AQS Processor] --> AccountDeleteQueues : Enqueue
+
+[AccountDelete Queue Processor] <--> AccountDeleteQueues
+
+Xbox --> [AccountDelete Queue Processor] : Get Xuids for closed accounts using batch API
+[MSA RVS] --> [AccountDelete Queue Processor] : Exchange pre verifier for verifier
+
+[AccountDelete Queue Processor] --> PCF : Send age outs and account closes
+
+PCF --> DeleteAgents : Send commands to applicable non cosmos agents
+PCF <--> AgentAzureQueues : Enqueue, dequeue, update, and delete age out commands
+
+PCF --> RawSignalStream : Write account close signal stream
+PCF --> RawAgeOutStream : Write age out signals stream separate from other signals
+
+RawSignalStream --> CookedSignalStream : "Cook" signals into structured stream for cosmos agents
+RawAgeOutStream --> CookedAgeOutStream : "Cook" age out signals into structured stream for cosmos agents
+
+CookedSignalStream --> CosmosDeleteAgents : Agents consume regular delete signals
+CookedAgeOutStream --> CosmosDeleteAgents : Agents consume age out signals if applicable
+
+legend
+    |= |= Type |
+    |<back:SeaGreen>   </back>| Updated |
+    |<back:LightYellow>   </back>| No Change |
+endlegend
+
+@enduml

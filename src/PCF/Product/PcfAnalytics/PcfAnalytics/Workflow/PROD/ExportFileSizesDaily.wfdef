@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Workflows xmlns="http://xflow/2015/v1">
+  <Workflow Name="PCF.ExportFileSizes.DailyProcessor.PROD" PrefixParentName="0" Start="2018-08-30T01:29:00.0000000" RecurrenceUnit="2" RecurrenceAmount="4" Email="gababu@microsoft.com" FolderName="PCF.Analytics" Author="gababu" Enabled="1" MaxParallelExecution="1" TimeOutInMinutes="0">
+    <ConfigBases>
+      <ConfigBase Name="PCF.ExportFileSizes.DailyProcessConfig" File="..\..\Cosmos\ExportFileSizeDetails.script" />
+    </ConfigBases>
+    <Parameters>
+      <Parameter Name="__vc" Value="https://cosmos15.osdinfra.net/cosmos/asimov.partner.ust" />
+      <Parameter Name="_dependencyCheckMissingAction" Value="CompleteNotWriteTracker" />
+      <Parameter Name="_dependencyStreams" Value="/shares/asimov.prod.data/Public/Collection/Asimov/Api/v3/SllCloudR1/%Y/%m/%d/%h_00_00.done?date={_endDate}&amp;hour={_endHour}" />
+      <Parameter Name="_lookBehind" Value="240" />
+      <Parameter Name="_maxJobs" Value="3" />
+      <Parameter Name="_recurrence" Value="DailyTracker" />
+      <Parameter Name="_scheduleOrder" Value="NewestFirst" />
+      <Parameter Name="_scopePath" Value="$(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Api/v3/" />
+      <Parameter Name="_startDate" Value="2018-08-30T00:00:00" />
+      <Parameter Name="_trackerFolder" Value="/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/Trackers/prod" />
+      <Parameter Name="_useLittleDelta" Value="false" />
+      <Parameter Name="pcfEnv" Value="PROD" />
+      <Parameter Name="version" Value="v1" />
+    </Parameters>
+    <Activities>
+      <Activity Name="PCF.ExportFileSizes.DailyProcess.PROD" ConfigBase="PCF.ExportFileSizes.DailyProcessConfig" Class="Microsoft.Xflow.Activities.Scope.RecurrentScopeActivityV3" MaxRetries="3" CredentialName="ScopeJob.Asimov.Partner.Public" RetryWaitInterval="3">
+      </Activity>
+    </Activities>
+  </Workflow>
+</Workflows>

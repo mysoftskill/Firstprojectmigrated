@@ -1,0 +1,52 @@
+﻿//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+
+// Asimov References:
+MODULE "Asimov.Batch.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTimeOffset.Parse("09/10/2018 11:00:00").UtcDateTime,DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTimeOffset.Parse("09/10/2018 11:00:00").UtcDateTime,DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@"); // v1
+
+#DECLARE aadException_outputPath string = "/my/aadException.ss";
+#DECLARE streamExpiry string = "5";
+
+#DECLARE cloud_env string = "Production";
+#DECLARE cloud_name string = "PXS";
+
+
+SllBaseQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+    WHERE cloud_name == @cloud_name
+    AND cloud_environment == @cloud_env;
+
+CheckpointObjectProcessor =
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "baseData.operationName:OperationName:string",
+        "baseData.requestStatus:RequestStatus:int64",
+        "Properties.AADAuthorizationError:AADAuthorizationError:string",
+        "Properties.AuthNException:AuthNException:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+    HAVING OperationName == "API.GetCommands.1.0" AND RequestStatus > 3 AND AADAuthorizationError != "AgentIdNotFound";
+
+aadAuthException = 
+    SELECT DISTINCT AADAuthorizationError, AuthNException
+    FROM CheckpointObjectProcessor;
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT aadAuthException
+TO SSTREAM @aadException_outputPath
+    HASH CLUSTERED BY AADAuthorizationError
+    SORTED BY AADAuthorizationError
+WITH STREAMEXPIRY @streamExpiry;

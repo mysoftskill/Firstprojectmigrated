@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).Privacy.ExperienceContracts</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).Privacy.ExperienceContracts</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <NuGetPackageImportStamp>daeb2f3e</NuGetPackageImportStamp>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Common\Source\Utilities\Base64UrlSerializer.cs" Link="Serializer\Base64UrlSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Serializer\" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>Microsoft.Membership.MemberServices.Privacy.ExperienceContracts</PackageId>
+    <Title>Microsoft.Membership.MemberServices.Privacy.ExperienceContracts</Title>
+    <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+    <Description>PXS Contracts.</Description>
+    <Copyright>Copyright 2020</Copyright>
+    <PackageTags>ngp privacy pxs sdk</PackageTags>
+  </PropertyGroup>
+
+  <Import Project="$(ProductBuildPath)\core.common.targets" />
+</Project>

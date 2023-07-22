@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/PdmsWorkerApp" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="EnvironmentName" Value="devbox" />
+    <!-- 
+    'AzureServicesAuthConnectionString' is required to run App Local since Service Fabric Local cluster runs under Network Service account 
+    For more information on connection string support, refer to: https://docs.microsoft.com/en-us/azure/key-vault/service-to-service-authentication#connection-string-support 
+    -->
+    <Parameter Name="AzureServicesAuthConnectionString" Value="RunAs=App;AppId=25862df9-0e4d-4fb7-a5c8-dfe8ac261930;TenantId=33e01921-4d64-4f8c-a055-5bdaffd5e33d;CertificateSubjectName=CN=aadclient2.ppe.dpp.microsoft.com;CertificateStoreLocation=LocalMachine" />
+  </Parameters>
+</Application>

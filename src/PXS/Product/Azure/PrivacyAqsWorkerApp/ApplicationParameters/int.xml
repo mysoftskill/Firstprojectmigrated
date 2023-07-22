@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application Name="fabric:/PxsServiceFabricApp" xmlns="http://schemas.microsoft.com/2011/01/fabric" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Parameters>
+    <Parameter Name="PrivacyAqsWorkerSvc_InstanceCount" Value="-1" />
+    <Parameter Name="EnvironmentName" Value="int" />
+    <Parameter Name="AzureServicesAuthConnectionString" Value="RunAs=App" />
+  </Parameters>
+</Application>

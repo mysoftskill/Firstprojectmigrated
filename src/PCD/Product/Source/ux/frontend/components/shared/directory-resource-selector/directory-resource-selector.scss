@@ -1,0 +1,22 @@
+@import "../../../styles/utilities.scss";
+
+$min-height-added-resource: 38px;
+
+pcd-directory-resource-selector {
+    display: block;
+
+    mee-text-action {
+        .f-auto-suggest-no-results span {
+            color: $error-color !important
+        }
+
+        &.added-resource-padding {
+            padding-bottom: $min-height-added-resource;
+        }
+    }
+
+    .added-resources {
+        @include drs-resource(false, /** hide-close */
+                              $min-height-added-resource);
+    }
+}

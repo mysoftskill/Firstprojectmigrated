@@ -1,0 +1,11 @@
+@import "../../../styles/utilities.scss";
+@import "../../../styles/utilities/mixins.scss";
+
+pcd-variant-details-view {
+    display: block;
+    @include resource-view-attributes();
+
+    .tfs-tracking:not(:first-child) {
+        @include margin-left(15px);
+    }
+}

@@ -1,0 +1,13 @@
+import "CommonConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IMsaAgeOutFakeCommandWorkerConfiguration
+{
+    1 : required bool EnableProcessing;
+    2 : optional bool EnableConsoleLogging = false;
+    3 : optional int32 DequeueCount = 32;
+    4 : optional int32 LeaseExtensionHours = 12;
+    5 : required IAzureStorageConfiguration QueueStorageConfiguration;
+};

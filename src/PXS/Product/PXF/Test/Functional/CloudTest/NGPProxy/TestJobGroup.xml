@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestJobGroup>
+  <ResourceSpec>
+    <Resource SKU="Standard_DS4_V2" Image="VS2019EnterpriseWS2019"/>
+  </ResourceSpec>
+  <Setup>
+    <BuildFiles>
+      <Copy Src="[BuildRoot]\outputs\build\fct\*" Dest="[WorkingDirectory]\fct" IsRecursive="true" />
+    </BuildFiles>
+    <Scripts/>
+  </Setup>
+  <TestJob Name="RunFct">
+    <Execution Type="MsTest" 
+               Path="[WorkingDirectory]\fct\Microsoft.Membership.MemberServices.PrivacyExperience.FunctionalTests.dll" 
+               Args="/InIsolation /Logger:trx /Platform:x64 /TestCaseFilter:&quot;TestCategory=PROXY&quot;" />
+  </TestJob>
+</TestJobGroup>

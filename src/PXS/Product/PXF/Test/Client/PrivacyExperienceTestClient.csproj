@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyExperience.TestClient</RootNamespace>
+    <AssemblyName>PxsTestClient</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>PxsTestClient</ReleaseSubDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Test\Common\TestCommon.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\PrivacyExperienceClientLibrary\Source\PrivacyExperienceClientLibrary.csproj" />
+    <ProjectReference Include="..\Common\PrivacyTestCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

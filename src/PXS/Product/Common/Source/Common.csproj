@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.Membership.MemberServices.Common</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.Common</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Deployment\Configurations\AadAccountCloseWorker\AadAccountCloseWorker.ini">
+      <Link>Configuration\Ini\AadAccountCloseWorker\AadAccountCloseWorker.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\CosmosExportAgent\CosmosExportAgent.ini">
+      <Link>Configuration\Ini\CosmosExportAgent\CosmosExportAgent.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\DataActionRunnner\DataActionRunner.ini">
+      <Link>Configuration\Ini\DataActionRunner\DataActionRunner.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\AadIdentityService.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\MsaIdentityService.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>Configuration\Ini\GlobalConfiguration.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyVsoWorker\PrivacyVsoWorker.ini">
+      <Link>Configuration\Ini\PrivacyVsoWorker\PrivacyVsoWorker.ini</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ParallaxInterface Include="Configuration\Bond\MsaAgeOutFakeCommandWorkerConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PrivacyVsoWorkerConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\AzureKeyVaultConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PrivacyPartnerMockConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\AzureStorageConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PrivacyAqsWorkerConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\AzureEventHubConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\WorkerTaskConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\CosmosExportAgentConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\AadAccountCloseWorkerConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\IfxTraceMetricConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\VortexDeviceDeleteWorkerConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\ExportConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\CommonConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PartnerServiceConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PartnerConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PrivacyExperienceConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\RpsConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\WorkerWatchdogConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\KustoConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\AadTokenAuthConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PrivacyPartnerAdapterConfiguration.bond" />
+    <ParallaxInterface Include="Configuration\Bond\EmailTrasmitConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\DataAgentMonitorConfig.bond" />
+    <ParallaxInterface Include="Configuration\Bond\PcfDataAgentConfiguration.bond" />
+	<ParallaxInterface Include="Configuration\Bond\RecurrentDeleteWorkerConfiguration.bond" />
+  </ItemGroup>
+  <ItemGroup>
+    <BondCodegen Remove="Configuration\Bond\MsaAgeOutFakeCommandWorkerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PrivacyVsoWorkerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\AzureKeyVaultConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PrivacyPartnerMockConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\AzureStorageConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PrivacyAqsWorkerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\AzureEventHubConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\RecurrentDeleteWorkerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\WorkerTaskConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\CosmosExportAgentConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\AadAccountCloseWorkerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\IfxTraceMetricConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\VortexDeviceDeleteWorkerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\ExportConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\CommonConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PartnerServiceConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PartnerConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PrivacyExperienceConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\RpsConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\WorkerWatchdogConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\KustoConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\AadTokenAuthConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\PrivacyPartnerAdapterConfiguration.bond" />
+    <BondCodegen Remove="Configuration\Bond\EmailTrasmitConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\DataAgentMonitorConfig.bond" />
+    <BondCodegen Remove="Configuration\Bond\PcfDataAgentConfiguration.bond" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PxfAdapters.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\PxfAdapters.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MockPxfAdapters.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\MockPxfAdapters.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\Adapters.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\PrivacyExperienceService.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\Export.ini">
+      <Link>Configuration\Ini\PrivacyExperienceService\Export.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyPartnerMock\PrivacyPartnerMockConfiguration.ini">
+      <Link>Configuration\Ini\PrivacyPartnerMock\PrivacyPartnerMockConfiguration.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceServiceWatchdog\PrivacyExperienceServiceWD.ini">
+      <Link>Configuration\Ini\PrivacyExperienceServiceWatchdog\PrivacyExperienceServiceWD.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceServiceWatchdog\Rps.ini">
+      <Link>Configuration\Ini\PrivacyExperienceServiceWatchdog\Rps.ini</Link>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PcfDataAgent\PcfDataAgent.ini">
+      <Link>Configuration\Ini\PcfDataAgent\PcfDataAgent.ini</Link>
+    </None>
+	<None Include="..\..\Deployment\Configurations\RecurrentDeleteWorker\RecurrentDeleteWorker.ini">
+		<Link>Configuration\Ini\RecurrentDeleteWorker\RecurrentDeleteWorker.ini</Link>
+	</None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Bond.CSharp" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" />
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.Oss.Membership.CommonCore" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Ms.Qos.IncomingServiceRequest" />
+    <PackageReference Include="Ms.Qos.OutgoingServiceRequest" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Parallax" />
+    <PackageReference Include="TransientFaultHandling.Core" />
+    <PackageReference Include="Unity" />
+    <PackageReference Include="Microsoft.ServiceFabric" />
+    <PackageReference Include="System.ServiceModel.Primitives" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PackageId>Microsoft.Membership.MemberServices.Common</PackageId>
+    <Title>Microsoft.Membership.MemberServices.Common</Title>
+    <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+    <Description>Microsoft.Membership.MemberServices.Common</Description>
+    <Copyright>Copyright 2022</Copyright>
+    <PackageTags>ngp privacy sdk</PackageTags>
+  </PropertyGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

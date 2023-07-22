@@ -1,0 +1,14 @@
+<div class="c-group">
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.generic"></mee-inline-error>
+
+    <button data-use-cms
+            mee-button
+            ng-click="$ctrl.onCancel()"
+            mee-progress-disabled="modalOperation">No</button>
+
+    <button data-use-cms
+            mee-button="primary"
+            ng-click="$ctrl.onConfirmClick()"
+            mee-progress-disabled="modalOperation"
+            ng-disabled="!$ctrl.canConfirm()">Yes</button>
+</div>

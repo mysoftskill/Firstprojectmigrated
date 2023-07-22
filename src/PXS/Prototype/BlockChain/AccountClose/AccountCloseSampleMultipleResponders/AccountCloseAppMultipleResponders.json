@@ -1,0 +1,241 @@
+{
+  "ApplicationName": "AccountCloseAppMultipleResponders",
+  "DisplayName": "AccountCloseAppMultipleResponders",
+  "Description": "A simple application to send account close signal and get response",
+  "ApplicationRoles": [
+    {
+      "Name": "RequestorFirstParty",
+      "Description": "A person sending an account close request."
+    },
+    {
+      "Name": "Responder3P",
+      "Description": "A person responding to an account close request"
+    },
+    {
+      "Name": "Auditor",
+      "Description": "A person auditing account close request"
+    }
+  ],
+  "Workflows": [
+    {
+      "Name": "AccountCloseAppMultipleResponders",
+      "DisplayName": "Account Close Request Response",
+      "Description": "A simple workflow to send a request and receive a response.",
+      "Initiators": [ "RequestorFirstParty" ],
+      "StartState": "AccountCloseRequested",
+      "Properties": [
+        {
+          "Name": "State",
+          "DisplayName": "State",
+          "Description": "Holds the state of the contract.",
+          "Type": {
+            "Name": "state"
+          }
+        },
+        {
+          "Name": "RequestorFirstParty",
+          "DisplayName": "Requestor First Party",
+          "Description": "A person sending a request.",
+          "Type": {
+            "Name": "RequestorFirstParty"
+          }
+        },
+        {
+          "Name": "Responder3P",
+          "DisplayName": "Responder3P",
+          "Description": "A person sending a response.",
+          "Type": {
+            "Name": "Responder3P"
+          }
+        },
+        {
+          "Name": "Auditor",
+          "DisplayName": "Auditor",
+          "Description": "A person auditing response.",
+          "Type": {
+            "Name": "Auditor"
+          }
+        },
+        {
+              "Name": "AadObjectId",
+              "Description": "AAD Object ID",
+              "DisplayName": "AAD Object ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "AadTenantId",
+              "Description": "AAD Tenant ID",
+              "DisplayName": "AAD Tenant ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "OrgIdPuid",
+              "Description": "Org ID",
+              "DisplayName": "Org ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+        {
+          "Name": "ResponseMessage",
+          "DisplayName": "Response Message",
+          "Description": "A response message.",
+          "Type": {
+            "Name": "string"
+          }
+        }
+      ],
+      "Constructor": {
+        "Parameters": [
+          {
+              "Name": "aadObjectId",
+              "Description": "AAD Object ID",
+              "DisplayName": "AAD Object ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "aadTenantId",
+              "Description": "AAD Tenant ID",
+              "DisplayName": "AAD Tenant ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "orgIdPuid",
+              "Description": "Org ID",
+              "DisplayName": "Org ID",
+              "Type": {
+                "Name": "string"
+              }
+            }
+        ]
+      },
+      "Functions": [
+        {
+          "Name": "SendRequest",
+          "DisplayName": "Request",
+          "Description": "...",
+          "Parameters": [
+            {
+              "Name": "aadObjectId",
+              "Description": "AAD Object ID",
+              "DisplayName": "AAD Object ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "aadTenantId",
+              "Description": "AAD Tenant ID",
+              "DisplayName": "AAD Tenant ID",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "orgIdPuid",
+              "Description": "Org ID",
+              "DisplayName": "Org ID",
+              "Type": {
+                "Name": "string"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "SendResponse",
+          "DisplayName": "Response",
+          "Description": "...",
+          "Parameters": [
+            {
+              "Name": "responseMessage",
+              "Description": "...",
+              "DisplayName": "Response Message",
+              "Type": {
+                "Name": "string"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "AuditResponse",
+          "DisplayName": "Audit Response",
+          "Description": "...",
+          "Parameters": [
+            {
+              "Name": "auditResponseMessage",
+              "Description": "...",
+              "DisplayName": "Audit Response Message",
+              "Type": {
+                "Name": "string"
+              }
+            }
+          ]
+        }
+      ],
+      "States": [
+        {
+          "Name": "AccountCloseRequested",
+          "DisplayName": "Account Close Requested",
+          "Description": "...",
+          "PercentComplete": 10,
+          "Value": 10,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": ["Responder3P"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "SendResponse",
+              "NextStates": [ "AccountCloseRequestProcessedBy3P" ],
+              "DisplayName": "Send Response"
+            }
+          ]
+        },
+        {
+          "Name": "AccountCloseRequestProcessedBy3P",
+          "DisplayName": "Account Close request processed by 3P",
+          "Description": "...",
+          "PercentComplete": 90,
+          "Value": 90,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": ["Responder3P"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "SendResponse",
+              "NextStates": [ "AccountCloseRequestProcessedBy3P" ],
+              "DisplayName": "Send Response"
+            }
+          ]
+        },
+        {
+          "Name": "AccountCloseRequestAudited",
+          "DisplayName": "Account Close request audited by 4P",
+          "Description": "...",
+          "PercentComplete": 100,
+          "Value": 100,
+          "Style": "Success"   ,
+          "Transitions": [
+            {
+              "AllowedRoles": [],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "AuditResponse",
+              "NextStates": [ "AccountCloseRequestAudited" ],
+              "DisplayName": "Audit Completed"
+            }
+          ]       
+        }
+      ]
+    }
+  ]
+}

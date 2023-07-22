@@ -1,0 +1,13 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IServicePointManagerConfig
+{
+    1   :   required    int32   DefaultConnectionLimit;
+    2   :   required    int32   DnsRefreshTimeout;
+    3   :   required    bool    EnableDnsRoundRobin;
+    4   :   required    int32   MaxServicePointIdleTime;
+    5   :   required    int32   MaxServicePoints;
+    6   :   required    bool    ReusePort;
+    7   :   required    bool    UseNagleAlgorithm;
+    8   :   optional    int32   MinThreads;
+};

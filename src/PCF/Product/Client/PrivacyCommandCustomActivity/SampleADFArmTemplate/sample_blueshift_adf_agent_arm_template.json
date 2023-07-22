@@ -1,0 +1,644 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+      "type": "string",
+      "metadata": "Name of Data Factory for Delete and Export pipeline"
+    },
+    "SecretNameForAgentBlobStorageConnectionString": {
+      "type": "string",
+      "metadata": "Secret name in Keyvault that has connection string for Blob Storage associated with Batch Account"
+    },
+    "SecretNameForBatchAccountAccessKey": {
+      "type": "string",
+      "metadata": "Secret name in Keyvault that has access key for Azure Batch account"
+    },
+    "SampleAgentAzureBatchUri": {
+      "type": "string",
+      "metadata": "Url of the batch account used in the custom activity"
+    },
+    "SampleAgentAzureBatchPoolName": {
+      "type": "string",
+      "metadata": "Name of the batch pool within the batch account"
+    },
+    "SampleAgentAzureBatchAccountName": {
+      "type": "string",
+      "metadata": "Name of the batch account used in custom activity"
+    },
+    "BlueshiftAnalyticsEngineAccountName": {
+      "type": "string",
+      "metadata": "Name of the Azure Data Lake Analytics instance that supports blueshift accounts"
+    },
+    "BlueshiftAnalyticsEngineServicePrincipalId": {
+      "type": "string",
+      "metadata": "The service principal that needs access to resources in ADLS Gen2 account"
+    },
+    "BlueshiftAnalyticsEngineTenant": {
+      "type": "string",
+      "metadata": "The tenant where the service principal resides"
+    },
+    "BlueshiftAnalyticsEngineSubscriptionId": {
+      "type": "string",
+      "metadata": "Subscription where the ADLS Gen2 account resides"
+    },
+    "BlueshiftAnalyticsEngineResourceGroupName": {
+      "type": "string",
+      "metadata": "ResourceGroup of the ADLS Gen2 store"
+    },
+    "AdlsGen2BlueshiftUrl": {
+      "type": "string",
+      "metadata": "Adls Gen2 storage account url"
+    }
+  },
+  "variables": {
+    "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+  },
+  "resources": [
+    {
+      "name": "[concat(parameters('factoryName'), '/AgentClientCertKV')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureKeyVault",
+        "typeProperties": {
+          "baseUrl": "[parameters('SampleAgentAzureBatchUri')]"
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AzureBlobStorageForAgent')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureBlobStorage",
+        "typeProperties": {
+          "connectionString": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "[parameters('SecretNameForAgentBlobStorageConnectionString')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AzureBatchForSampleAgent')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureBatch",
+        "typeProperties": {
+          "batchUri": "[parameters('SampleAgentAzureBatchUri')]",
+          "poolName": "[parameters('SampleAgentAzureBatchPoolName')]",
+          "accountName": "[parameters('SampleAgentAzureBatchAccountName')]",
+          "linkedServiceName": {
+            "referenceName": "AzureBlobStorageForAgent",
+            "type": "LinkedServiceReference"
+          },
+          "accessKey": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "AzureBatchForSampleAgentAccessKey"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+
+    {
+      "name": "[concat(parameters('factoryName'), '/BlueshiftAnalyticsEngine')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureDataLakeAnalytics",
+        "typeProperties": {
+          "accountName": "[parameters('BlueshiftAnalyticsEngineAccountName')]",
+          "servicePrincipalId": "[parameters('BlueshiftAnalyticsEngineServicePrincipalId')]",
+          "servicePrincipalKey": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "AppRegistrationKeyForScopeJobs"
+          },
+          "tenant": "[parameters('BlueshiftAnalyticsEngineTenant')]",
+          "subscriptionId": "[parameters('BlueshiftAnalyticsEngineSubscriptionId')]",
+          "resourceGroupName": "[parameters('BlueshiftAnalyticsEngineResourceGroupName')]"
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AdlsGen2Blueshift')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureBlobFS",
+        "typeProperties": {
+          "url": "[parameters('AdlsGen2BlueshiftUrl')]",
+          "accountKey": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "AdlsGen2StorageKey"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/DeletePipelineForAgents_Blueshift')]",
+      "type": "Microsoft.DataFactory/factories/pipelines",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "activities": [
+          {
+            "name": "GetDeleteBatchCommands",
+            "type": "Custom",
+            "dependsOn": [],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://scopesamplesbatchagent.blob.core.windows.net/",
+                "outputBlobContainerName": {
+                  "value": "@pipeline().parameters.outputBlobContainerName",
+                  "type": "Expression"
+                },
+                "customActivityType": {
+                  "value": "GetCommands",
+                  "type": "Expression"
+                },
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "CheckpointBatchCommands",
+            "type": "Custom",
+            "dependsOn": [
+              {
+                "activity": "ScopeToApplyDeleteDsr",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://scopesamplesbatchagent.blob.core.windows.net/",
+                "outputBlobContainerName": {
+                  "value": "@pipeline().parameters.outputBlobContainerName",
+                  "type": "Expression"
+                },
+                "customActivityType": {
+                  "value": "CompleteCommands",
+                  "type": "Expression"
+                },
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "ScopeToApplyDeleteDsr",
+            "type": "DataLakeAnalyticsScope",
+            "dependsOn": [
+              {
+                "activity": "GetDeleteBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "scriptFolderPath": "filesystem/Scripts",
+              "scriptFileName": "BUSSDeleteSample.script",
+              "scriptLinkedService": {
+                "referenceName": "AdlsGen2Blueshift",
+                "type": "LinkedServiceReference"
+              },
+              "parameters": {
+                "ReferenceRoot": "\"References\"",
+                "InputLocation": {
+                  "value": "@concat('\"',pipeline().parameters.assetGroupId,'/',formatDateTime(pipeline().parameters.startTime,'yyyyMMddTHHmmss'),'_', formatDateTime(pipeline().parameters.endTime,'yyyyMMddTHHmmss'),'/',pipeline().parameters.operation,'\"')",
+                  "type": "Expression"
+                },
+                "TargetLocation": "\"Target\""
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "BlueshiftAnalyticsEngine",
+              "type": "LinkedServiceReference"
+            }
+          }
+        ],
+        "policy": {
+          "elapsedTimeMetric": {},
+          "cancelAfter": {}
+        },
+        "parameters": {
+          "startTime": {
+            "type": "string",
+            "defaultValue": "2022-08-15 00:00"
+          },
+          "endTime": {
+            "type": "string",
+            "defaultValue": "2022-08-15 12:00"
+          },
+          "agentId": {
+            "type": "string",
+            "defaultValue": "c852d9ca-81f0-4d01-b018-5ea061e9a349"
+          },
+          "assetGroupId": {
+            "type": "string",
+            "defaultValue": "2cf473d6-01e0-40f8-9b53-21563dbe3b4d"
+          },
+          "outputBlobContainerName": {
+            "type": "string",
+            "defaultValue": "filesystem"
+          },
+          "operation": {
+            "type": "string",
+            "defaultValue": "Delete"
+          }
+        },
+        "annotations": [],
+        "lastPublishTime": "2022-08-16T05:19:33Z"
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AzureBatchForSampleAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AdlsGen2Blueshift')]",
+        "[concat(variables('factoryId'), '/linkedServices/BlueshiftAnalyticsEngine')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ExportPipelineForAgents_Blueshift')]",
+      "type": "Microsoft.DataFactory/factories/pipelines",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "activities": [
+          {
+            "name": "GetExportBatchCommands",
+            "type": "Custom",
+            "dependsOn": [],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://scopesamplesbatchagent.blob.core.windows.net/",
+                "outputBlobContainerName": {
+                  "value": "@pipeline().parameters.outputBlobContainerName",
+                  "type": "Expression"
+                },
+                "customActivityType": {
+                  "value": "GetCommands",
+                  "type": "Expression"
+                },
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "CheckpointBatchCommands",
+            "type": "Custom",
+            "dependsOn": [
+              {
+                "activity": "ScopeToApplyExportDsr",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://scopesamplesbatchagent.blob.core.windows.net/",
+                "outputBlobContainerName": {
+                  "value": "@pipeline().parameters.outputBlobContainerName",
+                  "type": "Expression"
+                },
+                "customActivityType": {
+                  "value": "CompleteCommands",
+                  "type": "Expression"
+                },
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                },
+                "exportStagingContainerUri": "https://scopesamplesbatchagent.blob.core.windows.net/filesystem/",
+                "exportStagingRootFolder": {
+                  "value": "@concat('ExportedAssets/',pipeline().parameters.assetGroupId, '/', formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), '_', formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'))",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "ScopeToApplyExportDsr",
+            "type": "DataLakeAnalyticsScope",
+            "dependsOn": [
+              {
+                "activity": "GetExportBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "scriptFolderPath": "filesystem/Scripts",
+              "scriptFileName": "ExportSample.script",
+              "scriptLinkedService": {
+                "referenceName": "AdlsGen2Blueshift",
+                "type": "LinkedServiceReference"
+              },
+              "parameters": {
+                "ReferenceRoot": "\"References\"",
+                "OutputLocation": {
+                  "value": "@replace('\"ExportedAssets/batchid\"','batchid', concat(pipeline().parameters.assetGroupId,'/',formatDateTime(pipeline().parameters.startTime, 'yyyyMMddTHHmmss'),'_',formatDateTime(pipeline().parameters.endTime, 'yyyyMMddTHHmmss')))",
+                  "type": "Expression"
+                },
+                "ProductId": "\"ProductA\"",
+                "InputLocation": {
+                  "value": "\"Target\"",
+                  "type": "Expression"
+                },
+                "TargetDataLocation": {
+                  "value": "\"Target\"",
+                  "type": "Expression"
+                }
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "BlueshiftAnalyticsEngine",
+              "type": "LinkedServiceReference"
+            }
+          }
+        ],
+        "policy": {
+          "elapsedTimeMetric": {},
+          "cancelAfter": {}
+        },
+        "parameters": {
+          "startTime": {
+            "type": "string",
+            "defaultValue": "2022-08-15 00:00"
+          },
+          "endTime": {
+            "type": "string",
+            "defaultValue": "2022-08-15 12:00"
+          },
+          "agentId": {
+            "type": "string",
+            "defaultValue": "c852d9ca-81f0-4d01-b018-5ea061e9a349"
+          },
+          "assetGroupId": {
+            "type": "string",
+            "defaultValue": "2cf473d6-01e0-40f8-9b53-21563dbe3b4d"
+          },
+          "outputBlobContainerName": {
+            "type": "string",
+            "defaultValue": "filesystem"
+          },
+          "operation": {
+            "type": "string",
+            "defaultValue": "Export"
+          }
+        },
+        "annotations": [],
+        "lastPublishTime": "2022-07-25T21:46:40Z"
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AzureBatchForSampleAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AdlsGen2Blueshift')]",
+        "[concat(variables('factoryId'), '/linkedServices/BlueshiftAnalyticsEngine')]"
+      ]
+    }
+  ]
+}

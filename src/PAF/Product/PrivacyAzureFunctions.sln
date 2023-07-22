@@ -1,0 +1,172 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{FEC4AAB6-2F0F-4F37-885D-AE8DE2707202}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2CCF04F7-6EF9-41CD-8231-777E542C1EF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{9A9AA895-D873-4165-AF76-DE3A93D1E6F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions.UnitTests", "Tests\Functions.UnitTests\Functions.UnitTests.csproj", "{48321C94-DC8F-460B-9A6C-A1AE0D767330}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{A2ABE6ED-EDC5-4471-8590-731A33D67B55}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Privacy.AzureFunctions.Common\Common.csproj", "{214057CF-3FCD-4342-8F97-6E1021654C53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions", "Functions\Functions.csproj", "{8DEA6CF2-042F-44C7-905C-49B6C219A52D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTests", "FunctionalTests", "{A286F92A-6317-4009-9432-403289C0D257}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions.FunctionalTests", "Tests\Functions.FunctionalTests\Functions.FunctionalTests.csproj", "{EE6F7586-7455-4169-9AC8-5ACDC1084102}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4908CE76-BB25-4A16-936C-612C6B3D81B8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		..\Packages.props = ..\Packages.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{340D5365-EAC5-4A33-8829-8A29D54E718C}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\ado-variant-assetlinkingprocesstemplate.json = Resources\ado-variant-assetlinkingprocesstemplate.json
+		Resources\configuration.json = Resources\configuration.json
+		Resources\README.md = Resources\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnaheimIdLib", "..\..\Common\AnaheimIdLib\AnaheimIdLib.csproj", "{C5559FBE-EF56-4450-97EA-DA10EF7E8109}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".pipelines", ".pipelines", "{462CC723-EBF5-4F0E-9CD2-63664064DF06}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\.pipelines\anaheim-id.shared.library-buddy-develop.yml = ..\..\..\.pipelines\anaheim-id.shared.library-buddy-develop.yml
+		..\..\..\.pipelines\common-steps.yml = ..\..\..\.pipelines\common-steps.yml
+		..\..\..\.pipelines\common-variables.yml = ..\..\..\.pipelines\common-variables.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Shared", ".Shared", "{38377917-448B-4C83-942A-F4012C23E40D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComplianceServicesCommon", "..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj", "{1F80ACF7-DA75-4805-B46E-FE6A821639C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PXS.Command.Contracts", "..\..\PXS\Product\Contracts\PCFContracts\PXS.Command.Contracts.csproj", "{E9537C34-6B3D-4F6F-8F2C-CD45E11E2038}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnaheimId", "AnaheimId", "{F8EA19CF-2851-4A35-93A3-56C2B9B7149D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnaheimId", "AnaheimId\AnaheimId.csproj", "{78A49EE5-2B70-4755-B955-82880FE769B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pdms.Client", "..\..\PDMS\Product\ClientSdks\Client\Pdms.Client.csproj", "{CDC980A2-0064-4EB6-82C7-738A3DB5546A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pdms.Client.Aad", "..\..\PDMS\Product\ClientSdks\Pdms.Client.Aad\Pdms.Client.Aad.csproj", "{F9134AEF-2B47-4534-A041-EA7873E3951A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Azure", "..\..\Common\Azure\Common.Azure.csproj", "{ED15AC6A-12C9-4D29-8A8D-FB7E14928CAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComplianceServicesCommon.UnitTests", "..\..\Common\ComplianceServicesCommon.UnitTests\ComplianceServicesCommon.UnitTests.csproj", "{12818329-C7C3-450E-BC3A-0D2BE3CC2B37}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIdFunctions", "AIdFunctions\AIdFunctions.csproj", "{92BB8441-C3C2-4C71-B48D-19FBAC82FE39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AIdFunctions", "AIdFunctions", "{DCB6B5E5-3756-4972-B70F-8AA73CDB237A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions.AIdFunctionalTests", "Tests\Functions.AIdFunctionalTests\Functions.AIdFunctionalTests.csproj", "{D2C9C52B-E696-4A7D-A861-5534B7C7BDE3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrivacyCommandProcessor", "..\..\PCF\Product\Client\Source\PrivacyCommandProcessor.csproj", "{B1767DB3-EC55-42B7-A8F8-1023032F12DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrivacyCommandValidator", "..\..\PCF\Product\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj", "{8847224A-D291-46AB-971C-EAE9D540C36A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48321C94-DC8F-460B-9A6C-A1AE0D767330}.Debug|x64.ActiveCfg = Debug|x64
+		{48321C94-DC8F-460B-9A6C-A1AE0D767330}.Debug|x64.Build.0 = Debug|x64
+		{48321C94-DC8F-460B-9A6C-A1AE0D767330}.Release|x64.ActiveCfg = Release|x64
+		{48321C94-DC8F-460B-9A6C-A1AE0D767330}.Release|x64.Build.0 = Release|x64
+		{214057CF-3FCD-4342-8F97-6E1021654C53}.Debug|x64.ActiveCfg = Debug|x64
+		{214057CF-3FCD-4342-8F97-6E1021654C53}.Debug|x64.Build.0 = Debug|x64
+		{214057CF-3FCD-4342-8F97-6E1021654C53}.Release|x64.ActiveCfg = Release|x64
+		{214057CF-3FCD-4342-8F97-6E1021654C53}.Release|x64.Build.0 = Release|x64
+		{8DEA6CF2-042F-44C7-905C-49B6C219A52D}.Debug|x64.ActiveCfg = Debug|x64
+		{8DEA6CF2-042F-44C7-905C-49B6C219A52D}.Debug|x64.Build.0 = Debug|x64
+		{8DEA6CF2-042F-44C7-905C-49B6C219A52D}.Release|x64.ActiveCfg = Release|x64
+		{8DEA6CF2-042F-44C7-905C-49B6C219A52D}.Release|x64.Build.0 = Release|x64
+		{EE6F7586-7455-4169-9AC8-5ACDC1084102}.Debug|x64.ActiveCfg = Debug|x64
+		{EE6F7586-7455-4169-9AC8-5ACDC1084102}.Debug|x64.Build.0 = Debug|x64
+		{EE6F7586-7455-4169-9AC8-5ACDC1084102}.Release|x64.ActiveCfg = Release|x64
+		{EE6F7586-7455-4169-9AC8-5ACDC1084102}.Release|x64.Build.0 = Release|x64
+		{C5559FBE-EF56-4450-97EA-DA10EF7E8109}.Debug|x64.ActiveCfg = Debug|x64
+		{C5559FBE-EF56-4450-97EA-DA10EF7E8109}.Debug|x64.Build.0 = Debug|x64
+		{C5559FBE-EF56-4450-97EA-DA10EF7E8109}.Release|x64.ActiveCfg = Release|x64
+		{C5559FBE-EF56-4450-97EA-DA10EF7E8109}.Release|x64.Build.0 = Release|x64
+		{1F80ACF7-DA75-4805-B46E-FE6A821639C2}.Debug|x64.ActiveCfg = Debug|x64
+		{1F80ACF7-DA75-4805-B46E-FE6A821639C2}.Debug|x64.Build.0 = Debug|x64
+		{1F80ACF7-DA75-4805-B46E-FE6A821639C2}.Release|x64.ActiveCfg = Release|x64
+		{1F80ACF7-DA75-4805-B46E-FE6A821639C2}.Release|x64.Build.0 = Release|x64
+		{E9537C34-6B3D-4F6F-8F2C-CD45E11E2038}.Debug|x64.ActiveCfg = Debug|x64
+		{E9537C34-6B3D-4F6F-8F2C-CD45E11E2038}.Debug|x64.Build.0 = Debug|x64
+		{E9537C34-6B3D-4F6F-8F2C-CD45E11E2038}.Release|x64.ActiveCfg = Release|x64
+		{E9537C34-6B3D-4F6F-8F2C-CD45E11E2038}.Release|x64.Build.0 = Release|x64
+		{78A49EE5-2B70-4755-B955-82880FE769B0}.Debug|x64.ActiveCfg = Debug|x64
+		{78A49EE5-2B70-4755-B955-82880FE769B0}.Debug|x64.Build.0 = Debug|x64
+		{78A49EE5-2B70-4755-B955-82880FE769B0}.Release|x64.ActiveCfg = Release|x64
+		{78A49EE5-2B70-4755-B955-82880FE769B0}.Release|x64.Build.0 = Release|x64
+		{CDC980A2-0064-4EB6-82C7-738A3DB5546A}.Debug|x64.ActiveCfg = Debug|x64
+		{CDC980A2-0064-4EB6-82C7-738A3DB5546A}.Debug|x64.Build.0 = Debug|x64
+		{CDC980A2-0064-4EB6-82C7-738A3DB5546A}.Release|x64.ActiveCfg = Release|x64
+		{CDC980A2-0064-4EB6-82C7-738A3DB5546A}.Release|x64.Build.0 = Release|x64
+		{F9134AEF-2B47-4534-A041-EA7873E3951A}.Debug|x64.ActiveCfg = Debug|x64
+		{F9134AEF-2B47-4534-A041-EA7873E3951A}.Debug|x64.Build.0 = Debug|x64
+		{F9134AEF-2B47-4534-A041-EA7873E3951A}.Release|x64.ActiveCfg = Release|x64
+		{F9134AEF-2B47-4534-A041-EA7873E3951A}.Release|x64.Build.0 = Release|x64
+		{ED15AC6A-12C9-4D29-8A8D-FB7E14928CAA}.Debug|x64.ActiveCfg = Debug|x64
+		{ED15AC6A-12C9-4D29-8A8D-FB7E14928CAA}.Debug|x64.Build.0 = Debug|x64
+		{ED15AC6A-12C9-4D29-8A8D-FB7E14928CAA}.Release|x64.ActiveCfg = Release|x64
+		{ED15AC6A-12C9-4D29-8A8D-FB7E14928CAA}.Release|x64.Build.0 = Release|x64
+		{12818329-C7C3-450E-BC3A-0D2BE3CC2B37}.Debug|x64.ActiveCfg = Debug|x64
+		{12818329-C7C3-450E-BC3A-0D2BE3CC2B37}.Debug|x64.Build.0 = Debug|x64
+		{12818329-C7C3-450E-BC3A-0D2BE3CC2B37}.Release|x64.ActiveCfg = Release|x64
+		{12818329-C7C3-450E-BC3A-0D2BE3CC2B37}.Release|x64.Build.0 = Release|x64
+		{92BB8441-C3C2-4C71-B48D-19FBAC82FE39}.Debug|x64.ActiveCfg = Debug|x64
+		{92BB8441-C3C2-4C71-B48D-19FBAC82FE39}.Debug|x64.Build.0 = Debug|x64
+		{92BB8441-C3C2-4C71-B48D-19FBAC82FE39}.Release|x64.ActiveCfg = Release|x64
+		{92BB8441-C3C2-4C71-B48D-19FBAC82FE39}.Release|x64.Build.0 = Release|x64
+		{D2C9C52B-E696-4A7D-A861-5534B7C7BDE3}.Debug|x64.ActiveCfg = Debug|x64
+		{D2C9C52B-E696-4A7D-A861-5534B7C7BDE3}.Debug|x64.Build.0 = Debug|x64
+		{D2C9C52B-E696-4A7D-A861-5534B7C7BDE3}.Release|x64.ActiveCfg = Release|x64
+		{D2C9C52B-E696-4A7D-A861-5534B7C7BDE3}.Release|x64.Build.0 = Release|x64
+		{B1767DB3-EC55-42B7-A8F8-1023032F12DC}.Debug|x64.ActiveCfg = Debug|x64
+		{B1767DB3-EC55-42B7-A8F8-1023032F12DC}.Debug|x64.Build.0 = Debug|x64
+		{B1767DB3-EC55-42B7-A8F8-1023032F12DC}.Release|x64.ActiveCfg = Release|x64
+		{B1767DB3-EC55-42B7-A8F8-1023032F12DC}.Release|x64.Build.0 = Release|x64
+		{8847224A-D291-46AB-971C-EAE9D540C36A}.Debug|x64.ActiveCfg = Debug|x64
+		{8847224A-D291-46AB-971C-EAE9D540C36A}.Debug|x64.Build.0 = Debug|x64
+		{8847224A-D291-46AB-971C-EAE9D540C36A}.Release|x64.ActiveCfg = Release|x64
+		{8847224A-D291-46AB-971C-EAE9D540C36A}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A9AA895-D873-4165-AF76-DE3A93D1E6F4} = {2CCF04F7-6EF9-41CD-8231-777E542C1EF5}
+		{48321C94-DC8F-460B-9A6C-A1AE0D767330} = {9A9AA895-D873-4165-AF76-DE3A93D1E6F4}
+		{214057CF-3FCD-4342-8F97-6E1021654C53} = {A2ABE6ED-EDC5-4471-8590-731A33D67B55}
+		{8DEA6CF2-042F-44C7-905C-49B6C219A52D} = {FEC4AAB6-2F0F-4F37-885D-AE8DE2707202}
+		{A286F92A-6317-4009-9432-403289C0D257} = {2CCF04F7-6EF9-41CD-8231-777E542C1EF5}
+		{EE6F7586-7455-4169-9AC8-5ACDC1084102} = {A286F92A-6317-4009-9432-403289C0D257}
+		{C5559FBE-EF56-4450-97EA-DA10EF7E8109} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{1F80ACF7-DA75-4805-B46E-FE6A821639C2} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{E9537C34-6B3D-4F6F-8F2C-CD45E11E2038} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{F8EA19CF-2851-4A35-93A3-56C2B9B7149D} = {FEC4AAB6-2F0F-4F37-885D-AE8DE2707202}
+		{78A49EE5-2B70-4755-B955-82880FE769B0} = {F8EA19CF-2851-4A35-93A3-56C2B9B7149D}
+		{CDC980A2-0064-4EB6-82C7-738A3DB5546A} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{F9134AEF-2B47-4534-A041-EA7873E3951A} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{ED15AC6A-12C9-4D29-8A8D-FB7E14928CAA} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{12818329-C7C3-450E-BC3A-0D2BE3CC2B37} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{92BB8441-C3C2-4C71-B48D-19FBAC82FE39} = {DCB6B5E5-3756-4972-B70F-8AA73CDB237A}
+		{D2C9C52B-E696-4A7D-A861-5534B7C7BDE3} = {A286F92A-6317-4009-9432-403289C0D257}
+		{B1767DB3-EC55-42B7-A8F8-1023032F12DC} = {38377917-448B-4C83-942A-F4012C23E40D}
+		{8847224A-D291-46AB-971C-EAE9D540C36A} = {38377917-448B-4C83-942A-F4012C23E40D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {222D73F5-CFDA-4290-871E-9B111773A42A}
+	EndGlobalSection
+EndGlobal

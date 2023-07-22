@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.Worker</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.PcfWorker</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Exe</OutputType>
+    <OutputPath>$(OutputPath)\..\AutopilotRelease\$(MSBuildProjectName)</OutputPath>
+    <PostBuildEvent>del $(OutDir)\extracted.txt</PostBuildEvent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\app.config" Link="app.config" />
+    <None Include="config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ServiceConfig.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="start.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\BackgroundTasks\BackgroundTasks.csproj" />
+    <ProjectReference Include="..\CommandHistory\CommandHistory.csproj" />
+    <ProjectReference Include="..\CommandLifecycle\CommandLifecycleNotifications.csproj" />
+    <ProjectReference Include="..\CommandReplay\CommandReplay.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\NonWindowsDeviceDeleteWorker\NonWindowsDeviceDeleteWorker.csproj" />
+    <ProjectReference Include="..\PdmsCache\PdmsCache.csproj" />
+    <ProjectReference Include="..\SLL\Instrumentation.csproj" />
+  </ItemGroup>
+  
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

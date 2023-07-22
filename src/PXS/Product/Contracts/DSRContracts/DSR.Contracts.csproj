@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.PrivacyServices.DataSubjectRight.Contracts</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.DataSubjectRight.Contracts</AssemblyName>
+    <TargetFrameworks>net452;net472</TargetFrameworks>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.OData" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
+    <PackageReference Include="System.Text.Encodings.Web" />
+    <!-- Newtonsoft.Json < v13.0.1 has a security issue. Enforcing versioning for the dependency here -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

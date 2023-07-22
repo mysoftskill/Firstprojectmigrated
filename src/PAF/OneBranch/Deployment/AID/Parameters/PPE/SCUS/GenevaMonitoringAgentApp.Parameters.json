@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionId": {
+      "value": "b4b176cf-fe78-4b59-bd1a-9b8c11536f4d"
+    },
+    "appServicePlanResourceGroup": {
+      "value": "AID-PPE-SOUTHCENTRALUS-CLUSTER-RG"
+    },
+    "location": {
+      "value": "SouthCentralUS"
+    },
+    "appName": {
+      "value": "AnaheimIdProcessorPPESCUS"
+    },
+    "storageResourceGroup": {
+      "value": "PAF-NONPROD-RG"
+    },
+    "storageName": {
+      "value": "aidinfrascusppe"
+    },
+    "storageAccountKind": {
+      "value": "StorageV2"
+    },
+    "genevaCertVaultId": {
+      "value": "/subscriptions/b4b176cf-fe78-4b59-bd1a-9b8c11536f4d/resourceGroups/ADG-CS-CLOUDTEST-RG/providers/Microsoft.KeyVault/vaults/adgcs-ame-kv"
+    },
+    "genevaCertSecretName": {
+      "value": "geneva"
+    },
+    "monitoringTenant": {
+      "value": "ADGCS-PPE-SCUS"
+    },
+    "monitoringRole": {
+      "value": "PAF.AIdFunction"
+    },
+    "monitoringGcsEnvironment": {
+      "value": "Diagnostics Prod"
+    },
+    "monitoringGcsAccount": {
+      "value": "ADGCSNonProdWarmPath"
+    },
+    "monitoringGcsNamespace": {
+      "value": "nonprodpafadgcs"
+    },
+    "monitoringGcsAuthId": {
+      "value": "pxs.Geneva.KeyVault.geneva.privacy.microsoft-ppe.com"
+    },
+    "monitoringConfigVersion": {
+      "value": "99.9"
+    },
+    "computeRegionOverride": {
+      "value": "" // Empty means we are using location of resourceGroup
+    }
+  }
+}

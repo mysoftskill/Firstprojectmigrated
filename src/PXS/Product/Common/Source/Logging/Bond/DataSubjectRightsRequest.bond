@@ -1,0 +1,25 @@
+﻿import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+
+namespace Microsoft.Membership.MemberServices.Common.Logging
+
+[Description("Event for Data Subject Rights Request")]
+struct DataSubjectRightsRequest : Microsoft.Telemetry.Base
+{
+    1  : string SubjectType;
+    2  : string RequestType;
+    3  : string PrivacyDataTypes;
+    4  : string RequestId;
+    5  : string RequestGuid;
+    6  : string CloudInstance;
+    7  : string Portal;
+    8  : bool ControllerApplicable;
+    9  : bool ProcessorApplicable;
+    10 : string RequestTimestamp;
+    11 : map<string, string> ExtraData;
+    12 : bool IsTestRequest;
+    13 : string Requester;
+}
+

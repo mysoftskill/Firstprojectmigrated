@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyExperience.PerfClient</RootNamespace>
+    <AssemblyName>PxsPerfClient</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ReleaseSubDir>PxsPerfClient</ReleaseSubDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Test\Common\TestCommon.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\PrivacyExperienceClientLibrary\Source\PrivacyExperienceClientLibrary.csproj" />
+    <ProjectReference Include="..\Common\PrivacyTestCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Users\ProdUsers.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Users\IntUsers.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Users\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

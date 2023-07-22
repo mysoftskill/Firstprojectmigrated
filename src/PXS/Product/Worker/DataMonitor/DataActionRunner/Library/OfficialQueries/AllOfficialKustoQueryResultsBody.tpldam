@@ -1,0 +1,23 @@
+﻿<h2>Daily Run of the Official Kusto Queries</h2>
+<p>
+  Queries:
+  <ol>
+  [[<foreach sel:$.QueryList foreach>]]
+    <li>
+      [[<var s:$.QueryName var>]]
+    </li>
+    [[<foreachend>]]
+</ol>
+</p>
+<p>
+  Results:
+  [[<foreach sel:$.FullQueryResults foreach>]]
+    <ol>
+      [[<foreach sel:$.QueryResults foreach>]]
+        <li>
+          [[<var s:$.QueryResult var>]]
+        </li>
+        [[<foreachend>]]
+    </ol>
+  [[<foreachend>]]
+</p>

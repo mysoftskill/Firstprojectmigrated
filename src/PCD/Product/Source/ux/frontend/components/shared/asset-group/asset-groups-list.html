@@ -1,0 +1,73 @@
+<div class="c-table f-divided" data-grid="col-12">
+    <table data-f-sort="false" ng-if="$ctrl.assetGroups">
+        <caption ng-if="$ctrl.title">{{$ctrl.title}}</caption>
+        <thead>
+            <tr>
+                <th scope="col" ng-if="$ctrl.shouldAllowMultiSelect()"></th>
+                <th scope="col" data-use-cms>AssetGroup qualifier</th>
+                <th scope="col" ng-if="$ctrl.shouldShowTeamOwned()" data-use-cms>Team owns data?</th>
+                <th scope="col" ng-if="$ctrl.shouldShowPrivacyActions()" data-use-cms>Privacy actions</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody ng-if="$ctrl.hasDataInventory()">
+            <tr ng-repeat="assetGroup in $ctrl.assetGroups track by assetGroup.id"
+                ng-class="{'pending-transfer': $ctrl.hasPendingTransferRequest(assetGroup)}"
+                class="content-row fade-in-animation"
+                id="{{assetGroup.id}}">
+                <td ng-if="$ctrl.shouldAllowMultiSelect()">
+                    <asset-group-list-item ng-if="$ctrl.canSelect(assetGroup)" asset-list-item-aria-label="Select this for Asset Group with id: {{assetGroup.id}}" ng-model="assetGroup.checked" />
+                </td>
+                <td class="force-wrapped">
+                    <span class="mee-error-color"
+                          ng-if="$ctrl.hasPendingTransferRequest(assetGroup)"
+                          data-use-cms>
+                        [Pending transfer to {{assetGroup.pendingTransferRequestTargetOwnerName}}<pcd-permalink pcd-url="{{$ctrl.getTransferOwnerViewLink(assetGroup.pendingTransferRequestTargetOwnerId)}}"></pcd-permalink>]
+                    </span><br/>
+                    <pcd-asset-group-qualifier-view pcd-qualifier="assetGroup.qualifier" pcd-asset-group-id="assetGroup.id"></pcd-asset-group-qualifier-view>
+                </td>
+                <td ng-if="$ctrl.shouldShowTeamOwned()">
+                    <span>{{$ctrl.getIsOwnerLabel(assetGroup)}}</span>
+                    <pcd-modal-link-trigger ng-if="$ctrl.shouldShowOwnerContact(assetGroup)"
+                                            pcd-modal-data="{ ownerId: assetGroup.ownerId }"
+                                            pcd-label="{{$ctrl.whoIsOwnerLabel}}"
+                                            pcd-modal-state-name=".owner-contact"></pcd-modal-link-trigger>
+                </td>
+                <td ng-if="$ctrl.shouldShowPrivacyActions()" i9n-privacy-actions>
+                    <pcd-privacy-actions-view pcd-asset-group="assetGroup"></pcd-privacy-actions-view>
+                </td>
+                <td class="action-list" i9n-action-list>
+                    <a ui-sref="data-assets.manage.edit({ ownerId: assetGroup.ownerId, assetGroupId: assetGroup.id })"
+                       data-glyph="edit"
+                       mee-action-trigger="align-margin"
+                       i9n-edit-asset
+                       data-use-cms>Edit</a>
+                    <a ng-if="$ctrl.hasVariant(assetGroup)"
+                       ui-sref="data-assets.manage.variants({ ownerId: assetGroup.ownerId, assetGroupId: assetGroup.id })"
+                       data-glyph="info"
+                       mee-action-trigger="align-margin"
+                       i9n-variants
+                       data-use-cms>Variants</a>
+                    <a ng-if="$ctrl.hasPendingVariantRequests(assetGroup)"
+                       ui-sref="data-assets.manage.variant-requests({ ownerId: assetGroup.ownerId, assetGroupId: assetGroup.id })"
+                       data-glyph="shuffle"
+                       mee-action-trigger="align-margin"
+                       i9n-pending-variants
+                       data-use-cms>Pending variants</a>
+                    <a ng-if="$ctrl.shouldShowRemove(assetGroup)"
+                       ng-click="$ctrl.onDeleteClicked(assetGroup)"
+                       mee-no-href
+                       data-glyph="cancel"
+                       mee-action-trigger="align-margin"
+                       i9n-remove-asset
+                       data-use-cms>Remove</a>
+                </td>
+            </tr>
+        </tbody>
+        <tbody ng-if="!$ctrl.hasDataInventory()">
+            <tr>
+                <td colspan="5" class="f-sub-categorical" data-use-cms>You don't currently have any assets registered.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

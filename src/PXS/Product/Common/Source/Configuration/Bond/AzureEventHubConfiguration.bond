@@ -1,0 +1,8 @@
+﻿namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IAzureEventHubConfiguration
+{
+    1 : required string HostName;
+    2 : required string VaultBaseUrl;
+    3 : required string ConsumerGroupName;
+};

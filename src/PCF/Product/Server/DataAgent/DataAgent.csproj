@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.DataAgent</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.DataAgent</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputPath>$(OutputPath)\..\AutopilotRelease\$(MSBuildProjectName)</OutputPath>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\app.config" Link="app.config" />
+    <None Include="config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ServiceConfig.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="start.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Client\Source\PrivacyCommandProcessor.csproj" />
+    <ProjectReference Include="..\..\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\SLL\Instrumentation.csproj" />
+  </ItemGroup>
+  
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

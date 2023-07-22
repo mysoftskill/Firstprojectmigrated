@@ -1,0 +1,28 @@
+<section>
+    <div class="c-table f-divided" data-grid="col-12">
+        <div ng-switch="$ctrl.warningStyle">
+            <ng-transclude ng-switch-when="simple" ng-transclude-slot="simpleWarning"></ng-transclude>
+            <ng-transclude ng-switch-when="custom1" ng-transclude-slot="customWarning1"></ng-transclude>
+        </div>
+
+        <table data-f-sort="false" class="data-assets-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="asset-type-th">{{$ctrl.caption}}</th>
+                </tr>
+            </thead>
+            <tbody ng-if="$ctrl.hasDataAssets()">
+                <tr ng-repeat="asset in $ctrl.ngModel track by asset.id">
+                    <td class="force-wrapped">
+                        <pcd-asset-group-qualifier-view pcd-qualifier="asset.qualifier"></pcd-asset-group-qualifier-view>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="!$ctrl.hasDataAssets()">
+                <tr>
+                    <td class="f-sub-categorical">{{$ctrl.noDataAssetsLabel}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

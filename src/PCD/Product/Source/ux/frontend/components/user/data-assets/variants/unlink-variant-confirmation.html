@@ -1,0 +1,11 @@
+<h2 mee-heading="subheading2" data-use-cms>Unlink Variant</h2>
+
+<p mee-paragraph data-use-cms>You are about to unlink variant <span class="view-label">{{$ctrl.variant.name}}</span></p>
+<p mee-paragraph data-use-cms>
+    Only proceed if you intend to start handling signals for the assets that are linked to this variant.
+    If you want to move it to a new team,
+    <a mee-hyperlink mee-no-href ng-click="$ctrl.requestAdminAssistance()">reach out to PDMS Admins</a>.
+</p>
+<p mee-paragraph data-use-cms>Are you sure?</p>
+
+<pcd-confirmation-modal-actions></pcd-confirmation-modal-actions>

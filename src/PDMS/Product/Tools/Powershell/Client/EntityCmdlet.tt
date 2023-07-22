@@ -1,0 +1,209 @@
+﻿<#@ template hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(EnlistmentRoot)\Product\Client\Core\Models\bin\debug\Microsoft.PrivacyServices.DataManagement.Client.Models.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Microsoft.PrivacyServices.DataManagement.Client.V2" #>
+<#@ output extension=".cs" #>
+<# Tuple<string, string, string, string, bool>[] types = new[] {
+    Tuple.Create("DataOwner", "DataOwner", "", "NEW,GET,SET,REMOVE,FIND", true),
+    Tuple.Create("AssetGroup", "AssetGroup", "", "NEW,GET,SET,REMOVE,FIND", true),
+    Tuple.Create("VariantDefinition", "VariantDefinition", "", "NEW,GET,SET,REMOVE,FIND", true),
+    Tuple.Create("DeleteAgent", "DataAgent", "<DeleteAgent>", "NEW,GET,SET,REMOVE,FIND", true),
+    Tuple.Create("SharingRequest", "SharingRequest", "", "GET,REMOVE,FIND", true),
+    Tuple.Create("VariantRequest", "VariantRequest", "", "NEW,GET,REMOVE,FIND", true),
+    Tuple.Create("HistoryItem", "HistoryItem", "", "FIND", false),
+    Tuple.Create("Incident", "Incident", "", "NEW", true)
+    };
+#>
+// -----------------------------------------------------------------------
+// <copyright file="EntityCmdlet.cs" company="Microsoft">
+//   Copyright (c) Microsoft Corporation.
+// </copyright>
+// -----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Generated code.")]
+
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Generated code.")]
+
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors", Justification = "Swagger documentation.")]
+
+namespace Microsoft.PrivacyServices.DataManagement.Client.Powershell
+{
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Management.Automation;
+    using System.Threading.Tasks;
+    using Microsoft.PrivacyServices.DataManagement.Client.V2;
+    <# foreach (var type in types) { #>
+
+    #region <#= type.Item1 #>
+    <# if (type.Item4.Contains("NEW")) {#>/// <summary>
+    /// Issues a create call against the service.
+    /// </summary>
+    [Cmdlet(VerbsCommon.New, "Pdms<#= type.Item1 #>")]
+    [OutputType(typeof(<#= type.Item1 #>))]
+    public sealed partial class New<#= type.Item1 #>Cmdlet : IHttpResultCmdlet<<#= type.Item1 #>>
+    {
+        /// <summary>
+        /// The input parameter to this cmdlet. This is the full object to pass to the service.
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Default")]
+        [ValidateNotNull]
+        public <#= type.Item1 #> Value { get; set; }
+
+        /// <summary>
+        /// Calls the service to create the object.
+        /// </summary>
+        /// <param name="client">The PDMS client.</param>
+        /// <param name="context">The request context.</param>
+        /// <returns>The object with service generated properties filled in.</returns>
+        protected override Task<IHttpResult<<#= type.Item1 #>>> ExecuteAsync(IDataManagementClient client, RequestContext context)
+        {
+            return client.<#= type.Item2 #>s.CreateAsync(this.Value, context);
+        }
+    }
+    
+    <# } #><# if (type.Item4.Contains("GET")) {#>/// <summary>
+    /// Issues a get (by id) call to the serivce.
+    /// </summary>
+    [Cmdlet(VerbsCommon.Get, "Pdms<#= type.Item1 #>")]
+    [OutputType(typeof(<#= type.Item1 #>))]
+    public sealed partial class Get<#= type.Item1 #>Cmdlet : IHttpResultCmdlet<<#= type.Item1 #>>
+    {
+        /// <summary>
+        /// The id of the object to retrieve.
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, ParameterSetName = "Default")]
+        [ValidateNotNull]
+        public string Id { get; set; }
+
+        <# if (type.Item5) {#>/// <summary>
+        /// Any expand options to apply when retrieving the object.
+        /// </summary>
+        [Parameter]
+        [ValidateNotNull]
+        public <#= type.Item2 #>ExpandOptions Expand { get; set; }
+
+        <# } #>/// <summary>
+        /// Calls the service to retrieve the object.
+        /// </summary>
+        /// <param name="client">The PDMS client.</param>
+        /// <param name="context">The request context.</param>
+        /// <returns>The object from the service.</returns>
+        protected override Task<IHttpResult<<#= type.Item1 #>>> ExecuteAsync(IDataManagementClient client, RequestContext context)
+        {
+            return client.<#= type.Item2 #>s.ReadAsync<#= type.Item3 #>(this.Id, context<# if (type.Item5){#>, this.Expand<#}#>);
+        }
+    }
+
+    <# } #><# if (type.Item4.Contains("SET")) {#>/// <summary>
+    /// Provide a description of this class.
+    /// </summary>
+    [Cmdlet(VerbsCommon.Set, "Pdms<#= type.Item1 #>")]
+    [OutputType(typeof(<#= type.Item1 #>))]
+    public sealed partial class Set<#= type.Item1 #>Cmdlet : IHttpResultCmdlet<<#= type.Item1 #>>
+    {
+        /// <summary>
+        /// The input parameter to this cmdlet. This is the full object to pass to the service.
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Default")]
+        [ValidateNotNull]
+        public <#= type.Item1 #> Value { get; set; }
+
+        /// <summary>
+        /// Calls the service to update the object.
+        /// </summary>
+        /// <param name="client">The PDMS client.</param>
+        /// <param name="context">The request context.</param>
+        /// <returns>The object with service generated properties filled in.</returns>
+        protected override Task<IHttpResult<<#= type.Item1 #>>> ExecuteAsync(IDataManagementClient client, RequestContext context)
+        {
+            return client.<#= type.Item2 #>s.UpdateAsync(this.Value, context);
+        }
+    }
+
+    <# } #><# if (type.Item4.Contains("REMOVE")) {#>/// <summary>
+    /// Provide a description of this class.
+    /// </summary>
+    [Cmdlet(VerbsCommon.Remove, "Pdms<#= type.Item1 #>")]
+    [OutputType(typeof(<#= type.Item1 #>))]
+    public sealed partial class Remove<#= type.Item1 #>Cmdlet : IHttpResultCmdlet
+    {
+        /// <summary>
+        /// The input parameter to this cmdlet. This is the full object to pass to the service.
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Default")]
+        [ValidateNotNull]
+        public <#= type.Item1 #> Value { get; set; }
+
+        /// <summary>
+        /// Calls the service to delete the object.
+        /// </summary>
+        /// <param name="client">The PDMS client.</param>
+        /// <param name="context">The request context.</param>
+        /// <returns>No result.</returns>
+        protected override Task<IHttpResult> ExecuteAsync(IDataManagementClient client, RequestContext context)
+        {
+            return client.<#= type.Item2 #>s.DeleteAsync(this.Value.Id, this.Value.ETag, context);
+        }
+    }
+
+    <# } #><# if (type.Item4.Contains("FIND")) {#>/// <summary>
+    /// Provide a description of this class.
+    /// </summary>
+    [Cmdlet(VerbsCommon.Find, "Pdms<#= type.Item1 #>s")]
+    [OutputType(typeof(<#= type.Item1 #>))]
+    public sealed partial class Find<#= type.Item1 #>sCmdlet : IHttpResultCmdlet<IEnumerable<<#= type.Item1 #>>>
+    {
+        /// <summary>
+        /// The filter critieria to use when searching for data in the service.
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Default")]
+        [ValidateNotNull]
+        public <#= type.Item1 #>FilterCriteria Filter { get; set; }
+
+        <# if (type.Item5) {#>/// <summary>
+        /// Any expand options to apply when retrieving the object.
+        /// </summary>
+        [Parameter]
+        [ValidateNotNull]
+        public <#= type.Item2 #>ExpandOptions Expand { get; set; }
+
+        <# } #>/// <summary>
+        /// Set this if you want the command to page through all of the results automatically.
+        /// Without this, a single page of results will be returned. 
+        /// We do this to preserve the service from extremely expensive queries that are issued accidentally.
+        /// </summary>
+        [Parameter]
+        public SwitchParameter Recurse { get; set; }
+
+        /// <summary>
+        /// Calls the service to retrieve the objects based on the given filter (or all objects if no filter is provided).
+        /// </summary>
+        /// <param name="client">The PDMS client.</param>
+        /// <param name="context">The request context.</param>
+        /// <returns>The list of objects.</returns>
+        protected override async Task<IHttpResult<IEnumerable<<#= type.Item1 #>>>> ExecuteAsync(IDataManagementClient client, RequestContext context)
+        {
+            if (this.Recurse.IsPresent)
+            {
+                var result = await client.<#= type.Item2 #>s.ReadAllByFiltersAsync(context<# if (type.Item5){#>, this.Expand<#}#>, this.Filter).ConfigureAwait(false);
+                return result;
+            }
+            else
+            {
+                var result = await client.<#= type.Item2 #>s.ReadByFiltersAsync(context<# if (type.Item5){#>, this.Expand<#}#>, this.Filter).ConfigureAwait(false);
+
+                if (result.Response.NextLink != null)
+                {
+                    this.WarningMessage = "Multiple pages of data found. Use -Recurse to automatically retrieve all pages. Only the first page of data has been added to the Powershell pipeline.";
+                }
+
+                return result.Convert(x => x.Response.Value, 2);
+            }
+        }
+    }
+    <# } #>#endregion
+<# } #>}

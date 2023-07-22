@@ -1,0 +1,29 @@
+<pcd-view-status-line display-by-status="{{$ctrl.displayByStatus}}"
+                      state-label=""
+                      icon-state="$ctrl.getStatus()">
+    <pcd-inline>
+        <pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.asset.qualifier"></pcd-asset-group-qualifier-view>
+    </pcd-inline>
+    <pcd-body>
+            <span data-use-cms>isLongTailOrCustomNonUse:</span><span class="view-label">{{$ctrl.asset.isLongTailOrCustomNonUse}}</span>
+            <span data-use-cms>isNonPersonal:</span><span class="view-label">{{$ctrl.asset.isNonPersonal}}</span>
+            <pcd-view-status-line data-use-cms
+                                  display-by-status="{{$ctrl.displayByStatus}}"
+                                  state-label="Data Types: "
+                                  state="$ctrl.asset.dataTypeTagsStatus"
+                                  category="data-type-tags-status">
+                <pcd-inline>
+                    <span>{{$ctrl.getDataTypeTags()}}</span>
+                </pcd-inline>
+            </pcd-view-status-line>
+            <pcd-view-status-line data-use-cms
+                                  display-by-status="{{$ctrl.displayByStatus}}"
+                                  state-label="Subject Types: "
+                                  state="$ctrl.asset.subjectTypeTagsStatus"
+                                  category="subject-type-tags-status">
+                <pcd-inline>
+                    <span>{{$ctrl.getSubjectTypeTags()}}</span>
+                </pcd-inline>
+            </pcd-view-status-line>
+    </pcd-body>
+</pcd-view-status-line>

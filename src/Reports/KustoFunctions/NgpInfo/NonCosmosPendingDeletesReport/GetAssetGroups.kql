@@ -1,0 +1,6 @@
+let latestStream = toscalar(DataOwnerAssetCountsV2
+    | summarize max(SQLizerStreamDateId));
+DataOwnerAssetCountsV2
+    | where SQLizerStreamDateId == latestStream
+    | project DataOwnerId, AssetGroupId, AssetGroupQualifier, AssetType, IsAgentLinked = iff(isnotempty(DeleteAgentId), true, false)
+    | summarize arg_max(IsAgentLinked, *) by AssetGroupId

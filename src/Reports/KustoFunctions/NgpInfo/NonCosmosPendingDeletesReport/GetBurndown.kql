@@ -1,0 +1,3 @@
+NonCosmosDeleteCounts
+| where ExpectedCount != 0
+| summarize ExpectedCount = sum(ExpectedCount), PendingCount = sum(PendingCount) by AssetGroupId, AgentId, StreamDate = SQLizerStreamDateId

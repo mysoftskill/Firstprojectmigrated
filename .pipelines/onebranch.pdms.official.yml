@@ -1,0 +1,226 @@
+#################################################################################
+#                        OneBranch Pipelines - Buddy                            #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger:  # https://aka.ms/obpipelines/triggers
+  branches:
+    include: [ 'master' ] # branch names which will trigger a build   
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+
+variables:   
+- template: variables.yml
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+    - repository: self
+      type: git
+      ref: refs/heads/master
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    cloudvault:
+      enabled: true
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      sbom:
+        enabled: true
+      tsa:
+        enabled: false
+        configFile: $(TSA_CONFIGFILE)
+      binskim:
+        enabled: true
+        break: true # always break the build on binskim issues. You can disable it by setting to 'false'
+      policheck:
+        enabled: true
+        break: true # always break the build on policheck issues. You can disable it by setting to 'false'
+      credscan:
+        enabled: true
+        break: true
+        suppressionsFile: $(CREDSCAN_SUPPRESSIONFILE)
+      # suppression:
+      #   suppressionFile: $(Build.SourcesDirectory)/.gdn/global.gdnsuppress
+      codeql:
+        cadence: 0
+        compiled: 
+          enabled: true
+        tsaEnabled: true # See 'Codeql.TSAEnabled' in the Addition Options section below
+     
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows  # read more about custom job pool types at https://aka.ms/obpipelines/yaml/jobs
+        
+        variables: # More settings at https://aka.ms/obpipelines/yaml/jobs
+          ob_outputDirectory: $(PDMSOutputDirectory) # this directory is uploaded to pipeline artifacts, reddog and cloudvault. More info at https://aka.ms/obpipelines/artifacts
+          ob_artifactBaseName: 'drop'
+          ob_sdl_codeSignValidation_excludes: -|**\build\EV2\Bin\gdn*\**;-|**\build\EV2\Bin\StandingQueryExtensionManagerApp\gdn*\**
+          ob_sdl_binskim_break: true # https://aka.ms/obpipelines/sdl
+          # ob_sdl_suppression_suppressionFile: $(Build.SourcesDirectory)/.gdn/build.nonofficial.gdnsuppress
+
+        steps:
+          - task: onebranch.pipeline.version@1 # generates automatic version. For other versioning options check https://aka.ms/obpipelines/versioning
+            displayName: 'Setup BuildNumber'
+            inputs:
+              system: 'RevisionCounter'
+              major: '2'
+              minor: '2'
+              exclude_commit: true
+
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)'
+              performMultiLevelLookup: true
+
+          - task: CmdLine@2
+            displayName: 'Update Version'
+            inputs:
+              script: '$(PDMSBuildRootDirectory)/OneBranch/Build/versioning.cmd'
+              workingDirectory: '$(Build.SourcesDirectory)'  
+
+          - task: DotNetCoreCLI@2
+            displayName: 'DotNetCore restore'
+            inputs:
+              command: 'custom' # if you use `restore` command it invalidates credential, so we recommend to use custom + restore argument
+              projects: $(PDMSSolution)
+              custom: 'restore'
+
+          - task: CmdLine@2
+            displayName: Restore Service Fabric Projects
+            inputs:
+              script: nuget restore $(PDMSSolution)
+
+          - task: CmdLine@2
+            displayName: 'Restore Packages for OpenApi generator'
+            inputs:
+              script: '$(Build.SourcesDirectory)/.build/restoreopenapi.cmd Debug'
+              workingDirectory: '$(Build.SourcesDirectory)'  
+
+          - task: RoslynAnalyzers@3
+            displayName: 'DotNet build with RoslynAnalyzers'
+            inputs:
+              userProvideBuildInfo: 'msBuildInfo'
+              setupCommandlinePicker: 'vs2022' # Allows you to pick the visual studio version used during the execution of the Analyzers. 2022 is required for .net 6 on the latest images.
+              msBuildVersion: '17.0' # Allows you to specificy the msbuild version used for the msbuild command line such as dontnet.exe
+              msBuildArchitecture: x64
+              rulesetName: Custom
+              customRuleset: $(Build.SourcesDirectory)\src\Build\build.ruleset
+              msBuildCommandline: 'dotnet.exe build $(PDMSSolution) --no-restore --configuration Release -p:ForcePackageTarget=true -p:platform=x64 -p:Version=$(Build.BuildNumber)'
+
+          - task: CmdLine@2
+            displayName: 'Package'
+            inputs:
+              script: '$(PDMSBuildRootDirectory)/OneBranch/Build/package.cmd Release'
+              workingDirectory: '$(Build.SourcesDirectory)'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet test'
+            inputs:
+              command: 'test'
+              projects: $(PDMSSolution)
+              arguments: '--filter "FullyQualifiedName!~FunctionalTests" --no-build --no-restore --configuration Release -p:platform=x64 --logger trx --results-directory $(PDMSBuildRootDirectory)\OneBranch\Build\TestResults\ /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(PDMSBuildRootDirectory)\OneBranch\Build\TestResults\'
+              publishTestResults: false
+
+          - task: VSTest@2
+            inputs:
+             testSelector: 'testAssemblies'
+             testAssemblyVer2: |
+               **/*test*.dll
+               !**/*TestAdapter.dll
+               !**/obj/**
+             searchFolder: '$(PDMSBuildRootDirectory)'
+             testFiltercriteria: '"TestCategory=Unit"'
+
+          - task: PublishTestResults@2
+            displayName: 'Publish test results'
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: '$(PDMSBuildRootDirectory)/OneBranch/Build/TestResults/*.trx'
+              failTaskOnFailedTests: true
+          
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish code coverage'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(PDMSBuildRootDirectory)\OneBranch\Build\TestResults\**\*.xml'
+
+          - task: PowerShell@2
+            displayName: 'Create Directories'
+            inputs:
+              targetType: 'inline'
+              script: |
+                New-Item -ItemType Directory -Force -Path $(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\CodeSign
+                New-Item -ItemType Directory -Force -Path $(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\EV2
+                New-Item -ItemType Directory -Force -Path $(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\FCT
+
+          - task: CmdLine@2
+            displayName: 'BuildOpenApiDoc'
+            inputs:
+              script: '$(Build.SourcesDirectory)/.build/buildopenapi.cmd Debug'
+              workingDirectory: '$(Build.SourcesDirectory)'
+            env: 
+              CDP_BUILD_TAG: PDMS
+         
+          - task: CopyFiles@2
+            displayName: 'Copy Build output'
+            inputs:
+              SourceFolder: $(PDMSBuildRootDirectory)
+              contents: |
+                **/*.dll
+                **/*.exe
+                **/*.ps1
+                **/*.psd1
+                **/OpenApiDocument.*
+              TargetFolder: $(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\CodeSign
+  
+          - task: CopyFiles@2
+            displayName: 'Copy Onebranch output EV2'
+            inputs:
+              SourceFolder: $(PDMSBuildRootDirectory)\OneBranch\Release
+              contents: '**/*'
+              TargetFolder: $(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\EV2 
+
+          - task: CopyFiles@2
+            displayName: 'Copy Product output to FCT'
+            inputs:
+              SourceFolder: $(PDMSBuildRootDirectory)\bin\Release\x64\ServiceFabricRelease\FunctionalTests
+              contents: '**/*'
+              TargetFolder: $(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\FCT     
+          
+          - task: onebranch.pipeline.signing@1
+            displayName: 'Sign files'
+            inputs:
+              command: 'sign'
+              signing_environment: 'azure-ado'
+              signing_profile: 'internal_azure_service'
+              files_to_sign: '**\*.exe;**\*.js;**\*.dll;**\*.psd1;**\*.ps1'
+              search_root: '$(PDMSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\'
+
+          - task: PublishSecurityAnalysisLogs@3
+            displayName: Publish Security Analysis Logs
+            inputs:
+              ArtifactName: 'CodeAnalysisLogs'
+              ArtifactType: 'Container'
+              AllTools: true
+              ToolLogsNotFoundAction: 'Standard' 
+
+         
+

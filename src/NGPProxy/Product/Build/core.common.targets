@@ -1,0 +1,33 @@
+<Project>
+
+  <PropertyGroup>
+    <IsTestProject Condition=" '$(IsTestProject)' == '' AND $(ProjectTypeGuids) == '{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">true</IsTestProject>
+    <DefineConstants Condition=" '$(InternalsVisisibleToUnitTests)' == 'true' ">INTERNALS_VISIBLE_TO_TESTS;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition=" '$(SignAssembly)' == 'true' ">STRONG_NAME_SIGNED;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <ExcludeFromCodeCoverage Condition=" '$(ExcludeFromCodeCoverage)' == ''">true</ExcludeFromCodeCoverage>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="$(MemberServicesRoot)\Build\CustomDictionary_Carbon.xml" />
+    <CodeAnalysisDictionary Include="$(MemberServicesRoot)\Build\CustomDictionary.xml" />
+  </ItemGroup>
+       
+  <PropertyGroup>
+    <CodeAnalysisRuleSet Condition="'$(IsTestProject)' != 'true'">$(MemberServicesRoot)\Build\Service.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(IsTestProject)' == 'true'">$(MemberServicesRoot)\Build\Test.ruleset</CodeAnalysisRuleSet>
+    <CopyFilesToReleasePathEnabled Condition=" '$(ReleaseSubDir)' != '' ">true</CopyFilesToReleasePathEnabled>
+  </PropertyGroup>
+
+  <Target Name="CopyConfig" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <Config Include="$(ServiceRoot)\Deployment\Config\*.config" />
+    </ItemGroup>
+
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(Config)" DestinationFolder="$(OutDir)" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(Config)" DestinationFolder="$(ReleasePath)" Condition="'$(CopyFilesToReleasePathEnabled)' != 'false'" />
+  </Target>
+  <Import Project="$(MemberServicesRoot)\Build\CopyFilesToReleasePath.targets" />
+</Project>

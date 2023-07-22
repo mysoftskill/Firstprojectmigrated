@@ -1,0 +1,137 @@
+﻿import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+
+namespace Microsoft.Membership.MemberServices.Common.Logging
+
+[Description("Structure to record exception details.")]
+struct ErrorDetails : Microsoft.Telemetry.Extension
+{
+    [Description("Error message")]
+    10 : string ErrorMessage;
+
+    [Description("Exception type, if this is logging an exception.")]
+    20 : string ExceptionType;
+
+    [Description("Stack trace, if this is logging an exception")]
+    30 : string StackTrace;
+    
+    [Description("Inner Exception Detail, if available.")]
+    40 : string InnerExceptionDetail;
+
+    [Description("True if this is an unexpected exception. False by default.")]
+    50 : bool UnexpectedException;
+}
+
+[Description("Event for AAD Account Close events missing data")]
+struct AadAccountCloseMissingData : Microsoft.Telemetry.Base
+{
+    1 : string TenantId;
+    2 : string Details;
+}
+
+[Description("Event for MSA Account Close events missing data")]
+struct MsaAccountCloseMissingData : Microsoft.Telemetry.Base
+{
+    10 : string Details;
+}
+
+[Description("Event for MSA Account Close events missing data")]
+struct MsaAccountCreateCidNotFound : Microsoft.Telemetry.Base
+{
+    10 : string Details;
+}
+
+[Description("Event for Request Expansion")]
+struct RequestExpansionEvent : Microsoft.Telemetry.Base
+{
+    10 : string PrivacyDataTypes;
+    11 : string RequestId;
+    12 : string CloudInstance;
+    13 : string RequestType;
+    14 : string Portal;
+    15 : string RequestGuid;
+    16 : bool HasXuid;
+}
+
+[Description("Event for AQS work received")]
+struct AqsWorkReceivedEvent : Microsoft.Telemetry.Base
+{
+    10 : string GroupId;
+    20 : int32 UniqueUsers;
+    30 : map<string, int32> EventCounts;
+}
+
+[Description("Campaign Publishing Manager incoming request base")]
+[Provider("PublishingManager")]
+struct SchedulerIncomingServiceRequest : Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest> {
+    10 : string User;
+
+    [Description("Error details")]
+    100 : ErrorDetails ErrorDetails;
+};
+
+[Description("Base event for outgoing requests")]
+struct SchedulerOutgoingRequestEvent : Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest> 
+{ 
+    [Description("Error details")]
+    60 : ErrorDetails ErrorDetails;
+};
+
+[Description("Worker scheduled task")]
+struct WorkOperationEvent : SchedulerOutgoingRequestEvent 
+{
+    70 : bool WorkReady;
+};
+
+[Description("Event for Queue Depth")]
+struct QueueDepthEvent : Microsoft.Telemetry.Base
+{
+    1 : string AccountName;
+    2 : string QueueName;
+    3 : uint64 QueueDepth;
+}
+
+[Description("Event for Queue Depth and age (in hours) of the oldest message")]
+struct QueueDepthAndAgeEvent : QueueDepthEvent
+{
+    10 : int32 AgeInHours;
+}
+
+[Description("Storage operation")]
+struct StorageOperationEvent : SchedulerOutgoingRequestEvent 
+{ 
+    80 : string PartitionKey;
+    90 : string RowKey;
+    100 : string OperationType;
+    110 : string QueryFilter;
+    120 : int32 Rows;
+};
+
+[Description("Generic Error Event")]
+struct ErrorEvent : Microsoft.Telemetry.Base
+{
+    10 : string ComponentName;
+    20 : optional string ErrorMethod;
+    30 : optional string ErrorName;
+    40 : optional string ErrorMessage;
+    50 : optional string ErrorType;
+    60 : optional string ErrorCode;
+    70 : optional uint32 LineNumber;
+    80 : optional string CallStack;
+    90 : optional string ServerActivityId;
+    100 : optional string ClientActivityId;
+    110 : optional string Authentication;
+    120 : optional string Flights;
+    130 : optional map<string, string> ExtraData;
+    140 : optional string ErrorDetails;
+};
+
+[Description("Event for AAD account close.")]
+struct AADAccountCloseEvent : Microsoft.Telemetry.Base
+{
+    1 : string EventHubId;
+    2 : string EventHubsEndpoint;
+    3 : uint64 Count;
+}

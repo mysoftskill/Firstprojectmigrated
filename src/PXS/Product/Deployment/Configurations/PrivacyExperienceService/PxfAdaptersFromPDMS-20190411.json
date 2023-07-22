@@ -1,0 +1,747 @@
+{
+  // keithjac: This was fetched from PROD (and contains PPE and PROD configs) on 4/11/2019 and was last activated on 4/4/2019
+  "PreProd": [
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "SearchRequestsAndQuery",
+      "viewSources": [
+        "SearchHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-int-ww.trafficmanager.net/ppe",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "BrowsingHistory",
+      "viewSources": [
+        "BrowseHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-int-ww.trafficmanager.net/ppe",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "View",
+        "Delete"
+      ],
+      "protocolParameters": {
+        "OnClear": "setflight=ResetCortanaData",
+        "CustomFlights": "nbfalcon=/profile/interests/v2/amc/api/servicelist|/profile/interests/v2/amc/api/userfeaturelist|/profile/interests/v2/entity/delete|/profile/interests/v2/entity/denyinference",
+        "AddCorDdsDelFeature": "True"
+      },
+      "dataType": "InterestsAndFavorites",
+      "dataAgentId": "796ceb14-6b1f-4f7c-b9a1-c4e4a448e3dd",
+      "dataAgentFriendlyName": "Legacy CortanaNotebook Agent [PPE]",
+      "protocol": "CortanaNotebookV1",
+      "endpointBaseUri": "https://www.bing.com/",
+      "retryStrategy": "FixedRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "InkingTypingAndSpeechUtterance",
+      "viewSources": [
+        "VoiceHistory"
+      ],
+      "dataAgentId": "a076f730-f06a-4f84-a30e-94b742995e39",
+      "dataAgentFriendlyName": "PDOS Agent",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://www.bing.com/privacyapi",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "PreciseUserLocation",
+      "viewSources": [
+        "Location"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-int-ww.trafficmanager.net/ppe",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ProductAndServiceUsage",
+      "viewSources": [
+        "AsimovAppUsage"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-int-ww.trafficmanager.net/ppe",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ContentConsumption",
+      "viewSources": [
+        "ContentConsumption"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-int-ww.trafficmanager.net/ppe",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    }
+  ],
+  "Ring1": [
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "SearchRequestsAndQuery",
+      "viewSources": [
+        "SearchHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "BrowsingHistory",
+      "viewSources": [
+        "BrowseHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "View",
+        "Delete"
+      ],
+      "protocolParameters": {},
+      "dataType": "InterestsAndFavorites",
+      "dataAgentId": "986c6f11-30e9-450c-a0a6-1551a29920c4",
+      "dataAgentFriendlyName": "Legacy CortanaNotebook Agent",
+      "protocol": "CortanaNotebookV1",
+      "endpointBaseUri": "https://www.bing.com/",
+      "retryStrategy": "FixedRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "InkingTypingAndSpeechUtterance",
+      "viewSources": [
+        "VoiceHistory"
+      ],
+      "dataAgentId": "a076f730-f06a-4f84-a30e-94b742995e39",
+      "dataAgentFriendlyName": "PDOS Agent",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://www.bing.com/privacyapi",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "PreciseUserLocation",
+      "viewSources": [
+        "Location"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ProductAndServiceUsage",
+      "viewSources": [
+        "AsimovAppUsage"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ContentConsumption",
+      "viewSources": [
+        "ContentConsumption"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    }
+  ],
+  "Ring2": [
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "SearchRequestsAndQuery",
+      "viewSources": [
+        "SearchHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "BrowsingHistory",
+      "viewSources": [
+        "BrowseHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "View",
+        "Delete"
+      ],
+      "protocolParameters": {},
+      "dataType": "InterestsAndFavorites",
+      "dataAgentId": "986c6f11-30e9-450c-a0a6-1551a29920c4",
+      "dataAgentFriendlyName": "Legacy CortanaNotebook Agent",
+      "protocol": "CortanaNotebookV1",
+      "endpointBaseUri": "https://www.bing.com/",
+      "retryStrategy": "FixedRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "InkingTypingAndSpeechUtterance",
+      "viewSources": [
+        "VoiceHistory"
+      ],
+      "dataAgentId": "a076f730-f06a-4f84-a30e-94b742995e39",
+      "dataAgentFriendlyName": "PDOS Agent",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://www.bing.com/privacyapi",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "PreciseUserLocation",
+      "viewSources": [
+        "Location"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ProductAndServiceUsage",
+      "viewSources": [
+        "AsimovAppUsage"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ContentConsumption",
+      "viewSources": [
+        "ContentConsumption"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    }
+  ],
+  "Ring3": [
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "SearchRequestsAndQuery",
+      "viewSources": [
+        "SearchHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "BrowsingHistory",
+      "viewSources": [
+        "BrowseHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "View",
+        "Delete"
+      ],
+      "protocolParameters": {},
+      "dataType": "InterestsAndFavorites",
+      "dataAgentId": "986c6f11-30e9-450c-a0a6-1551a29920c4",
+      "dataAgentFriendlyName": "Legacy CortanaNotebook Agent",
+      "protocol": "CortanaNotebookV1",
+      "endpointBaseUri": "https://www.bing.com/",
+      "retryStrategy": "FixedRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "InkingTypingAndSpeechUtterance",
+      "viewSources": [
+        "VoiceHistory"
+      ],
+      "dataAgentId": "a076f730-f06a-4f84-a30e-94b742995e39",
+      "dataAgentFriendlyName": "PDOS Agent",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://www.bing.com/privacyapi",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "PreciseUserLocation",
+      "viewSources": [
+        "Location"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ProductAndServiceUsage",
+      "viewSources": [
+        "AsimovAppUsage"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ContentConsumption",
+      "viewSources": [
+        "ContentConsumption"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    }
+  ],
+  "Prod": [
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "SearchRequestsAndQuery",
+      "viewSources": [
+        "SearchHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "BrowsingHistory",
+      "viewSources": [
+        "BrowseHistory"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "View",
+        "Delete"
+      ],
+      "protocolParameters": {},
+      "dataType": "InterestsAndFavorites",
+      "dataAgentId": "986c6f11-30e9-450c-a0a6-1551a29920c4",
+      "dataAgentFriendlyName": "Legacy CortanaNotebook Agent",
+      "protocol": "CortanaNotebookV1",
+      "endpointBaseUri": "https://www.bing.com/",
+      "retryStrategy": "FixedRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "InkingTypingAndSpeechUtterance",
+      "viewSources": [
+        "VoiceHistory"
+      ],
+      "dataAgentId": "a076f730-f06a-4f84-a30e-94b742995e39",
+      "dataAgentFriendlyName": "PDOS Agent",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://www.bing.com/privacyapi",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "BingIdToken",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "PreciseUserLocation",
+      "viewSources": [
+        "Location"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ProductAndServiceUsage",
+      "viewSources": [
+        "AsimovAppUsage"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    },
+    {
+      "capabilityType": [
+        "Delete",
+        "Edit",
+        "Export",
+        "View"
+      ],
+      "dataType": "ContentConsumption",
+      "viewSources": [
+        "ContentConsumption"
+      ],
+      "dataAgentId": "f151a8c8-f3cf-4f03-a94f-9cd10ee52db2",
+      "dataAgentFriendlyName": "PDOS Griffin API",
+      "protocol": "PdapiV2",
+      "endpointBaseUri": "https://pdapi-prod-ww.trafficmanager.net/prod",
+      "retryStrategy": "ExponentialRetry",
+      "authenticationType": "AadPopToken",
+      "aadTokenResourceId": "https://substrate.office.com",
+      "aadTokenScope": "PdApi-Internal.ReadWrite",
+      "partnerSignatureCertificateConfiguration": "PxsPdpPartnerSignatureCertificate",
+      "skipServerCertValidation": false
+    }
+  ]
+} 

@@ -1,0 +1,17 @@
+@import "../../../styles/utilities.scss";
+
+pcd-permalink {
+    display: inline;
+
+    [mee-hyperlink] {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+
+        text-decoration: none !important;
+        font-size: 15px;
+
+        @include margin-left(2px);
+    }
+}

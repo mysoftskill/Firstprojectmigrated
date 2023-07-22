@@ -1,0 +1,255 @@
+﻿import "CommonConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+enum AdapterConfigurationSource
+{
+    None,
+    ConfigurationIniFile,
+    MockConfiguration
+}
+
+struct IPrivacyExportConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required int32 ExportQueueTimeToLiveHours;
+
+    [UniquenessRule("Invariant")]
+    2 : required int32 ExportQueueMessageInitialVisibilitySeconds;
+
+    [UniquenessRule("Invariant")]
+    3 : required int32 ExportQueueMessageSubsequentVisibilitySeconds;
+
+    [UniquenessRule("Invariant")]
+    4 : required bool ExportRequestThrottleEnabled;
+
+    [UniquenessRule("Invariant")]
+    5 : required int32 ExportRequestThrottleWindowInHours;
+
+    [UniquenessRule("Invariant")]
+    6 : required int32 ExportRequestThrottleMaxCompleted;
+
+    [UniquenessRule("Invariant")]
+    7 : required int32 ExportRequestThrottleMaxCancelled;
+
+    [UniquenessRule("Invariant")]
+    8 : required int32 ListExportHistoryMax;
+
+    [UniquenessRule("Invariant")]
+    9 : required IRetryStrategyConfiguration RetryStrategy;
+};
+
+struct IOnBehalfOfConfiguration
+{
+    1 : optional bool EnforceAgeAuthZRules = false;
+};
+
+struct IVortexEndpointConfiguration
+{
+    // the amount of time in minutes required before another user-initiated request can be made
+    1 : required int32 TimeBetweenUserRequestsLimitMinutes;
+
+    // the amount of time in minutes required before another non-user-initiated request can be made
+    2 : required int32 TimeBetweenNonUserRequestsLimitMinutes;
+
+    // the maximum amount of items in the timeout table
+    3 : required int32 MaxTimeoutCacheCount;
+}
+
+struct IPrivacyThrottleConfiguration
+{
+    1 : required string Id;
+    2 : required int32 PeriodInSeconds;
+    3 : required int32 MaxRequestsPerPeriod;
+}
+
+struct ITestRequestClassifierConfiguration
+{
+    1 : required list<string> AllowedListAadObjectIds;
+    2 : required list<string> AllowedListAadTenantIds;
+    3 : required list<int64> AllowedListMsaPuids;
+    4 : required list<string> CorrelationContextBaseOperationNames;
+}
+
+[Multiplicity("Singleton")]
+struct IPrivacyExperienceServiceConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required string S2SAppSiteName;
+
+    [UniquenessRule("Invariant")]
+    2 : required string S2SUserSiteName;
+
+    [UniquenessRule("Invariant")]
+    3 : required string S2SUserLongSiteName;
+
+    // Map of MSM site ID to caller name
+    [UniquenessRule("Invariant")]
+    4 : optional map<string, string> SiteIdToCallerName;
+
+    5 : optional map<string, string> AppAllowList;
+
+    [UniquenessRule("Invariant")]
+    6: required string RpsConfigPath;
+
+    [UniquenessRule("Invariant")]
+    7: required string FamilyJwksUri;
+
+    [UniquenessRule("Invariant")]
+    16: required bool EnableCosmosCoordinator;
+
+    [UniquenessRule("Invariant")]
+    17: required int32 TimeInterval = -1;
+
+    [UniquenessRule("Invariant")]
+    18: required int32 BufferTime = -1;
+
+    [UniquenessRule("Invariant")]
+    22 : required IServicePointConfiguration ServicePointConfiguration;
+
+    [UniquenessRule("Invariant")]
+    25 : required AdapterConfigurationSource AdapterConfigurationSource;
+
+    [UniquenessRule("Invariant")]
+    26 : optional int32 StaleConfigurationDisposalDelayInSeconds = 300;
+
+    [UniquenessRule("Invariant")]
+    28 : required IPrivacyExportConfiguration PrivacyExportConfiguration;
+
+    [UniquenessRule("Invariant")]
+    30 : required IAzureStorageConfiguration AzureStorageConfiguration;
+
+    34 : required string PRCSecurityGroup;
+
+    35 : required string AadAdministratorRoleTemplateId;
+
+    37 : optional bool BindSslCertificateInHost = true;
+
+    38 : required IVortexEndpointConfiguration VortexEndpointConfiguration;
+
+    39 : required CloudInstanceType CloudInstance;
+
+    40 : required map<string, IPrivacyThrottleConfiguration> ThrottleConfigurations;
+
+    41 : required list<string> GetRequestByIdSecurityGroups;
+
+    45 : optional ITestRequestClassifierConfiguration TestRequestClassifierConfig;
+
+    46 : optional IOnBehalfOfConfiguration OnBehalfOfConfiguration;
+
+    47 : required bool RandomConnectionCloseEnable;
+
+    48 : required map<string, string> VortexAllowedCertSubjects;
+
+    49 : required list<string> VortexAllowedCertIssuers;
+};
+
+[Multiplicity("Singleton")]
+struct IPrivacyExperienceServiceWDConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required bool IsRunningLocally = false;
+
+    [UniquenessRule("Invariant")]
+    2 : required string MachineFunction;
+
+    [UniquenessRule("Invariant")]
+    3 : required string SslCertificateCommonName;
+
+    [UniquenessRule("Invariant")]
+    4 : optional MTimeSpan MachineCheckTimeout;
+
+    [UniquenessRule("Invariant")]
+    5 : required int32 CheckApisFailureThresholdInPercent;
+
+    [UniquenessRule("Invariant")]
+    6 : required string MsaS2STargetScope;
+
+    [UniquenessRule("Invariant")]
+    7 : required IRetryStrategyConfiguration RetryStrategyConfiguration;
+
+    /// <summary>
+    /// Gets the relative file path to an encrypted AP-Secret-Store file (containing several users confidential configuration data).
+    /// </summary>
+    [UniquenessRule("Invariant")]
+    9 : required string EncryptedUsersConfigurationFilePath;
+
+    [UniquenessRule("Invariant")]
+    10 : required string FamilyBaseUri;
+
+    [UniquenessRule("Invariant")]
+    11 : required string FamilyServiceTargetSite;
+
+    [UniquenessRule("Invariant")]
+    12 : required string RpsConfigPath;
+
+    // Value indicates if the environment uses PROD MSA accounts or not.
+    13 : required bool IsProdMsa;
+
+    [UniquenessRule("Invariant")]
+    16 : required IAzureStorageConfiguration AzureStorageConfiguration;
+
+    // Guid for the cosmos export agent id
+    21 : required string CosmosExportWorkerAgentId;
+
+    // Value indicates if Bulk export is enabled
+    22 : required bool IsBulkExportTestForMsaEnabled;
+    
+    // Maximum number of minutes since DSR was posted the watch dog will wait before moving the PrivacyTestFramework 
+    // to the next state in the DSR workflow (regardless of the actual status reported by graph).
+    27 : required int32 EndToEndTestDsrStatusIsRunningTimeout;
+    
+    // EndToEnd test can take a long time to run since some network requests can take up to 15s to return.
+    // EndToEndTestRunDurationPercentOfMachineCheckTimeout is the percent of the total MachineCheckTimeOut time, after which
+    // the EndToEnd test will not initiate any further network requests.  It will complete any outstanding requests, and then
+    // exit gracefully before the watchdog orchestration kills the process for running too long.
+    32 : required int32 EndToEndTestRunDurationPercentOfMachineCheckTimeout;
+
+    // minimum time to wait before querying graph on status of export
+    33 : required int32 EndToEndTestWaitMsBeforeNextExportStatusRequest;
+
+    // Indicates that the vortex test is enabled
+    34 : required bool IsVortexTestEnabled;
+
+    // Indicates the time that PrivacyRequestManager waits between DSR task executions
+    35 : required int32 EndToEndTestWaitMsBetweenDSRTaskExecutions;
+
+    // The site id for AMC
+    36 : required string ExportAmcSiteId;
+
+    // The site uri for AMC for exports
+    37 : required string ExportAmcSiteUri;
+
+    // The base uri for AMC for exports
+    38 : required string ExportAmcBaseUri;
+
+    // Cosmos configuration
+    39 : optional ICosmosVcConfig SyntheticExportSignalVcConfig;
+
+    // Synthetic Cosmos data agent
+    40 : optional string SyntheticCosmosDataAgentId;
+
+    // Synthetic Privacy data agent
+    41 : optional string SyntheticPrivacyDataAgentId;
+}
+
+struct IEnvironment
+{
+    10: string SllLoggerFilePath;
+    30: string SslCertsFilePath;
+    40: string MucpSslCertsFilePath;
+
+    50: bool DisableClientAuthorization;
+    60: string RpsAuthSiteName;
+};
+
+struct IStorageSettings
+{
+    10: bool UseCarbonStorageAccount;
+    20: string CertificateFolderPath;
+    30: string CertificateFileName;
+    40: string StorageMoniker;
+    100: string StorageAccountName;
+    110: string StorageAccountKey;
+};

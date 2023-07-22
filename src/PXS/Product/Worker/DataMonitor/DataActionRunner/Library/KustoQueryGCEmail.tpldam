@@ -1,0 +1,139 @@
+﻿declare query_parameters (ExcludedAgentsJson:string, IncidentMinAge:timespan, IncidentMaxAge:timespan); 
+//
+// id of the alert source that files the incidents we want to query for
+let icmAlertSourceId = 23601;
+//
+// yes, it is correct that the min / max for age & date are reversed- max age is the minimum date, etc.
+let minIcmDate = ago(IncidentMaxAge);
+let maxIcmDate = ago(IncidentMinAge);
+//
+// severity of the incidents we want to query for
+let severity = 2;
+//
+// converts the input JSON object list to an in memory table
+let excludedAgentsRaw = datatable(junk:int) [ 1 ] 
+| extend ListColumn = todynamic(ExcludedAgentsJson) 
+| project ListColumn 
+| mvexpand ListColumn 
+| evaluate bag_unpack(ListColumn) 
+| project AgentId=tostring(AgentId), Expires=todatetime(Expires)
+| where AgentId != "00000000-0000-0000-0000-000000000000"; 
+//
+// builds the list of agents we should submit incidents for
+let allowedAgents = materialize
+( 
+    cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+    | where AgentReadiness == "ProdReady"
+    | join kind=leftantisemi 
+        (
+          excludedAgentsRaw
+          | where isnull(Expires) or Expires > now() 
+          | project AgentId
+        )
+        on AgentId
+    | summarize by AgentId
+);
+//
+// queries IcM to find out the list of incidents we filed incidents for that have ever been sev2+ (where + is a higher 
+//  severity or lower numerical value)
+let sev2incidents = materialize
+(
+    cluster("Icmcluster").database('IcmDataWarehouse').Incidents
+    | where CreateDate >= minIcmDate and CreateDate < maxIcmDate and SourceId == icmAlertSourceId and Severity <= severity 
+    | summarize by IncidentId
+    | project IncidentId 
+);
+//
+// queries IcM to find out the latest value for the incidents we found above (must do this with either two queries or a 
+//  join against the same table and two queries seems cleaner)
+let incidents = materialize
+(
+    cluster("Icmcluster").database('IcmDataWarehouse').Incidents
+    | where IncidentId in (sev2incidents)
+    | summarize arg_max(Lens_IngestionTime, *) by IncidentId
+    | where Status == "ACTIVE"
+    | project 
+        OwnerId=trim(@"[^\w]+", tostring(split(RoutingId, ":", 1)[0])), 
+        Type=replace(@"(.*)Incomplete", @"\1", trim(@"[^\w]+", tostring(split(split(CorrelationId, ":", 1)[0], ".", 0)[0]))), 
+        AgentId=trim(@"[^\w]+", tostring(split(OccurringDeviceName, ":", 1)[0])),
+        IncidentId
+    | where 
+        isnotnull(AgentId) and strlen(AgentId) > 0 and
+        isnotnull(OwnerId) and strlen(OwnerId) > 0 and
+        isnotnull(Type) and strlen(Type) > 0
+);
+//
+// turn the (agent, incident) table into a (agent, List<incident>) table (where multiple rows for the same agent are
+//  compressed into a single row and the incident column becomes a list intead of a scalar)
+let incidentsByAgent = materialize
+(
+    incidents 
+    | where AgentId in (allowedAgents)
+    | summarize
+        IncidentIds = makelist(IncidentId)
+        by AgentId, Type, OwnerId
+);
+//
+// parse out the GC alias and turn string that is a semicolon separated list of agent contacts into a list column of
+//  individual email addresses
+let incidentsByAgentExt = materialize
+(
+    incidentsByAgent
+    | join kind=leftouter cluster("Ngpreporting").database('NpgInfo').fcnDataAgentOwnerInfo() on AgentId
+    | join kind=leftouter cluster("Ngpreporting").database('NGPReporting').AgentIdOwnerIdAndIcmContacts on AgentId
+    | project 
+        OrganizationName, 
+        DivisionName, 
+        GCEmail = coalesce(replace(@"[^<]+\w*<([^>]+)>", @"\1", Email), Email),  
+        Type, 
+        AgentId, 
+        AgentName,
+        IncidentIds,
+        ContactList = split(Contacts, ";")
+    | order by GCEmail asc, OrganizationName asc, AgentId asc  
+);
+//
+// build the list of contacts per agent, extracting the alias from the contact email address
+let contacts = materialize
+(
+    incidentsByAgentExt 
+    | project GCEmail, ContactList, AgentId
+    | mvexpand ContactList
+    | project GCEmail, ContactEmail = trim(@"\s", tostring(ContactList)), AgentId
+    | where strlen(ContactEmail) > 0
+    | extend ContactAlias = tostring(split(ContactEmail, "@")[0])
+    | summarize by GCEmail, ContactEmail, ContactAlias, AgentId
+);
+//
+// build the final output which is a row per GC that contains a list of agent info objects and a list of 
+//  contacts to include for each GC.
+let incidentsTable = materialize
+(
+    incidentsByAgentExt 
+    | join kind=inner 
+        (
+           contacts 
+            | extend Contact = pack("Email", ContactEmail, "Alias", ContactAlias)
+            | summarize AgentContactList = makelist(Contact) by AgentId
+        )
+        on AgentId
+    | order by GCEmail asc, AgentName asc
+    | project GCEmail, AgentId, AgentName, Incidents=IncidentIds, Contacts=AgentContactList
+);
+//
+// construct the list of email addresses that will be added to the email that is sent out
+let emailAddressingTable = materialize
+(
+    datatable(junk2:int) [ 1 ]
+    | extend 
+        ToLine = toscalar(
+            contacts | summarize by GCEmail | summarize ToLine = makelist(GCEmail))
+    | extend
+        CcLine = toscalar(
+            contacts | summarize by ContactEmail | summarize CcLine = makelist(ContactEmail))
+    | project ToLine, CcLine
+);
+//
+// send the result tables
+incidentsTable;
+emailAddressingTable;

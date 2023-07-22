@@ -1,0 +1,46 @@
+﻿<h2>{{$ctrl.strings.title}}</h2>
+
+<mee-text-field kind="flex" ng-if="$ctrl.isAgentNameRequired">
+    <label mee-label>{{$ctrl.strings.selectedDataAgentLabel}}</label>
+    <input mee-text-input readonly ng-model="$ctrl.dataAgentName">
+</mee-text-field>
+<mee-inline-error error-id="{{$ctrl.errorCategory}}.agent-id"></mee-inline-error>
+
+<legend class="c-label">{{$ctrl.strings.actionsLabel}}</legend>
+<div class="privacy-action-checkbox-group">
+    <mee-checkbox ng-model="$ctrl.deleteSelected" data-use-cms>Delete / Account Close</mee-checkbox>
+    <mee-checkbox ng-model="$ctrl.exportSelected" data-use-cms>Export</mee-checkbox>
+</div>
+
+<p mee-paragraph data-use-cms class="note">
+    * Unchecked actions will not change existing links. Checked actions will replace existing links with the new link to selected data agent.
+</p>
+
+<div ng-if="$ctrl.isUnlinkFlow()">
+    <p mee-paragraph data-use-cms>
+        If this asset is linked to a production agent, then this change will result in signal loss. 
+        Only proceed if you do not need to handle any new signals for this asset. 
+        If you want to move it to a new agent, use the link button instead.
+    </p>
+
+    <mee-checkbox ng-model="$ctrl.hasAcknowledgedUnlink"
+                  data-use-cms>
+        I understand that unlinking data asset may result in signal loss
+    </mee-checkbox>
+</div>
+
+<div class="c-group">
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.link-or-unlink"></mee-inline-error>
+    <button mee-button="primary"
+            ng-click="$ctrl.linkOrUnlink()"
+            ng-disabled="$ctrl.disallowedToLinkOrUnlink()"
+            mee-progress-disabled="modalOperation">
+        {{$ctrl.strings.buttonLabel}}
+    </button>
+    <button mee-button
+            ng-click="$ctrl.cancel()"
+            mee-progress-disabled="modalOperation"
+            data-use-cms>
+        Cancel
+    </button>
+</div>

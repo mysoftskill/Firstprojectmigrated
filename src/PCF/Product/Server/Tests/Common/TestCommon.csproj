@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.Tests.Common</AssemblyName>
+    <RootNamespace>icrosoft.PrivacyServices.CommandFeed.Service.Tests.Common</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="NonWindowsDevice\NonWindowsDeviceDeleteSample.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="NonWindowsDevice\NonWindowsDeviceDeleteSample.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.analyzers" />
+    <PackageReference Include="xunit.core" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj" />
+  </ItemGroup>
+  
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

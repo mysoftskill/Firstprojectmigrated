@@ -1,0 +1,19 @@
+﻿/// PCF Command Queue Depth Telemetry
+/// Kusto PCFAgentStatisticV2 definition
+.create table PCFAgentStatisticV2 (
+	TimeStamp:datetime, 
+	AgentId:string, 
+	AssetGroupId:string, 
+	CommandType:string, 
+	CommandCount:long, 
+	BaselineCommandCount:long, 
+	CompletedCheckpointCount:long, 
+	CreatedCheckpointCount:long, 
+	SoftDeletedCheckpointCount:long, 
+	SentToAgentCheckpointCount:long, 
+	PendingCheckpointCount:long, 
+	FailedCheckpointCount:long, 
+	UnexpectedCheckpointCount:long, 
+	VerificationFailureCheckpointCount:long, 
+	UnexpectedVerificationFailureCheckpointCount:long,
+	CompletedByPcfEventCount:long)

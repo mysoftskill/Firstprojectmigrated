@@ -1,0 +1,299 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-default-page-heading text="Welcome to the Privacy Compliance Dashboard!" data-use-cms></pcd-default-page-heading>
+        <pcd-landing-pivot></pcd-landing-pivot>
+    </pcd-heading>
+
+    <pcd-lede class="pcd-landing-page-lede">
+        <p mee-paragraph data-use-cms>
+            This dashboard contains mandatory steps your team needs to complete to be compliant with GDPR.
+            You will need to provide information about your team, your assets, and any data agents you own.
+            To become more familiar with these terms
+            <a mee-hyperlink target="_blank" href="https://aka.ms/PcdRegistration">please read this document</a>.
+        </p>
+    </pcd-lede>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Here are the steps you need to take.
+        </p>
+        <ul data-use-cms mee-list>
+            <li>
+                Create a new team. Your team will be linked to your assets and data agents.  The team will be used to control access to the info you register in PCD.  It will also be used for communication.
+            </li>
+            <li>
+                Add data assets that your team owns.
+                <a href="https://aka.ms/NGPIdentifiers" mee-hyperlink target="_blank">See this document</a> to determine what data assets your team owns.
+            </li>
+            <li>
+                Add data agents that your team owns.
+                <a href="https://aka.ms/PcdRegistration" mee-hyperlink target="_blank">See this document</a> to determine what data agents your team owns.
+            </li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            Useful links:
+        </p>
+        <ul data-use-cms mee-list="lean">
+            <li>
+                <a href="https://aka.ms/PcdRegistration"
+                   target="_blank"
+                   mee-hyperlink>
+                    PDMS Onboarding doc
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/datagrid"
+                   target="_blank"
+                   mee-hyperlink>
+                    DataGrid Wiki
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/DataGridPortalWiki"
+                   target="_blank"
+                   mee-hyperlink>
+                    DataGrid Portal Wiki
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/ngphome"
+                   target="_blank"
+                   mee-hyperlink>
+                    NGP Site
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/FindGCContact"
+                   target="_blank"
+                   mee-hyperlink>
+                    GC Contacts
+                </a>
+            </li>
+        </ul>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <section class="pcd-manage-section" i9n-manage-team>
+            <h3 data-use-cms mee-heading="heading4">Teams</h3>
+
+            <div class="pcd-section-lede">
+                <p mee-paragraph data-use-cms>
+                    All teams who manage data at Microsoft must register with PCD. Teams are defined as:
+                </p>
+                <ol mee-list="lean" data-use-cms>
+                    <li>responsible for managing the data they own (if CELA needs to request a manual deletion of some data, they should be able to contact the team directly responsible), and</li>
+                    <li>have sufficient responsibility to respond to legal requests from CELA.</li>
+                </ol>
+            </div>
+
+            <mee-progress-view watch-operation="fetchDataOwners">
+                <inert-view></inert-view>
+
+                <inprogress-view>
+                    <pcd-default-progress-spinner></pcd-default-progress-spinner>
+                </inprogress-view>
+
+                <failed-view>
+                    <p mee-paragraph data-use-cms>
+                        Failed to get teams.
+                    </p>
+                </failed-view>
+
+                <finished-view>
+                    <p ng-if="!$ctrl.hasDataOwners()" mee-paragraph data-use-cms>
+                        There are no teams registered. Please locate your team in below through Service Tree.
+                    </p>
+                    <mee-alert ng-if="$ctrl.requiresOwnerEdit()" kind="use-glyph error">
+                        <alert-content data-use-cms>
+                            This team's configuration requires attention. Please resolve outstanding issues before managing data associated with this team.
+                        </alert-content>
+                        <alert-actions>
+                            <a ui-sref="data-owners.edit({ ownerId: $ctrl.teamPickerModel.selectedOwnerId })" data-use-cms>Edit team</a>
+                        </alert-actions>
+                    </mee-alert>
+                    <mee-alert ng-if="$ctrl.hasPendingTransferRequests()" kind="use-glyph info">
+                        <alert-content data-use-cms>
+                            You have asset transfer requests from another team. Please click the link to review.
+                        </alert-content>
+                        <alert-actions>
+                            <a ui-sref="data-owners.asset-transfers({ ownerId: $ctrl.teamPickerModel.selectedOwnerId })" data-use-cms>Review</a>
+                        </alert-actions>
+                    </mee-alert>
+                    <pcd-team-picker ng-if="$ctrl.hasDataOwners()"
+                                     pcd-team-picker-model="$ctrl.teamPickerModel"
+                                     on-change="$ctrl.onTeamSelected()"></pcd-team-picker>
+
+                    <a ui-sref="data-owners.edit({ ownerId: $ctrl.teamPickerModel.selectedOwnerId })"
+                       ng-if="$ctrl.teamPickerModel.selectedOwnerId"
+                       data-glyph="edit"
+                       mee-action-trigger="align-margin"
+                       class="modify-team-link"
+                       i9n-modify-team-link
+                       data-use-cms>Modify selected team</a>
+                </finished-view>
+            </mee-progress-view>
+
+            <a ui-sref="data-owners.using-service-tree"
+               data-glyph="search"
+               mee-action-trigger="align-margin"
+               class="create-team-link"
+               i9n-create-team-link
+               data-use-cms>Find your team in Service Tree</a>
+        </section>
+
+        <hr mee-divider="vertical6x subdivider" />
+
+        <section ng-class="{'pcd-locked-manage-section' : $ctrl.shouldDisableManageSection() }"
+                 class="pcd-manage-section manage-data-assets"
+                 i9n-manage-data-assets>
+            <h3 data-use-cms mee-heading="heading4">Manage data assets</h3>
+
+            <div class="pcd-section-lede">
+                <p mee-paragraph data-use-cms>
+                    When you register your data in PCD, you are creating a top-level inventory of all the data your team manages.
+                    Data should be registered at the largest granularity possible - for example if your team manages the entire VC and your
+                    delete processor operates at that level, register your VC, and avoid the extra effort of registering any sub paths.
+                </p>
+                <p mee-paragraph data-use-cms>
+                    This top-level collection is referred to by PCD as a "data asset". Data assets can be (but are not limited to) SQL Databases,
+                    Cosmos VC/Folders, or Azure DocumentDB instances, for example.
+                </p>
+
+                <p mee-paragraph>
+                    <ul class="horizontal-nav">
+                        <li>
+                            <a mee-hyperlink
+                               data-use-cms
+                               target="_blank"
+                               href="https://datagrid.microsoft.com/Tagging/MyTeams">Explore your team's assets on DataGrid</a>
+                        </li>
+                        <li>
+                            <a mee-hyperlink
+                               data-use-cms
+                               target="_blank"
+                               href="https://datagrid.microsoft.com/Tagging/NGPReport">Real-time tagging completeness report</a>
+                        </li>
+                    </ul>
+                </p>
+            </div>
+
+            <mee-progress-view watch-operation="fetchDataOwners fetchDataAssetsCountForOwner">
+                <inert-view></inert-view>
+
+                <inprogress-view>
+                    <pcd-default-progress-spinner></pcd-default-progress-spinner>
+                </inprogress-view>
+
+                <failed-view>
+                    <p mee-paragraph data-use-cms>
+                        Failed to get data assets.
+                    </p>
+                </failed-view>
+
+                <finished-view>
+                    <p ng-if="!$ctrl.hasDataOwners()" mee-paragraph data-use-cms>
+                        You must create a team first.
+                    </p>
+
+                    <div ng-if="$ctrl.hasDataOwners()">
+                        <p ng-if="!$ctrl.hasAssetGroups()" mee-paragraph data-use-cms>
+                            You don't currently have any asset groups registered.
+                        </p>
+
+                        <div ng-if="$ctrl.hasAssetGroups()" class="asset-groups-summary" i9n-asset-groups-summary>
+                            <p mee-paragraph>
+                                <span data-use-cms>Data asset groups registered:</span>
+                                <span class="view-label" i9n-asset-count>{{ $ctrl.assetGroupsCount}}</span>
+                            </p>
+                            <a data-glyph="edit"
+                               mee-action-trigger="align-margin"
+                               ui-sref="data-assets.manage({ ownerId: $ctrl.teamPickerModel.selectedOwnerId})"
+                               class="manage-data-assets-link"
+                               i9n-manage-data-assets-link
+                               data-use-cms>Manage data assets</a>
+                        </div>
+
+                    </div>
+                </finished-view>
+            </mee-progress-view>
+
+            <a ui-sref="data-assets.create({ownerId: $ctrl.teamPickerModel.selectedOwnerId})"
+               ng-attr-tabindex="{{!$ctrl.hasDataOwners() ? '-1' : ''}}"
+               data-glyph="add"
+               mee-action-trigger="align-margin"
+               class="register-data-asset"
+               i9n-register-data-asset
+               data-use-cms>Register data asset</a>
+        </section>
+
+        <hr mee-divider="vertical6x subdivider" />
+
+        <section ng-class="{'pcd-locked-manage-section' : $ctrl.shouldDisableManageSection() }"
+                 class="pcd-manage-section manage-data-agents"
+                 i9n-manage-data-agents>
+            <h3 data-use-cms mee-heading="heading4">Manage data agents</h3>
+
+            <div class="pcd-section-lede">
+                <p mee-paragraph data-use-cms>
+                    If your data requires any processing (such as delete or export), you will need to register your processor as a data agent in PCD.
+                </p>
+
+                <p mee-paragraph>
+                    <ul class="horizontal-nav">
+                        <li>
+                            <a mee-hyperlink href="https://aka.ms/agentdrilldown" target="_blank" data-use-cms>Agent health dashboard</a>
+                        </li>
+                    </ul>
+                </p>
+            </div>
+
+            <mee-progress-view watch-operation="fetchDataOwners fetchDataAgentsCountForOwner">
+                <inert-view></inert-view>
+
+                <inprogress-view>
+                    <pcd-default-progress-spinner></pcd-default-progress-spinner>
+                </inprogress-view>
+
+                <failed-view>
+                    <p mee-paragraph data-use-cms>
+                        Failed to get data agents.
+                    </p>
+                </failed-view>
+
+                <finished-view>
+                    <p ng-if="!$ctrl.hasDataOwners()" mee-paragraph data-use-cms>
+                        You must create a team first.
+                    </p>
+                    <div ng-if="$ctrl.hasDataOwners()">
+                        <p ng-if="!$ctrl.hasDataAgents()" mee-paragraph data-use-cms>
+                            You don't currently have any agents registered.
+                        </p>
+                        <div ng-if="$ctrl.hasDataAgents()" class="agents-summary" i9n-agents-summary>
+                            <p mee-paragraph>
+                                <span data-use-cms>Data agents registered:</span>
+                                <span class="view-label" i9n-agent-count>{{$ctrl.agentsCount}}</span>
+                            </p>
+                            <a data-glyph="edit"
+                               mee-action-trigger="align-margin"
+                               ui-sref="data-agents.manage({ownerId: $ctrl.teamPickerModel.selectedOwnerId})"
+                               class="manage-data-agents-link"
+                               i9n-manage-data-agents-link
+                               data-use-cms>Manage data agents</a>
+                        </div>
+                    </div>
+                </finished-view>
+
+            </mee-progress-view>
+
+            <a ui-sref="data-agents.create({ownerId: $ctrl.teamPickerModel.selectedOwnerId})"
+               ng-attr-tabindex="{{!$ctrl.hasDataOwners() ? '-1' : ''}}"
+               data-glyph="add"
+               mee-action-trigger="align-margin"
+               class="register-data-agent"
+               i9n-register-data-agent
+               data-use-cms>Register data agent</a>
+        </section>
+    </pcd-content>
+
+</pcd-default-page-layout>

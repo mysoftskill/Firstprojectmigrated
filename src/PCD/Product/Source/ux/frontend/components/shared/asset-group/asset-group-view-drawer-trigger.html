@@ -1,0 +1,9 @@
+<pcd-page-context-drawer ng-if="$ctrl.assetGroup">
+    <pcd-drawer-trigger>
+        <span class="view-label">{{$ctrl.drawerTriggerLabel}}</span>
+        <pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.assetGroup.qualifier" pcd-hide-data-grid-link="true"></pcd-asset-group-qualifier-view>
+    </pcd-drawer-trigger>
+    <pcd-drawer-content>
+        <pcd-asset-group-view pcd-asset-group="$ctrl.assetGroup" pcd-hide-title="true"></pcd-asset-group-view>
+    </pcd-drawer-content>
+</pcd-page-context-drawer>

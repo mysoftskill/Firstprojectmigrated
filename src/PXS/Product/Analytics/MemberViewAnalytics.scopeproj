@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>cbab6158-0282-4d79-b303-fdf10629c06c</ProjectGuid>
+    <OutputType>File</OutputType>
+    <AssemblyName>Algebra.xml</AssemblyName>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Name>MemberViewAnalytics</Name>
+    <RootNamespace>MemberViewAnalytics</RootNamespace>
+    <VCSelectionInProjectProperty>vc://cosmos11/asimov.partner.osg</VCSelectionInProjectProperty>
+    <CosmosRuntimeVersion>Default</CosmosRuntimeVersion>
+    <ScopePath>%24(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;%24(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov;%24(CLUSTER_ROOT)/users/sarubio/libraries</ScopePath>
+    <InputStreamSearchPath>%24(PROJECT_DIR);%24(SCRIPT_DIR);%24(CLUSTER_ROOT)</InputStreamSearchPath>
+    <OutputStreamPath>%24(PROJECT_DIR)</OutputStreamPath>
+    <VertexDebugSolution>false</VertexDebugSolution>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Script Include="MemberView\Scripts\Logs.script" />
+    <Script Include="MemberView\Scripts\Qos.script" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MemberView" />
+    <Folder Include="MemberView\Reports" />
+    <Folder Include="MemberView\Scripts\" />
+    <Folder Include="MemberView\SQLizer" />
+    <Folder Include="Schemas" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MemberView\MemberView.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MemberView\Reports\MemberViewQos.vizfx">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MemberView\Reports\MemberViewQos.vizfx.metadata">
+      <SubType>Content</SubType>
+      <DependentUpon>MemberView\Reports\MemberViewQos.vizfx</DependentUpon>
+    </Content>
+    <Content Include="MemberView\Reports\QosReportSqlWorkspace.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="MemberView\SQLizer\MemberViewSQLizer.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Schemas\WFDEFSchema.xsd">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(AppData)\Microsoft\ScopeStudio\MsBuild\1.0\Scope.targets" />
+</Project>

@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.Client</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.DataManagement.Client</AssemblyName>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <SignAssembly>false</SignAssembly>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Metadata\Probe.xml" />
+    <EmbeddedResource Include="Metadata\Operations_V2.xml" />
+    <EmbeddedResource Include="Metadata\ServiceTree.xml" />
+	<EmbeddedResource Include="Metadata\Pcf.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="Microsoft.PrivacyServices.Identity" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <!-- Newtonsoft.Json < v13.0.1 has a security issue. Enforcing versioning for the dependency here -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+  <PropertyGroup>
+      <PackageId>Microsoft.PrivacyServices.DataManagement.Client</PackageId>
+      <Title>Microsoft.PrivacyServices.DataManagement.Client</Title>
+      <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+      <Description>Client library for contacting the Privacy Data Management Service.</Description>
+      <Copyright>Microsoft - Copyright 2020</Copyright>
+      <PackageTags>ngp ngpx privacy pdms</PackageTags>
+  </PropertyGroup>
+</Project>

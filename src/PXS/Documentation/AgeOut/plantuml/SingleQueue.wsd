@@ -1,0 +1,35 @@
+@startuml SingleQueue
+
+database AQS
+
+
+node PrivacyWorker {
+    component AqsWorkerHost
+    folder AzureStorage {
+        database Queue
+    }
+
+    component Filterer
+
+    folder "In Memory" {
+        database Queue24
+        database Queue60
+    }
+
+    component QueueWorker
+}
+
+AQS --> AqsWorkerHost
+
+AqsWorkerHost --> Queue : All items go to the same internal queue
+Queue --> Filterer : Dequeue items
+
+Filterer --> Queue24 : Filter into in memory storage
+Filterer --> Queue60 : Filter into in memory storage
+
+Queue24 --> QueueWorker : Get items when ready to send
+Queue60 --> QueueWorker : Get items when ready to send
+
+QueueWorker --> [PCF] : Batch post command
+
+@enduml

@@ -1,0 +1,78 @@
+parameters:
+- name: BuildConfiguration
+  displayName: BuildConfiguration Suffix
+  values:
+  - NONPROD
+  - PROD
+
+- name: ReleaseType
+  displayName: Release Type can be PRE or PROD
+  values:
+  - PRE
+  - PROD
+
+stages:
+- stage: BuildAndPackageCommandCustomActivity
+  dependsOn: setup
+  jobs:
+  - job: BuildCommandCustomActivity
+    pool:
+      type: windows
+    variables: 
+      ob_outputDirectory: $(PCFBuildRootDirectory)\OneBranch\Deployment\drop
+      ob_sdl_binskim_break: true
+      ob_artifactBaseName: drop_custom_activity
+    steps:
+      - task: UseDotNet@2
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+          performMultiLevelLookup: true
+
+      - task: UseDotNet@2
+        inputs:
+          packageType: sdk
+          version: "3.1.x"
+          workingDirectory: $(Build.SourcesDirectory)
+
+      - task: CmdLine@2
+        displayName: Restore
+        inputs:
+          script: $(PCFBuildRootDirectory)\OneBranch\Build\restore.cmd
+
+      - task: CmdLine@2
+        displayName: Restore Service Fabric Packages
+        inputs:
+          script: nuget restore $(PCFBuildRootDirectory)\Product\CommandFeed.sln 
+
+      # this command runs dotnet publish which is not supported by gaurdian tasks 
+      # like roslyn analysis: https://dev.azure.com/onebranch/OneBranch/_wiki/wikis/OneBranch.wiki/6395/FAQ's
+      - task: CmdLine@2
+        displayName: Publish
+        inputs:
+          script: $(PCFBuildRootDirectory)\OneBranch\Build\build-pcf-sdk-custom-activity.cmd Release ${{parameters.BuildConfiguration}} 
+
+      - task: onebranch.pipeline.signing@1
+        displayName: Sign binaries
+        inputs:
+          command: sign
+          signing_environment: azure-ado
+          signing_profile: external_distribution
+          files_to_sign: '**\*.exe;**\*.dll;**\*.ps1'
+          search_root: $(Build.SourcesDirectory)\src\PCF\bin
+
+      - task: CmdLine@2
+        displayName: Package PCF SDK
+        inputs:
+          script: $(PCFBuildRootDirectory)\OneBranch\Build\package-pcf-sdk-custom-activity.cmd ${{parameters.ReleaseType}} Release
+          workingDirectory: $(PCFBuildRootDirectory)\OneBranch
+
+      - task: PowerShell@2
+        displayName: Move Outputs
+        inputs:
+          targetType: inline
+          script: |
+            robocopy $(PCFBuildRootDirectory)\bin\Release\x64 $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\ *.dll *.exe *.ps1 /s
+            robocopy $(PCFBuildRootDirectory)\nupkgs $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\ * /s
+            # robocopy exit codes 1-8 are actually passing, but need to be converted to 0 so the OneBranch doesn't fail out.
+            if ($Lastexitcode -lt 9) {$global:LastExitcode=0}

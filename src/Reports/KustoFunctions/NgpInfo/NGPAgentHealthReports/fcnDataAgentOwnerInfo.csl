@@ -1,0 +1,11 @@
+// Data Agent info combined with Service Tree Info.
+let currentDataOwnersDate = toscalar(cluster("https://Ngpreporting.kusto.windows.net").database("NgpInfo").DataOwnersV2 | summarize max(SQLizerStreamDateId));
+let currentAgentOwnerDate = toscalar(cluster("https://Ngpreporting.kusto.windows.net").database("NgpInfo").AgentOwnerV2 | summarize max(SQLizerStreamDateId));
+let currentDate = iff(currentAgentOwnerDate < currentDataOwnersDate, currentAgentOwnerDate, currentDataOwnersDate);
+cluster("https://Ngpreporting.kusto.windows.net").database("NgpInfo").AgentOwnerV2
+    | where SQLizerStreamDateId == toscalar(currentDate)
+    | join kind=inner (cluster("https://Ngpreporting.kusto.windows.net").database("NgpInfo").DataOwnersV2 | where SQLizerStreamDateId == currentDate) on $left.OwnerId == $right.DataOwnerId
+    | project AgentId,AgentType,AgentName,OwnerId,ServiceId,DivisionId,DivisionName,OrganizationId,OrganizationName,
+        ServiceGroupId,ServiceGroupName,TeamGroupId,TeamGroupName,ServiceName,Protocol,AgentReadiness,
+        Capabilities=replace('""', '', trim_start(".",trim_end(".",Capabilities))),GC=GCTag,Email=GCEmail,VSOTag=GCVSOTag,
+        DivisionOwners,OrganizationOwners

@@ -1,0 +1,44 @@
+@import "../../../../styles/utilities.scss";
+
+$line-item-padding-top: 12px;
+
+pcd-view-agents-health {
+    display: block;
+
+    pcd-view-agent-health {
+        padding-top: 12px;
+        display: block;
+    }
+
+    pcd-view-asset-groups-health {
+        display: block;
+        .no-data-owner {
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+    }
+
+    pcd-view-status-line {
+        display: block;
+
+        @extend %force-wrap-element-contents;
+
+        .status-line:not(.status-metadata) {
+            padding-top: $line-item-padding-top;
+        }
+
+        .status-metadata > pcd-body {
+            display: block;
+            @include margin-left(25px);
+            padding-top: $line-item-padding-top;
+        }
+
+        .c-drawer > button {
+            font-size: inherit;
+        }
+    }
+
+    mee-caption {
+        display: block;
+    }
+}

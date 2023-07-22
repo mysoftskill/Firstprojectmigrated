@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Microsoft.Membership.MemberServices.Privacy.RecurrentDeleteWorker</RootNamespace>
+		<AssemblyName>Microsoft.Membership.MemberServices.Privacy.RecurrentDeleteWorker</AssemblyName>
+		<TargetFramework>net472</TargetFramework>
+		<ReleaseSubDir>RecurrentDeleteWorker</ReleaseSubDir>
+		<CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+		<FileAlignment>512</FileAlignment>
+		<FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\PXF\Host\Source\PrivacyHost.csproj" />
+		<ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+		<ProjectReference Include="..\..\Common\Source\Common.csproj" />
+		<ProjectReference Include="..\..\PXF\ScheduleDbClient\Source\ScheduleDbClient.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+			<Link>AadIdentityService.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MockPxfAdapters.ini">
+			<Link>MockPxfAdapters.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+			<Link>MsaIdentityService.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+			<Link>Adapters.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PxfAdapters.ini">
+			<Link>PxfAdapters.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+			<Link>PrivacyExperienceService.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\GlobalConfiguration.ini">
+			<Link>GlobalConfiguration.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\Deployment\Configurations\RecurrentDeleteWorker\RecurrentDeleteWorker.ini">
+			<Link>RecurrentDeleteWorker.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="App.config">
+			<SubType>Designer</SubType>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" />
+		<PackageReference Include="Microsoft.Azure.DocumentDB" />
+		<PackageReference Include="Microsoft.CommonSchema.Bond" />
+		<PackageReference Include="Microsoft.CommonSchema.Services" />
+		<PackageReference Include="Ms.Qos" />
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="ServiceManager.Tools" />
+		<PackageReference Include="Unity" />
+	</ItemGroup>
+	<Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+	<Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

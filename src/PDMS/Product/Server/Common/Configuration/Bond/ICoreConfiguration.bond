@@ -1,0 +1,61 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct ICoreConfiguration
+{
+    1   :   required    int64           LastActiveConfigurationPollingIntervalMs;
+    3   :   required    list<string>    ServiceAdminSecurityGroups;
+    5   :   required    list<string>    VariantEditorSecurityGroups;
+    6   :   required    list<string>    IncidentManagerSecurityGroups;
+    7   :   required    string          VariantEditorApplicationId;
+    8   :   required    int32           MaxPageSize;
+    9   :   required    int32           AssetGroupCapForAgentHealth;
+    10  :   optional    string          AzureServicesAuthConnectionString;
+    11  :   required    list<string>    DataAgentOwnershipSecurityGroupIds;
+};
+
+struct IAzureAppConfigurationSettings
+{
+    1   :   required    string          Endpoint;
+    10  :   optional    string          LabelFilter;
+};
+
+struct IDataGridConfiguration
+{
+    1   :   required    string  EndpointUrl;
+    2   :   required    int32   DefaultPageSize;
+    3   :   required    int32   MaxPageSize;
+    4   :   required    string  ClientKey;
+    5   :   required    string  ResourceId;
+    6   :   required    string  UseTransitionPropertiesAssetTypes
+    7   :   required    string  UseSearchPropertiesAssetTypes
+    8   :   required    string  UseMatchPropertiesAssetTypes
+    9   :   required    bool    AuthenticateWithFirstPartyAppId
+};
+
+struct IIcmConfiguration 
+{
+    1   :   required    bool        Enabled;
+    4   :   required    string      ServiceUrl;
+    5   :   required    int32       TimeoutInSeconds;
+    6   :   required    string      SourceName;
+    7   :   required    string      OwnerRegistrationTitle;
+    8   :   required    string      OwnerRegistrationEventName;
+    9   :   required    string      OwnerRegistrationBody;
+    10  :   required    bool        OwnerRegistrationBodyFromFile;
+    11  :   required    int32       OwnerRegistrationSeverity;
+    12  :   required    string      AgentRegistrationTitle;
+    13  :   required    string      AgentRegistrationEventName;
+    14  :   required    string      AgentRegistrationBody;
+    15  :   required    bool        AgentRegistrationBodyFromFile;
+    16  :   required    int32       AgentRegistrationSeverity;
+    17  :   required    string      KeyVaultCertificateName;
+};
+
+struct IServiceTreeKustoConfiguration
+{
+    1   :   required    string          ClientId;
+    2   :   required    string          KeyVaultCertificateName;
+    3   :   required    string          Authority;
+    4   :   required    string          KustoCluster;
+    5   :   required    string          KustoDatabase;
+};

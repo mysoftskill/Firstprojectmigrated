@@ -1,0 +1,228 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.PrivacyServices.DataMonitor.Runner</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.DataMonitor.DataActionRunner</AssemblyName>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+    <UseDefaultBinplacing>false</UseDefaultBinplacing>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>DataActionRunner</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Deployment\Configurations\DataActionRunnner\DataActionRunner.ini">
+      <Link>DataActionRunner.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+      <Link>AadIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Adapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+      <Link>MsaIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+      <Link>PrivacyExperienceService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>GlobalConfiguration.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Library\Actions.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\ActionRefs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\CosmosDeleteIncidentBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\GCEmailBodyPPE.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\AuditPipelineAlertSendStatusEmailBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+   <None Include="Library\IncidentBodyPPE.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\IncidentAuditPipelineAlertBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\GCEMailSendStatusEmailBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\IncidentSev3Body_MalwareFoundInExports.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryAuditPipelineAlert.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryCosmosDelete.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryGCEmail.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryGCEmailPPE.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryIncidentsPPE.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryPCFDelete.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\AllOfficialKustoQueryResults.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\CosmosDeleteAgentPostSLAAlert.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\CosmosDeleteOperationalRollup.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\CosmosDeleteOperationalRollup_ByRetention.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\AllOfficialKustoQueryResultsBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\CosmosPendingDeleteOperationalRollup.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\DeleteOperationalRollup.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\ExportAgentPendingCommandStatus.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\ExportOperationalRollup.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\GetNameByAlias.csl" />
+    <None Include="Library\OfficialQueries\missingDeleteAgentCommands.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\missingExportAgentCommands.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\NonCosmosContributionFactor.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\NonCosmosDeleteOperationalRollup.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\PostSLADeleteCompletionStatus.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\PostSLAExportForceCompleteStatus.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\UnexpectedAcknowledgementsStatus.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\OfficialQueries\Weighted30DayCompleted.csl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\PCFDeleteIncidentBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\ExportIncidentSev3Body.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\KustoQueryExport.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\IncidentSendStatusEmailBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\ExportIncidentSev2Body.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\TemplateManifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Library\GCEmailBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Update="Library\PCFV2BatchDeleteIncidentBody.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Library\KustoQueryPCFV2BatchDelete.tpldam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Update="Library\PCFV2ContinuousDeleteIncidentBody.tpldam">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Update="Library\KustoQueryPCFV2ContinuousDelete.tpldam">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\..\PXF\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\..\PXF\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\..\PXF\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\..\PXF\Host\Source\PrivacyHost.csproj" />
+    <ProjectReference Include="..\..\..\PXF\KustoHelpers\KustoHelpers\KustoHelpers.csproj" />
+    <ProjectReference Include="..\..\..\PXF\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+    <ProjectReference Include="..\ContextModelCommon\ContextModelCommon.csproj" />
+    <ProjectReference Include="..\DataAction\DataAction.csproj" />
+    <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Library\OfficialQueries\Readme.txt" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

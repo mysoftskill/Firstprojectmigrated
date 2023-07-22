@@ -1,0 +1,14 @@
+﻿{
+  "@odata.context": "https://servicetree.msftcloudes.com/api/$metadata#ServiceGroups/$entity",
+  "Id": "a81edd6c-bee1-4dd3-830c-ad027dc9134d",
+  "Name": "Membership",
+  "Description": "Represents the Universal Store high level team as mapped in Team Map",
+  "Tags": "",
+  "Status": "Active",
+  "BusinessOwners": "chaddkn;toddba;brajeshk;ericl;gayleu",
+  "Created": "2016-10-13T20:53:40.9215866Z",
+  "CreatedBy": "karinm@microsoft.com",
+  "Modified": "2016-10-13T20:53:40.9215866Z",
+  "ModifiedBy": "karinm@microsoft.com",
+  "OrganizationId": "efab8c59-3cd4-4eb2-8e8a-77b687f93843"
+}

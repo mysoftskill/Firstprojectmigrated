@@ -1,0 +1,31 @@
+﻿import "CommonConfiguration.bond"
+import "KustoConfig.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IVSOConfig
+{
+    10 : required bool EnableVsoWorkItemCreation = false;
+    15 : required bool EnableWorkItemAssignment = false;
+    20 : required string VSOAccessKeyName;
+    30 : required string VSOProjectUrl;
+    40 : required string WorkItemType;
+    50 : required string WorkItemAreaPath;
+    60 : required string WorkItemTeamProject;
+    80 : required string WorkItemTags;
+};
+
+struct IFileSystemProcessorConfig
+{
+    30 : required string WorkItemDescriptionPath;
+};
+
+struct IPrivacyVsoWorkerConfiguration
+{
+    10 : required bool EnableWorker = false;
+    30 : optional bool EnableConsoleLogging = false;
+    40 : required IKustoConfig KustoConfig;
+    50 : required IFileSystemProcessorConfig FileSystemProcessorConfig;
+    60 : required IVSOConfig VSOConfig;
+    70 : required int16 JobExecutionIntervalInDays;
+};

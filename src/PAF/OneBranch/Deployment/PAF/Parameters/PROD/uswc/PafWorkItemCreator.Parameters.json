@@ -1,0 +1,87 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "msdeployPackageUrl"
+  ],
+  "parameters": {
+    "deploymentEnvironment": {
+      "value": "PROD"
+    },
+    "azureRegion": {
+      "value": "WestCentralUS"
+    },
+    "appName": {
+      "value": "WorkItemProcessorProdUSWC"
+    },
+    "ShouldUseAADToken": {
+      "value": true
+    },
+    "msdeployPackageUrl": {
+      "value": "Bin\\WorkItemProcessor.zip"
+    },
+    "storageName": {
+      "value": "pafinfrauswcprod"
+    },
+    "storageAccountKind": {
+      "value": "StorageV2"
+    },
+    "keyVaultName": {
+      "value": "paf-prod-ame"
+    },
+    "pafCoreResourceGroup": {
+      "value": "PAF-PROD-RG"
+    },
+    "pafCoreResourceLocation": {
+      "value": "westcentralus"
+    },
+    "pdmsResourceId": {
+      "value": "b1b98629-ed2f-450c-9095-b895d292ccf1"
+    },
+    "pdmsBaseUrl": {
+      "value": "https://management.privacy.microsoft.com"
+    },
+    "pafUamiId": {
+      "value": "e0e21f83-d8a1-4226-910b-26d5c9b06b40"
+    },
+    "pafUamiName": {
+      "value": "NGP-PAF-Prod"
+    },
+    "variantUpdateTiming": {
+      "value": "0 0 * * * *" // Runs at the top of every hour
+    },
+    "variantRemoveTiming": {
+      "value": "0 5 * * * *" // Runs at 5 minutes after every hour
+    },
+    "variantRequestQueue": {
+      "value": "paf-variantrequests"
+    },
+    "variantRequestProjectUrl": {
+      "value": "https://dev.azure.com/nextgenpriv"
+    },
+    "variantRequestProjectName": {
+      "value": "NGPAsset-VariantLinking"
+    },
+    "enableNonProdFunctionality": {
+      "value": false
+    },
+    "virtualNetwork_name": {
+      "value": "paf-vnet-prod-uswc"
+    },
+    "genevaMonitoringTenant": {
+      "value": "ADGCS-USWC"
+    },
+    "genevaMonitoringRole": {
+      "value": "PAF.Function"
+    },
+    "genevaMetricPrefixName": {
+      "value": "PAF.Function"
+    },
+    "genevaMetricAccount": {
+      "value": "adgcsprod"
+    },
+    "pafConfigEndPoint": {
+      "value": "https://adgcs-prod-config.azconfig.io"
+    }
+  }
+}

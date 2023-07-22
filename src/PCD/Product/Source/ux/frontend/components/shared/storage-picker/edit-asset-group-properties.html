@@ -1,0 +1,17 @@
+<div data-grid="col-12">
+    <pcd-lede class="description">
+        <p data-use-cms>These selection boxes will disable broader asset group inheritance of specific asset groups if they have an export agent, delete agent, or variant linked.</p>
+    </pcd-lede>
+</div>
+
+<div data-grid="col-12">
+    <mee-checkbox ng-model="$ctrl.asset.isExportAgentInheritanceBlocked"
+                  i9n-export-inheritance-checkbox
+                  data-use-cms>Block export agent inheritance</mee-checkbox>
+    <mee-checkbox ng-model="$ctrl.asset.isDeleteAgentInheritanceBlocked"
+                  i9n-delete-inheritance-checkbox
+                  data-use-cms>Block delete agent inheritance</mee-checkbox>
+    <mee-checkbox ng-model="$ctrl.asset.isVariantsInheritanceBlocked"
+                  i9n-variants-inheritance-checkbox
+                  data-use-cms>Block variants inheritance</mee-checkbox>
+</div>

@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="TestJobGroupV2" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="Copy">
+    <xs:complexType>
+      <xs:attribute name="Src" type="xs:string" />
+      <xs:attribute name="Dest" type="xs:string" />
+      <xs:attribute name="DestType" type="xs:string" />
+      <xs:attribute name="IsRecursive" type="xs:string" />
+      <xs:attribute name="IsZeroCopiedFilesAllowed" type="xs:string" />
+      <xs:attribute name="Writable" type="xs:string" />
+      <xs:attribute name="SkipHashInput" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Scripts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Script" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="Path" type="xs:string" />
+            <xs:attribute name="Args" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TestJobGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ExecutionMode" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Properties" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="Name" type="xs:string" />
+                        <xs:attribute name="Value" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Type" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+        <xs:choice minOccurs="0" maxOccurs="1">
+          <xs:element name="ResourceSpecConfig" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:attribute name="Path" type="xs:string"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="ResourceSpec" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Resource" minOccurs="0" maxOccurs="unbounded">
+                  <xs:complexType>
+                    <xs:attribute name="Type" type="xs:string" />
+                    <xs:attribute name="SKU" type="xs:string" />
+                    <xs:attribute name="Image" type="xs:string" />
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+        <xs:choice minOccurs="0" maxOccurs="1">
+          <xs:element name="Setup" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:choice maxOccurs="unbounded" minOccurs="1">
+                  <xs:element name="BuildFiles" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element ref="Copy" minOccurs="0" maxOccurs="unbounded" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="DataFiles" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element ref="Copy" minOccurs="0" maxOccurs="unbounded" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="Services" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="Service" minOccurs="0" maxOccurs="unbounded">
+                          <xs:complexType>
+                            <xs:attribute name="Path" type="xs:string" />
+                            <xs:attribute name="SkipHashInput" type="xs:string" />
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element ref="Scripts" minOccurs="0" maxOccurs="1" />
+                </xs:choice>
+              </xs:sequence>
+              <xs:attribute name="TimeoutMins" type="xs:integer" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="SetupConfig" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:attribute name="Path" type="xs:string"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+          <xs:element name="TestJob" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Setup" minOccurs="0" maxOccurs="1">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element ref="Scripts" minOccurs="0" maxOccurs="1" />
+                    </xs:sequence>
+                    <xs:attribute name="TimeoutMins" type="xs:integer" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Execution" minOccurs="0" maxOccurs="1">
+                  <xs:complexType>
+                    <xs:attribute name="Type" type="xs:string" />
+                    <xs:attribute name="Path" type="xs:string" />
+                    <xs:attribute name="Args" type="xs:string" />
+                    <xs:attribute name="TimeoutMins" type="xs:integer" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="HashInputs" minOccurs="0" maxOccurs="1">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="HashInput" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                          <xs:attribute name="SourcePath" type="xs:string" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Cleanup" minOccurs="0" maxOccurs="1">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element ref="Scripts" minOccurs="0" maxOccurs="1" />
+                    </xs:sequence>
+                    <xs:attribute name="TimeoutMins" type="xs:integer" />
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+              <xs:attribute name="Id" type="xs:string" />
+              <xs:attribute name="Name" type="xs:string" />
+              <xs:attribute name="Type" type="xs:string" />
+              <xs:attribute name="Size" type="xs:string" />
+              <xs:attribute name="Tags" type="xs:string" />
+              <xs:attribute name="IsActive" type="xs:boolean" />
+              <xs:attribute name="IsCacheEnabled" type="xs:boolean" />
+              <xs:attribute name="OwnerAliases" type="xs:string" />
+              <xs:attribute name="TimeoutMins" type="xs:integer" />
+              <xs:attribute name="CodeCoverageEnabled" type="xs:boolean" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="TestJobConfig" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="Path" type="xs:string"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+        <xs:choice minOccurs="0" maxOccurs="1">
+          <xs:element name="Cleanup" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Scripts" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+              <xs:attribute name="TimeoutMins" type="xs:integer" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="CleanupConfig" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:attribute name="Path" type="xs:string"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="GroupId" type="xs:string" />
+      <xs:attribute name="HashInputHelperPath" type="xs:string" />
+      <xs:attribute name="EnableProcessJobObjectBreakaway" type="xs:boolean" />
+      <xs:attribute name="CodeCoverageEnabled" type="xs:boolean" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

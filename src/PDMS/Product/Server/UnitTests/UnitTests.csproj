@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>Pdms.UnitTests</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.UnitTests</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Library</OutputType>
+    <OutputPath>$(OutputPath)\..\ServiceFabricRelease\$(MSBuildProjectName)</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\$(Platform)\Pdms.UnitTests.xml</DocumentationFile>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="DataAccess\DocumentDB\StoredProcedures\Installation.xml" />
+    <None Remove="DataAccess\DocumentDB\StoredProcedures\Test1.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataAccess\DocumentDB\StoredProcedures\Installation.xml" />
+    <EmbeddedResource Include="DataAccess\DocumentDB\StoredProcedures\Test1.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="AutoFixture.AutoMoq" />
+    <PackageReference Include="AutoFixture.Xunit2" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="Microsoft.Owin.Testing" />
+    <PackageReference Include="Microsoft.PrivacyServices.DocumentDB.Models" />
+    <PackageReference Include="Microsoft.PrivacyServices.DataManagement.Models" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.abstractions" />
+    <PackageReference Include="xunit.analyzers" />
+    <PackageReference Include="xunit.assert" />
+    <PackageReference Include="xunit.core" />
+    <PackageReference Include="xunit.extensibility.core" />
+    <PackageReference Include="xunit.extensibility.execution" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\PdmsFrontdoor\PdmsFrontdoor.csproj" />
+    <ProjectReference Include="..\PdmsWorker\PdmsWorker.csproj" />
+    <ProjectReference Include="..\Testing\Microsoft.PrivacyServices.Testing.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Common\Instrumentation\EventWriters\Sll.ini.flattened.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\Service.FindByNameResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\Service.FindByAuthenticatedUserResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\Service.ReadByIdNotFoundError.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\Service.ReadByIdResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\ServiceGroup.ReadByIdUnknownError.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\ServiceGroup.ReadByIdResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\TeamGroup.ReadByIdResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\Service.ReadByIdUnknownError.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\ServiceGroup.ReadByIdNotFoundError.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\ServiceGroupOrTeamGroup.FindByNameResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\TeamGroup.ReadByIdNotFoundError.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\TeamGroup.ReadByIdUnknownError.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\ServiceGroup.GetAuthorizationsResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\ServiceGroup.GetHierarchyResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\TeamGroup.GetHierarchyResponse.json" />
+    <EmbeddedResource Include="ClientSdks\ServiceTree\Data\Service.ReadByIdResponseWithoutTeamGroup.json" />
+  </ItemGroup>
+</Project>

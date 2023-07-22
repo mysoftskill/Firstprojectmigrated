@@ -1,0 +1,11 @@
+﻿<h2 mee-heading="subheading2" data-use-cms>Delete team</h2>
+
+<p mee-paragraph data-use-cms>You are about to remove team <span mee-paragraph>{{$ctrl.owner.name}}</span></p>
+<p mee-paragraph data-use-cms>Are you sure?</p>
+
+<mee-checkbox ng-model="$ctrl.hasAcknowledgedDelete"
+                data-use-cms>
+    I understand that the team will be deleted
+</mee-checkbox>
+
+<pcd-confirmation-modal-actions></pcd-confirmation-modal-actions>

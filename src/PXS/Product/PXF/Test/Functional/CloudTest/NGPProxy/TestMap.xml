@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestMap>
+  <TestJobGroup Name="NGPProxyFunctionalTests" TestSystem="Default" ConfigPath="[BuildRoot]\outputs\build\fct\CloudTest\NGPProxy\TestJobGroup.xml" IsActive="true"/>
+</TestMap>

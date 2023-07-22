@@ -1,0 +1,6 @@
+<span mee-paragraph ng-class="{'mee-error-color': $ctrl.hasNoActions()}">{{$ctrl.getPrivacyActionsDisplayString()}}</span><br />
+<span ng-if="$ctrl.hasPendingActions()">{{$ctrl.getPendingPrivacyActionsDisplayString()}}</span>
+<a ng-if="$ctrl.hasPrivacyActionsDetails()"
+   ui-sref=".privacy-actions({ assetGroupId: $ctrl.assetGroup.id })"
+   mee-action-trigger="align-margin"
+   data-use-cms>Info</a>

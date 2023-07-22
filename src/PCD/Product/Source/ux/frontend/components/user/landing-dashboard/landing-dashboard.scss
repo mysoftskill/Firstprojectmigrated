@@ -1,0 +1,39 @@
+@import "../../../styles/utilities.scss";
+
+.pcd-manage-section {
+    &:last-of-type {
+        margin-bottom: 40px;
+    }
+
+    & pcd-team-picker {
+        @include margin-right(8px);
+    }
+
+    & .create-team-link {
+        display: block;
+    }
+}
+
+.pcd-locked-manage-section {
+    cursor: not-allowed;
+    color: lightgray;
+
+    a {
+        pointer-events: none;
+        color: lightgray;
+    }
+}
+
+.asset-groups-summary,
+.agents-summary {
+    padding-top: 12px;
+
+    p {
+        display: inline-block;
+    }
+
+    a {
+        @include set-directional-property(margin-left, margin-right, 25px, 25px, "important");
+        padding: 0px !important;
+    }
+}

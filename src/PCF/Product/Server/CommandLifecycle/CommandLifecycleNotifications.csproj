@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.CommandLifecycleNotifications</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.CommandLifecycleNotifications</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.EventHubs" />
+    <PackageReference Include="Microsoft.Azure.EventHubs.Processor" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+  
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

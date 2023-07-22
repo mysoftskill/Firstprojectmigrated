@@ -1,0 +1,89 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "serviceIdentifier": "eda3dc03-5654-43a9-a6fa-468706c89c97",
+    "ServiceGroup": "NGPPROXY-FAIRFAX-USGOVTEXAS-CLUSTER",
+    "Environment": "NgpProxyFairfax"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PxsServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.2NodeType.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\GenevaMonitoringAgentConsoleApp.Template.json"
+        },
+        {
+          "Name": "PxsServiceFabricApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "AadAccountCloseWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcfDataAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcfDataAgentV2App-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "NGPPROXY-FAIRFAX-USGOVTEXAS-CLUSTER",
+      "Location": "usgovtexas",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "ebce915f-ff1f-4faf-be94-35fe15f0673b",
+      "ServiceResources": [
+        {
+          "Name": "PxsServiceFabric-Cluster-Resources",
+          "InstanceOf": "PxsServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\PxsServiceFabric.Cluster.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "PxsServiceFabricApp-Resources",
+          "InstanceOf": "PxsServiceFabricApp-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\PxsServiceFabricApp.Parameters.json"
+        },
+        {
+          "Name": "AadAccountCloseWorkerApp-Resources",
+          "InstanceOf": "AadAccountCloseWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\AadAccountCloseWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "PcfDataAgentApp-Resources",
+          "InstanceOf": "PcfDataAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\PcfDataAgentApp.Parameters.json"
+        },
+        {
+          "Name": "PcfDataAgentV2App-Resources",
+          "InstanceOf": "PcfDataAgentV2App-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\PcfDataAgentV2App.Parameters.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\Fairfax\\usgovtexas\\Frontdoor.StandingQueryExtensionManagerApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

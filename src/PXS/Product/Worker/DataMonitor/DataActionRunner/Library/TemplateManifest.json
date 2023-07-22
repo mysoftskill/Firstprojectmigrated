@@ -1,0 +1,236 @@
+﻿[
+  {
+    "Tag": "IncidentSendStatusEmailBody",
+    "LocalName": "IncidentSendStatusEmailBody.tpldam"
+  },
+  {
+    "Tag": "GCEMailSendStatusEmailBody",
+    "LocalName": "GCEMailSendStatusEmailBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "ExportIncidentSev2Body",
+    "LocalName": "ExportIncidentSev2Body.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PROD" ],
+
+    "Tag": "ExportIncidentSev3Body",
+    "LocalName": "ExportIncidentSev3Body.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PROD" ],
+
+    "Tag": "KustoQueryExport",
+    "LocalName": "KustoQueryExport.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "PCFDeleteIncidentBody",
+    "LocalName": "PCFDeleteIncidentBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "KustoQueryPCFDelete",
+    "LocalName": "KustoQueryPCFDelete.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "CosmosDeleteIncidentBody",
+    "LocalName": "CosmosDeleteIncidentBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PROD" ],
+
+    "Tag": "PCFV2BatchDeleteIncidentBody",
+    "LocalName": "PCFV2BatchDeleteIncidentBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE", "PROD" ],
+
+    "Tag": "PCFV2ContinuousDeleteIncidentBody",
+    "LocalName": "PCFV2ContinuousDeleteIncidentBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "KustoQueryCosmosDelete",
+    "LocalName": "KustoQueryCosmosDelete.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PROD" ],
+
+    "Tag": "KustoQueryPCFV2BatchDelete",
+    "LocalName": "KustoQueryPCFV2BatchDelete.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE", "PROD" ],
+
+    "Tag": "KustoQueryPCFV2ContinuousDelete",
+    "LocalName": "KustoQueryPCFV2ContinuousDelete.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "KustoQueryGCEmail",
+    "LocalName": "KustoQueryGCEmail.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Tag": "GCEmailBody",
+    "LocalName": "GCEmailBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "IncidentBodyPPE",
+    "LocalName": "IncidentBodyPPE.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "KustoQueryIncidentsPPE",
+    "LocalName": "KustoQueryIncidentsPPE.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "GCEmailBodyPPE",
+    "LocalName": "GCEmailBodyPPE.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "KustoQueryGCEmailPPE",
+    "LocalName": "KustoQueryGCEmailPPE.tpldam"
+  },
+  {
+    "Tag": "IncidentSev3Body_MalwareFoundInExports",
+    "LocalName": "IncidentSev3Body_MalwareFoundInExports.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "IncidentAuditPipelineAlertBody",
+    "LocalName": "IncidentAuditPipelineAlertBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "AuditPipelineAlertSendStatusEmailBody",
+    "LocalName": "AuditPipelineAlertSendStatusEmailBody.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "KustoQueryAuditPipelineAlert",
+    "LocalName": "KustoQueryAuditPipelineAlert.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "CosmosDeleteAgentPostSLAAlert",
+    "LocalName": "OfficialQueries\\CosmosDeleteAgentPostSLAAlert.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "CosmosDeleteOperationalRollup",
+    "LocalName": "OfficialQueries\\CosmosDeleteOperationalRollup.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "CosmosDeleteOperationalRollup_ByRetention",
+    "LocalName": "OfficialQueries\\CosmosDeleteOperationalRollup_ByRetention.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "CosmosPendingDeleteOperationalRollup",
+    "LocalName": "OfficialQueries\\CosmosPendingDeleteOperationalRollup.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "DeleteOperationalRollup",
+    "LocalName": "OfficialQueries\\DeleteOperationalRollup.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "ExportAgentPendingCommandStatus",
+    "LocalName": "OfficialQueries\\ExportAgentPendingCommandStatus.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "ExportOperationalRollup",
+    "LocalName": "OfficialQueries\\ExportOperationalRollup.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "missingDeleteAgentCommands",
+    "LocalName": "OfficialQueries\\missingDeleteAgentCommands.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "missingExportAgentCommands",
+    "LocalName": "OfficialQueries\\missingExportAgentCommands.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "NonCosmosContributionFactor",
+    "LocalName": "OfficialQueries\\NonCosmosContributionFactor.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "NonCosmosDeleteOperationalRollup",
+    "LocalName": "OfficialQueries\\NonCosmosDeleteOperationalRollup.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "PostSLADeleteCompletionStatus",
+    "LocalName": "OfficialQueries\\PostSLADeleteCompletionStatus.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "PostSLAExportForceCompleteStatus",
+    "LocalName": "OfficialQueries\\PostSLAExportForceCompleteStatus.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "UnexpectedAcknowledgementsStatus",
+    "LocalName": "OfficialQueries\\UnexpectedAcknowledgementsStatus.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "Weighted30DayCompleted",
+    "LocalName": "OfficialQueries\\Weighted30DayCompleted.csl"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "AllOfficialKustoQueryResults",
+    "LocalName": "OfficialQueries\\AllOfficialKustoQueryResults.tpldam"
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "AllOfficialKustoQueryResultsBody",
+    "LocalName": "OfficialQueries\\AllOfficialKustoQueryResultsBody.tpldam"
+  }
+]

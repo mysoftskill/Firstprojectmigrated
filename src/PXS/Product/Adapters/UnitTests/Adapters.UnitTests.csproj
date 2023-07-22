@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Membership.MemberServices.Adapters.UnitTests</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.Adapters.UnitTests</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <DefaultTestCategory>CheckIn</DefaultTestCategory>
+    <TestGroupAreaPath>$(MemberServiceAreaPath)</TestGroupAreaPath>
+    <TestGroupName>$(AssemblyName)</TestGroupName>
+    <ExecuteAs64Bit>true</ExecuteAs64Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="DeviceManager\**" />
+    <EmbeddedResource Remove="DeviceManager\**" />
+    <None Remove="DeviceManager\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\Contracts\Exposed\ExposedContracts.csproj" />
+    <ProjectReference Include="..\..\Test\Common\TestCommon.csproj" />
+    <ProjectReference Include="..\Source\Adapters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Moq" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

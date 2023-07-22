@@ -1,0 +1,45 @@
+{
+  "tool": "Credential Scanner",
+  "suppressions": [
+    {
+      "file": [
+        "src\\Deployment\\Templates\\DeprecatedDontUse\\ServiceFabricCluster.2NodeType.HyperNet.Template.json",
+        "src\\Deployment\\Templates\\ServiceFabricCluster.2NodeType.NonHyperNet.Template.json",
+        "src\\Deployment\\Templates\\DeprecatedDontUse\\ServiceFabricCluster.Template.json"
+      ],
+      "_justification": "This is not a real password but an ARM template keyword"
+    },
+    {
+      "file": [
+        "src\\PCF\\Product\\Client\\Tests\\PrivacyCommandValidator\\TokenExtensionTests.cs",
+        "src\\PCF\\Product\\Client\\Tests\\PrivacyCommandValidator\\TokenValidatorTests.cs",
+        "src\\PCF\\Product\\Client\\Tests\\PrivacyCommandValidator\\Validator\\AzureBlobStoragePathTests.cs",
+        "src\\PCF\\Product\\Client\\Tests\\PrivacyCommandValidator\\Validator\\ValidationServiceTests.cs",
+        "src\\PCF\\Product\\Server\\Tests\\UnitTests\\Common\\CommandMonikerHashTests.cs",
+        "src\\PXS\\Product\\Core\\AadAuthManager\\UnitTests\\AadAuthManagerTest.cs",
+        "src\\PXS\\Product\\PXF\\PrivacyAdapters\\UnitTests\\Helpers\\AadToken\\AadTokenProviderTests.cs",
+        "src\\PXS\\Product\\PXF\\PrivacyAdapters\\UnitTests\\AadRequestVerificationServiceAdapter\\AadRequestVerificationServiceAdapterTests.cs"
+      ],
+      "_justification": "Test code, not a real secret."
+    },
+    {
+      "file": [
+        "src\\PXS\\Product\\PXF\\Test\\Common\\GraphApis\\GraphAuthenticationHelper.cs",
+        "src\\PXS\\OneBranch\\Deployment\\drop\\outputs\\build\\FCT\\Microsoft.Membership.MemberServices.PrivacyExperience.Test.Common.xml"
+      ],
+      "_justification": "This is not a real username/password but a paramter name"
+    },
+    {
+      "hash": "C0RC30b4HWUm7YzcAV4wq0lyC2OGLEWfsSN25FFrUng=",
+      "_justification": "Connection string using service principal, tenant id, and certificate name."
+    },
+    {
+      "hash": "TLEm/er17GNQ3lrvrFdSibctFz8ha268AbJTcJIJFv0=",
+      "_justification": "Connection string using service principal, tenant id, and certificate name."
+    },
+    {
+      "hash": "VO92Rj6k/4FzUzMEnVidi1DwenhLqVfOHZytGehiaHc=",
+      "_justification": "False positive in XML comments for password parameter."
+    }
+  ]
+}

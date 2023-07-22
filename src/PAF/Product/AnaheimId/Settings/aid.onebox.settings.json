@@ -1,0 +1,27 @@
+﻿{
+  "Values": {
+    "AidQueuesStorageAccounts": [
+      {
+        "StorageAccountName": "aidstorageonebox",
+        "QueueName": "anaheimid-01"
+      },
+      {
+        "StorageAccountName": "aidstorageonebox",
+        "QueueName": "anaheimid-02"
+      }
+    ],
+    "DeploymentEnvironment": "ONEBOX",
+    "AzureRegion": "local",
+    "PcfBaseUrl": "https://localhost/",
+    // using multi tenant ngp-anaheimid-nonprod AppId as a resource to get auth token from pcf-ppe
+    "AadPcfTargetResource": "https://MSAzureCloud.onmicrosoft.com/613e14a9-7c60-4f8b-863c-f719e68cd8db",
+    "ClientAppId": "975e1332-de26-4ac9-b120-fe35fa68adf1",
+    "AidUamiId": "9396613a-ec0d-4102-83a2-b079b69566f9",
+    "OneBoxCertSubjectName": "aad-auth-ppe.compliance-services.microsoft.com",
+    "OneBoxAadAuthority": "https://login.microsoftonline.com/33e01921-4d64-4f8c-a055-5bdaffd5e33d",
+    "OneBoxTenantId": "33e01921-4d64-4f8c-a055-5bdaffd5e33d",
+    "EventHubNamespace": "aid-eventhub-onebox",
+    "EventHubName": "anaheimid",
+    "StorageAccountName": "aidstorageonebox"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+      "value": "sample-agent-batch-scope"
+    },
+    "AgentKeyVaultBaseUrl": {
+      "value": "https://sampleagentKV.vault.azure.net/"
+    },
+    "SecretNameForAgentBlobStorageConnectionString": {
+      "value": "AzureBlobStorageForAgentAccessKey"
+    },
+    "SecretNameForBatchAccountAccessKey": {
+      "value": "AzureBatchForSampleAgentAccessKey"
+    },
+    "SecretNameForDataAssetsBlobConnectionString": {
+      "value": "AzureBlobStorageAccessToDataAssets"
+    },
+    "SampleAgentAzureBatchUri": {
+      "value": "https://batchforagent.eastus.batch.azure.com"
+    },
+    "SampleAgentAzureBatchPoolName": {
+      "value": "sample-agent-pool-vnet"
+    },
+    "SampleAgentAzureBatchAccountName": {
+      "value": "batchforagent"
+    },
+    "BlueshiftAnalyticsEngineAccountName": {
+      "value": "samplebatchagent"
+    },
+    "BlueshiftAnalyticsEngineServicePrincipalId": {
+      "value": "391fec19-e7b6-4d0d-b7d3-20a0da3a5404"
+    },
+    "BlueshiftAnalyticsEngineTenant": {
+      "value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+    },
+    "BlueshiftAnalyticsEngineSubscriptionId": {
+      "value": "ddbfcfa6-7351-4df0-9d87-d70e8c1ee747"
+    },
+    "BlueshiftAnalyticsEngineResourceGroupName": {
+      "value": "samplebatchagent"
+    },
+    "AdlsGen2BlueshiftUrl": {
+      "value": "https://scopesamplesbatchagent.dfs.core.windows.net/"
+    }
+  }
+}

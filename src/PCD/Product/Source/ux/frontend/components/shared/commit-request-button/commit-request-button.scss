@@ -1,0 +1,18 @@
+pcd-commit-request-button {
+    display: block;
+
+    .commit-request-button-div {
+        padding-top: 15px;
+
+        mee-inline-error {
+            // Enforce a min-height larger than the height of one line of an inline error to
+            // prevent the button from jumping around.
+            min-height: 30px;
+        }
+
+        button {
+            margin-top: 0px;
+        }
+    }
+
+}

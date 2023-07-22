@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>Microsoft.PrivacyServices.AzureFunctions.AIdFunctionalTests</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DocumentationFile>bin\$(Configuration)\Functions.AIdFunctionalTests.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\PCF\Product\Server\Frontdoor\CommandFeed\SharedCommandFeedContracts\Messages\CheckpointRequest.cs" Link="Common\CheckpointRequest.cs" />
+    <Compile Include="..\..\..\..\PCF\Product\Server\Frontdoor\CommandFeed\SharedCommandFeedContracts\Messages\CheckpointResponse.cs" Link="Common\CheckpointResponse.cs" />
+    <Compile Include="..\..\..\..\PCF\Product\Server\Frontdoor\CommandFeed\SharedCommandFeedContracts\Messages\GetCommandResponse.cs" Link="Common\GetCommandResponse.cs" />
+    <Compile Include="..\..\..\..\PXS\Product\PXF\Core\Source\Vortex\Event\VortexEvent.cs" Link="VortexEvent\VortexEvent.cs" />
+    <Compile Include="..\..\..\..\PXS\Product\PXF\Core\Source\Vortex\Event\VortexEvent.Device.cs" Link="VortexEvent\VortexEvent.Device.cs" />
+    <Compile Include="..\..\..\..\PXS\Product\PXF\Core\Source\Vortex\Event\VortexEvent.Extensions.cs" Link="VortexEvent\VortexEvent.Extensions.cs" />
+    <Compile Include="..\..\..\..\PXS\Product\PXF\Core\Source\Vortex\Event\VortexEvent.User.cs" Link="VortexEvent\VortexEvent.User.cs" />
+    <Compile Include="..\..\..\..\PXS\Product\PXF\Core\Source\Vortex\Event\VortexEvent.VortexData.cs" Link="VortexEvent.VortexData.cs" />
+    <Compile Include="..\..\..\..\PXS\Product\PXF\Core\Source\Vortex\Event\VortexEvent.VortexTags.cs" Link="VortexEvent\VortexEvent.VortexTags.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\AIdFunctions\local.settings.json" Link="Config\local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.OSGS.HttpClientCommon" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\AnaheimIdLib\AnaheimIdLib.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\..\..\PCF\Product\Client\Source\PrivacyCommandProcessor.csproj" />
+    <ProjectReference Include="..\..\AnaheimId\AnaheimId.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config\aid.ci1.test.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\aid.ci2.test.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\aid.onebox.test.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="VortexEvent\" />
+  </ItemGroup>
+
+</Project>

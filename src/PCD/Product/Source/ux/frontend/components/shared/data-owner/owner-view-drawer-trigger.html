@@ -1,0 +1,9 @@
+<pcd-page-context-drawer ng-if="$ctrl.owner">
+    <pcd-drawer-trigger>
+        <span class="view-label">{{$ctrl.drawerTriggerLabel}}</span>
+        <span>{{$ctrl.owner.name}}</span>
+    </pcd-drawer-trigger>
+    <pcd-drawer-content>
+        <pcd-owner-view pcd-owner="$ctrl.owner" pcd-hide-title="true"></pcd-owner-view>
+    </pcd-drawer-content>
+</pcd-page-context-drawer>

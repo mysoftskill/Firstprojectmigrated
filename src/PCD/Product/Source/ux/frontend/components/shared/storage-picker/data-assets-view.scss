@@ -1,0 +1,34 @@
+﻿@import "../../../styles/utilities/rtl.scss";
+
+pcd-data-assets-view {
+    display: block;
+
+    table.data-assets-table {
+        table-layout: fixed;
+
+        caption {
+            padding-top: 10px;
+            @include padding-left(4px);
+        }
+
+        tr {
+            vertical-align: top;
+        }
+
+        th {
+            width: 67%;
+
+            &.asset-type-th {
+                width: 33%;
+            }
+        }
+
+        td {
+            word-wrap: break-word;
+        }
+    }
+
+    pcd-simple-warning, pcd-custom-warning1 {
+        display: block;
+    }
+}

@@ -1,0 +1,3169 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Microsoft.Membership.MemberServices.PrivacyExperience.Service",
+    "version": "0.0.851.2"
+  },
+  "servers": [
+    {
+      "url": "https://pxs.api.account.microsoft.com"
+    }
+  ],
+  "paths": {
+    "/dataPolicyOperations({key})": {
+      "get": {
+        "tags": [
+          "Data Policy Operations"
+        ],
+        "summary": "Get a data policy operation by its ID.",
+        "operationId": "getByKey",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The data policy operation specified by ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacyRequestStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataPolicyOperations": {
+      "get": {
+        "tags": [
+          "Data Policy Operations"
+        ],
+        "summary": "Get all data policy operations.",
+        "operationId": "getDataPolicyOperations",
+        "responses": {
+          "200": {
+            "description": "A collection of PrivacyRequest statuses.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacyRequestStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/directory/inboundSharedUserProfiles({id})/exportPersonalData": {
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "summary": "Export personal data for a native identity when called by a tenant admin.",
+        "operationId": "postDirectoryByIdExportPersonalData",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The native identity object Id.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "00000000-0000-0000-0000-000000000000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/directory/inboundSharedUserProfiles('{objectId}')/removePersonalData": {
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "summary": "AccountClose in a resource tenant. This call is used by a tenant admin to \r\n                remove any data associated with a user that has traversed into their tenant.\r\n                The target tenant id is inferred from the caller's identity.",
+        "operationId": "postDirectoryByObjectIdRemovePersonalData",
+        "responses": {
+          "204": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "00000000-0000-0000-0000-000000000000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/directory/outboundSharedUserProfiles('{objectId}')/tenants('{tenantId}')/removePersonalData": {
+      "post": {
+        "tags": [
+          "Directory"
+        ],
+        "summary": "AccountClose called from a home tenant to delete data in a resource tenant. \r\n                This call is invoked by the user to remove any data associated with them in a resource tenant.\r\n                The target tenant id is included in the url.",
+        "operationId": "postDirectoryByObjectIdByTenantIdRemovePersonalData",
+        "responses": {
+          "204": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "00000000-0000-0000-0000-000000000000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/exporthistory": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "list export history",
+        "operationId": "getV1Exporthistory",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.ListExportHistoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/exportcancel": {
+      "post": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Post Cancel of export",
+        "operationId": "postV1Exportcancel",
+        "parameters": [
+          {
+            "name": "exportId",
+            "in": "query",
+            "description": "the export request id of the status record",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/deleteexport": {
+      "delete": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "delete export archives",
+        "operationId": "deleteV1Export",
+        "parameters": [
+          {
+            "name": "exportId",
+            "in": "query",
+            "description": "the export id to delete its archive",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "exportType",
+            "in": "query",
+            "description": "the type of export - full/quick",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/export": {
+      "post": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "make and export request",
+        "operationId": "postV1Export",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataTypes",
+            "in": "query",
+            "description": "A comma separated list of data types.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "The start time.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "description": "The end time.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PostExportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/keepalive": {
+      "get": {
+        "tags": [
+          "Keep Alive"
+        ],
+        "summary": "An API that always returns an empty HTTP status code 200 OK success response.\r\n                Use this as a heartbeat for the service and register with software load balancer\r\n                to maintain VIP status.",
+        "description": "May return T:System.Net.HttpStatusCode if the server is preparing to stop.",
+        "operationId": "getKeepalive",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/docs/v1/openapi": {
+      "get": {
+        "tags": [
+          "Swagger"
+        ],
+        "summary": "An API that always returns a copy of the OpenApi spec for this service.",
+        "description": "May return T:System.Net.HttpStatusCode if the document cannot be found.",
+        "operationId": "getDocsV1Openapi",
+        "responses": {
+          "default": {
+            "description": "Responses cannot be located for this operation."
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/delete": {
+      "post": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to execute a delete.",
+        "operationId": "postV1PrivacyrequestDelete",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataTypes",
+            "in": "query",
+            "description": "A comma separated list of privacy data types to perform delete on.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "The start time of the time window to perform delete on.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "description": "The end time of the time window to perform delete on.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.DeleteOperationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.OperationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/privacyrequest/delete": {
+      "post": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to execute a delete.",
+        "operationId": "postV2PrivacyrequestDelete",
+        "parameters": [
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataTypes",
+            "in": "query",
+            "description": "A comma separated list of privacy data types to perform delete on.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "The start time of the time window to perform delete on.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "description": "The end time of the time window to perform delete on.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.DeleteOperationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.OperationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/export": {
+      "post": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to execute an export.",
+        "operationId": "postV1PrivacyrequestExport",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataTypes",
+            "in": "query",
+            "description": "A comma separated list of privacy data types to export.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "The start time of the time window to export.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "description": "The end time of the time window to export.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "isSynthetic",
+            "in": "query",
+            "description": ".",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.ExportOperationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.OperationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/privacyrequest/export": {
+      "post": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to execute an export.",
+        "operationId": "postV2PrivacyrequestExport",
+        "parameters": [
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataTypes",
+            "in": "query",
+            "description": "A comma separated list of privacy data types to export.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "The start time of the time window to export.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "description": "The end time of the time window to export.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "isSynthetic",
+            "in": "query",
+            "description": ".",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.ExportOperationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.OperationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/list": {
+      "get": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to list their requests. It is only site-id authenticated.",
+        "operationId": "getV1PrivacyrequestList",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of request statuses.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacyRequestStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/listrequestbyid": {
+      "get": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows caller to retrieve non-sensitive information for a given command.",
+        "operationId": "getV1PrivacyrequestListrequestbyid",
+        "parameters": [
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/listmsa": {
+      "get": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to list the requests by the Puid in the caller's request.",
+        "operationId": "getV1PrivacyrequestListmsa",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of request statuses.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacyRequestStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/agentqueuestats": {
+      "get": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows the test page to retrieve all information for a given agent.",
+        "operationId": "getV1PrivacyrequestAgentqueuestats",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agentId",
+            "in": "query",
+            "description": "The target agent id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of queue statistics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupQueueStatistics"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/forcecomplete": {
+      "post": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows the test page to force a given command to complete even if not all agents have completed.",
+        "operationId": "postV1PrivacyrequestForcecomplete",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commandId",
+            "in": "query",
+            "description": "The command id to force complete.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/testmsaclose": {
+      "post": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows a partner to send MSA close signal.",
+        "operationId": "postV1PrivacyrequestTestmsaclose",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.OperationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/testrequestbyid": {
+      "get": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows the test page to retrieve all information for a given command.",
+        "operationId": "getV1PrivacyrequestTestrequestbyid",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commandId",
+            "in": "query",
+            "description": "The command id.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/privacyrequest/testrequestsbyuser": {
+      "get": {
+        "tags": [
+          "Privacy Request Api"
+        ],
+        "summary": "This allows the test page to retrieve all information for all commands this partner has produced with the caller's subject",
+        "operationId": "getV1PrivacyrequestTestrequestsbyuser",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of command statuses.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/scopeddelete/searchrequestsandquery": {
+      "post": {
+        "tags": [
+          "Scoped Delete Api"
+        ],
+        "summary": "This allows a partner to execute a scoped delete for search requests and query.",
+        "operationId": "postV1ScopeddeleteSearchrequestsandquery",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A list of impression IDs.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/bulkscopeddelete/searchrequestsandquery": {
+      "post": {
+        "tags": [
+          "Scoped Delete Api"
+        ],
+        "summary": "This allows a partner to execute a bulk scoped delete for search requests and query.",
+        "operationId": "postV1BulkscopeddeleteSearchrequestsandquery",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/users('{key}')/exportPersonalData": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Export personal data for an account providing its id.",
+        "operationId": "postByKeyExportPersonalData",
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "00000000-0000-0000-0000-000000000000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings": {
+      "get": {
+        "tags": [
+          "User Settings V1"
+        ],
+        "summary": "Gets the user's resource settings.",
+        "operationId": "getV1Settings",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user's resource settings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V1.ResourceSettingV1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "User Settings V1"
+        ],
+        "summary": "Updates the resource settings for the user",
+        "operationId": "patchV1Settings",
+        "parameters": [
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The new resource settings to patch.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V1.ResourceSettingV1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The nresulting resource settings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V1.ResourceSettingV1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/timeline": {
+      "post": {
+        "tags": [
+          "Timeline V2"
+        ],
+        "summary": "Deletes a list of cards by the card's Id field.",
+        "operationId": "postV2Timeline",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A list of card IDs.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Timeline V2"
+        ],
+        "summary": "Deletes a list of types by their Policy type Id for a given period of time.",
+        "operationId": "deleteV2Timeline",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "description": "A comma separated list of data types.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "The timespan to for the delete to be performed.",
+            "schema": {
+              "$ref": "#/components/schemas/System.TimeSpan"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v3/timeline": {
+      "get": {
+        "tags": [
+          "Timeline V2"
+        ],
+        "summary": "Gets the timeline cards.",
+        "operationId": "getV3Timeline",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cardTypes",
+            "in": "query",
+            "description": "A comma separated list of the card types to get.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "timeZoneOffset",
+            "in": "query",
+            "description": "The time span to get cards for.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/System.TimeSpan"
+            }
+          },
+          {
+            "name": "startingAt",
+            "in": "query",
+            "description": "The starting time.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "The count of cards to get.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "deviceIds",
+            "in": "query",
+            "description": "A comma separated list of device IDs.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "A comma separated list of sources.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search parameter.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "Token to get the next set of cards.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Timeline cards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.PagedResponse_Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.TimelineCard_"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/voicecardaudio": {
+      "get": {
+        "tags": [
+          "Timeline V2"
+        ],
+        "summary": "Gets the timeline voice card audio",
+        "operationId": "getV2Voicecardaudio",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The card ID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.VoiceCardAudio"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/warmup-timeline": {
+      "get": {
+        "tags": [
+          "Timeline V2"
+        ],
+        "summary": "Warms up the timeline cards. (They sometimes are too cold)",
+        "operationId": "getV1Warmuptimeline",
+        "parameters": [
+          {
+            "name": "X-Family-Json-Web-Token",
+            "in": "header",
+            "description": "The family JWT with information required for on behalf of.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client-request-id",
+            "in": "header",
+            "description": "The client activity ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "The correlation vector for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-Context",
+            "in": "header",
+            "description": "The correlation context for the request.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Flights",
+            "in": "header",
+            "description": "The flights to apply to the request applied.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "server-machine-id",
+            "in": "header",
+            "description": "The server machine ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Proxy-Ticket",
+            "in": "header",
+            "description": "The MSA User Proxy Ticket.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-S2S-Access-Token",
+            "in": "header",
+            "description": "The MSA S2S Access Token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/vortex/devicedelete": {
+      "post": {
+        "tags": [
+          "Vortex Ingestion"
+        ],
+        "summary": "Delete all privacy data for a specific device.",
+        "operationId": "postV1VortexDevicedelete",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacyRequestStatus": {
+        "type": "object",
+        "properties": {
+          "CompletedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CompletionSuccessRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "Context": {
+            "type": "string"
+          },
+          "DataTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "DestinationUri": {
+            "type": "string"
+          },
+          "Id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "RequestType": {
+            "enum": [
+              "None",
+              "Delete",
+              "Export",
+              "AccountClose"
+            ],
+            "type": "string"
+          },
+          "State": {
+            "enum": [
+              "Submitted",
+              "Completed"
+            ],
+            "type": "string"
+          },
+          "Subject": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.CommandFeed.Contracts.Subjects.IPrivacySubject"
+          },
+          "SubmittedTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.CommandFeed.Contracts.Subjects.IPrivacySubject": {
+        "type": "object"
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.ListExportHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "Exports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.ExportStatus"
+            }
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.ExportStatus": {
+        "type": "object",
+        "properties": {
+          "DataTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ExpiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ExportId": {
+            "type": "string"
+          },
+          "IsComplete": {
+            "type": "boolean"
+          },
+          "LastError": {
+            "type": "string"
+          },
+          "RequestedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ZipFileSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ZipFileUri": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PostExportResponse": {
+        "type": "object",
+        "properties": {
+          "ExportId": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.DeleteOperationRequest": {
+        "type": "object",
+        "properties": {
+          "Subject": {
+            "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.IPrivacySubject"
+          },
+          "Context": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.IPrivacySubject": {
+        "type": "object"
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.OperationResponse": {
+        "type": "object",
+        "properties": {
+          "Ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.ExportOperationRequest": {
+        "type": "object",
+        "properties": {
+          "StorageLocationUri": {
+            "type": "string"
+          },
+          "Subject": {
+            "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.PrivacySubject.IPrivacySubject"
+          },
+          "Context": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse": {
+        "type": "object",
+        "properties": {
+          "AssetGroupStatuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupCommandStatus"
+            }
+          },
+          "CommandId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "CommandType": {
+            "type": "string"
+          },
+          "Context": {
+            "type": "string"
+          },
+          "FinalExportDestinationUri": {
+            "type": "string"
+          },
+          "IsGloballyComplete": {
+            "type": "boolean"
+          },
+          "Requester": {
+            "type": "string"
+          },
+          "Subject": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.CommandFeed.Contracts.Subjects.IPrivacySubject"
+          },
+          "IsSyntheticCommand": {
+            "type": "boolean"
+          },
+          "SubjectType": {
+            "type": "string"
+          },
+          "PredicateType": {
+            "type": "string"
+          },
+          "DataTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "CreatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CompletedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CompletionSuccessRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalCommandCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "IngestionDataSetVersion": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "IngestionAssemblyVersion": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupCommandStatus": {
+        "type": "object",
+        "properties": {
+          "AffectedRows": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AgentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "AssetGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "AssetGroupQualifier": {
+            "type": "string"
+          },
+          "CompletedTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ForceCompleted": {
+            "type": "boolean"
+          },
+          "IngestionActionTaken": {
+            "type": "string"
+          },
+          "IngestionAssemblyVersion": {
+            "type": "string"
+          },
+          "IngestionDataSetVersion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "IngestionDebugText": {
+            "type": "string"
+          },
+          "IngestionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SoftDeleteTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupQueueStatistics": {
+        "type": "object",
+        "properties": {
+          "AgentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "AssetGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "SubjectType": {
+            "type": "string"
+          },
+          "AssetGroupQualifier": {
+            "type": "string"
+          },
+          "OldestPendingCommand": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "MinimumLeaseAvailableTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "PendingCommandCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "UnleasedCommandCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V1.ResourceSettingV1": {
+        "type": "object",
+        "properties": {
+          "advertising": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ETag": {
+            "type": "string"
+          },
+          "location_privacy": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "on_behalf_of_privacy": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "tailored_experiences_offers": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sharing_state": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "System.TimeSpan": {
+        "type": "object",
+        "properties": {
+          "Ticks": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "Days": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Hours": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Milliseconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalDays": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalHours": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalMilliseconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalMinutes": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalSeconds": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.PagedResponse_Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.TimelineCard_": {
+        "type": "object",
+        "properties": {
+          "Items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.TimelineCard"
+            }
+          },
+          "NextLink": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.TimelineCard": {
+        "type": "object",
+        "properties": {
+          "DeviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Id": {
+            "type": "string"
+          },
+          "Sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Microsoft.Membership.MemberServices.Privacy.ExperienceContracts.V2.VoiceCardAudio": {
+        "type": "object",
+        "properties": {
+          "Audio": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          }
+        }
+      }
+    }
+  }
+}

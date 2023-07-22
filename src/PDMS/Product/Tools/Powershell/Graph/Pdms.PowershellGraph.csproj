@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>Microsoft.PrivacyServices.DataManagement.Client.PowershellGraph</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.Client.Powershell</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Graph" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Management.Automation.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ClientSdks\Client\Pdms.Client.csproj" />
+    <ProjectReference Include="..\..\..\ClientSdks\Pdms.Client.Aad\Pdms.Client.Aad.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="install.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PDMSGraph.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

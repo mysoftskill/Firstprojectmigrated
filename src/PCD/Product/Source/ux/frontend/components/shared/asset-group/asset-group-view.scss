@@ -1,0 +1,12 @@
+@import "../../../styles/utilities/mixins.scss";
+
+pcd-asset-group-view {
+    display: block;
+
+    @include resource-view-attributes();
+
+    pcd-asset-group-qualifier-view {
+        display: block;
+        margin-top: 12px;
+    }
+}

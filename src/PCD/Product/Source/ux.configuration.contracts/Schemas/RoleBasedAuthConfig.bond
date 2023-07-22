@@ -1,0 +1,8 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IRoleBasedAuthConfig
+{
+	10: required string ManualRequests;
+	20: required string VariantAdmins;
+	30: required string IncidentManager;
+}

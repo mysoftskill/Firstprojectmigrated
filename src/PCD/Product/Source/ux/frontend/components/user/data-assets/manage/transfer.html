@@ -1,0 +1,27 @@
+<h2 data-use-cms>Transfer to team</h2>
+
+<mee-text-field kind="flex">
+    <label mee-label data-use-cms>Transfering to team</label>
+    <input mee-text-input readonly ng-model="$ctrl.context.targetOwnerName">
+</mee-text-field>
+
+<p mee-paragraph data-use-cms class="note">
+    You will not be able to modify this request once activated. Please ensure all information is correct before
+    selecting Transfer.
+</p>
+
+<div class="c-group">
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.transfer-to-owner"></mee-inline-error>
+    <button mee-button="primary"
+            ng-click="$ctrl.transfer()"
+            mee-progress-disabled="modalOperation"
+            data-use-cms>
+        Transfer
+    </button>
+    <button mee-button
+            ng-click="$ctrl.cancel()"
+            mee-progress-disabled="modalOperation"
+            data-use-cms>
+        Cancel
+    </button>
+</div>

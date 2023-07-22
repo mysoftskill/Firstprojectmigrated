@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Microsoft.Membership.MemberServices.PrivacyExperience.ClientLibrary</title>
+    <authors>ngpcieng@microsoft.com</authors>
+    <owners>ngpcieng@microsoft.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A proxy client for the PrivacyExperience service.</description>
+    <releaseNotes>A proxy client for the PrivacyExperience service.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>Privacy Experience PrivacyExperience MemberServices</tags>
+  </metadata>
+</package>

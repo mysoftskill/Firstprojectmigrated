@@ -1,0 +1,90 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>Reports:</p>
+        <ul mee-list="lean">
+            <li>
+                <a mee-hyperlink
+                   target="_blank"
+                   data-use-cms
+                   href="https://datagrid.microsoft.com/Tagging/NGPReport">
+                    Real-time tagging completeness report
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                   target="_blank"
+                   data-use-cms
+                   href="https://aka.ms/agentdrilldown">
+                    Agent health dashboard
+                </a>
+            </li>
+        </ul>
+        <p mee-paragraph data-use-cms>More information:</p>
+        <ul mee-list="lean">
+            <li>
+                <a mee-hyperlink
+                   target="_blank"
+                   data-use-cms
+                   href="https://aka.ms/ngpdataagents">
+                    NGP data agent prerequisites
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                   target="_blank"
+                   data-use-cms
+                   href="https://aka.ms/ngpdataagents/testing">
+                    NGP data agent testing
+                </a>
+            </li>
+        </ul>
+    </pcd-sidebar>
+
+    <pcd-lede>
+    </pcd-lede>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeViewDataAgentComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner="$ctrl.owner"></pcd-default-page-context>
+
+                <pcd-agent-view pcd-agent="$ctrl.dataAgent"></pcd-agent-view>
+
+                <p mee-paragraph>
+                    <ul class="horizontal-nav">
+                        <li>
+                            <a mee-hyperlink
+                               ui-sref="^.health({agentId: $ctrl.dataAgent.id})"
+                               data-use-cms>Check data agent registration health</a>
+                        </li>
+                        <li>
+                            <a mee-hyperlink
+                               target="_blank"
+                               href="https://aka.ms/agentdrilldown"
+                               data-use-cms>View data agent health dashboard</a>
+                        </li>
+                    </ul>
+                </p>
+                <pcd-agent-icm-button agent="$ctrl.dataAgent" owner="$ctrl.owner"></pcd-agent-icm-button>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

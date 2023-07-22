@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Membership.MemberServices.PrivacyAdapters</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.PrivacyAdapters</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\AnaheimIdLib\AnaheimIdLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Adapters\Source\Adapters.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\Exposed\ExposedContracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PrivacyOperationContracts\PrivacyOperation.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\..\..\..\PDMS\Product\ClientSdks\Client\Pdms.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ProfileIdentityService\PPSAProfile.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MsaIdentityService\How to generate proxy classes.txt" />
+    <None Include="MsaIdentityService\PPSACredential.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" />
+    <PackageReference Include="ConvertToPlayableAudio" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+    <PackageReference Include="Microsoft.OData.Client" />
+    <PackageReference Include="Microsoft.OSGS.HttpClientCommon" />
+    <PackageReference Include="Microsoft.Oss.Membership.CommonCore" />
+    <PackageReference Include="Microsoft.PassPort.Rps" />
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" />
+    <PackageReference Include="Microsoft.Windows.Services.Devices.Client" />
+    <PackageReference Include="Microsoft.XboxLive.Auth" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="SocialAccessor.Client.Library" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  <Import Project="$(ProductBuildPath)\core.common.targets" />
+</Project>

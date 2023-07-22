@@ -1,0 +1,8 @@
+﻿Incidents filed: 
+<p>
+<ul>
+[[<foreach sel:'$.Incidents' foreach>]]
+<li>[[<var s:'AgentId' var>]]: [[<var s:'IncidentId' var>]] ([[<var s:'IncidentStatusText' var>]])</li>
+[[<foreachend>]]
+</ul>
+</p>

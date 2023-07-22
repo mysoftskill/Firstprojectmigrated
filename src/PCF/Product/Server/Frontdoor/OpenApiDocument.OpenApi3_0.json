@@ -1,0 +1,866 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Pcf.Frontdoor",
+    "version": "0.0.851.2"
+  },
+  "servers": [
+    {
+      "url": "https://pcf.privacy.microsoft.com"
+    }
+  ],
+  "paths": {
+    "/pcf/v1/{agentId}/commands": {
+      "get": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Gets the next batch of commands for the given agent.",
+        "operationId": "getPcfV1ByAgentIdCommands",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcf/v1/{agentId}/checkpoint": {
+      "post": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Updates the status of a single command for an agent.",
+        "operationId": "postPcfV1ByAgentIdCheckpoint",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.CommandFeed.Client.CommandFeedContracts.CheckpointResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcf/v1/{agentId}/batchcomplete": {
+      "post": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Completes a batch of commands for an agent.",
+        "operationId": "postPcfV1ByAgentIdBatchcomplete",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/pcf/v1/{agentId}/command": {
+      "post": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Gets the details about a specific Command for an agent",
+        "operationId": "postPcfV1ByAgentIdCommand",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.CommandFeed.Client.CommandFeedContracts.QueryCommandResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcf/v1/{agentId}/queuestats": {
+      "post": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Gets the stats on an agent queue",
+        "operationId": "postPcfV1ByAgentIdQueuestats",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcf/v1/{agentId}/replaycommands": {
+      "post": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Insert command replay request",
+        "operationId": "postPcfV1ByAgentIdReplaycommands",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/pcf/v1/{agentId}/postexportedfilesize": {
+      "post": {
+        "tags": [
+          "Command Feed"
+        ],
+        "summary": "Logs exported file size by agent and command",
+        "operationId": "postPcfV1ByAgentIdPostexportedfilesize",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/coldstorage/v3/status/commandid/{commandId}": {
+      "get": {
+        "tags": [
+          "Command History V3"
+        ],
+        "summary": "Gets the cold storage record for the given command ID.",
+        "operationId": "getColdstorageV3StatusCommandidByCommandId",
+        "parameters": [
+          {
+            "name": "commandId",
+            "in": "path",
+            "description": "The command ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coldstorage/v3/status/query": {
+      "get": {
+        "tags": [
+          "Command History V3"
+        ],
+        "summary": "Gets the cold storage records issued by the given requester.",
+        "operationId": "getColdstorageV3StatusQuery",
+        "responses": {
+          "200": {
+            "description": "where T is",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coldstorage/v3/commandquery/{agent}/{assetGroup}/{command}": {
+      "get": {
+        "tags": [
+          "Command History V3"
+        ],
+        "summary": "Gets the cold storage records issued by the given requester.",
+        "operationId": "getColdstorageV3CommandqueryByAgentByAssetGroupByCommand",
+        "parameters": [
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assetGroup",
+            "in": "path",
+            "description": "The asset group ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "command",
+            "in": "path",
+            "description": "The command ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "where T is",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debug/status/commandid/{commandId}": {
+      "get": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Gets the cold storage record for the given command ID.",
+        "operationId": "getDebugStatusCommandidByCommandId",
+        "parameters": [
+          {
+            "name": "commandId",
+            "in": "path",
+            "description": "The command ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debug/dataagentmap": {
+      "get": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Gets the PDMS data set, applying filtering both by agent ID and by data set version as query string parameters.",
+        "operationId": "getDebugDataagentmap",
+        "parameters": [
+          {
+            "name": "agent",
+            "in": "query",
+            "description": "The agent ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "The data set version.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debug/queuestats/{agentIdString}/": {
+      "get": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Gets the PDMS data set, applying filtering both by agent ID and by data set version as query string parameters.",
+        "operationId": "getDebugQueuestatsByAgentIdString",
+        "parameters": [
+          {
+            "name": "agentIdString",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "detailed",
+            "in": "query",
+            "description": "for getting detailed statistics.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.AgentQueueStatisticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/debug/completecommand/{cid}": {
+      "get": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Force completes a command.",
+        "operationId": "getDebugCompletecommandByCid",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "The command ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/debug/resetnextvisibletime/{agentId}/{commandId}": {
+      "get": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Resets the next visible time for a command id associated with the given agent.",
+        "operationId": "getDebugResetnextvisibletimeByAgentIdByCommandId",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commandId",
+            "in": "path",
+            "description": "The command ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/debug/flushqueue": {
+      "get": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Flushes a given agent's queue, clearing all commands issued until the flushdate",
+        "operationId": "getDebugFlushqueue",
+        "parameters": [
+          {
+            "name": "agent",
+            "in": "query",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "flushDate",
+            "in": "query",
+            "description": "The flush date.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/debug/replaycommands/{agentId}": {
+      "post": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Replay selected days of commands for a given agent",
+        "operationId": "postDebugReplaycommandsByAgentId",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/debug/startqdbaseline/{agentId}": {
+      "post": {
+        "tags": [
+          "Debug Utilities"
+        ],
+        "summary": "Run command queue depth baseline for the agent.",
+        "operationId": "postDebugStartqdbaselineByAgentId",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "The agent ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/exportstorage/v1/accounts": {
+      "get": {
+        "tags": [
+          "Export Storage"
+        ],
+        "summary": "Gets the storage accounts managed by this service.",
+        "operationId": "getExportstorageV1Accounts",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.CommandFeed.Service.Common.PcfAuthenticationContext"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/openapi": {
+      "get": {
+        "tags": [
+          "Swagger"
+        ],
+        "summary": "An API that always returns a copy of the OpenApi spec for this service.",
+        "description": "May return T:System.Net.HttpStatusCode if the document cannot be found.",
+        "operationId": "getV1Openapi",
+        "responses": {
+          "default": {
+            "description": "Responses cannot be located for this operation."
+          }
+        }
+      }
+    },
+    "/keepalive": {
+      "get": {
+        "tags": [
+          "Probe"
+        ],
+        "summary": "A basic HTTP endpoint that returns OK.",
+        "operationId": "getKeepalive",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/pxs/commands": {
+      "post": {
+        "tags": [
+          "PXS"
+        ],
+        "summary": "Receives an array of Commands from PXS and inserts them into queues.",
+        "operationId": "postPxsCommands",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.PrivacyServices.CommandFeed.Client.CommandFeedContracts.CheckpointResponse": {
+        "type": "object",
+        "properties": {
+          "leaseReceipt": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.CommandFeed.Client.CommandFeedContracts.QueryCommandResponse": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "array",
+            "items": { }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.CommandStatusResponse": {
+        "type": "object",
+        "properties": {
+          "AssetGroupStatuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupCommandStatus"
+            }
+          },
+          "CommandId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "CommandType": {
+            "type": "string"
+          },
+          "Context": {
+            "type": "string"
+          },
+          "FinalExportDestinationUri": {
+            "type": "string"
+          },
+          "IsGloballyComplete": {
+            "type": "boolean"
+          },
+          "Requester": {
+            "type": "string"
+          },
+          "Subject": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.CommandFeed.Contracts.Subjects.IPrivacySubject"
+          },
+          "IsSyntheticCommand": {
+            "type": "boolean"
+          },
+          "SubjectType": {
+            "type": "string"
+          },
+          "PredicateType": {
+            "type": "string"
+          },
+          "DataTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "CreatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CompletedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CompletionSuccessRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalCommandCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "IngestionDataSetVersion": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "IngestionAssemblyVersion": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupCommandStatus": {
+        "type": "object",
+        "properties": {
+          "AffectedRows": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AgentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "AssetGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "AssetGroupQualifier": {
+            "type": "string"
+          },
+          "CompletedTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ForceCompleted": {
+            "type": "boolean"
+          },
+          "IngestionActionTaken": {
+            "type": "string"
+          },
+          "IngestionAssemblyVersion": {
+            "type": "string"
+          },
+          "IngestionDataSetVersion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "IngestionDebugText": {
+            "type": "string"
+          },
+          "IngestionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SoftDeleteTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.CommandFeed.Contracts.Subjects.IPrivacySubject": {
+        "type": "object"
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.AgentQueueStatisticsResponse": {
+        "type": "object",
+        "properties": {
+          "AssetGroupQueueStatistics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupQueueStatistics"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.PXS.Command.CommandStatus.AssetGroupQueueStatistics": {
+        "type": "object",
+        "properties": {
+          "AgentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "AssetGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "SubjectType": {
+            "type": "string"
+          },
+          "AssetGroupQualifier": {
+            "type": "string"
+          },
+          "OldestPendingCommand": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "MinimumLeaseAvailableTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "PendingCommandCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "UnleasedCommandCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.CommandFeed.Service.Common.PcfAuthenticationContext": {
+        "type": "object",
+        "properties": {
+          "AuthenticatedMsaSiteId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "AuthenticatedAadAppId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>PrivacyCommandProcessor.UnitTests</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Client.Test</RootNamespace>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Platforms>x64</Platforms>
+    <SignAssembly>true</SignAssembly>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <InternalsVisisibleToUnitTests>false</InternalsVisisibleToUnitTests>
+	  <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TestData\DeleteCommand.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle" />
+    <PackageReference Include="Microsoft.NET.Test.SDK" />
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <Compile Remove="PrivacyCommandValidator\Validator\**" />
+    <EmbeddedResource Remove="PrivacyCommandValidator\Validator\**" />
+    <None Remove="PrivacyCommandValidator\Validator\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="System.IO.Compression" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj" />
+    <ProjectReference Include="..\Source\PrivacyCommandProcessor.csproj" />
+  </ItemGroup>
+  
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

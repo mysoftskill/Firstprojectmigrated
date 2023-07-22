@@ -1,0 +1,39 @@
+﻿{
+	"@odata.context": "https://servicetree.msftcloudes.com/api/$metadata#Authorizations",
+	"value": [{
+		"Id": "dastc",
+		"Type": "User",
+		"ResourceId": null,
+		"EntityType": "AuthorizationBase",
+		"ExpiryDate": "2070-12-31T23:59:59Z",
+		"CanMintTokens": false,
+		"Created": "2017-06-08T18:01:18.5406813Z",
+		"CreatedBy": "mihaidel@microsoft.com",
+		"Modified": "2017-06-08T18:01:18.5406813Z",
+		"ModifiedBy": "mihaidel@microsoft.com"
+	},
+    {
+      "Id": "jeffblak",
+      "Type": "User",
+      "ResourceId": null,
+      "EntityType": "AuthorizationBase",
+      "ExpiryDate": "2070-12-31T23:59:59Z",
+      "CanMintTokens": false,
+      "Created": "2017-10-26T18:32:13.8149069Z",
+      "CreatedBy": "dastc@microsoft.com",
+      "Modified": "2017-10-26T18:32:13.8149069Z",
+      "ModifiedBy": "dastc@microsoft.com"
+    },
+	{
+		"Id": "romand",
+		"Type": "User",
+		"ResourceId": null,
+		"EntityType": "AuthorizationBase",
+		"ExpiryDate": "2070-12-31T23:59:59Z",
+		"CanMintTokens": false,
+		"Created": "2017-11-10T01:08:13.7441709Z",
+		"CreatedBy": "jeffblak@microsoft.com",
+		"Modified": "2017-11-10T01:08:13.7441709Z",
+		"ModifiedBy": "jeffblak@microsoft.com"
+	}]
+}

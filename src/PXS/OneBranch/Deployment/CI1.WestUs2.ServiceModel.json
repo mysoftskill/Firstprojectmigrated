@@ -1,0 +1,173 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PXS-CI1-WestUs2",
+    "Environment": "Test"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PxsServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "PxsPartnerMock-ServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.2NodeType.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\GenevaMonitoringAgentConsoleApp.Template.json"
+        },
+        {
+          "Name": "PxsServiceFabricApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "DataActionRunnerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "AadAccountCloseWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "CosmosExportWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PrivacyAqsWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PrivacyVsoWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "VortexDeviceDeleteWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "QuickExportWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PxsPartnerMockApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "WorkerStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "RecurrentDeleteWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PXS-CI1-WESTUS2-CLUSTER-RG",
+      "Location": "westus2",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "b4b176cf-fe78-4b59-bd1a-9b8c11536f4d",
+      "ServiceResources": [
+        {
+          "Name": "PxsServiceFabric-Cluster-Resources",
+          "InstanceOf": "PxsServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PxsServiceFabric.Cluster.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "PxsServiceFabricApp-Resources",
+          "InstanceOf": "PxsServiceFabricApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PxsServiceFabricApp.Parameters.json"
+        },
+        {
+          "Name": "DataActionRunnerApp-Resources",
+          "InstanceOf": "DataActionRunnerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\DataActionRunnerApp.Parameters.json"
+        },
+        {
+          "Name": "AadAccountCloseWorkerApp-Resources",
+          "InstanceOf": "AadAccountCloseWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\AadAccountCloseWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "CosmosExportWorkerApp-Resources",
+          "InstanceOf": "CosmosExportWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\CosmosExportWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "PrivacyAqsWorkerApp-Resources",
+          "InstanceOf": "PrivacyAqsWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PrivacyAqsWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "PrivacyVsoWorkerApp-Resources",
+          "InstanceOf": "PrivacyVsoWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PrivacyVsoWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "VortexDeviceDeleteWorkerApp-Resources",
+          "InstanceOf": "VortexDeviceDeleteWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\VortexDeviceDeleteWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "QuickExportWorkerApp-Resources",
+          "InstanceOf": "QuickExportWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\QuickExportWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "WorkerStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "WorkerStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\Worker.StandingQueryExtensionManagerApp.Parameters.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\Frontdoor.StandingQueryExtensionManagerApp.Parameters.json"
+        },
+        {
+          "Name": "RecurrentDeleteWorkerApp-Resources",
+          "InstanceOf": "RecurrentDeleteWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\RecurrentDeleteWorkerApp.Parameters.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PXS-CI1-PARTNERMOCK-WESTUS2-CLUSTER-RG",
+      "Location": "westus2",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "b4b176cf-fe78-4b59-bd1a-9b8c11536f4d",
+      "ServiceResources": [
+        {
+          "Name": "PxsPartnerMock-ServiceFabric-Cluster-Resources",
+          "InstanceOf": "PxsPartnerMock-ServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PxsPartnerMock\\ServiceFabric.Cluster.Parameters.json"
+        },
+        {
+          "Name": "PxsPartnerMock-GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PxsPartnerMock\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "PxsPartnerMock-App-Resources",
+          "InstanceOf": "PxsPartnerMockApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PxsPartnerMock\\PxsPartnerMockApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

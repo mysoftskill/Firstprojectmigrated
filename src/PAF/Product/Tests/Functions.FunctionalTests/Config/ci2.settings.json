@@ -1,0 +1,9 @@
+{
+  "Values": {
+    "PafKeyVaultUrl": "https://paf-ci2-ame.vault.azure.net/",
+    "PafFunctionKeyName": "PafFunctionKey",
+    "PafFunctionUrl": "https://workitemprocessorci2.azurewebsites.net",
+    "PdmsBaseUrl": "https://ci2.management.privacy.microsoft-int.com",
+    "StorageAccountName": "aidstorageci2"
+  }
+}

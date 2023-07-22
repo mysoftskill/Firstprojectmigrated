@@ -1,0 +1,66 @@
+﻿//Script GUID:dba95265-c103-470d-b004-da5b536e0cad
+// Used for baking the Puid Mapping unstructured streams into structured stream
+
+#DECLARE envName string = @@ENVNAME@@;
+#DECLARE sourceFolder string = String.Format(@"/local/puidmapping/{0}/ExistingAccounts", @envName);
+
+mapping0 = EXTRACT
+        Puid : string,
+        Anid : string,
+        Opid : string,
+        Cid  : long
+    FROM STREAMSET @sourceFolder
+         PATTERN @"/FSS%n.csv"
+         RANGE __serialnum= ["100", "543"]
+    USING DefaultTextExtractor( delimiter: ',' );
+
+mapping1 = EXTRACT
+        Puid : string,
+        Anid : string,
+        Opid : string,
+        Cid  : long
+    FROM STREAMSET @sourceFolder
+         PATTERN @"/FSS00%n.csv"
+         RANGE __serialnum= ["0", "9"]
+    USING DefaultTextExtractor( delimiter: ',' );
+
+mapping2 = EXTRACT
+        Puid : string,
+        Anid : string,
+        Opid : string,
+        Cid  : long
+    FROM STREAMSET @sourceFolder
+         PATTERN @"/FSS0%n.csv"
+         RANGE __serialnum= ["10", "99"]
+    USING DefaultTextExtractor( delimiter: ',' );
+
+mapping01 = SELECT * FROM mapping0
+    UNION ALL
+    SELECT * FROM mapping1;
+
+mapping = SELECT * FROM mapping01
+    UNION ALL
+    SELECT * FROM mapping2;
+
+#DECLARE anidOutput string = String.Format(@"/local/puidmapping/{0}/ANID/anidmap.ss", @envName);
+#DECLARE cidOutput string = String.Format(@"/local/puidmapping/{0}/CID/cidmap.ss", @envName);
+#DECLARE opidOutput string = String.Format(@"/local/puidmapping/{0}/OPID/opidmap.ss", @envName);
+
+anidMap = SELECT Anid, Puid FROM mapping;
+cidMap = SELECT Cid.ToString(@"X16") AS Cid, Puid FROM mapping;
+opidMap = SELECT Opid, Puid FROM mapping;
+
+OUTPUT anidMap 
+TO SSTREAM @anidOutput
+HASH CLUSTERED BY Anid 
+SORTED BY Anid;
+
+OUTPUT cidMap
+TO SSTREAM @cidOutput
+HASH CLUSTERED BY Cid
+SORTED BY Cid;
+
+OUTPUT opidMap
+TO SSTREAM @opidOutput
+HASH CLUSTERED BY Opid
+SORTED BY Opid;

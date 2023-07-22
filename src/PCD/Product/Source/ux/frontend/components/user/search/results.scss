@@ -1,0 +1,26 @@
+﻿pcd-search-results {
+    display: block;
+
+    a[mee-action-trigger] {
+        display: inline;
+    }
+
+    section {
+        .entity-name {
+            padding-top: 24px;
+        }
+
+        [mee-paragraph] {
+            padding-top: 0;
+        }
+
+        .horizontal-nav {
+            font-size: 13px !important;
+            padding-top: 4px;
+
+            a[mee-action-trigger] {
+                font-size: 13px !important;
+            }
+        }
+    }
+}

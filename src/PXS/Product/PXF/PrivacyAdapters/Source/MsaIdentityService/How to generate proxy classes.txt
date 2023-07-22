@@ -1,0 +1,16 @@
+﻿The list of all the service api wsdls is at: https://nexus.passport-int.com/public/partner/rpsnetwork4.xml
+We use
+1. ProfileServiceAPI (For getting Profile information, such as CID)
+2. CredentialServiceAPI (for GDPR verifiers)
+
+The WSDL can be found at:
+1. Profile service - https://api.login.live-int.com/PPSAProfileWSDL.srf
+2. Credential service - https://api.login.live-int.com/PPSACredentialWSDL.srf
+
+To generate the proxy classes:
+1. Download the required wsdl files from the above mentioned WSDL links and save it.
+2. Rename the file to have extension ".wsdl", Ex: PPSACredentialWSDL.wsdl that exists here in the source code as a reference for a current snapshot.
+3. Then use the WSDL.exe in the VS developer command prompt to generate the auto-generated proxy file.
+
+Sample command:
+wsdl /l:CS PPSACredential.wsdl /out:CredentialServiceProxy.cs /n:Microsoft.Membership.MemberServices.PrivacyAdapters.MsaIdentityService

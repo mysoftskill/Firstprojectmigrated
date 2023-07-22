@@ -1,0 +1,79 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page provides detailed information regarding variants. These details are managed by the NGP Cabinet and cannot be modified.
+        </p>
+        <p mee-paragraph data-use-cms>
+            For more information regarding the variant approval process and to find other variants that have already been approved, see the following:
+        </p>
+        <p mee-paragraph>
+            <a href="https://aka.ms/NGPVariant" mee-hyperlink target="_blank" data-use-cms>
+                Learn more about variant process and status.
+            </a>
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeVariantViewComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-asset-group-id="$ctrl.assetGroupId"></pcd-default-page-context>
+
+                <div class="c-table f-divided" data-grid="col-12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col" data-use-cms>Name</th>
+                                <th scope="col" data-use-cms>ID</th>
+                                <th scope="col" data-use-cms>Approver</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="v in $ctrl.variantDefinitions track by $index"
+                                class="content-row fade-in-animation">
+                                <td>
+                                    {{v.name}}
+                                </td>
+                                <td>
+                                    {{v.id}}
+                                </td>
+                                <td>
+                                    {{v.approver}}
+                                </td>
+                                <td class="action-list">
+                                    <a ui-sref="data-assets.manage.variants.details({ variantId: v.id })"
+                                       data-glyph="info"
+                                       mee-action-trigger="align-margin"
+                                       data-use-cms>Details</a>
+                                    <a ng-click="$ctrl.showUnlinkVariantConfirmationDialog(v)"
+                                       mee-no-href
+                                       data-glyph="cancel"
+                                       mee-action-trigger="align-margin"
+                                       data-use-cms>Unlink</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

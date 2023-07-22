@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pcfprod"
+    },
+    "applicationTypeName": {
+      "value": "WhatIfFilterAndRouteWorkItemHostAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\WhatIfFilterAndRouteWorkItemHostApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "WhatIfFilterAndRouteWorkItemHostApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "EnvironmentName": "PXS-Prod-BN3P",
+        "Svc_PlacementConstraints": "(NodeTypeName==Worker)"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import "../../../../styles/utilities.scss";
+
+pcd-data-agent-health-icon {
+    .mee-icon-Sad, .mee-icon-StatusErrorFull {
+        color: $error-color;
+    }
+
+    .mee-icon-CompletedSolid {
+        color: $standard-green-color;
+    }
+
+    .mee-icon-StatusErrorFull.mild {
+        color: $warning-color;
+        -webkit-text-stroke: 1px $standard-black-color;
+        text-stroke: 1px $standard-black-color;
+    }
+}

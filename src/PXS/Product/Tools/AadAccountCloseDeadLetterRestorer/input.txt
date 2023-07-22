@@ -1,0 +1,4 @@
+﻿; This file is intentionally empty. Fill in prior to executing the application. See readme for more information.
+; Format: [object-id],[tenant-id]
+; Example:
+; 06569777-8b17-40e1-a0f1-7fff3a3ab8e7,015771b0-39f5-46ec-9cec-b924bdda8dae 

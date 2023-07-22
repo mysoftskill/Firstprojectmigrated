@@ -1,0 +1,33 @@
+@startuml SalUpdates
+
+start
+
+:GetDataAsset();
+
+:GetSignalInfo();
+
+if (DataAsset.Capabilities.Contains(SignalInfo.Capability)) then (true)
+    #SkyBlue :DataAsset.IsCapabilityApplicable(SignalInfo);
+    if (CapabilityStillApplicable) then (true)
+        if (DataAsset.SubjectTypes.Contains(SignalInfo.SubjectType)) then (true)
+            if (DataAsset.Variants.AnyApplicable(SignalInfo)) then (false)
+                :MarkApplicable();
+            else (true)
+            endif
+        else (false)
+        endif
+    else (false)
+    endif
+else (false)
+endif
+
+stop
+
+legend
+|= |= Type |
+|<back:SeaGreen>   </back>| Update Required |
+|<back:SkyBlue>   </back>| New |
+|<back:LightYellow>   </back>| No Change |
+endlegend
+
+@enduml

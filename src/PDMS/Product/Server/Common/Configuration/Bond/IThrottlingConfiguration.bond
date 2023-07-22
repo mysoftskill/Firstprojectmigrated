@@ -1,0 +1,33 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct ThrottlingRule
+{
+    1   :   required    int32   PolicyType;
+    2   :   required    string  Entry;
+    3   :   optional    int64   LimitPerSecond;
+    4   :   optional    int64   LimitPerMinute;
+    5   :   optional    int64   LimitPerHour;
+    6   :   optional    int64   LimitPerDay;
+    7   :   optional    int64   LimitPerWeek;
+};
+
+struct ThrottlingExclusion
+{
+    1   :   required    int32   PolicyType;
+    2   :   required    string  Entry;
+};
+
+struct IThrottlingConfiguration
+{
+    1   :   optional    int64                       LimitPerSecond;
+    2   :   optional    int64                       LimitPerMinute;
+    3   :   optional    int64                       LimitPerHour;
+    4   :   optional    int64                       LimitPerDay;
+    5   :   optional    int64                       LimitPerWeek;
+    6   :   optional    bool                        IPThrottlingEnabled;
+    7   :   optional    bool                        ClientThrottlingEnabled;
+    8   :   optional    bool                        EndpointThrottlingEnabled;
+    9   :   optional    bool                        StackBlockedRequests;
+    10  :   optional    list<ThrottlingRule>        Rules;
+    11  :   optional    list<ThrottlingExclusion>   Exclusions;
+};

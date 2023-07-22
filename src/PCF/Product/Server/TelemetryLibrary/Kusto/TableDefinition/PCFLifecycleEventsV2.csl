@@ -1,0 +1,3 @@
+﻿/// PCF Command Queue Depth Telemetry
+/// Kusto PCFLifecycleEventsV2 definition
+.create table PCFLifecycleEventsV2 (TimeStamp:datetime, AgentId:string, AssetGroupId:string, CommandId:string, CommandType:string, EventType:string, Count:long)

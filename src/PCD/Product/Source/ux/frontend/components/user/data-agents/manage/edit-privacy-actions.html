@@ -1,0 +1,13 @@
+<pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.model.assetGroup.qualifier" pcd-hide-data-grid-link="true"></pcd-asset-group-qualifier-view>
+
+<pcd-asset-privacy-actions ng-model="$ctrl.model.privacyActionState"
+                           pcd-is-data-owner="$ctrl.model.isDataOwner"
+                           pcd-agent-protocol="{{$ctrl.model.protocol}}"
+                           pcd-asset-group="$ctrl.model.assetGroup"
+                           pcd-data-agent-id="$ctrl.model.dataAgentId"></pcd-asset-privacy-actions>
+
+<div class="c-group">
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.generic"></mee-inline-error>
+    <button data-use-cms mee-button ng-click="$ctrl.onCancel()" mee-progress-disabled="modalOperation">Cancel</button>
+    <button data-use-cms mee-button="primary" ng-click="$ctrl.onSave()" mee-progress-disabled="modalOperation" ng-disabled="$ctrl.hasNoChangesInPrivacyActions()">Save</button>
+</div>

@@ -1,0 +1,29 @@
+<div data-grid="col-12">
+    <h3 mee-heading="heading4" data-use-cms>Variants requested</h3>
+    <div class="variant-request-detail" data-grid="col-12" ng-repeat="variant in $ctrl.request.requestedVariants">
+        <p mee-paragraph>
+            <span data-use-cms class="view-label">Variant ID: </span>{{ variant.variantId }}
+        </p>
+        <p mee-paragraph>
+            <span data-use-cms class="view-label">Variant name: </span>{{ variant.variantName }}
+        </p>
+        <p mee-paragraph>
+            <span data-use-cms class="view-label">State: </span>{{variant.variantState}}
+        </p>
+        <p mee-paragraph>
+            <span data-use-cms class="view-label">ADO links: </span>
+            <span ng-if="variant.tfsTrackingUris.length" ng-repeat="link in variant.tfsTrackingUris track by $index" class="tfs-tracking">
+                <a mee-hyperlink ng-href="{{link}}" target="_blank"> {{link}}</a>
+            </span>
+            <span data-use-cms ng-if="!variant.tfsTrackingUris.length" class="tfs-tracking">None</span>
+        </p>
+    </div>
+</div>
+<div data-grid="col-12">
+    <h3 mee-heading="heading4" data-use-cms>Data assets linked</h3>
+    <div data-grid="col-12">
+        <p class="asset-linked" mee-paragraph ng-repeat="relationship in $ctrl.request.variantRelationships">
+            <pcd-asset-group-qualifier-view pcd-qualifier="relationship.assetGroupQualifier"></pcd-asset-group-qualifier-view>
+        </p>
+    </div>
+</div>

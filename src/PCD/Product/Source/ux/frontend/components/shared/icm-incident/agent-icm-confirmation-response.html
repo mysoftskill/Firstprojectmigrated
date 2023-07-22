@@ -1,0 +1,13 @@
+﻿<h2 mee-heading="subheading2" data-use-cms>IcM Incident</h2>
+
+<p mee-paragraph data-use-cms>
+    IcM ticket created: <a ng-href="{{ $ctrl.incidentUrl }}" mee-hyperlink target='_blank'>{{ $ctrl.incidentId }}</a>
+</p>
+
+<div class="c-group">
+    <button mee-button="primary" 
+            ng-click="$ctrl.close()"
+            data-use-cms>
+        OK
+    </button>
+</div>

@@ -1,0 +1,146 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "type": "string",
+      "defaultValue": "Cluster",
+      "metadata": {
+        "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
+      }
+    },
+    "applicationTypeName": {
+      "type": "string",
+      "defaultValue": "PcfServiceFabricAppType",
+      "metadata": {
+        "description": "The application type name"
+      }
+    },
+    "applicationTypeVersion": {
+      "type": "string",
+      "defaultValue": "1",
+      "metadata": {
+        "description": "The application type version"
+      }
+    },
+    "appPackageUrl": {
+      "type": "string",
+      "defaultValue": "Bin\\PcfServiceFabricApp.sfpkg",
+      "metadata": {
+        "description": "The URL to the application package zip file"
+      }
+    },
+    "applicationName": {
+      "type": "string",
+      "defaultValue": "PcfServiceFabricApp",
+      "metadata": {
+        "description": "The application name"
+      }
+    },
+    "healthCheckWaitDuration": {
+      "type": "string",
+      "defaultValue": "00:00:00.0",
+      "metadata": {
+        "description": "The amount of time to wait after completing an upgrade domain before applying health policies."
+      }
+    },
+    "healthCheckStableDuration": {
+      "type": "string",
+      "defaultValue": "00:05:00.0",
+      "metadata": {
+        "description": "The amount of time that the application or cluster must remain healthy before the upgrade proceeds to the next upgrade domain."
+      }
+    },
+    "healthCheckRetryTimeout": {
+      "type": "string",
+      "defaultValue": "00:10:00.0",
+      "metadata": {
+        "description": "The amount of time to retry health evaluation when the application or cluster is unhealthy before FailureAction is executed."
+      }
+    },
+    "upgradeTimeout": {
+      "type": "string",
+      "defaultValue": "01:00:00.0",
+      "metadata": {
+        "description": "The amount of time the overall upgrade has to complete before FailureAction is executed."
+      }
+    },
+    "upgradeDomainTimeout": {
+      "type": "string",
+      "defaultValue": "00:20:00.0",
+      "metadata": {
+        "description": "The amount of time each upgrade domain has to complete before FailureAction is executed."
+      }
+    },
+    "applicationParameters": {
+      "type": "object",
+      "metadata": {
+        "description": "Application parameters override to be applied when creating or upgrading an application."
+      }
+    }
+  },
+  "variables": {
+    "clusterLocation": "[resourcegroup().location]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2017-07-01-preview",
+      "type": "Microsoft.ServiceFabric/clusters/applicationTypes",
+      "name": "[concat(parameters('clusterName'), '/', parameters('applicationTypeName'))]",
+      "location": "[variables('clusterLocation')]",
+      "dependsOn": [],
+      "properties": {
+        "provisioningState": "Default"
+      }
+    },
+    {
+      "apiVersion": "2017-07-01-preview",
+      "type": "Microsoft.ServiceFabric/clusters/applicationTypes/versions",
+      "name": "[concat(parameters('clusterName'), '/', parameters('applicationTypeName'), '/', parameters('applicationTypeVersion'))]",
+      "location": "[variables('clusterLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.ServiceFabric/clusters/', parameters('clusterName'), '/applicationTypes/', parameters('applicationTypeName'))]"
+      ],
+      "properties": {
+        "provisioningState": "Default",
+        "appPackageUrl": "[parameters('appPackageUrl')]"
+      }
+    },
+    {
+      "apiVersion": "2017-07-01-preview",
+      "type": "Microsoft.ServiceFabric/clusters/applications",
+      "name": "[concat(parameters('clusterName'), '/', parameters('applicationName'))]",
+      "location": "[variables('clusterLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.ServiceFabric/clusters/', parameters('clusterName'), '/applicationTypes/', parameters('applicationTypeName'), '/versions/', parameters('applicationTypeVersion'))]"
+      ],
+      "properties": {
+        "provisioningState": "Default",
+        "typeName": "[parameters('applicationTypeName')]",
+        "typeVersion": "[parameters('applicationTypeVersion')]",
+        "parameters": "[parameters('applicationParameters')]",
+        "upgradePolicy": {
+          "upgradeReplicaSetCheckTimeout": "00:00:00.0",
+          "forceRestart": true,
+          "rollingUpgradeMonitoringPolicy": {
+            "failureAction": "Rollback",
+            "healthCheckWaitDuration": "[parameters('healthCheckWaitDuration')]",
+            "healthCheckStableDuration": "[parameters('healthCheckStableDuration')]",
+            "healthCheckRetryTimeout": "[parameters('healthCheckRetryTimeout')]",
+            "upgradeTimeout": "[parameters('upgradeTimeout')]",
+            "upgradeDomainTimeout": "[parameters('upgradeDomainTimeout')]"
+          },
+          "applicationHealthPolicy": {
+            "considerWarningAsError": false,
+            "maxPercentUnhealthyDeployedApplications": 0,
+            "defaultServiceTypeHealthPolicy": {
+              "maxPercentUnhealthyServices": 0,
+              "maxPercentUnhealthyPartitionsPerService": 0,
+              "maxPercentUnhealthyReplicasPerPartition": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

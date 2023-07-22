@@ -1,0 +1,108 @@
+﻿
+#DECLARE startDate DateTime = DateTime.Parse("@@startDate@@", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).AddHours(-2);
+#DECLARE endDate DateTime = DateTime.Parse("@@endDate@@", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).AddHours(-2); 
+#DECLARE endDateString string = @endDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+
+// Constants
+#DECLARE inputStreamName string = @"@@MemberViewServiceLogsStreamName@@";
+#DECLARE inputStream string = string.Format(@"@@MemberViewServiceStagingPath@@/@@HourlyStreamPathPattern@@?datetime={1}", @inputStreamName, @endDateString);
+
+#DECLARE qosStreamName string = @"@@MemberViewServiceQosStreamName@@";
+#DECLARE qosStream string = string.Format(@"@@MemberViewServiceProcessedPath@@/@@HourlyStreamPathPattern@@?datetime={1}", @qosStreamName, @endDateString);
+
+logs =
+    SSTREAM @inputStream;
+
+logicalOperationLogs =
+    SELECT A_time,
+           GetAggregatedTime(A_time) AS aggregatedTime,
+           A_name,
+           A_data_baseType,
+           A_tags["level"] AS level,
+           A_tags["service"] AS service,
+           A_tags["dataCenter"] AS dataCenter,
+           A_tags["roleInstance"] AS roleInstance,
+           B_callerName,
+           Double.Parse(B_latencyMs ?? Double.MaxValue.ToString()) AS latencyMs,
+           B_operationName,
+           B_requestMethod,
+           Boolean.Parse(B_succeeded ?? "false") AS succeeded,
+           B_dependencyName,
+           B_dependencyOperationName,
+           B_dependencyType,
+           B_protocol,
+           B_protocolStatusCode,
+           C_PartnerId,
+           C_Authentication,
+           C_AttemptCount
+    FROM logs
+    WHERE REGEX("^Microsoft.Membership.MemberServices.Common.Logging.((Incoming)|(Outgoing))").IsMatch(A_name);
+
+qos =
+    SELECT aggregatedTime AS Timestamp,
+           // Event Information Dimensions
+           A_name AS Name,
+           A_data_baseType AS BaseType,
+           level AS Level,
+           
+           // Where is this request taking place?
+           service AS Service,
+           dataCenter AS DataCenter,
+           roleInstance AS RoleInstance,
+
+           // What does this event represent?
+           B_operationName AS OperationName,
+           B_dependencyOperationName AS DependencyOperationName,
+           B_requestMethod AS RequestMethod,
+           
+           // Who's involved?
+           B_callerName AS CallerName,
+           B_dependencyName AS DependencyName,
+           B_dependencyType AS DependencyType,
+           C_PartnerId AS PartnerId,
+
+           // Details
+           C_AttemptCount AS AttemptCount,
+           C_Authentication AS Authentication,
+           
+           // Result
+           B_protocol AS Protocol,
+           B_protocolStatusCode AS ProtocolStatusCode,
+           
+           // Aggregations
+           COUNTIF(succeeded) AS Success,
+           COUNT() AS Total,
+           AVG(latencyMs) AS AverageLatency,
+           MAX(latencyMs) AS MaxLatency,
+           MIN(latencyMs) AS MinLatency
+    FROM logicalOperationLogs
+    GROUP BY Timestamp,
+             Name,
+             BaseType,
+             Level,
+             Service,
+             DataCenter,
+             RoleInstance,
+             OperationName,
+             DependencyOperationName,
+             RequestMethod,
+             CallerName,
+             DependencyName,
+             DependencyType,
+             PartnerId,
+             AttemptCount,
+             Authentication,
+             Protocol,
+             ProtocolStatusCode;
+
+OUTPUT qos
+TO SSTREAM @qosStream;
+
+#CS
+public static DateTime GetAggregatedTime(DateTime logDateTime)
+{
+    TimeSpan interval = new TimeSpan(hours: 0, minutes: 15, seconds: 0);
+    return new DateTime(((logDateTime.Ticks + interval.Ticks - 1) / interval.Ticks) * interval.Ticks);
+}
+#ENDCS
+

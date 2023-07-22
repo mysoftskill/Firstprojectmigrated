@@ -1,0 +1,8 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IFlightingConfig
+{
+    10: string Environment;
+
+    20: string ApiEndpoint;
+}

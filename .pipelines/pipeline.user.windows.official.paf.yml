@@ -1,0 +1,94 @@
+# For full annotated example, please visit: https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FPipeline%20Spec%20YAML%20Concepts%2FAnnotated%20Example&wikiVersion=GBwikiMaster&pageId=302
+# YAML File Naming: pipeline.user.<os>.<buildtype>.<tag>.<phase>.<config>.<branch>.yml
+# https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FMulti%252DPhase%20and%20Multi%252DConfiguration%20Builds&wikiVersion=GBwikiMaster&pageId=291&anchor=yaml-file-naming
+
+versioning:
+  commands:
+    - !!defaultcommand
+      name: 'Update Version'
+      command: 'src\PAF\OneBranch\Build\versioning.cmd'
+
+restore:
+  commands:
+    - !!defaultcommand
+      name: 'Restore Packages'
+      command: 'src\PAF\OneBranch\Build\restore.cmd'
+    
+build:
+  commands:
+    - !!buildcommand
+      name: 'Build'
+      command: 'src\PAF\OneBranch\Build\build.cmd'
+      arguments: 'Debug'
+      artifacts:
+        - from: 'src\PAF'
+          to: 'Codesign'
+          include:
+            - '**/*.dll'
+            - '**/*.exe'
+            - '**/*.ps1'
+            - '**/bin/**/*.json'
+          signing_options:
+            sign_inline: true
+    - !!buildcommand
+      name: 'Package'
+      command: 'src\PAF\OneBranch\Build\package.cmd'
+      arguments: 'Debug'
+      artifacts:
+        - from: 'src\PAF\OneBranch\Release'
+          to: 'Ev2'
+          include:
+            - '**/*'
+        - from: 'src\PAF\Product\Tests\Functions.FunctionalTests\bin\x64\Release'
+          to: 'fct\PAF'
+          include:
+            - '**/*'
+        - from: 'src\PAF\Product\Tests\Functions.FunctionalTests'
+          to: 'fct\PAF'
+          include:
+            - 'CloudTest/**/*'
+        - from: 'src\PAF\Product\Tests\Functions.AIdFunctionalTests\bin\x64\Release'
+          to: 'fct\AID'
+          include:
+            - '**/*'
+        - from: 'src\PAF\Product\Tests\Functions.AIdFunctionalTests'
+          to: 'fct\AID'
+          include:
+            - 'CloudTest/**/*'
+      logs:
+        - from: 'src\PAF\OneBranch\Build'
+          to: 'Build Logs'
+          include:
+            - '**/build*.log'
+
+test:
+  commands:
+    - !!testcommand                               # We are going to run tests and collect back the test results for publishing
+      name: 'UnitTests'                                # If your test run does not have a name, this will be used.
+      command: 'src\PAF\OneBranch\Build\test.cmd'              # Script that runs tests. 
+      fail_on_stderr: true                        # Force pipeline to fail if the task writes to standard error stream; default is true.
+      skip_on_developer_box: true                 # If running locally on a developer host instead of the pipeline managed hosts, skip this task. Default is false.
+      testresults:                                # Sequence of entries indicating which test results files to collect.
+        - title: 'All Tests'                      # Test run title. Used by VSTS.
+          configuration: 'Debug'                  # Optional build configuration.
+          platform: 'x64'                         # Optional build platform.
+          type: 'VSTest'                          # Test engine type. Used by VSTS. Supported values are JUnit, NUnit, VSTest and xUnit.
+          include:                                # Sequence of glob patterns indicating which test results file to associate with this test run.
+            - 'src\PAF\OneBranch\Build\TestResults\*.trx'      # Include all TRX files under any TestResults folder under the src folder.                
+
+
+static_analysis_options:
+  policheck_options:
+    files_to_scan:
+      - from: 'src\PAF'
+        exclude:                         
+          - '**/Product/Source/ux/appsettings.json'
+  moderncop_options:
+    disable_tool_scan: true
+  binskim_options:
+    files_to_scan:
+      - from: 'src\PAF'
+        exclude:                         
+          - '**/Bond.IO.dll'
+          - '**/Bond.Reflection.dll'
+          - '**/Bond.Attributes.dll'

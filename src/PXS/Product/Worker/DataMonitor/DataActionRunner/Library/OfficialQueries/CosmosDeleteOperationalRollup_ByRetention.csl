@@ -1,0 +1,140 @@
+// Date Constants
+let reportdate = toscalar(AssetGroups | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+let startdate = datetime_add('day', -45, reportdate);
+let enddate = datetime_add('day', -33, reportdate); // We use 33 days ago to account for RDD propagation delays.
+//
+// Build the AssetGroupDataOwnerInfo table
+let assetGroups = materialize
+(
+    AssetGroups
+    | where SQLizerStreamDateId == reportdate
+    | project AssetGroupId=Id, DeleteAgentId, OwnerId
+);
+let dataOwners = materialize
+(
+    DataOwnersV2
+    | where SQLizerStreamDateId == reportdate
+    | project OwnerId=DataOwnerId, Name=OwnerName, DivisionName, OrganizationName, ServiceGroupName, TeamGroupName, ServiceName
+);
+let AssetOwnerInfo = materialize
+(
+    assetGroups 
+    | join kind=inner (dataOwners) on OwnerId
+    | project 
+        AssetGroupId, 
+        DeleteAgentId, 
+        OwnerId, 
+        DivisionName=iif(DivisionName == "", "ClaimedWithoutST", DivisionName),
+        OrganizationName
+);
+//
+// Asset Level information
+let AssetLevelData = materialize
+(
+    CosmosRetentionTrackingFullRollupByDayHistory
+    | where SQLizerStreamDateId == reportdate
+    | where startofday(CreatedDay) < enddate
+    | summarize 
+        StartDate=min(startofday(CreatedDay)), 
+        EndDate=max(startofday(CreatedDay)), 
+        IEPending=sum(IntermediateEngineeringLE30DaysPendingCount),
+        IEAcknowledged=sum(IntermediateEngineeringLE30DaysDeletedByRetentionCount),
+        LTPending=sum(LongTailPendingCount),
+        LTAcknowledged=sum(LongTailDeletedByRetentionCount) 
+        by AssetGroupId    
+    | join kind=leftouter AssetOwnerInfo on AssetGroupId
+    | project 
+        DivisionName=iif(AssetGroupId == "", "NotRegistered", iif(OwnerId == "", "Unclaimed", DivisionName)),
+        OrganizationName, 
+        AssetGroupId, 
+        StartDate, 
+        EndDate, 
+        IEPending, 
+        IEAcknowledged, 
+        LTPending, 
+        LTAcknowledged, 
+        DeleteAgentId, 
+        OwnerId 
+);
+//
+// Total rollup
+let Total = materialize
+(
+    AssetLevelData
+    | summarize 
+        IEAcknowledged=sum(IEAcknowledged), 
+        IETotal=sum(IEAcknowledged + IEPending), 
+        LTAcknowledged=sum(LTAcknowledged), 
+        LTTotal=sum(LTAcknowledged + LTPending), 
+        AssetGroupCount=count()
+    | project 
+        DisplayName = "Total", 
+        SortName = "z", 
+        AssetGroupCount, 
+        IEAcknowledged, 
+        IETotal, 
+        IEPostSLACompletionStatus=iif(IETotal > 0, toreal(IEAcknowledged) / toreal(IETotal), toreal(0)),
+        LTAcknowledged,
+        LTTotal,
+        LTPostSLACompletionStatus=iif(LTTotal > 0, toreal(LTAcknowledged) / toreal(LTTotal), toreal(0))
+);
+// Division rollup
+let ByDivision = materialize
+(
+    AssetLevelData
+    | summarize 
+        IEAcknowledged=sum(IEAcknowledged), 
+        IETotal=sum(IEAcknowledged + IEPending), 
+        LTAcknowledged=sum(LTAcknowledged), 
+        LTTotal=sum(LTAcknowledged + LTPending), 
+        AssetGroupCount=count()
+        by DivisionName
+    | project 
+        DisplayName = DivisionName, 
+        SortName = strcat(DivisionName, "."), 
+        AssetGroupCount, 
+        IEAcknowledged, 
+        IETotal, 
+        IEPostSLACompletionStatus=iif(IETotal > 0, toreal(IEAcknowledged) / toreal(IETotal), toreal(0)),
+        LTAcknowledged,
+        LTTotal,
+        LTPostSLACompletionStatus=iif(LTTotal > 0, toreal(LTAcknowledged) / toreal(LTTotal), toreal(0))
+);
+// Org rollup
+let ByOrg = materialize
+(   
+    AssetLevelData
+    | summarize 
+        IEAcknowledged=sum(IEAcknowledged), 
+        IETotal=sum(IEAcknowledged + IEPending), 
+        LTAcknowledged=sum(LTAcknowledged), 
+        LTTotal=sum(LTAcknowledged + LTPending), 
+        AssetGroupCount=count()
+        by DivisionName, OrganizationName
+    | where IETotal > 0 or LTTotal > 0
+    | where OrganizationName != ""
+    | project 
+        DisplayName = strcat("    ", OrganizationName), 
+        SortName = strcat(DivisionName, ".", OrganizationName), 
+        AssetGroupCount, 
+        IEAcknowledged, 
+        IETotal, 
+        IEPostSLACompletionStatus=iif(IETotal > 0, toreal(IEAcknowledged) / toreal(IETotal), toreal(0)),
+        LTAcknowledged,
+        LTTotal,
+        LTPostSLACompletionStatus=iif(LTTotal > 0, toreal(LTAcknowledged) / toreal(LTTotal), toreal(0))
+    | where IEPostSLACompletionStatus < 0.999 or LTPostSLACompletionStatus < 0.999
+);
+// Report summary
+Total
+| union ByDivision 
+| union ByOrg 
+| order by SortName asc
+| project 
+    DisplayName, 
+    AssetGroupCount, 
+    IECounts_streams=strcat(IEAcknowledged, " / ", IETotal), 
+    IEPostSLACompletionStatus=iif(IETotal == 0, "100.0%", strcat(round(IEPostSLACompletionStatus*100, 2), "%")),
+    LTCounts_streams=strcat(LTAcknowledged, " / ", LTTotal), 
+    LTPostSLACompletionStatus=iif(LTTotal == 0, "100.0%", strcat(round(LTPostSLACompletionStatus*100, 2), "%"))

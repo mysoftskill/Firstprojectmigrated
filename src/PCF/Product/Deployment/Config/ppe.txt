@@ -1,0 +1,253 @@
+%UseKvSecrets%|true
+%UseKvSecretsForStorageConnectionString%|true
+%UseKvSecretsForRedisPassword%|true
+%DataFolderName%|PPE
+%IsProductionEnvironment%|false
+%IsTestEnvironment%|false
+%IsPreProdEnvironment%|true
+%ServiceToServiceSiteId%|296170
+%AzureActiveDirectoryValidAudience%|https://pcf.privacy.microsoft-ppe.com
+%AzureActiveDirectoryValidAudienceAME%|https://MSAzureCloud.onmicrosoft.com/613e14a9-7c60-4f8b-863c-f719e68cd8db
+%PPEHackEnabled%|true
+%AllowSdkWithoutVerifier%|true
+%CarbonFlightingEnvironmentName%|PPE
+
+%AzureKeyVaultBaseUrl%|https://pcf-ppe-ame.vault.azure.net/
+
+%AzureManagementApplicationId%|061be1ab-f7cb-4d44-bc8e-c0dfb357b7fc
+%AzureManagementSubscriptionId%|b4b176cf-fe78-4b59-bd1a-9b8c11536f4d
+%AzureManagementUAMISubscriptionId%|b4b176cf-fe78-4b59-bd1a-9b8c11536f4d
+
+%AzureManagementResourceGroupName%|PCF-PPE
+%AzureRedisCacheEndpoint%|adgcs-nonprod-cache.redis.cache.windows.net
+
+%AzureBlobConnectionString%|ppe-exportstorage-cs
+
+%PCFV2AzureStorageAccountName%|pcfppe
+
+%CosmosDbDefaultRuPerSecond%|2500
+
+%SytheticCommandInsertionEnabled%|true
+
+<!-- Item ttl 7 days -->
+%CosmosDBQueueTimeToLiveDays%|7
+<!-- Min lease duration 15 mins -->
+%CosmosDbQueueMinLeaseDurationSecs%|900
+<!-- Max lease duration 1 day -->
+%CosmosDbQueueMaxLeaseDurationSecs%|86400
+%CosmosDBList%|MULTI
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfppe-east.db3</Moniker>
+        <DatabaseId>db3</DatabaseId>
+        <Uri>https://pcfppe-east.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">ppe-commandqueue-east-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfppe-westcentral.db3</Moniker>
+        <DatabaseId>db3</DatabaseId>
+        <Uri>https://pcfppe-westcentral.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">ppe-commandqueue-westcentral-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+.
+
+%AssetGroupCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}.ss
+%AssetGroupHourlyCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}T{0:HH}_00_00.ss
+
+%PdmsDatabaseUri%|https://pcf-ppe-usw-pdmscache.documents.azure.com:443/
+%PdmsDatabaseKey%|ppe-pdmscache-key
+
+%EventHubEnablePeriodicNoOpEvents%|true
+
+%AzureStorageAccounts%|MULTI
+     <Item kvsecret="true">ppe-storage-east-cs</Item>
+     <Item kvsecret="true">ppe-storage-west-cs</Item>
+.
+
+%EventHubList%|MULTI
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">ppe-eventhub-east-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecyclea</LeaseContainerName>
+        <Moniker>pcf-ppe-eventhub-east</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">ppe-storage-east-cs</CheckpointAccountConnectionString>
+      </Item>
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">ppe-eventhub-west-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecycleb</LeaseContainerName>
+        <Moniker>pcf-ppe-eventhub-west</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">ppe-storage-west-cs</CheckpointAccountConnectionString>
+      </Item>
+.
+
+%CommandHistoryCosmosDbUri%|https://pcf-ppe-coldstorage.documents.azure.com:443/
+%CommandHistoryCosmosDbKey%|ppe-commandhistory-key
+
+%ColdStorageCompletionBackoffSeconds%|120
+
+%ExportStorageConnectionStringA%|%AzureBlobConnectionString%
+%ExportStorageConnectionStringB%|%AzureBlobConnectionString%
+
+%PCF_PPE-INT_SiteId%|296170
+%PCF_PPE-INT_AppId%|7819dd7c-2f73-4787-9557-0e342743f34b
+%PDMS_PROD_FP_AppId%|b1b98629-ed2f-450c-9095-b895d292ccf1
+%PDMS_PPE_FP_AppId%|ff3a41f1-6748-48fa-ba46-d19a123ae965
+
+%PXS_PPE_AppId%|705363a0-5817-47fb-ba32-59f47ce80bb7
+
+%GetFullCommandStatusCallerList%|MULTI
+  <Item>%PCF_PPE-INT_SiteId%</Item>
+.
+
+%GetFullCommandStatusAadCallerList%|MULTI
+  <Item>%PXS_PPE_AppId%</Item>
+.
+
+%DebugApisCallerList%|MULTI
+  <Item>%PCF_PPE-INT_SiteId%</Item>
+.
+
+%DebugApisAadCallerList%|MULTI
+  <Item>%PXS_PPE_AppId%</Item>
+  <Item>%PDMS_PROD_FP_AppId%</Item>
+  <Item>%PDMS_PPE_FP_AppId%</Item>
+.
+
+%TestHooksCallerList%|MULTI
+  <Item>%PCF_PPE-INT_SiteId%</Item>
+.
+
+%TestHooksAadCallerList%|MULTI
+  <Item>%PCF_PPE-INT_AppId%</Item>
+.
+
+%KnownCallersList%|MULTI
+  <Caller>
+    <Id cg:Type="System.String">%PCF_PPE-INT_SiteId%</Id>
+    <Name>PCF-PPE/INT-SiteId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PDMS_PPE_FP_AppId%</Id>
+    <Name>PDMS-PPE/INT-FP-AppId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PDMS_PROD_FP_AppId%</Id>
+    <Name>PDMS-PROD-FP-AppId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PCF_PPE-INT_AppId%</Id>
+    <Name>PCF-PPE/INT-AppId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PXS_PPE_AppId%</Id>
+    <Name>PXS-PPE</Name>
+  </Caller>
+.
+
+%ExportStorageGetAccountsCallerList%|%GetFullCommandStatusCallerList%
+
+%ExportStorageGetAccountsAadCallerList%|%GetFullCommandStatusAadCallerList%
+
+%CosmosExporterAgentId%|3134bf67-a6a9-405f-b334-4e5f287f7e87
+
+%SyntheticAgentsList%|MULTI
+  <!-- PXS Cosmos Export Reader PPE -->
+  <Item>3134bf67-a6a9-405f-b334-4e5f287f7e87</Item>
+  
+  <!-- PXS Synthetic Agent PPE -->
+  <Item>fa011c2b-e5f5-4d57-aee8-158b2f61a964</Item>
+.
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/PPE/CommandFeedProcessors/PrivacyCommand/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/PPE/CommandFeedProcessors/PrivacyCommand/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/PPE/CommandFeedProcessors/AuditLog/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/PPE/CommandFeedProcessors/AuditLog/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+%AccountCloseCommandMaxIngestionDelaySeconds%|2
+
+%ExportToCSVEnabled%|true
+
+%MaxWorkingSetMb%|5000
+%StopService%|true
+
+%OldExportForceCompleteTaskEnabled%|true
+%IngestionRecoveryTaskEnabled%|true
+
+%ReplayProcessDelayEnabled%|false
+%CommandReplayDocDBUri%|https://pcf-ppe-commandreplay.documents.azure.com:443/
+%CommandReplayDocDBKey%|ppe-commandreplay-key
+
+%QueueDepthBaselineFrequencyMinutes%|60
+%TelemetryTimeToLiveDays%|7
+%TelemetryMaxItemCount%|100
+
+%KustoDatabaseName%|PcfPpe
+
+%CosmosDbAutoscalerEnabled%|false
+
+%AzureQueueCommandQueueDepthCheckerEnabled%|true
+
+%AgentAzureQueuesStorageAccounts%|MULTI
+     <AzureQueue>
+        <ConnectionString kvsecret="true">ppe-agentqueue-storage-east-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">ppe-agentqueue-storage-east-2-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">ppe-agentqueue-storage-west-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+.
+
+%DeviceIdExpirationMinutes%|60
+%EventHubCheckpointExpirationSeconds%|60
+%NonWindowsDeviceEventHubConfig%|MULTI
+    <Moniker>ppe-nonwindowsdevice-eventhub</Moniker>
+    <ConnectionString kvsecret="true">ppe-altdevice-eventhub-cs</ConnectionString>
+    <EventHubName>aef-altdevicedelete-ppe</EventHubName>
+    <ConsumerGroupName>$Default</ConsumerGroupName>
+    <BlobContainerName>altdevicedelete</BlobContainerName>
+    <StorageConnectionString kvsecret="true">%AzureBlobConnectionString%</StorageConnectionString>
+.
+
+%IncomingApiSamplingRate%|10
+%IncomingApiSamplingList%|MULTI
+  <Item>InsertIntoQueueWorkItemHandler.ProcessWorkItemAsync</Item>
+  <Item>TelemetryLifecycleCheckpointProcessor.ProcessEventsAsync</Item>
+.
+
+%OutgoingApiSamplingRate%|20
+%OutgoingApiSamplingList%|MULTI
+  <Item>AzureWorkItemQueue.UpdateMessageAsync</Item>
+  <Item>AzureQueueStorageCommandQueue.PopAsync</Item>
+  <Item>CosmosDbStoredProceduresService.PopNextItemsByCompoundKeyAsync</Item>
+.
+
+%AzureAppConfigEndpoint%|https://adgcs-nonprod-config.azconfig.io
+
+%PxsPostCommandAadCallerList%|MULTI
+  # PXS_PPE_AppId
+  <Item>705363a0-5817-47fb-ba32-59f47ce80bb7</Item>
+  # AID_PPE_AppId / UAMI ID
+  <Item>9396613a-ec0d-4102-83a2-b079b69566f9</Item>
+.
+
+%AdlsAccountName%|pxscosmos15-prod-c15
+%AdlsTenantId%|33e01921-4d64-4f8c-a055-5bdaffd5e33d
+%AdlsAccountSuffix%|azuredatalakestore.net
+%AdlsClientAppId%|975e1332-de26-4ac9-b120-fe35fa68adf1
+%AdlsClientAppCertificateName%|aad-auth-ppe
+
+%PCFv2CosmosDbExportExpectationsContainerName%|exportexpectations
+%PCFv2CosmosDbCompletedCommandsContainerName%|completedexports
+%PCFv2CosmosDbDatabaseName%|db01
+%PCFv2CosmosDbEndpointName%|https://pcfppe.documents.azure.com:443/
+
+%CosmosDbPartitionSizeWorkerEnabled%|true
+%CosmosDbResourceGroup%|PCF-PPE
+%AzureLogAnalyticsWorkspaceId%|9707cabd-59fa-4ae2-849b-3513f20f52e3

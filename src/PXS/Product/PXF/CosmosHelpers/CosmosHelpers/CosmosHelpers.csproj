@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.Membership.MemberServices.CosmosHelpers</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.CosmosHelpers</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Common\Cosmos\Common.Cosmos.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

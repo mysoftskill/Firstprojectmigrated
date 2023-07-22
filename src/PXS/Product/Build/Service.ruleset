@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="WPS Services Ruleset" Description="Rules for all WPS shipped services." ToolsVersion="10.0">
+  <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1002" Action="None" />
+    <Rule Id="CA1006" Action="None" />
+    <Rule Id="CA1011" Action="None" />
+    <Rule Id="CA1014" Action="None" />
+    <Rule Id="CA1019" Action="None" />
+    <Rule Id="CA1020" Action="None" />
+    <Rule Id="CA1021" Action="None" />
+    <Rule Id="CA1024" Action="None" />
+    <Rule Id="CA1025" Action="None" />
+    <Rule Id="CA1026" Action="None" />
+    <Rule Id="CA1028" Action="None" />
+    <Rule Id="CA1045" Action="None" />
+    <Rule Id="CA1062" Action="None" />
+    <Rule Id="CA1303" Action="None" />
+    <Rule Id="CA1506" Action="None" />
+    <Rule Id="CA1600" Action="None" />
+    <Rule Id="CA1601" Action="None" />
+    <Rule Id="CA1700" Action="None" />
+    <Rule Id="CA1716" Action="None" />
+
+    <!-- Remove exception for CA1804 when migrating to VS2013 -->
+    <Rule Id="CA1804" Action="None" />
+
+    <Rule Id="CA2104" Action="None" />
+    <Rule Id="CA2105" Action="None" />
+    <Rule Id="CA2119" Action="None" />
+    <Rule Id="CA2204" Action="None" />
+    <Rule Id="CA2225" Action="None" />
+    <Rule Id="CA2227" Action="None" />
+    <Rule Id="CA903" Action="None" />
+    <Rule Id="CA908" Action="None" />
+    
+    <!-- Remove on Next Build Environment Version Increment -->
+    <Rule Id="CA0001" Action="None" />
+    <Rule Id="CA2135" Action="None" />
+    <Rule Id="CA3113" Action="None" />
+    <Rule Id="CA3135" Action="None" />
+    <Rule Id="MSEC3007" Action="None" />
+  </Rules>
+</RuleSet>

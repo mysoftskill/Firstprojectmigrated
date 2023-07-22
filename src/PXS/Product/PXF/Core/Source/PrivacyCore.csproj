@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).Privacy.Core</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).Privacy.Core</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <Platform>x64</Platform>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.Entity" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\..\..\PCF\Product\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj" />
+    <ProjectReference Include="..\..\..\Adapters\Source\Adapters.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\DSRContracts\DSR.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\Exposed\ExposedContracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PrivacyOperationContracts\PrivacyOperation.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\CosmosHelpers\CosmosHelpers\CosmosHelpers.csproj" />
+    <ProjectReference Include="..\..\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+    <ProjectReference Include="..\..\ScheduleDbClient\Source\ScheduleDbClient.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AQS\CDPEvent2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Cosmos" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Direct" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Table" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" />
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.Data.Edm" />
+    <PackageReference Include="Microsoft.Data.OData" />
+    <PackageReference Include="Microsoft.Family.Client" />
+    <PackageReference Include="Microsoft.Family.Client.JsonWebToken" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+	<PackageReference Include="Microsoft.IdentityModel.Tokens.JWT" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Ms.Qos.IncomingServiceRequest" />
+    <PackageReference Include="Ms.Qos.OutgoingServiceRequest" />
+	<PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Parallax" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Spatial" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

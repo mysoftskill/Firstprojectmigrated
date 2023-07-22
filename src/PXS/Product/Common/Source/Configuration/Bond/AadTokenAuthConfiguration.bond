@@ -1,0 +1,77 @@
+import "CommonConfiguration.bond"
+import "PrivacyPartnerAdapterConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+enum OutboundPolicyName
+{
+    AadRvsConstructAccountClose
+};
+
+struct IIssuerAppIdConfig
+{
+    1 : required string AppId;
+    2 : required string StsAuthorityEndpoint;
+    3 : required string OpenIdConfigurationEndpoint;
+}
+
+struct IJwtInboundPolicyConfig
+{
+    1 : required list<string> IssuerPrefixes;
+    2 : required string Authority;
+    3 : required string AadTenantName;
+    4 : required list<string> ValidIncomingAppIds;
+    5 : required list<string> Audiences;
+    6 : required bool ApplyPolicyForAllTenants;
+};
+
+struct IJwtOutboundPolicyConfig
+{
+    1 : required string AppId;
+    2 : required string Authority;
+    3 : required string Resource;
+};
+
+struct IAadPopTokenAuthConfiguration
+{
+    // Value is how long an aad app token can expire in seconds
+    1 : required int32 AadAppTokenExpirySeconds;
+
+    // Value is how long an aad app token can be in the cache before it expires 
+    2 : required int32 MaxCacheAgeAadAppTokenExpirySeconds;
+
+    3 : required bool CacheAppTokens = true;
+
+    4 : required string AadAppAuthority;
+}
+
+struct IAadTokenAuthConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    1 : required string AadAppId;
+
+    2 : required ICertificateConfiguration RequestSigningCertificateConfiguration;
+
+    3 : required IAadPopTokenAuthConfiguration AadPopTokenAuthConfig;
+        
+    4 : required IJwtInboundPolicyConfig JwtInboundPolicyConfig;
+
+    5 : required map<string, IJwtOutboundPolicyConfig> JwtOutboundPolicyConfig;
+
+    6 : required string AuthorityTenantId;
+
+    7 : required string AadLoginEndpoint;
+
+    8 : required string StsAuthorityEndpoint;
+
+    9 : required map<string, IIssuerAppIdConfig> IssuerAppIdConfigs;
+
+    // Value determines if PII can be show in diagnostic logs for Aad Token Auth. Should always be *false* in production environments.
+    10 : optional bool EnableShowPIIDiagnosticLogs = false;
+
+    // temporary mitigation for aad rvs issue
+    11 : required string AadRvsAppId;
+
+    12: required string AuthorityTenantIdForOpenId;
+
+    13: required string AadLoginEndpointForOpenId;
+};

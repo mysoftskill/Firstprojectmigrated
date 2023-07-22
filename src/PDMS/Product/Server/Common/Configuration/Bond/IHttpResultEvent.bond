@@ -1,0 +1,10 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("A successful outgoing call from the pdms client.")]
+struct IHttpResultEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string requestBody;
+    20: required string responseBody;
+}

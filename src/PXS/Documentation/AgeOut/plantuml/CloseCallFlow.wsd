@@ -1,0 +1,45 @@
+@startuml CloseCallFlow
+
+node MSA
+database AQS {
+    folder "Account Notifications" {
+        database CloseNotifications
+    }
+}
+
+node "NGP Components" {
+
+    [AqsWorker]
+
+    node PCF
+
+    cloud "Cosmos" {
+        node CosmosSignalStream
+    }
+}
+
+node Xbox
+node MSARVS
+
+cloud "Agents" {
+    node DeleteAgents
+}
+
+cloud "Cosmos Agents" {
+    node CosmosDeleteAgents
+}
+
+MSA -> CloseNotifications : Add account close event
+CloseNotifications --> AqsWorker : Batch dequeue of account close events
+
+Xbox --> AqsWorker : Get Xuids for closed accounts
+MSARVS --> AqsWorker : Exchange pre verifier for verifier
+
+AqsWorker --> PCF : Batch post of commands matching events
+
+PCF -left-> CosmosSignalStream : Write account closes to signal stream
+PCF --> DeleteAgents : Send filtered closes to agents
+
+CosmosSignalStream --> CosmosDeleteAgents : Agents consume from signal stream
+
+@enduml

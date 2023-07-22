@@ -1,0 +1,49 @@
+{
+    "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+
+    "ServiceMetadata": {
+        "ServiceGroup": "ADXBuildOut",
+        "Environment": "Prod"
+    },
+
+    "ServiceResourceGroupDefinitions": [
+    {
+        "Name": "adxBuildOutServiceResourceDefinition",
+        "ServiceResourceDefinitions": [
+        {
+            "Name":"ClusterDB",
+            "ComposedOf":
+            {
+                "arm": 
+                {
+                  "templatePath": "Templates\\ClusterDB.Template.json",
+                  "parametersPath": "Parameters\\ClusterDB.parameters.json"
+                },
+                "extension": 
+                {
+                  "rolloutParametersPath": "RolloutParameters\\ClusterDB.RolloutParameters.json"
+                }
+            }    
+        }
+        ]
+    }
+    ],
+
+    "serviceResourceGroups": [{
+        "AzureResourceGroupName": "ADG-CS-GENEVA-KUSTO-RG",
+        "Location": "westus",
+        "InstanceOf": "adxBuildOutServiceResourceDefinition",
+        "AzureSubscriptionId": "4e261d67-9395-4cec-a519-14053c4765e3",
+        "serviceResources": [{
+            "name": "ClusterDB",
+            "instanceOf": "ClusterDB"
+        }
+        ],
+        "scopeTags": [
+        {
+            "name": "adxBuildOut"
+        }]
+    }
+    ]
+}

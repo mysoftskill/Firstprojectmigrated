@@ -1,0 +1,87 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "msdeployPackageUrl"
+  ],
+  "parameters": {
+    "deploymentEnvironment": {
+      "value": "CI2"
+    },
+    "azureRegion": {
+      "value": "WestUS2"
+    },
+    "appName": {
+      "value": "WorkItemProcessorCi2"
+    },
+    "ShouldUseAADToken": {
+      "value": true
+    },
+    "msdeployPackageUrl": {
+      "value": "Bin\\WorkItemProcessor.zip"
+    },
+    "storageName": {
+      "value": "pafinfrawestus2ci2"
+    },
+    "storageAccountKind": {
+      "value": "StorageV2"
+    },
+    "keyVaultName": {
+      "value": "paf-ci2-ame"
+    },
+    "pafCoreResourceGroup": {
+      "value": "PAF-NONPROD-RG"
+    },
+    "pafCoreResourceLocation": {
+      "value": "westus2"
+    },
+    "pdmsResourceId": {
+      "value": "ff3a41f1-6748-48fa-ba46-d19a123ae965"
+    },
+    "pdmsBaseUrl": {
+      "value": "https://ci2.management.privacy.microsoft-int.com"
+    },
+    "pafUamiId": {
+      "value": "9396613a-ec0d-4102-83a2-b079b69566f9"
+    },
+    "pafUamiName": {
+      "value": "NGP-PAF-NonProd"
+    },
+    "variantUpdateTiming": {
+      "value": "0 0 0 * * *" // Runs at midnight every day
+    },
+    "variantRemoveTiming": {
+      "value": "0 5 0 * * *" // Runs at 5 minutes after midnight
+    },
+    "variantRequestQueue": {
+      "value": "paf-variantrequests-ci2"
+    },
+    "variantRequestProjectUrl": {
+      "value": "https://dev.azure.com/nextgenpriv"
+    },
+    "variantRequestProjectName": {
+      "value": "NGP-Test"
+    },
+    "enableNonProdFunctionality": {
+      "value": true
+    },
+    "virtualNetwork_name": {
+      "value": "paf-vnet-ci2"
+    },
+    "genevaMonitoringTenant": {
+      "value": "ADGCS-CI2-WESTUS2"
+    },
+    "genevaMonitoringRole": {
+      "value": "PAF.Function"
+    },
+    "genevaMetricPrefixName": {
+      "value": "PAF.Function"
+    },
+    "genevaMetricAccount": {
+      "value": "ADGCS_NonProdHotPath"
+    },
+    "pafConfigEndPoint": {
+      "value": "https://adgcs-nonprod-config.azconfig.io"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<operations>
+  <operation name="Probe"
+             method="GET"
+             regex="^/probe$"
+             excludeFromTelemetry="true" />
+</operations>

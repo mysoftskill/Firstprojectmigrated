@@ -1,0 +1,41 @@
+<Project>
+  <!--
+    Set all package versions here. 
+	Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+	Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+	Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+  <Import Project="..\Build\Directory.Build.props" />
+  <ItemGroup>
+    <PackageReference Update="ConvertToPlayableAudio" Version="[1.0.2]" />
+    <PackageReference Update="ICM.SDK" Version="[1.0.1]" />
+    <PackageReference Update="Microsoft.Azure.Cosmos.Direct" Version="[3.21.1]" />
+    <PackageReference Update="Microsoft.Azure.Cosmos.Table" Version="[2.0.0-preview]" />
+    <PackageReference Update="Microsoft.Azure.ServiceBus.EventProcessorHost" Version="[5.0.1]" />
+    <PackageReference Update="Microsoft.Cosmos.VcClient" Version="[2.0.8]" />
+    <PackageReference Update="Microsoft.Extensions.Primitives" Version="7.0.0" />
+    <PackageReference Update="Microsoft.Family.Client" Version="[1.0.19077.6]" />
+    <PackageReference Update="Microsoft.Family.Client.JsonWebToken" Version="[1.0.19077.6]" />
+    <PackageReference Update="Microsoft.Identity.ServiceEssentials.Authentication" Version="1.13.1" />
+    <PackageReference Update="Microsoft.Identity.ServiceEssentials.Modules.TrV2Module" Version="2.4.1" />
+    <PackageReference Update="Microsoft.IdentityModel.S2S" Version="[3.42.1]" />
+    <PackageReference Update="Microsoft.IdentityModel.S2S.Configuration" Version="3.42.1" />
+    <PackageReference Update="Microsoft.IdentityModel.S2S.Tokens" Version="[3.42.1]" />
+    <PackageReference Update="Microsoft.IdentityModel.S2S.Tokens.Jwt" Version="[6.25.1]" />
+    <PackageReference Update="Microsoft.IdentityModel.Tokens.JWT" Version="[0.1.0]" />
+    <PackageReference Update="Microsoft.Membership.Communications.Client" Version="[9.0.18249.1]" />
+    <PackageReference Update="Microsoft.OSGS.HttpClientCommon" Version="[9.0.14236.1]" />
+    <PackageReference Update="Microsoft.Oss.Membership.CommonCore" Version="[9.0.16313.1]" />
+    <PackageReference Update="Microsoft.QualityTools.Testing.Fakes" Version="[16.11.230815]" />
+    <PackageReference Update="Microsoft.ServiceFabric" Version="[8.0.521]" />
+    <PackageReference Update="Microsoft.SqlServer.Types" Version="[11.0.2]" />
+    <PackageReference Update="Microsoft.XboxLive.Auth" Version="[4.0.1704.10007]" />
+    <PackageReference Update="RelativitySchemas.Library" Version="[2.102.0]" />
+    <PackageReference Update="ServiceManager.Tools" Version="[1.0.0.9]" />
+    <PackageReference Update="SocialAccessor.Client.Library" Version="[5.3.1]" />
+    <PackageReference Update="TransientFaultHandling.Core" Version="[5.1.1209.1]" />
+    <PackageReference Update="WinLiveIdToolkit.Library" Version="[16.3.1923.703]" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,47 @@
+@startuml PcfAgentCommandConsumption
+
+participant Agent
+participant PCF #SeaGreen
+participant CosmosDBQueue
+participant AzureQueue #SkyBlue
+
+Agent -> PCF : Get Commands
+
+PCF -> CosmosDBQueue : Get Commands
+CosmosDBQueue --> PCF : Return Commands
+
+PCF -> PCF : Build lease receipts
+
+alt has more room for commands
+    PCF -> AzureQueue : Get Commands
+    AzureQueue --> PCF : Return commands
+    PCF -> PCF : Build lease receipts
+
+    PCF -> PCF : Combine command results
+end
+
+PCF --> Agent : Return Commands
+
+loop for each command
+    Agent -> Agent : Process commands
+    Agent -> PCF : Checkpoint Command
+    PCF -> PCF : Check lease receipt
+    alt from cosmos db queue
+        PCF -> CosmosDBQueue : Mark complete
+        CosmosDBQueue --> PCF : Ack
+    else from azure queue
+        PCF -> AzureQueue : Delete command
+        AzureQueue --> PCF : Ack
+    end
+
+    PCF --> Agent : Ack
+end
+
+legend
+    |= |= Type |
+    |<back:SeaGreen>   </back>| Update Required |
+    |<back:SkyBlue>   </back>| New |
+    |<back:LightYellow>   </back>| No Change |
+endlegend
+
+@enduml

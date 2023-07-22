@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "ngpproxyff"
+    },
+    "applicationTypeName": {
+      "value": "FrontdoorStandingQueryExtensionManagerAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "5.2.105"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\StandingQueryExtensionManagerApp\\FrontdoorStandingQueryExtensionManagerApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "FrontdoorStandingQueryExtensionManagerApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)",
+        "SQE_MAMetricsAccount": "NGPProxy-FFPROD",
+        "SQE_MAConfigNamespace": "NGPProxy",
+        "SQE_MonitoringTenant": "ADGCS-FF-usgovarizona",
+        "SQE_MonitoringRole": "NGPProxy.Frontdoor",
+        "SQE_MonitoringListeningPort": "5010",
+        "SQE_ClusterName": "ngpproxyff",
+        "SQE_ClusterPath": "ngpproxyff.usgovarizona.cloudapp.usgovcloudapi.net:19000",
+        "CertificateThumbprint": "",
+        "CertificateSubjectName": "adg-cs.cluster.prod.ngpproxy.microsoftonline.us",
+        "RunDebug": "false"
+      }
+    }
+  }
+}

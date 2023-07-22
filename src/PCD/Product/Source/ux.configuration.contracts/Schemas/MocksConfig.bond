@@ -1,0 +1,6 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IMocksConfig
+{
+	10: required bool AllowMocks;
+}

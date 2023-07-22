@@ -1,0 +1,61 @@
+@startuml PcfSequence
+
+participant PXS #SeaGreen
+participant PcfPxsController
+participant LifeCycleEventHub
+participant PublishCommandAzureQueue
+participant CommandIngester #SeaGreen
+participant AgentAssetGroupCosmosDbQueue
+participant AgentAzureQueue #SkyBlue
+
+PXS -> PcfPxsController : Post Account Close Commands
+
+note over LifeCycleEventHub
+    This will be the only time a life cycle
+    event is published for age out commands
+end note
+PcfPxsController -> LifeCycleEventHub : Publish command start
+LifeCycleEventHub --> PcfPxsController : Ack
+
+PcfPxsController -> PublishCommandAzureQueue : Publish to command queue for filtering
+PublishCommandAzureQueue --> PcfPxsController : Ack commands queued
+
+PcfPxsController --> PXS : Ack Commands
+
+note over CommandIngester
+    There's some additional queuing and logic
+    before getting to command ingester that
+    shouldn't change
+end note
+PublishCommandAzureQueue -> CommandIngester : Commands get to command ingester
+
+alt is non age out command
+    note over AgentAssetGroupCosmosDbQueue
+        Commands sent to Cosmos DB end up having
+        life cycle events go into event hub.
+    end note
+
+    CommandIngester -> AgentAssetGroupCosmosDbQueue : Enqueue work for agent
+    AgentAssetGroupCosmosDbQueue --> CommandIngester : Ack
+else is age out command
+    note over AgentAzureQueue
+        Azure Queued Commands will not have life
+        cycle events go into event hub, multiple
+        asset groups for an agent will <i>currently</i>
+        share an azure queue.
+    end note
+
+    CommandIngester -> AgentAzureQueue : Enqueue work for agent
+    AgentAzureQueue --> CommandIngester : Ack
+end
+
+CommandIngester --> PublishCommandAzureQueue : Remove from queue
+
+legend
+    |= |= Type |
+    |<back:SeaGreen>   </back>| Update Required |
+    |<back:SkyBlue>   </back>| New |
+    |<back:LightYellow>   </back>| No Change |
+endlegend
+
+@enduml

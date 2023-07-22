@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Microsoft.PrivacyServices.UX.Deployment.IisRewrite</id>
+    <version>1.0.1</version>
+    <authors>alexkole</authors>
+    <owners>MEEPCDEng</owners>
+    <projectUrl>https://www.microsoft.com/en-us/download/details.aspx?id=47337</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Microsoft URL Rewrite Module 2.0 for IIS (x64).</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>PCD PDMS UX Deployment IIS Rewrite</tags>
+  </metadata>
+  <files>
+    <file src="rewrite_amd64.msi" target="" />
+  </files>
+</package>

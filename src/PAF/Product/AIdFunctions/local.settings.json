@@ -1,0 +1,48 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "PafFunctionUrl": "http://localhost:7071",
+
+    // Geneva settings
+    // fake info just in case
+    "MonitoringTenant": "ADGCS-Development",
+    "MonitoringRole": "PAF.AIdFunction",
+    "MetricAccount": "DevAccount",
+    "MetricPrefixName": "PAF.Function",
+    "AppName": "AnaheimIdProcessor-Development",
+
+    // App Configuration settings
+    "AzureAppConfigEndpoint": "",
+
+    // Connection Strings for local dev to suppress warnings
+    "PAF_AID_BLOBSTORAGE_HOST": "",
+    "PAF_AID_EVENTHUB_HOST": "",
+    "PXS_DEVICE_DELETE_EVENTHUB_HOST": "",
+
+    // Anaheim Id settings
+    "PAF_AID_BLOBSTORAGE_HOST__serviceUri": "https://aidstorageonebox.blob.core.windows.net/",
+    "PAF_AID_BLOBSTORAGE_HOST__blobServiceUri": "https://aidstorageonebox.blob.core.windows.net/",
+    "PAF_AID_BLOBSTORAGE_HOST__queueServiceUri": "https://aidstorageonebox.queue.core.windows.net/",
+    "PAF_AID_EVENTHUB_NAME": "anaheimid",
+    "PAF_AID_EVENTHUB_HOST__fullyQualifiedNamespace": "aid-eventhub-onebox.servicebus.windows.net",
+    "PAF_AID_STORAGE_ACCOUNT_NAME_01__serviceUri": "https://aidstorageonebox.queue.core.windows.net/",
+    "PAF_AID_STORAGE_ACCOUNT_NAME_02__serviceUri": "https://aidstorageonebox.queue.core.windows.net/",
+    "PAF_AID_QUEUE_NAME_01": "paf-anaheimid-qn-01",
+    "PAF_AID_QUEUE_NAME_02": "paf-anaheimid-qn-02",
+    "PXS_DEVICE_DELETE_EVENTHUB_NAME": "devicedeletes",
+    "PXS_DEVICE_DELETE_EVENTHUB_HOST__fullyQualifiedNamespace": "aid-eventhub-onebox.servicebus.windows.net",
+    "PXS_DEVICE_DELETE_EVENTHUB_CONSUMER_GROUP": "mock",
+    "AID_REDIS_CACHE_ENDPOINT": "adgcs-onebox-cache.redis.cache.windows.net",
+    "AID_REDIS_CACHE_PORT": "6380",
+    "AID_REDIS_CACHE_PASSWORD_NAME": "redis-password",
+    "AID_REDIS_PASSWORD_KEY_VAULT_ENDPOINT": "https://aid-akv-onebox.vault.azure.net/"
+  },
+  "FeatureManagement": {
+    "PAF_AID_RunMockAidEventHubAsync_Enabled": true,
+    "PAF_AID_ICMConnector_Enabled": true,
+    "PAF_AID_ICMMockTestFiles_Enabled": false,
+    "PAF_AID_EventsToQueue_Enabled":  true
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "FeatureManagement": {
+    "MultiTenantCollaboration": true,
+    "TestFeatureTypeStringInclude": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Include",
+            "Value": "arg1, arg2"
+          }
+        }
+      ]
+    },
+    "TestFeatureTypeStringExclude": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Exclude",
+            "Value": "arg1, arg2"
+          }
+        }
+      ]
+    },
+    "TestFeatureTypeIntInclude": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Include",
+            "Value": "100, 200"
+          }
+        }
+      ]
+    },
+    "TestFeatureTypeIntExclude": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Exclude",
+            "Value": "100, 200"
+          }
+        }
+      ]
+    },
+    "TestFeatureTypeGreaterThan": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": ">",
+            "Value": 100
+          }
+        }
+      ]
+    },
+    "TestFeatureTypeLessThan": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "<",
+            "Value": 50
+          }
+        }
+      ]
+    },
+    "TestFeatureTypePercentage": {
+      "EnabledFor": [
+        {
+          "Name": "Microsoft.Percentage",
+          "Parameters": {
+            "Value": 50
+          }
+        }
+      ]
+    },
+    "TestFeatureTypeProperty": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Include",
+            "Key": "OID",
+            "Value": "60,90"
+          }
+        },
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Include",
+            "Key": "PID",
+            "Value": "10,20"
+          }
+        }
+      ]
+    },
+    "PCF.CONFIGURED_PCD_APP_IDS": "foo,bar"
+  }
+}

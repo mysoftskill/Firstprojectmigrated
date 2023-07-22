@@ -1,0 +1,45 @@
+<RPSServer>
+    <!-- Contains a list of Windows Live ID service environments. The element contains the URLs from which RPS can download the RPSNetwork.xml file for that environment. Required and should not be modified. -->
+    <Environment>
+        <Production>nexus.passport.com/public/partner/rpsnetwork4.xml</Production>
+        <PPE>nexus.passport-ppe.com/public/partner/rpsnetwork4.xml</PPE>
+        <INT>nexus.passport-int.com/public/partner/rpsnetwork4.xml</INT>
+    </Environment>
+    <!-- Contains the RPS server settings such as which server to authenticate against. Leave defaults. -->
+    <NetworkServices>
+        <Url>nexus.passport-int.com/public/partner/rpsnetwork4.xml</Url>
+        <Proxy>http://itgproxy:80</Proxy>
+        <PollingInterval>86400</PollingInterval>
+        <ServiceAccount>NT AUTHORITY\NetworkService</ServiceAccount>
+        <CurrentEnvironment>INT</CurrentEnvironment>
+    </NetworkServices>
+    <!-- Contains the configuration for your server. A site named "default" must be present. RPS API identify sites using SiteName attribute. -->
+    <Sites>
+        <Site SiteName="default">
+            <LanguageId>1033</LanguageId>
+        </Site>
+        <!-- Site for access token validation. Used by PrivacyExperienceService. -->
+        <Site SiteName="s2sapp.pxs.api.account.microsoft.com">
+            <SiteId>295218</SiteId>
+            <AuthPolicy>S2S_24HOURS_MUTUALSSL</AuthPolicy>
+        </Site>
+        <!-- Site for user proxy ticket validation. Used by PrivacyExperienceService. -->
+        <Site SiteName="s2suser.pxs.api.account.microsoft.com">
+            <DisableCookies>1</DisableCookies>
+            <AuthPolicy>MBI_SSL</AuthPolicy>
+            <DisableProxyValidation>1</DisableProxyValidation>
+        </Site>
+        <!-- Test site for validating a user ticket and converting it to a user proxy ticket. Used by the watchdog, smoke tests, and test client. -->
+        <Site SiteName="pxstest.api.account.microsoft.com">
+            <SiteId>295750</SiteId>
+            <DisableCookies>1</DisableCookies>
+            <AuthPolicy>MBI_SSL</AuthPolicy>
+        </Site>
+        <!-- Site name used for long lived proxy ticket validation (for example PCD copy/pasted tickets). -->
+        <!-- AuthPolicy recommended by wibartle -->
+        <Site SiteName="s2suser-long.pxs.api.account.microsoft.com">
+            <DisableCookies>1</DisableCookies>
+            <AuthPolicy>NFS_1WK_COMPACT_SSL</AuthPolicy>
+        </Site>
+    </Sites>
+</RPSServer>

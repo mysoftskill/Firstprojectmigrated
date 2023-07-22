@@ -1,0 +1,75 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Registering a data agent declares that an agent, such as a delete processor, is covering specified assets. This is important
+            to verify GDPR compliance of assets. If you are unclear on whether you need to perform this step, please follow
+            the <a href="https://aka.ms/ngphome" target="_blank"
+                   mee-hyperlink>NGPX Onboarding Quick Start</a>.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">
+                IMPORTANT: Registering an agent will not enable processing for your data. You must code and deploy a functional agent to be compliant.
+            </span>
+        </p>
+        <p mee-paragraph data-use-cms>
+            First, on this page you will register the data agent. On the next page, you will specify the assets covered by this agent.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Name</span> is a friendly name of your choosing for the agent.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Description</span> is for additional information about your agent.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Sharing</span> is for allowing other teams to use your agent to link their assets to.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Third party</span> is for identifying if your agent is a third party proxy data agent
+            and handles passing DSRs to third parties.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Connection details</span> declares which protocol your agent is using. Most people will
+            be using the Cosmos Delete Signal. Changes here can take up to 24 hours to propagate.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Region</span> indicates which cloud instance the agent is deployed in.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Data Residency</span> indicates the data boundary in which the Region(cloud instance) lies. 
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Supported clouds</span> is a list of cloud instances the agent can process commands upon.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeEditDataAgentComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner="$ctrl.model.owner"></pcd-default-page-context>
+
+                <pcd-agent-editor owner="$ctrl.model.owner"
+                                  agent="$ctrl.model.dataAgent"
+                                  on-saved="$ctrl.onDataAgentUpdated(updatedAgent)"
+                                  modal-return-location="$ctrl.modalReturnLocation"></pcd-agent-editor>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

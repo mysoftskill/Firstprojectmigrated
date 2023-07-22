@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "PROD.uswest.ServiceModel.json",
+    "Name": "PCF-PROD-USWEST-COMPLIANCE-SERVICES",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-PcfFrontdoorApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PcfFrontdoorApp-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    },
+    {
+      "Name": "Deploy-PcfWorkerApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PcfWorkerApp-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    },
+    {
+      "Name": "Deploy-PcfWhatIfApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PcfWhatIfApp-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    },
+    {
+      "Name": "Deploy-QueueDepthApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "QueueDepthApp-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    }
+  ]
+}

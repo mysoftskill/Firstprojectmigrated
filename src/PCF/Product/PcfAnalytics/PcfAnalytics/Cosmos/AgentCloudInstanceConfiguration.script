@@ -1,0 +1,73 @@
+﻿//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+
+// This script get the agents' SupportedCloudInstances and Issuer to determine the location
+
+// Asimov References:
+MODULE "Asimov.Batch.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddDays(-3),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddDays(-1),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@"); // v1
+
+#DECLARE aadAgent_outputPath string = "/my/aadAgent.ss";
+#DECLARE msaAgent_outputPath string = "/my/msaAgent.ss";
+#DECLARE streamExpiry string = "2";
+
+#DECLARE cloud_env string = "Production";
+#DECLARE cloud_name string = "PXS";
+
+
+SllBaseQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+    WHERE cloud_name == @cloud_name
+    AND cloud_environment == @cloud_env;
+
+CheckpointObjectProcessor =
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "baseData.operationName:OperationName:string",
+        "baseData.requestStatus:RequestStatus:int64",
+        "Properties.LeaseRecieptAgentId:AgentId:string",
+        "Properties.SupportedCloudInstances:SupportedCloudInstances:string",
+        "Properties.S2SAuthProvider:S2SAuthProvider:string",
+        "Properties.AADSecurityTokenIssuer:AADSecurityTokenIssuer:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+    HAVING RequestStatus == 3 AND OperationName == "API.PostCheckpoint.1.0";
+
+aadAgent = 
+    SELECT DISTINCT Guid.Parse(AgentId) AS AgentId,
+           SupportedCloudInstances,
+           AADSecurityTokenIssuer
+    FROM CheckpointObjectProcessor
+    WHERE S2SAuthProvider == "AAD";
+
+msaAgent = 
+    SELECT DISTINCT Guid.Parse(AgentId) AS AgentId,
+           SupportedCloudInstances
+    FROM CheckpointObjectProcessor
+    WHERE S2SAuthProvider == "MSA";
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT aadAgent
+TO SSTREAM @aadAgent_outputPath
+    HASH CLUSTERED BY AgentId
+    SORTED BY AgentId
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT msaAgent
+TO SSTREAM @msaAgent_outputPath
+    HASH CLUSTERED BY AgentId
+    SORTED BY AgentId
+WITH STREAMEXPIRY @streamExpiry;

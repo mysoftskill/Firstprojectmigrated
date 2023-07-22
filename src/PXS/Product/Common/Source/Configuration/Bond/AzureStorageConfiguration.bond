@@ -1,0 +1,26 @@
+﻿import "CommonConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+enum AzureStorageObjectType
+{
+    Blob,
+    File,
+    Queue,
+    Table,
+};
+
+struct IAzureStorageConfiguration
+{
+    1 : required string AccountName;
+    2 : required string AuthKeyEncryptedFilePath;
+    3 : optional bool UseEmulator = false;
+    4 : optional list<ITaggedServicePointConfiguration> OverrideServicePointConfigurations;
+    5 : optional IServicePointConfiguration ServicePointConfiguration;
+    6 : optional string StorageEndpointSuffix = "core.windows.net";
+    7 : optional string ResourceId = "https://storage.azure.com/";
+    8 : optional string AnaheimIdQueueName = "anaheimid";
+    9 : optional string AnaheimIdUamiId;
+    10 : optional string RecurringDeleteQueueName;
+    11 : optional string RefreshPreVerifierQueueName;
+};

@@ -1,0 +1,7 @@
+<mee-select ng-model="$ctrl.model"
+            menu-style="border">
+    <label data-use-cms>Priority</label>
+    <select>
+        <option ng-repeat="item in $ctrl.priorityPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+    </select>
+</mee-select>

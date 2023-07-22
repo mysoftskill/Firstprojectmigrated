@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+  <Words>
+    <!-- 
+      This is a list of case-insensitive words that exist in the dictionary
+      but you do not want to be recognized by IdentifiersShouldBeSpelledCorrectly.
+      Do not add deprecated terms to this list, instead add these to the 
+      <Deprecated> section below.
+    -->
+    <Unrecognized>
+      <Word>wpcom</Word>
+    </Unrecognized>
+    <!--
+      This is a list of case-insensitive words that do not exist in the dictionary
+      but you still want to be considered as recognized by 
+      IdentifiersShouldBeSpelledCorrectly. Do not add compound words (e.g. 'FileName') 
+      to this list as this will cause CompoundWordsShouldBeCasedCorrectly to fire on 
+      usages of the compound word stating that they should be changed to their discrete equivalent 
+      (for example 'FileName' -> 'Filename').
+    -->
+    <Recognized>
+      <Word>Auth</Word>
+      <Word>Abch</Word>
+      <Word>Acento</Word>
+      <Word>Ack</Word> <!-- Acknowledgement typically from a service-->
+      <Word>Affinitized</Word>
+      <Word>Agc</Word>
+      <Word>Agps</Word>
+      <Word>Aii</Word>
+      <Word>Aku</Word>
+      <Word>Affinitized</Word>
+      <Word>Alipay</Word>
+      <Word>Anid</Word>
+      <Word>Anonymized</Word>
+      <Word>Apns</Word>
+      <Word>Archiver</Word>
+      <Word>Arfcn</Word>
+      <Word>Arcsinh</Word>
+      <Word>Bll</Word>
+      <Word>Blocklisted</Word>
+      <Word>Bic</Word>
+      <Word>Bmr</Word> <!-- Build Migrate Restore service -->
+      <Word>Bss</Word>
+      <Word>Bssid</Word>
+      <Word>Bssids</Word>
+      <Word>Bvt</Word> <!-- Build Verification Test -->
+      <Word>Calg</Word>
+      <Word>Cas</Word>
+      <Word>Cdma</Word>
+      <Word>Cli</Word> <!-- Command Line Interface -->
+      <Word>Ccmp</Word> <!-- Wifi encryption -->
+      <Word>Cco</Word>
+      <Word>Ccp</Word> <!-- Command Channel Platform -->
+      <Word>Cd</Word>
+      <Word>Cdata</Word>
+      <Word>Cdf</Word>
+      <Word>Cdl</Word>
+      <Word>Cdp</Word>
+      <Word>Cdn</Word>
+      <Word>Charset</Word>
+      <Word>Changeset</Word> <!-- TFS term -->
+      <Word>Checkinpolicy</Word>
+      <Word>Checkin</Word>
+      <Word>Clusterer</Word>
+      <Word>cmo</Word>
+      <Word>Comm</Word> <!-- abbreviation from Commerce -->
+      <Word>Composable</Word>
+      <Word>Conx</Word> <!-- Consumer eXperience -->
+      <Word>Cpx</Word> <!-- Consumer and Partner eXperience -->
+      <Word>Crc</Word>
+      <Word>Csat</Word>
+      <Word>Csv</Word> <!-- Comma separated values -->
+      <Word>Ctag</Word>
+      <Word>Cvc</Word>
+      <Word>Cypher</Word>
+      <Word>Daos</Word>
+      <Word>Dataset</Word>
+      <Word>Dac</Word> <!-- SQL Data-tier Application -->
+      <Word>Db</Word>  <!-- Database, generic -->
+      <Word>Dcs</Word> <!-- Device Certification Service -->
+      <Word>Dcp</Word> <!-- Data Collection Platform -->
+      <Word>Deallocate</Word>
+      <Word>Dek</Word> <!-- Data Encryption Key -->
+      <Word>Deprovision</Word>
+      <Word>Deprovisioned</Word>
+	  <Word>Dgml</Word>
+      <Word>Dirs</Word>
+      <Word>Dms</Word> <!-- Delay in Milli-Second -->
+      <Word>Dreamspark</Word>
+      <Word>Drm</Word>
+      <Word>Dsss</Word> <!--PHY Type-->
+      <Word>Dtr</Word> <!-- Distributed Task Runner -->
+      <Word>Dts</Word> <!-- Distributed Task Scheduler-->
+      <Word>Dtsx</Word>
+      <Word>Eci</Word>  <!-- Edge Charging Interface -->
+      <Word>Ef</Word>  <!--Elementary File-->
+      <Word>Efons</Word> <!--Elementary File\Operator Name Software-->
+      <Word>Efspn</Word> <!--Elementary File\Service Provider Name-->
+      <Word>Earfcn</Word>
+      <Word>Eap</Word> <!--User Authentication Type-->
+      <Word>Ecno</Word>
+      <Word>Eggo</Word>
+      <Word>Eku</Word>
+      <Word>Ekus</Word>
+      <Word>Elo</Word>
+      <Word>Encrypter</Word>
+      <Word>Endianess</Word>
+      <Word>Enh</Word>
+      <Word>Erp</Word> <!--PHY Type-->
+      <Word>Ess</Word>
+      <Word>Etag</Word>
+      <Word>Etl</Word>
+      <Word>Etw</Word>
+      <Word>Eutramrl</Word>
+      <Word>Eval</Word>
+      <Word>Evals</Word>
+      <Word>Fe</Word> <!-- Front End -->
+      <Word>Fhss</Word> <!--PHY Type-->
+      <Word>Fqdn</Word>
+      <Word>Gid</Word>
+      <Word>Git</Word>
+      <Word>Gfs</Word> <!-- Global Foundation Service -->
+      <Word>Gluf</Word>
+      <Word>Gps</Word> <!-- Global Position System -->
+      <Word>Gst</Word>
+      <Word>Gtui</Word>
+      <Word>Gtup</Word>
+      <Word>Gsm</Word>
+      <Word>Gwp</Word> <!-- Genuine Windows Phone  -->
+      <Word>Gzip</Word>
+      <Word>Handshaker</Word>
+      <Word>Haxis</Word>
+      <Word>Hbi</Word>
+      <Word>Hconf</Word>
+      <Word>Hdop</Word>
+      <Word>Hepe</Word>
+      <Word>Herrperp</Word>
+      <Word>Herralong</Word>
+      <Word>Hrdss</Word> <!--PHY Type-->
+      <Word>Ht</Word> <!--PHY Type-->
+      <Word>Iban</Word>
+      <Word>Idl</Word>
+      <Word>Imap</Word>
+      <Word>Imei</Word>
+      <Word>Imsi</Word>
+      <Word>ini</Word>
+      <Word>Inicis</Word> <!-- A Korean payment instrument -->
+      <Word>Inetroot</Word>
+      <Word>Instantiator</Word>
+      <Word>Ir</Word> <!--PHY Type-->
+      <Word>Isd</Word> <!-- Issuer Security Domain -->
+      <Word>Isv</Word>
+      <Word>Jobman</Word>
+      <Word>Kaf</Word>
+      <Word>Kalman</Word>
+      <Word>Km</Word>
+      <Word>Kvp</Word>
+      <Word>Kvps</Word>
+      <Word>Lbi</Word>
+      <Word>Lolcat</Word>
+      <Word>Ldl</Word>
+      <Word>ldd</Word>
+      <Word>Lte</Word>
+      <Word>Lf</Word>
+      <Word>Lumia</Word>
+      <WorD>Mbi</WorD>
+      <Word>Mcc</Word>
+      <Word>Mcm</Word>
+      <Word>Meid</Word> <!-- Mobile Equipment Identity -->
+      <Word>Mef</Word> <!-- Managed Extensibility Framework -->
+      <Word>Memcache</Word>
+      <Word>Memcached</Word>
+      <Word>Mmc</Word> <!-- Microsoft Management Console -->
+      <Word>Mmf</Word>
+      <Word>Mnc</Word>
+      <Word>Mo</Word> <!-- Mobile Operator -->
+      <Word>Mobi</Word> <!-- MO Billing -->
+      <Word>Mox</Word> <!-- Mobile Operator eXperience -->
+      <Word>Moxy</Word> <!-- Mobile Operator eXperience -->
+      <Word>Mpn</Word> <!-- Microsoft Push Notification -->
+      <Word>Mpns</Word> <!-- Microsoft Push Notification Service -->
+      <Word>Mrl</Word>
+      <Word>Msa</Word>
+      <Word>Msm</Word>
+      <Word>Msli</Word>
+      <Word>Msp</Word>
+      <Word>Mspp</Word>
+      <Word>Mtps</Word>
+      <Word>Multicell</Word>
+      <Word>Mvc</Word> <!-- Model-View-Controller -->
+      <Word>Mvno</Word> <!-- Mobile Virtual Network Operator -->
+      <Word>Ndx</Word>
+      <Word>Nid</Word>
+      <Word>Nmr</Word>
+      <Word>Normalizer</Word>
+      <Word>Nsa</Word>
+      <Word>Nstl</Word>
+      <Word>Nt</Word>
+      <Word>Num</Word>
+      <Word>Oaep</Word>
+      <Word>Ofdm</Word> <!--PHY Type-->
+      <Word>Oid</Word>
+      <Word>Omniture</Word>
+      <Word>Onboarded</Word>
+      <Word>Onboarding</Word>
+      <Word>Ons</Word> <!--OperatorNameSoftware-->
+      <Word>Oobe</Word> <!-- Out Of Box Experience -->
+      <Word>Osgs</Word>
+      <Word>Oui</Word>
+      <Word>Otg</Word>
+      <Word>Outputter</Word>
+      <Word>Packageable</Word>
+      <Word>Peap</Word> <!--Authentication Type-->
+      <Word>Perf</Word> <!-- abbreviation from Performance -->
+      <Word>Pcs</Word>
+      <Word>Perp</Word>
+      <Word>Phy</Word> <!--Phy Type-->
+      <Word>Pkcs</Word>
+      <Word>Plugin</Word>
+      <Word>Pn</Word>
+      <Word>Png</Word> <!-- Portable Network Graphics -->
+      <Word>Po</Word>
+      <Word>Ppse</Word> <!-- Proximity Payment System Environment -->
+      <Word>Prioritizable</Word>
+      <Word>Prov</Word>
+      <Word>Provisioner</Word>
+      <Word>Psc</Word>
+      <Word>Psk</Word> <!-- Wifi Authentication -->
+      <Word>Pstn</Word>
+      <Word>Puid</Word>
+      <Word>Puids</Word>
+      <Word>Quadkey</Word>
+      <Word>Referer</Word>
+      <Word>Reflectable</Word>
+      <Word>Req</Word>
+      <Word>Resp</Word>
+      <Word>Retryable</Word>
+      <Word>revet</Word>
+      <Word>revetting</Word>
+      <Word>Rfu</Word>
+      <Word>Rig</Word>
+      <Word>Ro</Word>
+      <Word>Rnc</Word>
+      <Word>Rps</Word>
+      <Word>Rsa</Word>
+      <Word>Rscp</Word>
+      <Word>Rsna</Word> <!-- Wifi Authentication -->
+      <Word>Rsrp</Word>
+      <Word>Rsrq</Word>
+      <Word>Rss</Word>
+      <Word>Rssi</Word>
+      <Word>Rssdl</Word>
+      <Word>Runnable</Word>
+      <Word>Rts</Word> <!-- Ready to Send -->
+      <Word>Ruim</Word>
+      <Word>Rx</Word>
+      <Word>Scg</Word>
+      <word>Scm</word>
+      <Word>Scom</Word>
+      <Word>Scs</Word>
+      <Word>Sha</Word>
+      <Word>Sim</Word>
+      <Word>Sms</Word>
+      <Word>Sntp</Word>
+      <Word>Spn</Word>
+      <Word>Sq</Word>
+      <Word>Sqm</Word>
+      <Word>Sqrt</Word>
+      <Word>Srid</Word>
+      <Word>Ssd</Word> <!-- Supplemental Security Domain -->
+      <Word>Ssds</Word> <!-- Plural form of Supplemental Security Domain -->
+      <Word>Ssid</Word>
+      <Word>Ssis</Word>
+      <Word>Sso</Word>
+      <Word>Tac</Word>
+      <Word>Tdd</Word>
+      <Word>Tdscdma</Word>
+      <Word>Tfs</Word>
+      <Word>Timezone</Word>
+      <Word>Tin</Word>
+      <Word>Tkip</Word> <!-- Wifi encryption -->
+      <Word>Tld</Word>
+      <Word>Tlv</Word>
+      <Word>Tmf</Word>
+      <Word>Toc</Word>
+      <Word>Tok</Word>
+      <Word>Tokenizer</Word> <!-- aka lexical analyzer -->
+      <Word>Tos</Word>
+      <Word>Tou</Word>
+      <Word>Tps</Word>
+      <Word>Transcode</Word>
+      <Word>Transcoder</Word>
+      <Word>Transcoders</Word>
+      <Word>Transcoding</Word>
+      <Word>Trid</Word>
+      <Word>Trk</Word>
+      <Word>Tsm</Word> <!-- Trusted Service Manager -->
+      <Word>Tsv</Word> <!-- Tab separated values -->
+      <Word>Ttl</Word>
+      <Word>Tx</Word> <!--Transmit-->
+      <Word>Uarfcn</Word>
+      <Word>Umts</Word>
+      <Word>unbatch</Word>
+      <Word>unbatcher</Word>
+      <Word>Utm</Word>
+      <Word>Unpartitioned</Word>
+      <Word>Unpublish</Word>
+      <Word>Uploader</Word>
+      <Word>Usps</Word>
+      <Word>Util</Word> <!-- abbreviation from Utility -->
+      <Word>Utils</Word> <!-- abbreviation from Utilities -->
+      <Word>Wifi</Word> <!-- WiFi -->
+      <Word>Umts</Word>
+      <Word>Unbatch</Word>
+      <Word>Unbatched</Word>
+      <Word>Unbatcher</Word>
+      <Word>Unthrottled</Word>
+      <Word>Upn</Word>
+      <Word>Upsert</Word>
+      <Word>Utra</Word>
+      <Word>Wbo</Word>
+      <Word>Wgs</Word>
+      <Word>Validators</Word>
+      <Word>Vc</Word>
+      <Word>Vdop</Word>
+      <Word>Verr</Word>
+      <Word>Vma</Word>
+      <Word>Wam</Word> <!-- Web App Marketplace -->
+      <Word>Wap</Word>
+      <Word>Webstore</Word>
+      <Word>Wep</Word> <!-- Wifi encryption -->
+      <Word>Whitespace</Word>
+      <Word>Wlan</Word>
+      <Word>Wlcd</Word>
+      <Word>Wtt</Word>
+      <Word>Wp</Word> <!-- Windows Phone -->
+      <Word>Wpa</Word> <!-- Wifi authentication -->
+      <Word>Wpapsk</Word> <!-- Wifi authentication -->
+      <Word>Wpc</Word> <!-- Windows Phone Client -->
+      <Word>wplc</Word>
+      <Word>Wps</Word> <!-- Windows Phone Services -->
+      <Word>Xap</Word>
+      <Word>Xbl</Word>
+      <Word>Xceed</Word>
+      <Word>Xds</Word> <!-- eXtensible Data Service -->
+      <Word>Xna</Word>
+      <Word>Xpand</Word>
+      <Word>Xpander</Word>
+      <Word>Xpath</Word>
+      <Word>Xtra</Word>
+      <Word>Ypid</Word> <!-- Yellow Page Id (from Bing Phonebook) -->
+      <Word>revet</Word>
+      <Word>revetting</Word>
+      <Word>Cnd</Word>
+      <Word>Param</Word>
+      <Word>Params</Word>
+      <Word>Vs</Word>
+      <Word>Instrumentable</Word>
+      <Word>Argb</Word>
+      <Word>argb</Word>
+      <Word>Dnses</Word>
+      <Word>Octree</Word>
+      <Word>Psnr</Word>
+      <Word>tcs</Word>
+      <Word>str</Word>
+      <Word>urlkey</Word>
+      <Word>Usim</Word>
+    </Recognized>
+    <Deprecated>
+      <!-- 
+        This is a list of deprecated terms with their preferred alternates and is 
+        used by UsePreferredTerms. The deprecated terms are case-insensitive, 
+        however, make sure to Pascal-case the preferred alternates. If a word 
+        does not have a preferred alternate, simply leave it blank.
+      -->
+    </Deprecated>
+    <Compound>
+      <!-- 
+        This is a list of discrete terms with their compound alternates and is used by 
+        CompoundWordsShouldBeCasedCorrectly. These are words that exist in the 
+        dictionary as discrete terms, however, should actually be cased as compound words. 
+        For example, 'Filename' exists in the dictionary and hence the spelling rules will 
+        not see it as unrecognized but its actual preferred usage is 'FileName'; adding it
+        below causes CompoundWordsShouldBeCasedCorrectly to fire. The discrete terms are 
+        case-insensitive, however, be sure to Pascal-case the compound alternates.
+        Any discrete terms added below automatically get added to the list of discrete
+        exceptions to prevent CompoundWordsShouldBeCasedCorrectly from firing both on the
+        compound word (for example 'WhiteSpace') and its discrete alternate (for example 
+        'Whitespace').
+      -->
+      <Term CompoundAlternate="HyperLink">hyperlink</Term>
+      <Term CompoundAlternate="CounterTypes">countertypes</Term>
+    </Compound>
+    <DiscreteExceptions>
+      <!--
+        This is a list of case-insensitive exceptions to the CompoundWordsShouldBeCasedCorrectly 
+        discrete term check. As this check works solely on the basis of whether two consecutive
+        tokens exists in the dictionary, it can have a high false positive rate. For example, 
+        'onset' exists in the dictionary but the user probably intended it to be 'OnSet'. 
+        Adding this word below prevents this rule from firing telling the user to change 'OnSet' 
+        to 'Onset'.
+      -->
+      <Term>backup</Term>
+      <Term>dataset</Term>
+      <Term>gzip</Term>
+      <Term>preprocess</Term>
+      <Term>preregistered</Term>
+      <Term>preregistration</Term>
+      <Term>timezone</Term>
+      <Term>turnoff</Term>
+      <Term>website</Term>
+      <Term>whitespace</Term>
+      <Term>TypeSet</Term>
+      <Term>ETag</Term>
+      <Term>urlStr</Term>
+      <Term>RunTime</Term>
+      <Term>RigId</Term>
+      <Term>UrlKey</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>ACL</Acronym> <!-- Access Control List -->
+      <Acronym>AGPS</Acronym>
+      <Acronym>BAS</Acronym>
+      <Acronym>BLL</Acronym>
+      <Acronym>BMR</Acronym>
+      <Acronym>BVT</Acronym>
+      <Acronym>CDF</Acronym>
+      <Acronym>CDL</Acronym> <!-- Cosmos Data Loader -->
+      <Acronym>CDR</Acronym>
+      <Acronym>CSAT</Acronym>
+      <Acronym>Dcp</Acronym> <!-- Data Collection Platform -->
+      <Acronym>DCS</Acronym>
+	  <Acronym>DGML</Acronym> <!-- Directed Graph Markup Language -->
+      <Acronym>DIP</Acronym>
+      <Acronym>DIS</Acronym> <!-- Device Instance Service -->
+      <Acronym>DTOEM</Acronym> <!-- Original Equipment Manufacturer -->
+      <Acronym>ECI</Acronym> <!-- Mobi's Edge Charging Interface -->
+      <Acronym>EKU</Acronym>
+      <Acronym>ESRB</Acronym> <!-- ESRB rating -->
+      <Acronym>GWP</Acronym> <!-- Genuine Windows Phone -->
+      <Acronym>IMSI</Acronym>
+      <Acronym>Ip</Acronym>
+      <Acronym>ISV</Acronym>
+      <Acronym>GWP</Acronym>
+      <Acronym>GTUI</Acronym>
+      <Acronym>JCB</Acronym>
+      <Acronym>LDL</Acronym>
+      <Acronym>MAC</Acronym>
+      <Acronym>MDM</Acronym> <!-- Mater Data Management -->
+      <Acronym>MO</Acronym> <!-- Mobile Operator -->
+      <Acronym>MPN</Acronym>
+      <Acronym>MPNS</Acronym>
+      <Acronym>MSN</Acronym>
+      <Acronym>Msn</Acronym>
+      <Acronym>NMR</Acronym>
+      <Acronym>NPS</Acronym>
+      <Acronym>NSTL</Acronym>
+      <Acronym>OEM</Acronym> <!-- Original Equipment Manufacturer -->
+      <Acronym>OOBE</Acronym>
+      <Acronym>OUI</Acronym>
+      <Acronym>PEGI</Acronym> <!-- PEGI rating -->
+      <Acronym>POP</Acronym> <!-- Phone Operator Pairing -->
+      <Acronym>PUID</Acronym>
+      <Acronym>QSR</Acronym> <!-- Query Success Rate -->
+      <Acronym>RPS</Acronym>
+      <Acronym>RSA</Acronym>
+      <Acronym>SCS</Acronym>
+      <Acronym>SHA</Acronym>
+      <Acronym>SMS</Acronym>
+      <Acronym>TIN</Acronym>
+      <Acronym>TLS</Acronym>
+      <Acronym>TLV</Acronym>
+      <Acronym>TMF</Acronym>
+      <Acronym>TOC</Acronym>
+      <Acronym>TOS</Acronym>
+      <Acronym>TRX</Acronym>
+      <Acronym>TTL</Acronym>
+      <Acronym>USI</Acronym>  <!-- Unique Software Identifier -->
+      <Acronym>USK</Acronym> <!-- USK rating -->
+      <Acronym>WPC</Acronym>
+      <Acronym>WTT</Acronym>
+      <Acronym>XBL</Acronym>
+      <Acronym>XDS</Acronym> <!-- eXtensible Data Service -->
+      <Acronym>XML</Acronym>
+      <Acronym>Xml</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

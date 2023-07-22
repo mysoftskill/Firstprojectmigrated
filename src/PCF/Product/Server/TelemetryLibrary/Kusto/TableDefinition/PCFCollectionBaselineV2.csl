@@ -1,0 +1,3 @@
+﻿/// PCF Command Queue Depth Telemetry
+/// Kusto PCFCollectionBaselineV2 definition
+.create table PCFCollectionBaselineV2 (TaskId:string, TaskCreateTime:datetime, StartTime:datetime, EndTime:datetime, DbMoniker:string, CollectionId:string, AgentId:string, AssetGroupId:string, CommandType:string, CommandCount:long)

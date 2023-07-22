@@ -1,0 +1,35 @@
+<h1>Welcome to Next Generation Privacy (NGP)</h1>
+<p>You have successfully connected IcM to your team (<b>{0}</b>) in PCD. If this incident was not routed to the correct IcM team, you will need to create a <i>Routing Rule</i> to ensure future incidents are routed appropriately. Routing can be applied by specifying either <b>ownerId</b>, <b>agentId</b>, or <b>assetGroupId</b> in the routing rule. At least one is required.</p>
+
+<p>To do so, you will need to be a <i>Tenant Admin</i> or <i>Rule Manager</i> in IcM for your service, or <a href='https://portal.microsofticm.com/imp/TenantAndTeamIdLookup.aspx'>find your Service Admin</a>.</p>
+
+<h3>Create a Routing Rule</h3>
+<ol>
+<li>Navigate to <a href='https://portal.microsofticm.com/imp/RoutingRules.aspx'>IcM -> Administration -> Routing Rules</a></li>
+<li>Select <i>Add a Routing Rule</i></li>
+  <ul>
+  <li>Service: <i>[your service]</i></li>
+  <li>Cloud Instance: (All)</li>
+  <li>Routing Id: <font color='blue'><b><i>ownerId:{5}</i></b></font></li>
+  <li>Correlation Id: (blank)</li>
+  <li>Role: <i>[provide <b>assetGroupId</b> listed in incident]</i></li>
+  <li>Environment: (All)</li>
+  <li>DC/Region: (All)</li>
+  <li>Slice: (blank)</li>
+  <li>Instance/Cluster: <i>[provide <b>agentId</b> listed in incident]</i></li>
+  <li>Enforce Default Severity: (unchecked)</li>
+  <li>Escalate to Service: <i>[your service]</i></li>
+  <li>Escalate to Team: <i>[your team]</i></li>
+  </ul>
+</ol>
+
+<h3>Mapping Table*</h3>
+<ul>
+<li>Routing Id = ownerId:[guid]</li>
+<li>Role = assetGroupId:[guid]</li>
+<li>Instance/Cluster = agentId:[guid]</li>
+</ul>
+
+<p><font color='red'>*ownerId will always be provided. The assetGroupId and agentId will only be provided if it applies.</font></p>
+
+<p>For more information on <a href='https://icmdocs.azurewebsites.net/administration/rules/routing rules-overview.html'>Routing Rules</a>, please refer to <a href='https://icmdocs.azurewebsites.net/administration/rules/routing rules-overview.html'>IcM wiki</a>.</p>

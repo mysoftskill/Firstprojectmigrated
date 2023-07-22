@@ -1,0 +1,13 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successful call of LockWorker request.")]
+struct WorkItemSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseIncomingSucessEvent
+{
+    10: required string workerId;
+    20: required string expiryTime;
+    30: required string documentId;
+    40: required string etag;
+    50: required string state;
+}

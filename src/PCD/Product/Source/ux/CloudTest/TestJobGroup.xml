@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestJobGroup>
+    <ResourceSpec>
+        <Resource SKU="Standard_DS4_V2" Image="VS2019EnterpriseWS2019"/>
+    </ResourceSpec>
+    <Setup>
+        <BuildFiles>
+            <Copy Src="[BuildRoot]\outputs\build\intTest\*" Dest="[WorkingDirectory]\intTest" IsRecursive="true" />
+        </BuildFiles>
+        <Scripts>
+         <!--<Script Path="[WorkingDirectory]\intTest\CloudTest\I9nCloudTest.ps1"/> -->
+        </Scripts>
+    </Setup>
+    <TestJob Name="RunIntegrationTests"  TimeoutMins="20">
+        <Execution Type="Exe"
+                   Parser="NUnitXml"
+                   Path="[WorkingDirectory]\intTest\CloudTest\I9nCloudTest.cmd"/>
+    </TestJob>
+</TestJobGroup>

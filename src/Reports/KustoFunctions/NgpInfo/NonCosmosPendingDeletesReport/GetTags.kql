@@ -1,0 +1,7 @@
+let latestStream = toscalar(DataOwnerAssetsV2
+    | summarize max(SQLizerStreamDateId));
+DataOwnerAssetsV2
+    | where SQLizerStreamDateId == latestStream
+    | where AssetType != "CosmosStructuredStream" and AssetType != "CosmosUnstructuredStream"
+    | summarize Tags = make_set(parse_json(AllPrivacyTags)) by AssetGroupId
+    | mv-expand Tags

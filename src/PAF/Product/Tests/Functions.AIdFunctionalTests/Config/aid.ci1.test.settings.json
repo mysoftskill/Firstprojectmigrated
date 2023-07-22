@@ -1,0 +1,25 @@
+﻿{
+  "Values": {
+    // storage account name: queue name dictionary
+    // storage account name same as "storageName" in ARM template parameters
+    "AidQueuesStorageAccounts": [
+      {
+        "StorageAccountName": "aidstorageci1",
+        "QueueName": "paf-anaheimid-qn-01"
+      },
+      {
+        "StorageAccountName": "aidstorageci1",
+        "QueueName": "paf-anaheimid-qn-02"
+      }
+    ],
+    "DeploymentEnvironment": "CI1",
+    "AidClientId": "975e1332-de26-4ac9-b120-fe35fa68adf1",
+    "AmeTenantId": "33e01921-4d64-4f8c-a055-5bdaffd5e33d",
+    "CloudTestCertSubjectName": "cloudtest.privacy.microsoft-int.ms",
+    "MessageEncoding": "true",
+    "EventHubHostName": "aid-eventhub-ci1",
+    "EventHubName": "anaheimid",
+    "PxsApiHost": "sf-pxsci1.api.account.microsoft-int.com",
+    "PcfApiHost": "sf-ci1.pcf.privacy.microsoft-int.com"
+  }
+}

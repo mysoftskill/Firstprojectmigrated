@@ -1,0 +1,38 @@
+import "CommonConfiguration.bond" 
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IPrivacyPartnerAdapterConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required string BaseUrl;
+
+    // True to skip server cert validation
+    [UniquenessRule("Invariant")]
+    2 : optional bool SkipServerCertValidation = false;
+
+    [UniquenessRule("Invariant")]
+    3 : optional int32 TimeoutInMilliseconds = 10000;
+    
+    // The target site for the partner to which MSA S2S tokens are being sent. Optional some partners that do not use MSA S2S as the auth mechanism. (ie. PDOS)
+    [UniquenessRule("Invariant")]
+    4 : optional string MsaS2STargetSite;
+
+    // TODO: Update to PXS VE name once it's migrated
+    // The Perf-Counter-Category-Name.
+    [UniquenessRule("Invariant")]
+    5 : required string CounterCategoryName;
+    
+    [UniquenessRule("Invariant")]
+    7 : required IRetryStrategyConfiguration RetryStrategyConfiguration;
+
+    [UniquenessRule("Invariant")]
+    8 : optional IServicePointConfiguration ServicePointConfiguration;
+
+    9 : optional string PartnerId;
+
+    // the resource id that will be added into the AAD token that identifies the partner as the service the AAD token grants 
+    //  access to
+    10 : optional string AadTokenResourceId;
+
+};

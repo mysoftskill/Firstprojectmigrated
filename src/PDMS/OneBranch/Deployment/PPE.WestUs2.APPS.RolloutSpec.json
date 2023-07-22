@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "PPE.WestUs2.ServiceModel.json",
+    "Name": "PDMS-PPE-WESTUS2-CLUSTER",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-GenevaMonitoringAgentApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "GenevaMonitoringAgentApp-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    },
+    {
+      "Name": "Deploy-PdmsFrontdoorApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PdmsFrontdoorApp-Resources",
+      "Actions": [
+        "Deploy"
+      ],
+      "DependsOn": [
+        "Deploy-GenevaMonitoringAgentApp-Resources"
+      ]
+    },
+    {
+      "Name": "Deploy-PdmsWorkerApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PdmsWorkerApp-Resources",
+      "Actions": [
+        "Deploy"
+      ],
+      "DependsOn": [
+        "Deploy-GenevaMonitoringAgentApp-Resources"
+      ]
+    },
+    {
+      "Name": "Deploy-FrontdoorStandingQueryExtensionManagerApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+      "Actions": [
+        "Deploy"
+      ],
+      "DependsOn": [
+        "Deploy-GenevaMonitoringAgentApp-Resources"
+      ]
+    }
+  ]
+}

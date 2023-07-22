@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<operations>   
+  <!-- Service Groups -->
+  <operation name="ServiceTree.ServiceGroup.ReadById"
+             method="GET"
+             regex="^\/api\/ServiceGroups\([\w-]{36}\)$" />
+  
+  <operation name="ServiceTree.GetAuthorizations"
+             method="GET"
+             regex="^\/api\/OrganizationHierarchy\([\w-]{36}\)\/ServiceTree\.GetCurrentAuthorizations$" />
+  
+  <operation name="ServiceTree.ServiceGroupOrTeamGroup.FindByName"
+             method="GET"
+             regex="^\/api\/OrganizationHierarchy\/ServiceTree\.SearchServiceGroupOrTeamGroupByKeyword\(Keyword='(?:.*)'\)$" />
+
+  <operation name="ServiceTree.ServiceGroup.GetHierarchy"
+             method="GET"
+             regex="^\/api\/OrganizationHierarchy\/ServiceTree\.GetByServiceGroupId\(ServiceGroupId=[\w-]{36}\)$" />
+
+  <!-- Team Groups -->
+  <operation name="ServiceTree.TeamGroup.ReadById"
+             method="GET"
+             regex="^\/api\/TeamGroups\([\w-]{36}\)$" />
+
+  <operation name="ServiceTree.TeamGroup.GetHierarchy"
+             method="GET"
+             regex="^\/api\/OrganizationHierarchy\/ServiceTree\.GetByTeamGroupId\(TeamGroupId=[\w-]{36}\)$" />
+  
+  <!-- Services --> 
+  <operation name="ServiceTree.Service.ReadById"
+             method="GET"
+             regex="^\/api\/Services\([\w-]{36}\)$" />
+
+  <operation name="ServiceTree.Service.FindByAuthenticatedUser"
+             method="GET"
+             regex="^\/api\/PeopleHierarchy\/ServiceTree.GetServicesForCurrentUser" />
+  
+  <operation name="ServiceTree.Service.FindByName"
+             method="GET"
+             regex="^\/api\/ServiceHierarchy\/ServiceTree\.SearchServiceHierarchyByKeyword\(Keyword='(?:.*)'\)$"  />
+
+  <operation name="ServiceTree.Service.AddMetadata"
+             method="POST"
+             regex="^\/api\/ServiceHierarchy\([\w-]{36}\)\/ServiceTree\.AddMetadata$"  />
+
+  <operation name="ServiceTree.Service.GetMetadata"
+             method="GET"
+             regex="^\/api\/ServiceHierarchy\([\w-]{36}\)\/ServiceTree\.GetMetadata\(MetadataDefinitionId=\%27NGP_Entities\%27\)$"  />
+   
+  <operation name="ServiceTree.Service.UpdateMetadata"
+             method="PUT"
+             regex="^\/api\/ServiceMetadata\(\d+\)$"  />
+
+   <operation name="ServiceTree.Service.DeleteMetadata"
+             method="DELETE"
+             regex="^\/api\/ServiceMetadata\(\d+\)$"  />
+   
+  </operations>

@@ -1,0 +1,22 @@
+﻿    declare query_parameters (ExcludedAgentsJson:string, Age:timespan); 
+
+    datatable(
+      AgentId:string,
+      AgentName:string,
+      AgentType:string,
+      TeamName:string,
+      Missing:dynamic)
+    [
+      // 
+      "AgentId1", 
+      "AgentName1", 
+      "Cosmos", 
+      "TeamName1", 
+      dynamic([ { "c": "Command1", "t": datetime(2018-01-01) }, { "c": "Command2", "t": datetime(2018-01-02) } ]),
+      //
+      "AgentId2",
+      "AgentName2", 
+      "Non-Cosmos", 
+      "TeamName2", 
+      dynamic([ { "c": "Command3", "t": datetime(2018-01-03) }, { "c": "Command4", "t": datetime(2018-01-04) }, { "c": "Command5", "t": datetime(2018-01-05) } ])
+    ]

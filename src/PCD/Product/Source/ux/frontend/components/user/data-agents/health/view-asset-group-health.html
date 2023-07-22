@@ -1,0 +1,37 @@
+<pcd-view-status-line display-by-status="{{$ctrl.displayByStatus}}"
+                      state-label="{{$ctrl.getAssetGroupLabel()}}"
+                      state="$ctrl.getStatus()"
+                      icon-state="$ctrl.getIconState()"
+                      show-drawer="true"
+                      drawer-state="{{$ctrl.getDrawerState()}}"
+                      category="assets-status">
+    <pcd-inline>
+    </pcd-inline>
+    <pcd-description>
+        <div ng-if="$ctrl.shouldShowQualifierInline()">
+            <pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.assetGroup.qualifier"></pcd-asset-group-qualifier-view>
+        </div>
+    </pcd-description>                
+    <pcd-body>
+        <div ng-if="$ctrl.shouldShowQualifier()">
+            <pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.assetGroup.qualifier"></pcd-asset-group-qualifier-view>
+        </div>
+        <div mee-select="bare" ng-repeat="asset in $ctrl.assetGroup.assets">
+            <pcd-view-asset-health data-asset="asset" display-by-status="{{$ctrl.displayByStatus}}" index-value="{{$index+1}}"></pcd-view-data-asset-health>
+        </div>
+        <mee-progress-view watch-operation="{{$ctrl.getOperationName()}}" ng-if="$ctrl.shouldShowLoadLink()">
+            <inert-view>
+                <button mee-action-trigger data-glyph="download" ng-click="$ctrl.loadAssetGroup()" data-use-cms>Load</button>
+            </inert-view>
+            <inprogress-view>
+                <mee-progress-ants-mwf kind="local"></mee-progress-ants-mwf>
+            </inprogress-view>
+            <failed-view>
+                <p mee-paragraph data-use-cms>Failed to load.</p>
+                <button mee-action-trigger data-glyph="refresh" ng-click="$ctrl.loadAssetGroup()" data-use-cms>Retry</button>
+            </failed-view>
+            <finished-view>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-body>
+</pcd-view-status-line>

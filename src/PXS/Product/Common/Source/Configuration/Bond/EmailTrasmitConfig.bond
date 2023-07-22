@@ -1,0 +1,32 @@
+import "CommonConfiguration.bond" 
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct ISmtpServer
+{
+    10: required string Server;
+    20: required int32 Port;
+}
+
+struct ISmtpConfig
+{
+    10: required list<ISmtpServer> Servers;
+    20: required IRetryStrategyConfiguration RetryStrategy;
+
+    30: required string TransmitTimeout;
+
+    40: required bool UseSspi;
+    50: required bool UseHttps;
+
+    60: required string DefaultFromAddress;
+
+    // need to figure out how to get auth info
+}
+
+struct IMucpConfig
+{
+    10: required string Endpoint;
+    20: required string EventId;
+    30: required int32 TimeoutSeconds;
+    40: required string AuthResourceId;
+}

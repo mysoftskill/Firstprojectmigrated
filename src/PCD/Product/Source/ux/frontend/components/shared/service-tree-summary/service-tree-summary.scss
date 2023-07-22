@@ -1,0 +1,13 @@
+@import "../../../styles/utilities.scss";
+
+pcd-service-tree-summary {
+    display: block;
+    margin-top: 20px;
+
+    .summary-content {
+        & .description {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    }
+}

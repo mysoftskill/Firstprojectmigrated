@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.Client.ServiceTree</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.DataManagement.Client.ServiceTree</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Client\Pdms.Client.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+      <PackageId>Microsoft.PrivacyServices.DataManagement.Client.ServiceTree</PackageId>
+      <Title>Microsoft.PrivacyServices.DataManagement.Client.ServiceTree</Title>
+      <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+      <Description>Client library for contacting ServiceTree using the common code from the PDMS.</Description>
+      <Copyright>Microsoft - Copyright 2020</Copyright>
+      <PackageTags>ngp ngpx privacy pdms</PackageTags>
+  </PropertyGroup>
+</Project>

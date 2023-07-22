@@ -1,0 +1,31 @@
+let expectedRate = 95.0; // Identifies the threshold for failing completion.
+let signalAge = 30; // Identifies the minimum age of the signals. PostSLA fields only consider signals between 30-45 days old.
+let reportdate = toscalar(DeleteAgentCompletionStatus | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+//
+let ExcludedAgentsRaw = datatable(AgentId: string, Expires: datetime, Reason: string)
+[
+    // list agent id, expire date (or null for no expire date) that you want excluded from the query
+    // "b79dbeb3-b5e7-4967-87f7-1dd678c4feb0", datetime(2018-08-30T00:00:00Z), "Asimov",
+    // "745fcdad-b6e4-426a-a1c4-fe49baeb02d6", datetime(2018-08-30T00:00:00Z), "SharedData",
+    // "d9873979-56d9-4639-84f9-c2e35c2101b8", datetime(2018-08-30T00:00:00Z), "SharedData",
+];
+//
+let ExcludedAgents = ExcludedAgentsRaw 
+| where isnull(Expires) or Expires > now() 
+| project AgentId;
+//
+let AgentOwnerInfo = cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo();
+//
+cluster("Ngpreporting").database('NgpInfo').DeleteAgentCompletionStatus 
+| where SQLizerStreamDateId == reportdate
+| where AgentType == "Cosmos"
+| where AgentId !in (ExcludedAgents)
+| project 
+    AgentId, 
+    AgentType,
+    CompletionRate = round(((todouble(PostSLAExpectedDeleteCount - PostSLAPendingDeleteCount) / PostSLAExpectedDeleteCount) * 100), 2)
+| join kind=inner AgentOwnerInfo on AgentId
+| project AgentId, AgentName, CompletionRate, ExpectedRate=expectedRate, SignalAge=signalAge, Color = "red", AgentReadiness, AgentType
+| where CompletionRate < expectedRate and AgentReadiness == "ProdReady"
+| order by CompletionRate desc 

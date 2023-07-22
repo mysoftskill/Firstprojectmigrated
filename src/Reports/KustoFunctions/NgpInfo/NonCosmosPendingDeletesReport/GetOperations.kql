@@ -1,0 +1,9 @@
+// Operations
+let LatestStream = toscalar( NonCosmosDeleteCounts | top 1 by SQLizerStreamDateId | project SQLizerStreamDateId );
+NonCosmosDeleteCounts
+| where ExpectedCount != 0
+| where SQLizerStreamDateId == LatestStream
+| extend PendingCountWithoutAgent = iff(isempty(AgentId), PendingCount, 0)
+| extend PendingCountWithin30Days = iff(isnotempty(AgentId) and SignalDate >= ago(30d), PendingCount, 0)
+| extend PendingCountPast30Days = iff(isnotempty(AgentId) and SignalDate < ago(30d), PendingCount, 0)
+| project-away SQLizerPartitionIndex, SQLizerStreamDateId

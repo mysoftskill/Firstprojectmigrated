@@ -1,0 +1,141 @@
+﻿//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+
+// This script scans the PDMS config and variant config and get applicable asset groups. Applicability logic can be customized in the C# section and the Where clause
+
+variant = SSTREAM  @"/shares/PXSCosmos15.Prod/PDMSPrivate/PROD/PrivacyDeleteAuditor/AssetGroupVariantInfo/2018/10/AssetGroupVariantInfo_2018_10_22.ss";
+assetgroup = SSTREAM  @"/shares/PXSCosmos15.Prod/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/2018/10/PcfConfig_PPE_2018_10_22.ss";
+
+joinTable =
+    SELECT 
+        v.AssetGroupId,
+        v.VariantId,
+        a.AgentId,
+        v.Capabilities AS VCap,
+        v.SubjectTypes AS VSub,
+        v.DataTypes AS VTypes,
+        a.Capabilities AS ACap,
+        a.SubjectTypes AS ASub,
+        a.DataTypes AS ATypes,
+        a.AssetGroupQualifier AS Aq,
+        a.AgentReadiness
+    FROM variant AS v
+         INNER JOIN
+             assetgroup AS a
+         ON v.AssetGroupId == a.AssetGroupId
+         WHERE v.DisableSignalFiltering == false AND v.DataTypes != "[]" AND IsDeprecated == false
+         AND (a.SubjectTypes.Contains("MSAUser") OR a.SubjectTypes.Contains("AADUser"))
+         AND (v.Capabilities != "[\"Delete\"]" AND a.Capabilities != "[\"Delete\"]")
+         AND a.Capabilities != "[]" AND a.DataTypes != "[]";
+
+joinTableExport =
+    SELECT 
+        v.AssetGroupId,
+        v.VariantId,
+        a.AgentId,
+        v.Capabilities AS VCap,
+        v.SubjectTypes AS VSub,
+        v.DataTypes AS VTypes,
+        a.Capabilities AS ACap,
+        a.SubjectTypes AS ASub,
+        a.DataTypes AS ATypes,
+        a.AssetGroupQualifier AS Aq,
+        a.AgentReadiness
+    FROM variant AS v
+         INNER JOIN
+             assetgroup AS a
+         ON v.AssetGroupId == a.AssetGroupId
+         WHERE v.DisableSignalFiltering == false AND v.DataTypes != "[]" AND IsDeprecated == false
+         AND (a.SubjectTypes.Contains("MSAUser") OR a.SubjectTypes.Contains("AADUser") OR a.SubjectTypes.Contains("DemographicUser") OR a.SubjectTypes.Contains("MicrosoftEmployee"))
+         AND (v.Capabilities == "[]" OR v.Capabilities.Contains("Export"))
+         AND a.Capabilities.Contains("Export")
+         AND a.DataTypes != "[]";
+
+result =
+    SELECT *, InlineCSHelper.IncludeAssetGroup(VTypes, ATypes) AS Applicability
+    FROM joinTable;
+
+resultExport =
+    SELECT *,
+           InlineCSHelper.IncludeAssetGroup(VTypes, ATypes) AS Applicability
+    FROM joinTableExport;
+
+assetgrouplist = 
+    SELECT DISTINCT AssetGroupId, AgentId, AgentReadiness
+    FROM result;
+
+// OUTPUT
+
+OUTPUT joinTable
+TO SSTREAM "/my/joint_10221700.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "2";
+
+OUTPUT joinTableExport
+TO SSTREAM "/my/exportjoin_10221700.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "2";
+
+
+OUTPUT result
+TO SSTREAM "/my/accountClose_10221700.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "2";
+
+
+OUTPUT resultExport
+TO SSTREAM "/my/export_10221700.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "2";
+
+
+OUTPUT assetgrouplist
+TO SSTREAM "/my/variantGroup_10221700.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "2";
+
+
+#CS
+public static class InlineCSHelper
+{
+    public static string IncludeAssetGroup(string vdat, string adat)
+    {  
+        adat = adat.Replace("[", string.Empty).Replace(" ", string.Empty).Replace("]", string.Empty);
+
+        var adt = adat.Split(',').ToList();
+        
+        bool intersect = false;
+        bool hasNotInVdt = false;
+    
+        // is it partially applicable? (arrays intersect and assetDataType has an element that is not in vdt)
+        foreach (string d in adt)
+        {
+            if (!vdat.Contains(d))
+            {
+                hasNotInVdt = true;
+            }
+            else
+            {
+                intersect = true;
+            }
+        }
+    
+        //return intersect && hasNotInVdt;
+        if (intersect && hasNotInVdt)
+        {
+            return "Partially Applicable";
+        }
+
+        if (!intersect) {
+            return "Fully Applicable";
+        }
+
+        return "Not Applicable";
+    }  
+}
+#ENDCS

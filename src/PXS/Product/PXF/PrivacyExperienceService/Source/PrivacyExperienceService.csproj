@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyExperience.Service</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).PrivacyExperience.Service</AssemblyName>
+    <UseDefaultBinplacing>false</UseDefaultBinplacing>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>PrivacyExperienceService</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The SqlServerTypes cannot be loaded by PackageReference, this is the workaround until a new package supports this in the new format.
+         https://developercommunity.visualstudio.com/content/problem/91318/reference-dlls-from-nuget-package.html
+    -->
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\Common\Owin\NoSniffXContentTypeOptionsMiddleware.cs">
+      <Link>Extensions\NoSniffXContentTypeOptionsMiddleware.cs</Link>
+    </Compile>
+  </ItemGroup>
+    <ItemGroup>
+	    <Compile Include="..\..\..\..\..\Common\Owin\StrictTransportSecurityMiddleware.cs">
+		    <Link>Extensions\StrictTransportSecurityMiddleware.cs</Link>
+	    </Compile>
+    </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\PxfAdaptersFromPDMS-20190411.json">
+      <Link>PxfAdaptersFromPDMS-20190411.json</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\DEV\rpsserver.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\INT\rpsserver.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\PPE\rpsserver.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\PROD\rpsserver.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\DSRContracts\DSR.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\Exposed\ExposedContracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PrivacyOperationContracts\PrivacyOperation.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\UnitTests\PrivacyExperienceContracts.UnitTests\PrivacyExperienceContracts.UnitTests.csproj" />
+    <ProjectReference Include="..\..\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\CosmosHelpers\CosmosHelpers\CosmosHelpers.csproj" />
+    <ProjectReference Include="..\..\Host\Source\PrivacyHost.csproj" />
+    <ProjectReference Include="..\..\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+      <Link>AadIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\RecurrentDeleteWorker\RecurrentDeleteWorker.ini" Link="RecurrentDeleteWorker.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\VortexDeviceDeleteWorker\VortexDeviceDeleteWorker.ini">
+      <Link>VortexDeviceDeleteWorker.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\Export.ini">
+      <Link>Export.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+      <Link>MsaIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+      <Link>PrivacyExperienceService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\PxfAdapters.ini">
+      <Link>PxfAdapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\MockPxfAdapters.ini">
+      <Link>MockPxfAdapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Adapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>GlobalConfiguration.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.OData" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Authentication" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Modules.TrV2Module" />
+    <PackageReference Include="Microsoft.IdentityModel.S2S.Tokens" />
+    <PackageReference Include="Microsoft.OData.Core" />
+    <PackageReference Include="Microsoft.OSGS.HttpClientCommon" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Microsoft.SqlServer.Types" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Server" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="OpenApiDocument.OpenApi3_0.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

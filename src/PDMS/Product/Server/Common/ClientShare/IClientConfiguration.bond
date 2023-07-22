@@ -1,0 +1,9 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Client
+
+struct IClientConfiguration 
+{
+    1   :   required    string      ClientId;
+    4   :   required    string      ServiceUrl;
+    5   :   required    int32       TimeoutInSeconds;
+    6   :   required    string      KeyVaultCertificateName;
+};

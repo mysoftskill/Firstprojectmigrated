@@ -1,0 +1,28 @@
+﻿{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "rolloutMetadata": {
+    "serviceModelPath": "Synthetics.ServiceModel.json",
+    "name": "Compliance Services Synthetics",
+    "rolloutType": "Major",
+    "buildSource": {
+      "parameters": {
+        "versionFile": "BuildVer.txt"
+      }
+    },
+    "notification": {
+      "email": {
+        "to": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "orchestratedsteps": [
+    {
+      "name": "ComplianceServicesDeployStep",
+      "targetType": "ServiceResource",
+      "targetName": "ComplianceServicesSyntheticsResourceInstance",
+      "actions": [
+        "Extension/Deploy"
+      ]
+    }
+  ]
+}

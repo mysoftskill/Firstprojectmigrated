@@ -1,0 +1,11 @@
+import "CommonConfiguration.bond" 
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IKustoConfig
+{
+    10: required string DefaultClusterUrl;
+    20: required string DefaultDatabaseName;
+    30: required string DefaultKustoAppName;
+    40: required IRetryStrategyConfiguration RetryStrategy;
+}

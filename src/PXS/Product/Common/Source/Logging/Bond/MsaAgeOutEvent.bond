@@ -1,0 +1,25 @@
+﻿import "Microsoft.Telemetry.bond"
+
+namespace Microsoft.Membership.MemberServices.Common.Logging
+
+
+enum MsaAgeOutErrorCode
+{
+    None,
+    MissingLastLoginTime,
+    MissingIsSuspendedValue,
+    LastLoginTimeInFuture,
+    LastLoginLessThan2Years,
+    LastLoginLessThan5Years,
+};
+
+struct MsaAgeOutEvent : Microsoft.Telemetry.Base
+{
+    1 : string RequestId;
+    2 : string RequestGuid;
+    3 : string RequestTimestamp;
+    4 : string Description;
+    5 : map<MsaAgeOutErrorCode, string> ErrorCodes;
+    6 : string LastSuccessSignIn;
+    7 : string SignalAge;
+};

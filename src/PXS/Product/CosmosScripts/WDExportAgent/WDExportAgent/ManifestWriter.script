@@ -1,0 +1,55 @@
+﻿// Watch Dog Export Synthetic Agent - Manifest Writer 
+
+#DECLARE agentId string = @@AGENTID@@;
+#DECLARE exportPath string = string.Format("/local/ExportAndAuditDrop/PPE/v2/ExportData/{0}", @agentId);
+
+// Process events from the previous hour
+#DECLARE eventTime DateTime = DateTime.UtcNow.AddHours(-1);
+
+#DECLARE dataManifestFile string = string.Format("DataFileManifest_{0:yyyy_MM_dd_HH}.txt", @eventTime);
+#DECLARE dataManifestStream string = @exportPath + "/" + @dataManifestFile;
+#DECLARE dataManifestContent string = "WatchDog_%Y_%M_%D_%H.txt";
+
+// Should contain command ids processed
+#DECLARE requestManifestFile string = string.Format("RequestManifest_{0:yyyy_MM_dd_HH}.txt", @eventTime);
+#DECLARE requestManifestStream string = @exportPath + "/" + @requestManifestFile;
+
+#DECLARE signalPath string = "/local/PXS-WD/export/PPE/SyntheticSignals/{0}";
+#DECLARE signalFile string = string.Format("{0:yyyy-MM-dd-HH}.tsv", @eventTime);
+#DECLARE signalStream string = string.Format(@signalPath, @signalFile);
+
+#IF (EXISTS(@signalStream))
+
+Commands = 
+    EXTRACT
+        CmdId : string,
+        Data : string
+    FROM @signalStream
+    USING DefaultTextExtractor();
+
+RequestManifestValues = SELECT CmdId FROM Commands;
+
+OUTPUT RequestManifestValues
+TO @requestManifestStream;
+
+DataManifestContent = SELECT @dataManifestContent AS Format;
+
+OUTPUT DataManifestContent 
+TO @dataManifestStream;
+
+#ELSE
+
+#DECLARE empty string = "/local/PXS-WD/empty.tsv";
+
+Empty =
+    EXTRACT
+        Nothing : string,
+        NoData : string
+    FROM @empty
+    USING DefaultTextExtractor();
+
+OUTPUT Empty
+TO "/local/PXS-WD/empty-out.tsv"
+WITH STREAMEXPIRY "1";
+
+#ENDIF

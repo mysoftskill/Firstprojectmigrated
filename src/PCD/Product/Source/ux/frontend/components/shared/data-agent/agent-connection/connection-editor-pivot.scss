@@ -1,0 +1,65 @@
+﻿@import "../../../../styles/utilities.scss";
+
+pcd-agent-connection-editor-pivot {
+    display: block;
+
+    mee-alert > div.m-alert[role="alert"] {
+        margin: 12px 0px;
+    }
+
+    li {
+        &.f-active.add-connection-tab:after {
+            border: none !important; // Override MWF styling
+        }
+
+        .release-state-remove {
+            font-size: 13px;
+            @include padding(2px, 2px, 0, 2px);
+            @include margin-left(-3px);
+
+            &:hover {
+                background-color: $standard-blue-color;
+                color: $light-grey-color;
+            }
+        }
+
+        button.add-connection {
+            position: relative;
+            padding: 0 4px;
+            margin-top: 8px;
+            height: 18px;
+            width: 18px;
+            background-color: $standard-blue-color;
+            border: none;
+
+            &:before {
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 0;
+                margin-top: -9px;
+                color: $light-grey-color;
+                font-size: 12px;
+            }
+        }
+    }
+
+    div.add-connection-content {
+        margin-top: 15px;
+
+        h5.add-connection-heading {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        button.add-connection-save {
+            margin-top: 28px;
+            min-width: 65px;
+        }
+
+        mee-select.release-state-picker {
+            margin-top: 20px;
+        }
+    }
+
+}

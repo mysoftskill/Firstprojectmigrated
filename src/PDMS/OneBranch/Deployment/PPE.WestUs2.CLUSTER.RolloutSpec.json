@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "PPE.WestUs2.ServiceModel.json",
+    "Name": "PDMS-PPE-WESTUS2-CLUSTER",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-PdmsServiceFabric-Cluster-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PdmsServiceFabric-Cluster-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    }
+  ]
+}

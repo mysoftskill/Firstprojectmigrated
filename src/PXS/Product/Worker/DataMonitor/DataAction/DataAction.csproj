@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.PrivacyServices.DataMonitor.DataAction</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.DataMonitor.DataAction</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\..\PXF\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\..\PXF\KustoHelpers\KustoHelpers\KustoHelpers.csproj" />
+    <ProjectReference Include="..\..\..\PXF\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+    <ProjectReference Include="..\ContextModelCommon\ContextModelCommon.csproj" />
+    <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ICM.SDK" />
+    <PackageReference Include="Microsoft.Membership.Communications.Client" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

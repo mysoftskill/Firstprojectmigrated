@@ -1,0 +1,89 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "serviceIdentifier": "eda3dc03-5654-43a9-a6fa-468706c89c97",
+    "ServiceGroup": "NGPPROXY-EUDB-NORTHEUROPE-CLUSTER",
+    "Environment": "NgpProxyEuDb"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PxsServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.2NodeType.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\GenevaMonitoringAgentConsoleApp.Template.json"
+        },
+        {
+          "Name": "PxsServiceFabricApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "AadAccountCloseWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcfDataAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcfDataAgentV2App-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "NGPPROXY-EUDB-NORTHEUROPE-CLUSTER",
+      "Location": "northeurope",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "4e261d67-9395-4cec-a519-14053c4765e3",
+      "ServiceResources": [
+        {
+          "Name": "PxsServiceFabric-Cluster-Resources",
+          "InstanceOf": "PxsServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\PxsServiceFabric.Cluster.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "PxsServiceFabricApp-Resources",
+          "InstanceOf": "PxsServiceFabricApp-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\PxsServiceFabricApp.Parameters.json"
+        },
+        {
+          "Name": "AadAccountCloseWorkerApp-Resources",
+          "InstanceOf": "AadAccountCloseWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\AadAccountCloseWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "PcfDataAgentApp-Resources",
+          "InstanceOf": "PcfDataAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\PcfDataAgentApp.Parameters.json"
+        },
+        {
+          "Name": "PcfDataAgentV2App-Resources",
+          "InstanceOf": "PcfDataAgentV2App-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\PcfDataAgentV2App.Parameters.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\EuDb\\northeurope\\Frontdoor.StandingQueryExtensionManagerApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

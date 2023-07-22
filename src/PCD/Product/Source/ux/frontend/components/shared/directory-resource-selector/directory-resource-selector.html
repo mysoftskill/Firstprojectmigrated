@@ -1,0 +1,52 @@
+<mee-text-action mee-text-action-kind="add"
+                 mee-display-type="flex"
+                 mee-auto-suggest="$ctrl.isAutoSuggestEnabled"
+                 mee-auto-suggest-scrollable="true"
+                 mee-auto-suggest-act-on-select="true"
+                 mee-perform-action="$ctrl.addResource($ctrl.textBoxContent)"
+                 mee-debounce-timeout="$ctrl.debounceTimeoutMsec"
+                 mee-get-suggestions="$ctrl.getSuggestions($ctrl.textBoxContent)"
+                 mee-no-suggestion-label="{{$ctrl.noSuggestionLabel}}"
+                 ng-class="{ 'added-resource-padding': $ctrl.shouldAddResourcePadding(),
+                             '{{$ctrl.resourceType}}-selector': true }"
+                 data-error-id="{{$ctrl.errorId}}">
+    <label>{{$ctrl.displayLabel}}</label>
+    <input placeholder="{{$ctrl.placeholderLabel}}"
+           ng-model="$ctrl.textBoxContent"
+           ng-focus="$ctrl.onFocus()"
+           ng-blur="$ctrl.onBlur()"
+           ng-keyup="$ctrl.onKeyup($event)">
+    <button data-use-cms aria-label="Click add" ng-click="$ctrl.addResource($ctrl.textBoxContent)"></button>
+</mee-text-action>
+
+<mee-progress-view watch-operation="{{$ctrl.progressMonitoredOperationName}}" class="progress-local-small">
+    <inert-view></inert-view>
+    <inprogress-view>
+        <mee-progress-ants-mwf kind="local"></mee-progress-ants-mwf>
+    </inprogress-view>
+    <failed-view>
+        <p mee-paragraph data-use-cms>
+            Failed to load resources.
+        </p>
+    </failed-view>
+    <finished-view>
+
+        <div class="added-resources" ng-if="$ctrl.addedResources.length">
+            <ul class="c-group f-wrap-items">
+                <li class="resource-entity c-choice-summary" ng-repeat="resource in $ctrl.addedResources" ng-class="{'invalid': resource.isInvalid}">
+                    <span>{{resource.displayName}}</span>
+                    <a data-use-cms
+                       mee-no-href
+                       class="close-button c-glyph glyph-cancel"
+                       mee-action-trigger aria-label="{{resource.displayName}}"
+                       ng-click="$ctrl.onRemoveResource(resource.id)">
+                        <span class="x-screen-reader" role="note">Remove</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </finished-view>
+</mee-progress-view>
+
+<mee-inline-error error-id="{{$ctrl.errorId}}"></mee-inline-error>

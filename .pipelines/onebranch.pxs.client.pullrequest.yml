@@ -1,0 +1,76 @@
+#################################################################################
+#                        OneBranch Pipelines - Buddy                            #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: none
+
+parameters:
+- name: debug
+  displayName: Enable debug output
+  type: boolean
+  default: false
+
+variables:
+  # needed for onebranch.pipeline.version task https://aka.ms/obpipelines/versioning
+  CDP_DEFINITION_BUILD_COUNT: $[counter('', 0)] 
+  system.debug: ${{ parameters.debug }}
+  ENABLE_PRS_DELAYSIGN: 0
+  NUGET_XMLDOC_MODE: none
+  WindowsContainerImage: 'onebranch.azurecr.io/windows/ltsc2019/vse2022:latest'
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates 
+  parameters:
+    featureFlags:
+      ensureArtifactsDirExists: true
+    globalSdl:
+      sbom:
+        enabled: true
+      antimalwareScan:
+        enabled: false
+      binskim:
+        enabled: true
+        break: true 
+        analyzeTargetGlob: 
+          '+:file|**\Microsoft.PrivacyServices*.exe;+:file|**\Microsoft.PrivacyServices*.dll;+:file|**\Pxs*.exe;+:file|**\Pxs*.dll;+:file|**\Microsoft.Azure.ComplianceServices*.exe;+:file|**\Microsoft.Azure.ComplianceServices*.dll;+:file|**\PrivacyCommand*.exe;+:file|**\PrivacyCommand*.dll;+:file|**\CertInstaller*.exe;+:file|**\CertInstaller*.dll'
+      credscan:
+        enabled: false
+      policheck:
+        enabled: false
+      tsa:
+        # If TSA is disabled all SDL tools will forced into 'break' build mode.
+        enabled: false
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows 
+        variables:
+          ob_outputDirectory: $(Build.SourcesDirectory)\src\PXS\OneBranch\Deployment\drop
+          ob_sdl_binskim_break: true
+
+        steps:
+          - template: .pipelines/HelperTemplates/version.restore.build.test.yml@self
+            parameters:
+              buildConfiguration: Debug
+              versionTemplate: onebranch.versioning.pxs.client.yml
+              productName: PXS
+              pathToRestore: $(Build.SourcesDirectory)\src\PXS\Product\PrivacyExperienceSvc.sln
+              projectsToBuild:   
+                - $(Build.SourcesDirectory)\src\PXS\Product\Contracts\PCFContracts\PXS.Command.Contracts.csproj
+                - $(Build.SourcesDirectory)\src\PXS\Product\PXF\PrivacyExperienceClientLibrary\Source\PrivacyExperienceClientLibrary.csproj

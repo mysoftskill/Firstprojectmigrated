@@ -1,0 +1,82 @@
+@import "../../../styles/utilities.scss";
+
+pcd-default-page-layout, pcd-heading, pcd-default-page-heading, pcd-content, pcd-lede, pcd-sidebar {
+    display: block;
+    clear: both;
+}
+
+.global-header {
+    background-color: $standard-blue-color;
+    height: 50px;
+
+    .global-header-label {
+        font-size: 20px;
+        font-weight: 300;
+        margin-top: 10px;
+        white-space: nowrap;
+        @include padding-left(15px);
+        color: $light-grey-color;
+    }
+
+    .global-header-menu {
+        @include float(right);
+        @include padding-right(10px);
+
+        .global-header-menu-label {
+            display: inline-block;
+            color: $light-grey-color;
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: 14px;
+
+            &:focus {
+                color: $light-grey-color;
+            }
+        }
+
+        .global-header-menu-label + .global-header-menu-label {
+            @include padding-left(16px);
+        }
+    }
+
+    a:hover {
+        color: $light-grey-color !important;
+        text-decoration: none !important;
+    }
+}
+
+.app-content {
+    @include breakpoint-vp3 {
+        display: flex;
+    }
+
+    .left-content-pane {
+        padding-bottom: 40px;
+    }
+
+    .right-content-pane {
+        background-color: $light-grey-color;
+        padding-bottom: 40px;
+    }
+}
+
+pcd-heading {
+    margin-bottom: 15px;
+}
+
+.pcd-default-page-layout-help-container {
+    border: 2px solid black;
+    padding: 10px;
+
+    & > a {
+        margin-bottom: 10px;
+        display: block;
+    }
+}
+
+.pcd-default-page-layout-help-actions-container {
+    & > a {
+        margin-top: 20px;
+        float: right;
+    }
+}

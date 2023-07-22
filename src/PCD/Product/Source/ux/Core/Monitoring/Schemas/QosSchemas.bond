@@ -1,0 +1,80 @@
+import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "BaseIncomingServiceEvent.bond"
+import "BaseOutgoingServiceEvent.bond"
+
+namespace Microsoft.PrivacyServices.UX.Monitoring.Events
+
+[Description("Incoming service event")]
+struct IncomingServiceEvent : Microsoft.Osgs.Infra.Monitoring.BaseIncomingServiceEvent
+{
+	[Description("The flight behaviors.")]
+	20: string flightBehaviors;
+
+	[Description("The original referrer for BI. referrer header is always login.live.com so this logs the original referrer.")]
+	30: string originalReferrer;
+
+	[Description("The mvc area name for the request.")]
+	40: string mvcAreaName;
+
+	[Description("The mvc controller name for the request.")]
+	50: string mvcControllerName;
+
+	[Description("Identifies the current host (web|xbox|windows).")]
+	60: string hostId;
+};
+
+[Description("Outgoing service event")]
+struct OutgoingServiceEvent : Microsoft.Osgs.Infra.Monitoring.BaseOutgoingServiceEvent
+{
+	[Description("The flight behaviors.")]
+	20: string flightBehaviors;
+
+	[Description("The original referrer for BI. referrer header is always login.live.com so this logs the original referrer.")]
+	30: string originalReferrer;
+
+	[Description("The mvc area name for the request.")]
+	40: string mvcAreaName;
+
+	[Description("The mvc controller name for the request.")]
+	50: string mvcControllerName;
+
+	[Description("Identifies the current host (web|xbox|windows).")]
+	60: string hostId;
+
+	[Description("When verbose logging is enabled contains the response content of outgoing calls.")]
+	70: string responseContent;
+};
+
+[Description("Debug trace event")]
+struct TraceEvent : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("Trace message.")]
+	10: string message;
+};
+
+[Description("Outgoing service event for Compass CMS")]
+struct CompassOutgoingServiceEvent : Microsoft.Osgs.Infra.Monitoring.BaseOutgoingServiceEvent
+{
+	[Description("Compass endpoint.")]
+	10: string Endpoint;
+
+	[Description("Path to a content item.")]
+	20: string ContentPath;
+
+	[Description("Locale.")]
+	30: string Locale;
+
+	[Description("Cache key generated for the item.")]
+	40: string CacheKey;
+
+	[Description("Indicates whether the cache was missed.")]
+	50: bool IsCacheMiss;
+};
+
+[Description("Outgoing service event for cache")]
+struct CacheOutgoingServiceEvent : Microsoft.Osgs.Infra.Monitoring.BaseOutgoingServiceEvent
+{
+	[Description("Cache key")]
+	10: string Key;
+};

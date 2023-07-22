@@ -1,0 +1,45 @@
+﻿// Script GUID:ee81be58-5b2b-449a-8eba-a646e2e772ef
+// Used for doing daily roll up of all mappings to puid
+
+
+#DECLARE envName string = @@ENVNAME@@;
+
+#IF(LOCAL)
+    MODULE "PuidMappingView.module" AS MappingView;
+#ELSE
+    MODULE "/local/puidmapping/PuidMappingView.module" AS MappingView;
+#ENDIF
+
+#DECLARE startDate DateTime = DateTime.Parse("2018-01-12");
+#DECLARE endDate DateTime = DateTime.Parse(@@ENDDATE@@);
+
+// Output 
+#DECLARE anidOut string = String.Format(@"/local/puidmapping/{0}/ANID/anidrollup-{1:yyyy-MM-dd}.ss", @envName, @endDate);
+#DECLARE cidOut string = String.Format(@"/local/puidmapping/{0}/CID/cidrollup-{1:yyyy-MM-dd}.ss", @envName, @endDate);
+#DECLARE opidOut string = String.Format(@"/local/puidmapping/{0}/OPID/opidrollup-{1:yyyy-MM-dd}.ss", @envName, @endDate);
+
+#DECLARE streamExpiry string = "7";
+
+allAnids = MappingView.AnidMap(Env=@envName,StartDate=@startDate,EndDate=@endDate,UseExisting=false);
+
+OUTPUT allAnids
+TO SSTREAM @anidOut
+HASH CLUSTERED BY Anid
+SORTED BY Anid
+WITH STREAMEXPIRY @streamExpiry;
+
+allCids = MappingView.CidMap(Env=@envName,StartDate=@startDate,EndDate=@endDate,UseExisting=false);
+
+OUTPUT allCids
+TO SSTREAM @cidOut
+HASH CLUSTERED BY Cid
+SORTED BY Cid
+WITH STREAMEXPIRY @streamExpiry;
+
+allOpids = MappingView.OpidMap(Env=@envName,StartDate=@startDate,EndDate=@endDate,UseExisting=false);
+
+OUTPUT allOpids
+TO SSTREAM @opidOut
+HASH CLUSTERED BY Opid
+SORTED BY Opid
+WITH STREAMEXPIRY @streamExpiry;

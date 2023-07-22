@@ -1,0 +1,21 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-content>
+        <p mee-paragraph data-use-cms>You currently don't have permission to access these pages.</p>
+
+        <div ng-if="$ctrl.isPartnerTestEnvironment()">
+            <p mee-paragraph data-use-cms>To gain access for testing purposes:</p>
+            <ul mee-list>
+                <li data-use-cms>Go to <a mee-hyperlink href="//idweb" target="_blank">//idweb</a></li>
+                <li data-use-cms>Search for "Alt-Subject"</li>
+                <li data-use-cms>Request to join "NGP – Access to Alt-Subject Test Page (PCD)". You will get a welcome email when approved.</li>
+                <li data-use-cms>NOTE: Access to the test page may take up to 24 hours after approval</li>
+            </ul>
+        </div>
+    </pcd-content>
+
+</pcd-default-page-layout>

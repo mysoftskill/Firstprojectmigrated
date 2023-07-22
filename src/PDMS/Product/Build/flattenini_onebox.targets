@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="CopyConfigurationFilesForF5" BeforeTargets="AfterBuild" Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+    <Error Condition="!Exists('autopilot.ini')" Text="Project must include autopilot.ini file." />
+    <Copy SourceFiles="autopilot.ini" DestinationFolder="$(OutDir)\..\" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- Create list of .ini files in flatten path to feed to FlattenIniOnebox Target that will flatten them -->
+  <Target Name="CreateIniFileList" AfterTargets="Build">
+    <CreateItem Include="$(OutDir)\*.ini">
+      <Output TaskParameter="Include" ItemName="OutputIniFile" />
+    </CreateItem>
+  </Target>
+
+  <!-- Flatten .ini files for onebox settings, only when building in VS and the flag is turned on -->
+  <Target Name="FlattenIniOnebox" Outputs="%(OutputIniFile.Identity)" AfterTargets="CreateIniFileList" Condition="'$(BuildingInsideVisualStudio)' == 'true' And '$(FlattenIniOneboxUnderVisualStudio)' == 'true'">
+    <PropertyGroup>
+      <CurrentFileName>%(OutputIniFile.Filename)%(OutputIniFile.Extension)</CurrentFileName>
+    </PropertyGroup>
+    <Exec
+      WorkingDirectory="$(OutDir)"
+      Command="$(ServiceManagerToolsPath)\iniFlatten.exe -i $(CurrentFileName) -o $(CurrentFileName).flattened.ini -p $(MSBuildThisFileDirectory)oneboxprops.txt"
+      Condition="!$(CurrentFileName.EndsWith('.flattened.ini'))" />
+  </Target>
+
+</Project>

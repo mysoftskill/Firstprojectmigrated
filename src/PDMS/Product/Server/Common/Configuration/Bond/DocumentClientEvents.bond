@@ -1,0 +1,33 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successful outgoing call to document db.")]
+struct DocumentClientSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string activityId;
+    20: required double requestCharge;
+    30: required int32  resultCount;
+}
+
+struct DocumentClientError
+{
+    10: required string code;
+    20: required string message;
+}
+
+struct ResponseHeader
+{
+    10: required string name;
+    20: required vector<string> values;
+}
+
+[Description("Failed outgoing call to document db.")]
+struct DocumentClientErrorEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingErrorEvent
+{
+    10: required string activityId;
+    20: required DocumentClientError error;
+    30: required double requestCharge;
+    40: required vector<ResponseHeader> responseHeaders;
+    50: required string retryAfter;
+}

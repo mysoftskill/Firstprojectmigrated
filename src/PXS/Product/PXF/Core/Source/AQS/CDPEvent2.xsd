@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CDPEvent2" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="CDPEvent2">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Version" type="xs:int" />
+                <xs:element name="AggregationKey" type="xs:string" />
+                <xs:element name="SequenceNumber" type="xs:long" />
+                <xs:element name="EventData" type="EventData" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+  <xs:complexType name="EventDataBase" abstract="true" >
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Property">
+        <xs:complexType>
+          <xs:attribute name="Name" type="xs:string" use="required" />
+          <xs:attribute name="Value" type="xs:string" use="required" />
+          <xs:attribute name="OldValue" type="xs:string" />
+          <xs:attribute name="Flags" type="xs:string" />
+          <xs:attribute name="OldFlags" type="xs:string" />
+          <xs:attribute name="ExtendedData" type="xs:string" />
+          <xs:attribute name="CredentialType" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+<xs:complexType name="EventData">
+   <xs:complexContent>
+     <xs:extension base="EventDataBase" />
+   </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UserCreate">
+   <xs:complexContent>
+     <xs:extension base="EventData" />
+   </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="UserUpdate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="UserDelete">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="DeviceCreate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="DeviceUpdate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="DeviceDelete">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AliasCreate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="AliasUpdate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="AliasDelete">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="RelationshipCreate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="RelationshipUpdate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+<xs:complexType name="RelationshipDelete">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AccountNameVersionUpdate">
+  <xs:complexContent>
+    <xs:extension base="EventData" />
+  </xs:complexContent>
+</xs:complexType>
+
+</xs:schema>

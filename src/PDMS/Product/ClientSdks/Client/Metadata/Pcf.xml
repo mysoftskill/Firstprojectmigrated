@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<operations>   
+  <!-- Service Groups -->
+  <operation name="Pcf.Debug.DataAgentMap"
+             method="GET"
+             regex="^\/debug\/dataagentmap\?agent=[\w-]{36}$" />
+</operations>

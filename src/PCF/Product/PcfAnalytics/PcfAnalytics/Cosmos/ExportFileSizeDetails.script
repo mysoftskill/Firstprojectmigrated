@@ -1,0 +1,104 @@
+﻿//Script GUID:9A752852-74A0-4DC2-941B-D5E4E7146988
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      version             = @@version@@
+
+// Asimov References:
+MODULE "Asimov.Batch.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;  
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddDays(-2),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddDays(-1),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@"); // v1
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE outputRootFolderName string = "ExportFileSizeDetails";
+
+#DECLARE dailyPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/%Y/%m/{{0}}_%Y_%m_%d.ss?date={{1:yyyy-MM-dd}}", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+
+#DECLARE cloud_env string = "Production";
+#DECLARE cloud_name string = "PXS";
+
+//OUTPUTS
+#DECLARE exportFileSizeDetails_outputPath string = string.Format(@dailyPathFormat,"ExportFileSizeDetails",@startDate);
+#DECLARE streamExpiry string = "180";
+
+//output for test
+#IF (@localRun)
+    #SET exportFileSizeDetails_outputPath = string.Concat("/my", @exportFileSizeDetails_outputPath);
+    #SET streamExpiry = "7";
+#ENDIF
+
+SllBaseQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+    WHERE cloud_name == @cloud_name
+    AND cloud_environment == @cloud_env;
+
+// Define JsonObjectProcessor for different SLL events
+ExportFileSizeEventProcessor = 
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "AgentId:AgentId:string",
+        "AssetGroupId:AssetGroupId:string",
+        "CommandId:CommandId:string",
+        "SubjectType:SubjectType:string",
+        "AgentType:AgentType:string",
+        "CloudInstance:CloudInstance:string",
+        "Length:Length:string",
+        "CompressedLength:CompressedLength:string",
+        "IsSourceCompressed:IsSourceCompressed:string",
+        "Path:Path:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.ExportFileSizeEvent";
+
+// Get specific PCF Events
+ExportFileSizeDetails = 
+    SELECT Guid.Parse(AgentId) AS AgentId,
+           Guid.Parse(AssetGroupId) AS AssetGroupId,
+           Guid.Parse(CommandId) AS CommandId,
+           SubjectType,
+           AgentType,
+           CloudInstance,
+           Length,
+           CompressedLength,
+           IsSourceCompressed,
+           Path
+    FROM ExportFileSizeEventProcessor;
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT ExportFileSizeDetails
+TO SSTREAM @exportFileSizeDetails_outputPath
+    HASH CLUSTERED BY AgentId
+    SORTED BY AgentId
+WITH STREAMEXPIRY @streamExpiry;

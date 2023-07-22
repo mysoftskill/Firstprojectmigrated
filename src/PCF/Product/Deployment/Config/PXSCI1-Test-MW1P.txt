@@ -1,0 +1,75 @@
+%AzureManagementResourceGroupName%|PCF-CI1
+
+%CosmosDBList%|MULTI
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfci1-east</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcfci1-east.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">ci1-commandqueue-east-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfci1-westcentral</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcfci1-westcentral.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">ci1-commandqueue-westcentral-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+.
+
+%AzureBlobConnectionString%|ci1-storage-cs
+
+%AzureStorageAccounts%|MULTI
+     <Item kvsecret="true">%AzureBlobConnectionString%</Item>
+.
+
+%EventHubList%|MULTI
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">ci1-eventhub-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecyclea</LeaseContainerName>
+        <Moniker>pcf-ci1-eventhub</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">%AzureBlobConnectionString%</CheckpointAccountConnectionString>
+      </Item>
+.
+
+%CommandHistoryCosmosDbUri%|https://pcf-ci1-coldstorage.documents.azure.com:443/
+%CommandHistoryCosmosDbKey%|ci1-commandhistory-key
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/ci1/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/ci1/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/ci1/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/ci1/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%CommandReplayDocDBUri%|https://pcf-ci1-commandreplay.documents.azure.com:443/
+%CommandReplayDocDBKey%|ci1-commandreplay-key
+
+%QueueDepthBaselineFrequencyMinutes%|10
+%TelemetryTimeToLiveDays%|7
+%TelemetryMaxItemCount%|100
+
+%AgentAzureQueuesStorageAccounts%|MULTI
+    <AzureQueue>
+        <ConnectionString kvsecret="true">%AzureBlobConnectionString%</ConnectionString>
+        <Weight>1</Weight>
+    </AzureQueue>
+.
+
+%DeviceIdExpirationMinutes%|1
+%EventHubCheckpointExpirationSeconds%|1
+%NonWindowsDeviceEventHubConfig%|MULTI
+    <Moniker>ci1-nonwindowsdevice-eventhub</Moniker>
+    <ConnectionString kvsecret="true">ci1-eventhub-cs</ConnectionString>
+    <EventHubName>altdevicedelete</EventHubName>
+    <ConsumerGroupName>$Default</ConsumerGroupName>
+    <BlobContainerName>altdevicedelete</BlobContainerName>
+    <StorageConnectionString kvsecret="true">%AzureBlobConnectionString%</StorageConnectionString>
+.
+
+%PxsPostCommandAadCallerList%|MULTI
+  # PXS_PPE_AppId
+  <Item>705363a0-5817-47fb-ba32-59f47ce80bb7</Item>
+  # AID_PPE_AppId / UAMI ID
+  <Item>9396613a-ec0d-4102-83a2-b079b69566f9</Item>
+.

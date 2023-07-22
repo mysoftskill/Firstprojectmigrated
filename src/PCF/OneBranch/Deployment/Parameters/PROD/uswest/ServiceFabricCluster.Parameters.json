@@ -1,0 +1,86 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "westus"
+    },
+    "keyVaultManagedIdentityName": {
+      "value": "ADG-CS-PROD-UAMI"
+    },
+    "uamiResourceGroup": {
+      "value": "ADG-CS-USWEST-RG"
+    },
+    "clusterName": {
+      "value": "pcfprod"
+    },
+    "certificateCommonName": {
+      "value": "adg-cs.cluster.prod.microsoft.com"
+    },
+    "adminUserName": {
+      "value": "a803b4a25de1415fae6"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/4e261d67-9395-4cec-a519-14053c4765e3/resourceGroups/ADG-CS-PROD-RG/providers/Microsoft.KeyVault/vaults/ADG-CS-PROD-KV"
+        },
+        "secretName": "AdminPassword"
+      }
+    },
+    "durabilityLevel": {
+      "value": "Silver"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
+    },
+    "vmImageSku": {
+      "value": "2022-datacenter"
+    },
+    "maxBatchInstancePercent": {
+      "value": 10
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2_V2"
+    },
+    "nt1InstanceCount": {
+      "value": 20
+    },
+    "vmNodeType1Size": {
+      "value": "Standard_D4_V2"
+    },
+    "nt2InstanceCount": {
+      "value": 100
+    },
+    "vmNodeType2Size": {
+      "value": "Standard_D4_V2"
+    },
+    "frontdoorEphemeralStartPort": {
+      "value": "30001"
+    },
+    "workerEphemeralStartPort": {
+      "value": "30001"
+    },
+    "kvvmextPollingInterval": {
+      "value": "3600"
+    },
+    "kvvmextObservedCertificates": {
+      "value": [
+        "https://adg-cs-uswest-kv.vault.azure.net/secrets/cluster",
+        "https://adg-cs-uswest-kv.vault.azure.net/secrets/geneva"
+      ]
+    },
+    "monitoringTenant": {
+      "value": "ADGCS"
+    },
+    "monitoringRoleForNodeType1": {
+      "value": "PCF.Frontdoor"
+    },
+    "monitoringRoleForNodeType2": {
+      "value": "PCF.Worker"
+    }
+  }
+}

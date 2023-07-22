@@ -1,0 +1,62 @@
+{
+  "environment":  "Autopilot" ,
+  "categories": [
+    {
+      "name": "Location",
+      "resources": [
+        {
+          "resourceDataType": "LocationHistoryV1",
+          "sequence": "Primary",
+          "resourceSchemaVersion": "0",
+          "dataProcessingType": "SynchronousDataFromWebService",
+          "agentType": "PDApiDataAgent",
+          "blockCount": "1000",
+          "orderByType": "DateTime",
+          "serviceEndpoint": "",
+          "resourceRelativeUri": "v1/my/locationhistory",
+          "operationName": "",
+          "formatTypes": [ "json" ]
+        }
+      ]
+    },
+    {
+      "name": "Browser",
+      "resources": [
+        {
+          "resourceDataType": "BrowseHistoryV1",
+          "sequence": "Primary",
+          "resourceSchemaVersion": "0",
+          "dataProcessingType": "SynchronousDataFromWebService",
+          "agentType": "PDApiDataAgent",
+          "blockCount": "1000",
+          "orderByType": "DateTime",
+          "serviceEndpoint": "",
+          "resourceRelativeUri": "v1/my/browsehistory",
+          "operationName": "",
+          "formatTypes": [ "json" ]
+        }
+      ]
+    },
+    {
+      "name": "AppUsage",
+      "resources": [
+        {
+          "resourceDataType": "AppUsageV1",
+          "sequence": "Primary",
+          "resourceSchemaVersion": "0",
+          "dataProcessingType": "AsynchronousDataFromCosmos",
+          "agentType": "CosmosAgent",
+          "blockCount": "1000",
+          "orderByType": "DateTime",
+          "serviceEndpoint": "",
+          "resourceRelativeUri": "",
+          "cosmosUseDefaultCreds": "false",
+          "cosmosWriteDir": "https://be.cosmos15.osdinfra.net/cosmos/pxscosmos15.prod/local/upload/INT/ExportSignal/",
+          "cosmosReadDir":  "https://be.cosmos15.osdinfra.net/cosmos/pxscosmos15.prod/local/upload/INT/ExportResult/",
+          "operationName": "",
+          "formatTypes": [ "json" ]
+        }
+      ]
+    }
+  ]
+}

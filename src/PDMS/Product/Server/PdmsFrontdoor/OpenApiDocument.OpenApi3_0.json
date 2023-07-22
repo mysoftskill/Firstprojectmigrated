@@ -1,0 +1,4027 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PdmsFrontdoor",
+    "version": "0.0.851.2"
+  },
+  "servers": [
+    {
+      "url": "https://management.privacy.microsoft.com"
+    }
+  ],
+  "paths": {
+    "/api/v2/assetGroups": {
+      "post": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Creates an asset group.",
+        "operationId": "postApiV2AssetGroups",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "An asset group with the following fields provided: qualifier, deleteAgentId, ownerId. It is not required to set both deleteAgentId and ownerId, but you must have at least one of them.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created asset group with service generated properties filled in (such as Id and ETag).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Reads all asset groups using the provided query options.",
+        "operationId": "getApiV2AssetGroups",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the ownerId and deleteAgentId properties. Ex: $filter=ownerId eq '{id}'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of asset groups. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/assetGroups('{id}')": {
+      "put": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Updates an asset group. This uses replace semantics, so all fields must be provided even if they are unchanged.",
+        "operationId": "putApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the asset group to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "An asset group with all fields provided (tracking details can be excluded).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated asset group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Deletes an asset group by id.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded asset group. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the asset group to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Reads an asset group by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the asset group to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The asset group if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/assetGroups/v2.findByAssetQualifier(qualifier={qualifier})/complianceState": {
+      "get": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "API always returns isCompliant = true state\r\n            Changes to this API are being made as part of Decoupling from cosmos \r\n            After discussion from Scott, we can return IsCompliant = true and deprecate the AssetGroupWorker",
+        "operationId": "getApiV2AssetGroupsByQualifierComplianceState",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "qualifier",
+            "in": "path",
+            "description": "The fully specified asset qualifier to search on. Use the identity library to create valid qualifiers.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The ComplianceState is always compliant.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ComplianceState"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/assetGroups/v2.setAgentRelationships": {
+      "post": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Link/unlink asset groups to agents or create/delete requests for linking (based on ownership).",
+        "operationId": "postApiV2AssetGroupsV2setAgentRelationships",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The set of relationships and actions to apply.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The results of each releationship action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/assetGroups('{id}')/v2.removeVariants": {
+      "post": {
+        "tags": [
+          "AssetGroups V2"
+        ],
+        "summary": "Remove/unlink variants from the given asset group.",
+        "operationId": "postApiV2ByIdV2removeVariants",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the asset group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Action parameter that contains a list of variant ids that should be removed from the asset group.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.RemoveVariantsParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated asset group with the variants removed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/assetGroups('{id}')/v2.calculateRegistrationStatus": {
+      "get": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Calculates the registration status for an AssetGroup.",
+        "operationId": "getApiV2ByIdV2calculateRegistrationStatus",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the asset group to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The asset group registration status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroupRegistrationStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataAgents": {
+      "post": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Creates a data agent. Agent must of of type v2.DeleteAgent",
+        "operationId": "postApiV2DataAgents",
+        "requestBody": {
+          "description": "A data agent with the following fields provided: qualifier, deleteAgentId, ownerId. It is not required to set both deleteAgentId and ownerId, but you must have at least one of them.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created data agent with service generated properties filled in (such as Id and ETag).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Reads all data agents using the provided query options.",
+        "operationId": "getApiV2DataAgents",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the ownerId and name properties. Ex: $filter=ownerId eq '{id}'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of data agents. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataAgents('{id}')": {
+      "put": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Updates a data agent. This uses replace semantics, so all fields must be provided even if they are unchanged.",
+        "operationId": "putApiV2ById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data agent to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A data agent with all fields provided (tracking details can be excluded).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated data agent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Deletes a data agent by id.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. The header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded data agent. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data agent to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Reads a data agent by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data agent to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The data agent if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataAgents('{id}')/v2.override": {
+      "delete": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Deletes a data agent by id with override pending commands check.",
+        "operationId": "deleteApiV2ByIdV2override",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded data agent. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data agent to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      }
+    },
+    "/api/v2/dataAgents('{id}')/v2.DeleteAgent": {
+      "get": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Reads a data agent by id and casts it into a v2.DeleteAgent. This API is required if you want to use $select for properties that are available only for delete agents.",
+        "operationId": "getApiV2ByIdV2DeleteAgent",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data agent to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The data agent if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DeleteAgent"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataAgents('{id}')/v2.DeleteAgent/v2.calculateRegistrationStatus": {
+      "get": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Calculates the registration status for a DeleteAgent.",
+        "operationId": "getApiV2ByIdV2DeleteAgentV2calculateRegistrationStatus",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data agent to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The agent registration status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AgentRegistrationStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/deleteAgents/v2.DeleteAgent": {
+      "get": {
+        "tags": [
+          "DataAgents V2"
+        ],
+        "summary": "Reads all data agents or the DeleteAgent subtype using the provided query options.",
+        "operationId": "getApiV2DeleteAgentsV2DeleteAgent",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the ownerId and name properties. Ex: $filter=ownerId eq '{id}'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of delete agents. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DeleteAgent"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataOwners": {
+      "post": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Creates a data owner.",
+        "operationId": "postApiV2DataOwners",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A data owner with the following fields provided: alertContacts, announcementContacts, writeSecurityGroups, name, description.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created data owner with service generated properties filled in (such as Id and ETag).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Reads all data owners using the provided query options.",
+        "operationId": "getApiV2DataOwners",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the name property. Ex: $filter=name eq 'value' OR $filter=contains(name, '{value}').",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of data owners. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataOwners('{id}')": {
+      "put": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Updates a data owner. This uses replace semantics, so all fields must be provided even if they are unchanged.",
+        "operationId": "putApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data owner to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A data owner with all fields provided (tracking details can be excluded).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated data owner.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Deletes a data owner by id.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded data owner. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data owner to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Reads a data owner by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data owner to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The data owner if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataOwners/v2.findByAuthenticatedUser": {
+      "get": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Reads all data owners for the current authenticated user. It identifies the security groups for the user\r\n            and then retrieves any data owner that contains any of the user's security groups.",
+        "operationId": "getApiV2DataOwnersV2findByAuthenticatedUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of data owners. Paging is not supported for this API, so all owners are returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/dataOwners('{id}')/v2.replaceServiceId": {
+      "post": {
+        "tags": [
+          "DataOwners V2"
+        ],
+        "summary": "Finds the existing data owner that contains the given serviceTree.serviceId\r\n            and replaces the serviceTree object for the provided data owner with the found values.\r\n            It then deletes the original service tree data owner and returns the updated owner.",
+        "operationId": "postApiV2ByIdV2replaceServiceId",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the data owner to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Action parameters that contain a data owner with all fields provided\r\n            (tracking details can be excluded). The serviceTree.serviceId must be set to the id that should be replaced.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ReplaceServiceIdParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated data owner with properties replaced by the existing service tree entity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/historyItems": {
+      "get": {
+        "tags": [
+          "History items V2"
+        ],
+        "summary": "Reads all history items using the provided query options.",
+        "operationId": "getApiV2HistoryItems",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the name property. Ex: $filter=name eq 'value' OR $filter=contains(name, '{value}').",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of history items. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.HistoryItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/incidents": {
+      "post": {
+        "tags": [
+          "Incidents V2"
+        ],
+        "summary": "Creates an incident and sends it to ICM.",
+        "operationId": "postApiV2Incidents",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "An incident with routing information provided. Must include at minimum one of ownerId, agentId, or assetGroupId in the routing data.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Incident"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created incident with service generated properties filled in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Incident"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/sharingRequests('{id}')/v2.approve": {
+      "post": {
+        "tags": [
+          "SharingRequests V2"
+        ],
+        "summary": "Approves a sharing request by id.",
+        "operationId": "postApiV2ByIdV2approve",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded sharing request. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the sharing request to approve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      }
+    },
+    "/api/v2/sharingRequests('{id}')": {
+      "delete": {
+        "tags": [
+          "SharingRequests V2"
+        ],
+        "summary": "Deletes a sharing request by id.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded sharing request. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the sharing request to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SharingRequests V2"
+        ],
+        "summary": "Reads a sharing request by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the sharing request to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The sharing request if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SharingRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/sharingRequests": {
+      "get": {
+        "tags": [
+          "SharingRequests V2"
+        ],
+        "summary": "Reads all sharing requests using the provided query options.",
+        "operationId": "getApiV2SharingRequests",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the ownerId and deleteAgentId properties. Ex: $filter=ownerId eq '{id}'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of sharing requests. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SharingRequest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/TransferRequests": {
+      "post": {
+        "tags": [
+          "TransferRequest V2"
+        ],
+        "summary": "Creates a Transfer request.",
+        "operationId": "postApiV2TransferRequests",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A Transfer request with the input fields provided.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TransferRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created Transfer request with service generated properties filled in (such as Id and ETag).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TransferRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/TransferRequests('{id}')/v2.approve": {
+      "post": {
+        "tags": [
+          "TransferRequest V2"
+        ],
+        "summary": "Approves a Transfer request by id.",
+        "operationId": "postApiV2ByIdV2approve",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded Transfer request. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the Transfer request to approve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      }
+    },
+    "/api/v2/TransferRequests('{id}')": {
+      "delete": {
+        "tags": [
+          "TransferRequest V2"
+        ],
+        "summary": "Deletes a Transfer request by id.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded Transfer request. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the Transfer request to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "TransferRequest V2"
+        ],
+        "summary": "Reads a Transfer request by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the Transfer request to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Transfer request if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TransferRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/TransferRequests": {
+      "get": {
+        "tags": [
+          "TransferRequest V2"
+        ],
+        "summary": "Reads all Transfer requests using the provided query options.",
+        "operationId": "getApiV2TransferRequest",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the sourceOwnerId and targetOwnerId properties. Ex: $filter=sourceOwnerId eq '{id}'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of Transfer requests. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TransferRequest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/users('{id}')": {
+      "get": {
+        "tags": [
+          "Users V2"
+        ],
+        "summary": "Reads a user by id. Pass ‘me’ to use the id of the authenticated user.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of the user to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/VariantDefinitions": {
+      "post": {
+        "tags": [
+          "Variant definitions V2"
+        ],
+        "summary": "Creates a variant definition.",
+        "operationId": "postApiV2VariantDefinitions",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "a variant definition with the following fields provided: name, description.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created variant definition with service generated properties filled in (such as Id and ETag).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Variant definitions V2"
+        ],
+        "summary": "Reads all variant definitions using the provided query options.",
+        "operationId": "getApiV2VariantDefinitions",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the name and state property. Ex: $filter=name eq 'value' OR $filter=contains(name, '{value}') or $filter=state eq 'Closed'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of variant definitions. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/VariantDefinitions('{id}')": {
+      "put": {
+        "tags": [
+          "Variant definitions V2"
+        ],
+        "summary": "Updates a variant definition. This uses replace semantics, so all fields must be provided even if they are unchanged.",
+        "operationId": "putApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the variant definition to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A variant definition with all fields provided (tracking details can be excluded).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated variant definition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Variant definitions V2"
+        ],
+        "summary": "Reads a variant definition by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the variant definition to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The variant definition if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Variant definitions V2"
+        ],
+        "summary": "Delete a variant definition by id.\r\n            Deletion will fail if any other entities are linked to the given variant definition.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded variant definition. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the variant definition to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      }
+    },
+    "/api/v2/VariantDefinitions('{id}')/force": {
+      "delete": {
+        "tags": [
+          "Variant definitions V2"
+        ],
+        "summary": "Delete a variant definition by id.\r\n            All other entities linked to the given variant will be unlinked.",
+        "operationId": "deleteApiV2ByIdForce",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded variant definition. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the variant definition to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      }
+    },
+    "/api/v2/variantRequests": {
+      "post": {
+        "tags": [
+          "VariantRequests V2"
+        ],
+        "summary": "Creates a variant request.",
+        "operationId": "postApiV2VariantRequests",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A variant request with the following fields provided: requestedVariants, variantRelationships.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created variant request with service generated properties filled in (such as Id and ETag).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/variantRequests('{id}')": {
+      "put": {
+        "tags": [
+          "VariantRequests V2"
+        ],
+        "summary": "Updates a variant request. This uses replace semantics, so all fields must be provided even if they are unchanged.",
+        "operationId": "putApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the variant request to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A variant request with all fields provided (tracking details can be excluded).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated variant request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/VariantRequests('{id}')/v2.approve": {
+      "post": {
+        "tags": [
+          "VariantRequests V2"
+        ],
+        "summary": "Approves a variant request by id.",
+        "operationId": "postApiV2ByIdV2approve",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded Variant request. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the Variant request to approve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      }
+    },
+    "/api/v2/VariantRequests('{id}')": {
+      "delete": {
+        "tags": [
+          "VariantRequests V2"
+        ],
+        "summary": "Deletes a variant request by id.",
+        "operationId": "deleteApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "The ETag of the previously downloaded Variant request. A non matching value will result in a failure.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the Variant request to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Empty."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "VariantRequests V2"
+        ],
+        "summary": "Reads a variant request by id.",
+        "operationId": "getApiV2ById",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the Variant request to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Variant request if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/VariantRequests": {
+      "get": {
+        "tags": [
+          "VariantRequests V2"
+        ],
+        "summary": "Reads all variant requests using the provided query options.",
+        "operationId": "getApiV2VariantRequests",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication token for the request. The service supports AAD user/app authentication. For AAD, the header value must be in the format: Bearer {token}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MS-CV",
+            "in": "header",
+            "description": "Correlation Vector for the request. If not provided, then the service generates a new one.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "A select clause for the query. If provided, then only the requested properties are returned. If not provided, then all properties are returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "A filter clause for the query. Filters are supported for the ownerId and deleteAgentId properties. Ex: $filter=ownerId eq '{id}'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Determines page size for the request. If not provided, then server side paging will be used.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Determines page index for the request. If not provided, then the first page is returned.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A collection of Variant requests. If server-side paging is triggered, than the nextLink property will be set. Use that to download the next page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup": {
+        "type": "object",
+        "properties": {
+          "complianceState": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ComplianceState"
+          },
+          "qualifier": {
+            "type": "string"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroupVariant"
+            }
+          },
+          "dataAssets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAsset"
+            }
+          },
+          "deleteAgentId": {
+            "type": "string"
+          },
+          "exportAgentId": {
+            "type": "string"
+          },
+          "deleteSharingRequestId": {
+            "type": "string"
+          },
+          "exportSharingRequestId": {
+            "type": "string"
+          },
+          "accountCloseAgentId": {
+            "type": "string"
+          },
+          "inventoryId": {
+            "type": "string"
+          },
+          "isRealTimeStore": {
+            "type": "boolean"
+          },
+          "isVariantsInheritanceBlocked": {
+            "type": "boolean"
+          },
+          "isDeleteAgentInheritanceBlocked": {
+            "type": "boolean"
+          },
+          "isExportAgentInheritanceBlocked": {
+            "type": "boolean"
+          },
+          "hasPendingVariantRequests": {
+            "type": "boolean"
+          },
+          "deleteAgent": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DeleteAgent"
+          },
+          "exportAgent": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DeleteAgent"
+          },
+          "accountCloseAgent": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DeleteAgent"
+          },
+          "inventory": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Inventory"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+          },
+          "hasPendingTransferRequest": {
+            "type": "boolean"
+          },
+          "pendingTransferRequestTargetOwnerId": {
+            "type": "string"
+          },
+          "pendingTransferRequestTargetOwnerName": {
+            "type": "string"
+          },
+          "optionalFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ComplianceState": {
+        "type": "object",
+        "properties": {
+          "isCompliant": {
+            "type": "boolean"
+          },
+          "incompliantReason": {
+            "enum": [
+              "AssetGroupNotFound",
+              "DeleteAgentNotFound",
+              "DeleteAgentNotEnabledForProd"
+            ],
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroupVariant": {
+        "type": "object",
+        "properties": {
+          "variantId": {
+            "type": "string"
+          },
+          "variantName": {
+            "type": "string"
+          },
+          "variantState": {
+            "enum": [
+              "Requested",
+              "Approved",
+              "Deprecated",
+              "Rejected"
+            ],
+            "type": "string"
+          },
+          "variantExpiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tfsTrackingUris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "egrcId": {
+            "type": "string"
+          },
+          "egrcName": {
+            "type": "string"
+          },
+          "disableSignalFiltering": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAsset": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "qualifier": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DeleteAgent": {
+        "type": "object",
+        "properties": {
+          "sharingEnabled": {
+            "type": "boolean"
+          },
+          "isThirdPartyAgent": {
+            "type": "boolean"
+          },
+          "hasSharingRequests": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "assetGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+            }
+          },
+          "deploymentLocation": {
+            "type": "string"
+          },
+          "dataResidencyBoundary": {
+            "type": "string"
+          },
+          "supportedClouds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "connectionDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ConnectionDetail"
+            }
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+          },
+          "operationalReadinessLow": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "operationalReadinessHigh": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "icm": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Icm"
+          },
+          "inProdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ConnectionDetail": {
+        "type": "object",
+        "properties": {
+          "protocol": {
+            "type": "string"
+          },
+          "authenticationType": {
+            "enum": [
+              "MsaSiteBasedAuth",
+              "AadAppBasedAuth"
+            ],
+            "type": "string",
+            "nullable": true
+          },
+          "msaSiteId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "aadAppId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "aadAppIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          "releaseState": {
+            "enum": [
+              "PreProd",
+              "Ring1",
+              "Ring2",
+              "Ring3",
+              "Prod"
+            ],
+            "type": "string"
+          },
+          "agentReadiness": {
+            "enum": [
+              "TestInProd",
+              "ProdReady"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner": {
+        "type": "object",
+        "properties": {
+          "alertContacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "announcementContacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sharingRequestContacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "writeSecurityGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tagSecurityGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tagApplicationIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dataAgents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent"
+            }
+          },
+          "assetGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroup"
+            }
+          },
+          "serviceTree": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ServiceTree"
+          },
+          "icm": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Icm"
+          },
+          "hasInitiatedTransferRequests": {
+            "type": "boolean"
+          },
+          "hasPendingTransferRequests": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataAgent": {
+        "type": "object",
+        "properties": {
+          "connectionDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ConnectionDetail"
+            }
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+          },
+          "operationalReadinessLow": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "operationalReadinessHigh": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "icm": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Icm"
+          },
+          "inProdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Icm": {
+        "type": "object",
+        "properties": {
+          "connectorId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "source": {
+            "enum": [
+              "Manual",
+              "ServiceTree"
+            ],
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "egressedOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ServiceTree": {
+        "type": "object",
+        "properties": {
+          "serviceAdmins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "divisionId": {
+            "type": "string"
+          },
+          "divisionName": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "organizationName": {
+            "type": "string"
+          },
+          "serviceGroupId": {
+            "type": "string"
+          },
+          "serviceGroupName": {
+            "type": "string"
+          },
+          "teamGroupId": {
+            "type": "string"
+          },
+          "teamGroupName": {
+            "type": "string"
+          },
+          "serviceId": {
+            "type": "string"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "Service",
+              "TeamGroup",
+              "ServiceGroup"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Inventory": {
+        "type": "object",
+        "properties": {
+          "dataCategory": {
+            "enum": [
+              "None",
+              "Controller",
+              "Processor"
+            ],
+            "type": "string"
+          },
+          "retentionPolicy": {
+            "enum": [
+              "FiveYears",
+              "EighteenMonths",
+              "ThirteenMonths",
+              "SixMonths",
+              "Other"
+            ],
+            "type": "string"
+          },
+          "retentionPolicyDetail": {
+            "type": "string"
+          },
+          "disposalMethod": {
+            "enum": [
+              "FullDelete",
+              "DeIdentify",
+              "Other"
+            ],
+            "type": "string"
+          },
+          "disposalMethodDetail": {
+            "type": "string"
+          },
+          "documentationType": {
+            "enum": [
+              "DataFlowDiagram"
+            ],
+            "type": "string"
+          },
+          "documentationLink": {
+            "type": "string"
+          },
+          "thirdPartyRelation": {
+            "enum": [
+              "None",
+              "Internal",
+              "SentTo",
+              "ReceivedFrom"
+            ],
+            "type": "string"
+          },
+          "thirdPartyDetails": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipParameters": {
+        "type": "object",
+        "properties": {
+          "relationships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipParameters.Relationship"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipParameters.Relationship": {
+        "type": "object",
+        "properties": {
+          "assetGroupId": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipParameters.Action"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipParameters.Action": {
+        "type": "object",
+        "properties": {
+          "verb": {
+            "enum": [
+              "Set",
+              "Clear"
+            ],
+            "type": "string"
+          },
+          "capabilityId": {
+            "type": "string"
+          },
+          "deleteAgentId": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipResponse.AssetGroupResult"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipResponse.AssetGroupResult": {
+        "type": "object",
+        "properties": {
+          "assetGroupId": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipResponse.CapabilityResult"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SetAgentRelationshipResponse.CapabilityResult": {
+        "type": "object",
+        "properties": {
+          "capabilityId": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "Updated",
+              "Requested",
+              "Removed"
+            ],
+            "type": "string"
+          },
+          "sharingRequestId": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.RemoveVariantsParameters": {
+        "type": "object",
+        "properties": {
+          "variantIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroupRegistrationStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "isComplete": {
+            "type": "boolean"
+          },
+          "qualifier": {
+            "type": "string"
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetRegistrationStatus"
+            }
+          },
+          "assetsStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetRegistrationStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "isComplete": {
+            "type": "boolean"
+          },
+          "qualifier": {
+            "type": "string"
+          },
+          "isNonPersonal": {
+            "type": "boolean"
+          },
+          "isLongTailOrCustomNonUse": {
+            "type": "boolean"
+          },
+          "subjectTypeTags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Tag"
+            }
+          },
+          "subjectTypeTagsStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          },
+          "dataTypeTags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Tag"
+            }
+          },
+          "dataTypeTagsStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Tag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AgentRegistrationStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "isComplete": {
+            "type": "boolean"
+          },
+          "protocols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "protocolStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          },
+          "environments": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "PreProd",
+                "Ring1",
+                "Ring2",
+                "Ring3",
+                "Prod"
+              ],
+              "type": "string"
+            }
+          },
+          "environmentStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "capabilityStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          },
+          "assetGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroupRegistrationStatus"
+            }
+          },
+          "assetGroupsStatus": {
+            "enum": [
+              "Invalid",
+              "Valid",
+              "Deprecated",
+              "Missing",
+              "Partial",
+              "ValidButTruncated",
+              "NotApplicable"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.ReplaceServiceIdParameters": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.HistoryItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "entity": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Entity"
+          },
+          "writeAction": {
+            "enum": [
+              "Create",
+              "Update",
+              "SoftDelete",
+              "HardDelete"
+            ],
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Entity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.Incident": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "alertSourceId": {
+            "type": "string"
+          },
+          "routing": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.RouteData"
+          },
+          "severity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "keywords": {
+            "type": "string"
+          },
+          "inputParameters": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.IncidentInputParameters"
+          },
+          "responseMetadata": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.IncidentResponseMetadata"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.RouteData": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "agentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "assetGroupId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.IncidentInputParameters": {
+        "type": "object",
+        "properties": {
+          "disableTitleSubstitutions": {
+            "type": "boolean"
+          },
+          "disableBodySubstitutions": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.IncidentResponseMetadata": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "substatus": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SharingRequest": {
+        "type": "object",
+        "properties": {
+          "ownerId": {
+            "type": "string"
+          },
+          "deleteAgentId": {
+            "type": "string"
+          },
+          "ownerName": {
+            "type": "string"
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SharingRelationship"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.SharingRelationship": {
+        "type": "object",
+        "properties": {
+          "assetGroupId": {
+            "type": "string"
+          },
+          "assetQualifier": {
+            "type": "string"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TransferRequest": {
+        "type": "object",
+        "properties": {
+          "sourceOwnerId": {
+            "type": "string"
+          },
+          "targetOwnerId": {
+            "type": "string"
+          },
+          "requestState": {
+            "enum": [
+              "None",
+              "Pending",
+              "Approving",
+              "Approved",
+              "Cancelled",
+              "Failed"
+            ],
+            "type": "string"
+          },
+          "assetGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.User": {
+        "type": "object",
+        "properties": {
+          "securityGroups": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantDefinition": {
+        "type": "object",
+        "properties": {
+          "egrcId": {
+            "type": "string"
+          },
+          "egrcName": {
+            "type": "string"
+          },
+          "dataTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subjectTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "approver": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.DataOwner"
+          },
+          "state": {
+            "enum": [
+              "Active",
+              "Closed"
+            ],
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "None",
+              "Intentional",
+              "Expired"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRequest": {
+        "type": "object",
+        "properties": {
+          "ownerId": {
+            "type": "string"
+          },
+          "ownerName": {
+            "type": "string"
+          },
+          "requesterAlias": {
+            "type": "string"
+          },
+          "generalContractorAlias": {
+            "type": "string"
+          },
+          "celaContactAlias": {
+            "type": "string"
+          },
+          "workItemUri": {
+            "type": "string"
+          },
+          "requestedVariants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.AssetGroupVariant"
+            }
+          },
+          "variantRelationships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRelationship"
+            }
+          },
+          "additionalInformation": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "eTag": {
+            "type": "string"
+          },
+          "trackingDetails": {
+            "$ref": "#/components/schemas/Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.TrackingDetails"
+          }
+        }
+      },
+      "Microsoft.PrivacyServices.DataManagement.DataAccess.Models.V2.VariantRelationship": {
+        "type": "object",
+        "properties": {
+          "assetGroupId": {
+            "type": "string"
+          },
+          "assetQualifier": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

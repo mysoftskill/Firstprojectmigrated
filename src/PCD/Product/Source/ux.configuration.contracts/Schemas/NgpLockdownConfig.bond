@@ -1,0 +1,16 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+enum NgpLockdownKind
+{
+	Scheduled,
+	Forced
+}
+
+struct INgpLockdownConfig
+{
+    10: NgpLockdownKind Kind;
+
+    20: optional string StartedUtc;
+
+    30: optional string EndedUtc;
+}

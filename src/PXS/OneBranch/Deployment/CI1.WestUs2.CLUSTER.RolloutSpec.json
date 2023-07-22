@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "CI1.WestUs2.ServiceModel.json",
+    "Name": "PXS-CI1-WESTUS2-CLUSTER",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-PxsServiceFabric-Cluster-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PxsServiceFabric-Cluster-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    },
+    {
+      "Name": "Deploy-PxsPartnerMock-ServiceFabric-Cluster-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PxsPartnerMock-ServiceFabric-Cluster-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    }
+  ]
+}

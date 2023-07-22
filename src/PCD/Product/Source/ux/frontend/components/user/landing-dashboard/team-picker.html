@@ -1,0 +1,9 @@
+﻿<div class="team-picker">
+    <mee-combo dropdown-trigger-label="Select a team" data-use-cms>
+        <label data-use-cms>Select a team</label>
+        <input ng-model="$ctrl.selectedOwnerName" ng-change="$ctrl.teamListSelectionChanged()">
+        <combo-items>
+            <combo-item ng-repeat="owner in $ctrl.model.owners">{{owner.name}}</combo-item>
+        </combo-items>
+    </mee-combo>
+</div>

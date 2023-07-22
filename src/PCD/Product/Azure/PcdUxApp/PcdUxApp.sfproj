@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.props" Condition="Exists('..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.props')" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>9d9316c4-a54b-4469-98d5-e3114b779ad0</ProjectGuid>
+    <ProjectVersion>2.5</ProjectVersion>
+    <MinToolsVersion>1.5</MinToolsVersion>
+    <SupportedMSBuildNuGetPackageVersion>1.6.8</SupportedMSBuildNuGetPackageVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ApplicationPackageRoot\ApplicationManifest.xml" />
+    <None Include="ApplicationParameters\Cloud.xml" />
+    <None Include="ApplicationParameters\Local.1Node.xml" />
+    <None Include="ApplicationParameters\Local.5Node.xml" />
+    <None Include="PublishProfiles\Cloud.xml" />
+    <None Include="PublishProfiles\Local.1Node.xml" />
+    <None Include="PublishProfiles\Local.5Node.xml" />
+    <None Include="Scripts\Deploy-FabricApplication.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationPackageRoot\PcdUxSvcPkg\Config\Settings.xml" />
+    <Content Include="ApplicationPackageRoot\PcdUxSvcPkg\ServiceManifest.xml" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\ServiceFabricWatchdog\WatchdogSvc.csproj" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <PropertyGroup>
+    <ApplicationProjectTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Service Fabric Tools\Microsoft.VisualStudio.Azure.Fabric.ApplicationProject.targets</ApplicationProjectTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(ApplicationProjectTargetsPath)" Condition="Exists('$(ApplicationProjectTargetsPath)')" />
+  <Target Name="AfterBuild">
+    <Message Text="Copy guest executables code to $(ProjectName)" Importance="high" />
+    <PropertyGroup>
+      <BinFolder>$(ProjectDir)..\..\Source\ux\bin</BinFolder>
+      <ServiceFabricIniFolder>$(ProjectDir)..\..\Deployment\ServiceFabricIni</ServiceFabricIniFolder>
+      <AppSettingFolder>$(ProjectDir)..\..\Source\ux</AppSettingFolder>
+      <WWWRootFolder>$(ProjectDir)..\..\Source\ux\wwwroot</WWWRootFolder>
+      <CertInstallFolder>$(ProjectDir)..\..\Source\CertInstaller\bin</CertInstallFolder>
+      <PcdUxCodeFolder>$(ProjectDir)ApplicationPackageRoot\PcdUxSvcPkg\Code</PcdUxCodeFolder>
+      <PcdAppConfigFolder>$(ProjectDir)ApplicationPackageRoot\PcdUxSvcPkg\Code\appconfig</PcdAppConfigFolder>
+      <PcdServiceIniModulesFolder>$(ProjectDir)ApplicationPackageRoot\PcdUxSvcPkg\Code</PcdServiceIniModulesFolder>
+      <WWWRootModulesFolder>$(ProjectDir)ApplicationPackageRoot\PcdUxSvcPkg\Code\wwwroot</WWWRootModulesFolder>
+      <PcdCertInstallFolder>$(ProjectDir)ApplicationPackageRoot\PcdUxSvcPkg\Code\CertInstaller</PcdCertInstallFolder>
+    </PropertyGroup>
+    <ItemGroup>
+      <PcdUxFiles Include="$(BinFolder)\$(Configuration)\**\*.*" />
+      <PcdIniFiles Include="$(ServiceFabricIniFolder)\**\*.*" />
+      <PcdAppSettingFile Include="$(AppSettingFolder)\appsettings.json" />
+      <CertInstFiles Include="$(CertInstallFolder)\$(Configuration)\**\*.*" />
+      <WwwRootFiles Include="$(WWWRootFolder)\**\*.*" />
+    </ItemGroup>
+    <Message Text="$(ProjectName): Copy guest executables from $(BinFolder)\$(Configuration) to $(PcdUxCodeFolder)" Importance="high" />
+    <Copy SourceFiles="@(PcdUxFiles)" DestinationFiles="@(PcdUxFiles->'$(PcdUxCodeFolder)\%(RecursiveDir)%(Filename)%(Extension)')" ContinueOnError="False" SkipUnchangedFiles="true" />
+    <Message Text="$(ProjectName): Copy setup scripts from $(ServiceFabricIniFolder) to $(PcdServiceIniModulesFolder)" Importance="high" />
+    <Copy SourceFiles="@(PcdIniFiles)" DestinationFiles="@(PcdIniFiles->'$(PcdServiceIniModulesFolder)\%(RecursiveDir)%(Filename)%(Extension)')" ContinueOnError="False" SkipUnchangedFiles="true" />
+    <Message Text="$(ProjectName): Copy appsettings from $(AppSettingFolder) to $(PcdUxCodeFolder)" Importance="high" />
+    <Copy SourceFiles="@(PcdAppSettingFile)" DestinationFiles="@(PcdAppSettingFile->'$(PcdUxCodeFolder)\%(RecursiveDir)%(Filename)%(Extension)')" ContinueOnError="False" SkipUnchangedFiles="true" />
+    <Message Text="$(ProjectName): Copy certinstaller from $(CertInstallFolder) to $(PcdCertInstallFolder)" Importance="high" />
+    <Copy SourceFiles="@(CertInstFiles)" DestinationFiles="@(CertInstFiles->'$(PcdCertInstallFolder)\%(RecursiveDir)%(Filename)%(Extension)')" ContinueOnError="False" SkipUnchangedFiles="true" />
+    <Message Text="$(ProjectName): Copy wwwroot from $(WWWRootFolder) to $(WWWRootModulesFolder)" Importance="high" />
+    <Copy SourceFiles="@(WwwRootFiles)" DestinationFiles="@(WwwRootFiles->'$(WWWRootModulesFolder)\%(RecursiveDir)%(Filename)%(Extension)')" ContinueOnError="False" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="ForcePackageTarget" AfterTargets="Build" Condition="'$(ForcePackageTarget)' =='true'">
+    <CallTarget Targets="Package" />
+  </Target>
+  <Import Project="..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets" Condition="Exists('..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets')" />
+  <Target Name="ValidateMSBuildFiles" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.props')" Text="Unable to find the '..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.props' file. Please restore the 'Microsoft.VisualStudio.Azure.Fabric.MSBuild' Nuget package." />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets')" Text="Unable to find the '..\..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.8\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets' file. Please restore the 'Microsoft.VisualStudio.Azure.Fabric.MSBuild' Nuget package." />
+  </Target>
+</Project>

@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Microsoft.PrivacyServices.CommandFeed.Validator</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Validator</RootNamespace>
+    <TargetFrameworks>net452;net472;netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <RuntimeFrameworkVersion>3.1</RuntimeFrameworkVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <Platforms>AnyCPU;x64</Platforms>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</Version>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</Version>
+    <SourceRevisionId Condition=" '$(BUILD_SOURCEVERSION)' != '' ">$(BUILD_SOURCEVERSION)</SourceRevisionId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Build\UnprotectedKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" VersionOverride="13.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" VersionOverride="[6.30.0]" />
+    <PackageReference Include="System.Net.Http" VersionOverride="4.3.4" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <!-- [assembly: InternalsVisibleTo("PrivacyCommandProcessor.UnitTests, PublicKey=002400000480000094000000060200000024000052534131000400000100010073131da48c441580970097c650ce13a92917d460bb661b0718b617e9e4dd8cdaedf1e00d73b9658e8e8c938847a93a7294ffd0807ce451e85a72dce1ed0456e4572ec42bd37cc7abd9140845ea5dfa6515ea51eef0c94656dfc5ee22fd4acc53bf56528b34e85633c5ba4613baf02fb52d8c102cffc44c1bac22549e5329f4e6")] -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>PrivacyCommandProcessor.UnitTests, PublicKey=002400000480000094000000060200000024000052534131000400000100010073131da48c441580970097c650ce13a92917d460bb661b0718b617e9e4dd8cdaedf1e00d73b9658e8e8c938847a93a7294ffd0807ce451e85a72dce1ed0456e4572ec42bd37cc7abd9140845ea5dfa6515ea51eef0c94656dfc5ee22fd4acc53bf56528b34e85633c5ba4613baf02fb52d8c102cffc44c1bac22549e5329f4e6</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\.version\PipelineAssemblyInfo.cs" Link="Properties\PipelineAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>Microsoft.PrivacyServices.CommandFeed.Validator</PackageId>
+    <Title>Microsoft.PrivacyServices.CommandFeed.Validator</Title>
+    <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+    <Description>NGPX Privacy Command Validator SDK.</Description>
+    <Copyright>Copyright 2020</Copyright>
+    <PackageTags>ngp ngpx privacy pcf verifier</PackageTags>
+  </PropertyGroup>
+
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

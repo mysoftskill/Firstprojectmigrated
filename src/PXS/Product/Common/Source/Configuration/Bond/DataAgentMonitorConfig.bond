@@ -1,0 +1,44 @@
+import "WorkerTaskConfiguration.bond"
+import "PartnerConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+import "KustoConfig.bond"
+import "EmailTrasmitConfig.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IDataActionJobRunnerConfig : ITaskConfig
+{
+    10 : required string LockTableName;
+    20 : optional int32 MaxDequeueCount = 9999;
+    30 : optional int32 DelayIfCouldNotCompleteMinutes = 10;
+    40 : required int32 LeaseMinutes;
+    50 : optional int32 DelayOnEmptyQueueSeconds = 60;
+    60 : optional bool ForceVerboseLogOnSuccess = false;
+    70 : optional bool ForceSimulationMode = false;
+}
+
+struct IDataActionJobSchedulerConfig : ITaskConfig
+{
+    10 : optional int32 RunFrequencySeconds = 3600;
+    20 : optional bool ForceVerboseLogOnSuccess = false;
+}
+
+struct IFileSystemActionLibraryConfig
+{
+    10 : required string TemplateManifestPath;
+    20 : required string ActionRefSetPath;
+    30 : required string ActionSetPath;
+    40 : required string LibraryFilterTag = "PROD";
+}
+
+struct IDataActionRunnerConfig : ITaskWorkerConfig
+{
+    10 : required IAzureStorageConfiguration AzureStorageConfiguration;
+    20 : required string LockTableName;
+    30 : required IKustoConfig KustoConfig;
+    40 : optional ISmtpConfig SmtpConfig;
+    50 : optional string StorageItemNamePrefix;
+    60 : required IMucpConfig MucpConfig;
+    70 : required IFileSystemActionLibraryConfig FileSystemLibraryConfig;
+    80 : optional string FilterTag;
+}

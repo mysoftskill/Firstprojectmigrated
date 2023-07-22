@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" TreatAsLocalProperty="StyleCopOverrideSettingsFile">
+
+    <PropertyGroup>
+        <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    </PropertyGroup>
+
+    <PropertyGroup>
+
+        <ServiceName>CommandFeed</ServiceName>      
+        <ServiceRoot>$(EnlistmentRoot)\Product\</ServiceRoot>
+        <BuildPath>$(ServiceRoot)Build\</BuildPath>
+
+        <RunCodeAnalysis>true</RunCodeAnalysis>
+        <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+        <StyleCopAnalyzersEnabled>true</StyleCopAnalyzersEnabled>
+        <StyleCopTreatErrorsAsWarnings>false</StyleCopTreatErrorsAsWarnings>
+
+        <AssemblyClsCompliant>false</AssemblyClsCompliant>
+        <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+        <SignAssembly>false</SignAssembly>
+        <EnforceNuGetPackageVersionConsistency>true</EnforceNuGetPackageVersionConsistency>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>   
+        
+        <!-- Don't generate FXCop success files. These interfere with Pilotfish code signing. -->
+        <CodeAnalysisGenerateSuccessFile>false</CodeAnalysisGenerateSuccessFile>
+        
+        <!-- Disable carbon nuget pack target. Using vsts build task instead. -->
+        <EnableNugetPack>false</EnableNugetPack>
+
+        <!-- Force x64! -->
+        <Prefer32Bit>false</Prefer32Bit>
+        <Platform>x64</Platform>
+        
+        <!-- Platform Target is x64 for everything except the PCF SDKs -->
+        <ItemGroup Condition="'$(Platforms)' == 'x64'">
+            <PlatformTarget>x64</PlatformTarget>
+        </ItemGroup>
+
+        <InternalsVisisibleToUnitTests>true</InternalsVisisibleToUnitTests>
+        
+        <!-- Compile test hooks when: explicitly told to, or when we're building on a dev machine.-->
+        <DefineConstants Condition=" '$(CompileTestHooks)' == 'true' OR '$(BUILD_DEFINITIONNAME)' == '' ">INCLUDE_TEST_HOOKS;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  
+  <!-- add in some explicit configurations so that VS can discover them --> 
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" /> 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" /> 
+  
+</Project>

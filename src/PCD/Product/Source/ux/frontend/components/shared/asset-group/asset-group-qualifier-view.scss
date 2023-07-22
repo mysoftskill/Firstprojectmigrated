@@ -1,0 +1,24 @@
+@import "../../../styles/utilities.scss";
+
+pcd-asset-group-qualifier-view {
+    span.asset-group-qualifier-line {
+        span.asset-group-qualifier-separator:after {
+            /* Add visual space, which also serves as a signal for word break, but will not get copied to clipboard, when users copies the qualifier. */
+            content: " ";
+        }
+
+        span.asset-group-qualifier:last-child {
+            span.asset-group-qualifier-separator {
+                display: none;
+
+                &:after {
+                    content: "";
+                }
+            }
+        }
+
+        span.asset-group-qualifier-value {
+            @extend %force-wrap-element-contents;
+        }
+    }
+}

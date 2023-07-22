@@ -1,0 +1,59 @@
+﻿//Script GUID:dba95265-c103-470d-b004-da5b536e0cad
+// Used for baking the Puid Mapping unstructured streams into structured stream
+
+#DECLARE targetDate DateTime = DateTime.Parse(@@TARGETDATE@@);
+#DECLARE dateString string = @targetDate.ToString("yyyy-MM-dd");
+
+// The number of sub-streams per hour
+#DECLARE writerCount int = @@WRITERCOUNT@@;
+#DECLARE writerCountString string = @writerCount.ToString();
+
+#DECLARE envName string = @@ENVNAME@@;
+#DECLARE sourceFolder string = String.Format(@"/local/puidmapping/{0}/PuidMapping", @envName);
+
+oldMapping = EXTRACT
+        Puid : string,
+        Anid : string,
+        Opid : string,
+        Cid  : long
+    FROM SPARSE STREAMSET @sourceFolder
+         PATTERN @"/%Y/%m/%d/puidmapwcid_%h.csv"
+         RANGE __date = [@dateString, @dateString], __hour = ["00", "23"]
+    USING DefaultTextExtractor( delimiter: ',' );
+
+parallelMapping = EXTRACT
+        Puid : string,
+        Anid : string,
+        Opid : string,
+        Cid  : long
+    FROM SPARSE STREAMSET @sourceFolder
+         PATTERN @"/%Y/%m/%d/puidmapwcid_%h_%n.csv"
+         RANGE __date = [@dateString, @dateString], __hour = ["00", "23"], __serialnum = ["0", @writerCountString]
+    USING DefaultTextExtractor( delimiter: ',' );
+
+mapping = SELECT * FROM oldMapping
+    UNION ALL
+    SELECT * FROM parallelMapping;
+
+#DECLARE anidOutput string = String.Format(@"/local/puidmapping/{0}/ANID/{1:yyyy/MM}/puidmap_{1:dd}.ss", @envName, @targetDate);
+#DECLARE cidOutput string = String.Format(@"/local/puidmapping/{0}/CID/{1:yyyy/MM}/puidmap_{1:dd}.ss", @envName, @targetDate);
+#DECLARE opidOutput string = String.Format(@"/local/puidmapping/{0}/OPID/{1:yyyy/MM}/puidmap_{1:dd}.ss", @envName, @targetDate);
+
+anidMap = SELECT Anid, Puid FROM mapping;
+cidMap = SELECT Cid.ToString(@"X16") AS Cid, Puid FROM mapping;
+opidMap = SELECT Opid, Puid FROM mapping;
+
+OUTPUT anidMap 
+TO SSTREAM @anidOutput
+HASH CLUSTERED BY Anid 
+SORTED BY Anid;
+
+OUTPUT cidMap
+TO SSTREAM @cidOutput
+HASH CLUSTERED BY Cid
+SORTED BY Cid;
+
+OUTPUT opidMap
+TO SSTREAM @opidOutput
+HASH CLUSTERED BY Opid
+SORTED BY Opid;

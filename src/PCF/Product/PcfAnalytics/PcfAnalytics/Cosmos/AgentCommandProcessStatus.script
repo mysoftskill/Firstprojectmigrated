@@ -1,0 +1,287 @@
+﻿//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      version             = @@version@@
+
+// Asimov References:
+MODULE "Asimov.Batch.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@"); // v1
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE outputRootFolderName string = "AgentRequestStatus";
+
+#DECLARE hourlyPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/%Y/%m/%d/{{0}}_%Y_%m_%d_%h.ss?date={{1:yyyy-MM-dd}}&hour={{1:HH}}", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+
+#DECLARE cloud_env string = "Production";
+#DECLARE cloud_name string = "PXS";
+
+//OUTPUTS
+#DECLARE hourlyAgentCommandProcessStatus_outputPath string = string.Format(@hourlyPathFormat,"AgentCommandProcessStatus",@startDate);
+#DECLARE hourlyCheckpointStatusSummary_outputPath string = string.Format(@hourlyPathFormat,"CheckpointStatusSummary",@startDate);
+#DECLARE hourlyUnexpectedCommandDetails_outputPath string = string.Format(@hourlyPathFormat,"UnexpectedCommandDetails",@startDate);
+#DECLARE streamExpiry string = "180";
+
+//output for test
+#IF (@localRun)
+    #SET hourlyAgentCommandProcessStatus_outputPath = string.Concat("/my", @hourlyAgentCommandProcessStatus_outputPath);
+    #SET hourlyCheckpointStatusSummary_outputPath = string.Concat("/my", @hourlyCheckpointStatusSummary_outputPath);
+    #SET hourlyUnexpectedCommandDetails_outputPath = string.Concat("/my", @hourlyUnexpectedCommandDetails_outputPath);
+    #SET streamExpiry = "7";
+#ENDIF
+
+SllBaseQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+    WHERE cloud_name == @cloud_name
+    AND cloud_environment == @cloud_env;
+
+// Define JsonObjectProcessor for different SLL events
+AddCommandObjectProcessor = 
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "AgentId:AgentId:string",
+        "AssetGroupId:AssetGroupId:string",
+        "CommandType:CommandType:string",
+        "CommandId:CommandId:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.AddCommandEvent";
+
+GetCommandsObjectProcessor =
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "AgentId:AgentId:string",
+        "AssetGroupId:AssetGroupId:string",
+        "DeleteCommandCount:DeleteCount:int64",
+        "AccountCloseCommandCount:AccountCloseCount:int64",
+        "ExportCommandCount:ExportCount:int64"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.GetCommandsEvent";
+
+CheckpointObjectProcessor =
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "baseData.operationName:OperationName:string",
+        "baseData.requestStatus:RequestStatus:int64",
+        "Properties.LeaseRecieptAgentId:AgentId:string",
+        "Properties.LeaseReceiptAssetGroupId:AssetGroupId:string",
+        "Properties.CommandType:CommandType:string",
+        "Properties.LeaseReceiptCommandId:CommandId:string",
+        "Properties.CheckpointStatusCode:CheckpointStatusCode:string",
+        "Properties.AffectedRows:AffectedRows:string",
+        "Properties.SubjectType:CommandSubject:string",
+        "Properties.CommandDataTypes:CommandDataTypes:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+    HAVING RequestStatus == 3 AND OperationName == "API.PostCheckpoint.1.0";
+
+// Get specific PCF Events
+AddCommandEvents = 
+    SELECT Guid.Parse(AgentId) AS AgentId,
+           Guid.Parse(AssetGroupId) AS AssetGroupId,
+           CommandType,
+           CommandId
+    FROM AddCommandObjectProcessor;
+
+GetCommandsEvents = 
+    SELECT Guid.Parse(AgentId) AS AgentId,
+           Guid.Parse(AssetGroupId) AS AssetGroupId,
+           DeleteCount,
+           AccountCloseCount,
+           ExportCount
+    FROM GetCommandsObjectProcessor;
+
+CheckpointEvents = 
+    SELECT Guid.Parse(AgentId) AS AgentId,
+           Guid.Parse(AssetGroupId) AS AssetGroupId,
+           CommandType,
+           CommandId,
+           CheckpointStatusCode,
+           Int64.Parse(AffectedRows) AS AffectedRows,
+           CommandSubject,
+           CommandDataTypes
+    FROM CheckpointObjectProcessor;
+
+// Aggregate Events
+AddCommandStats =
+    SELECT AgentId,
+           AssetGroupId,
+           CommandType,
+           COUNT(DISTINCT CommandId) AS IngestedCommands
+    FROM AddCommandEvents
+    GROUP BY AgentId, AssetGroupId, CommandType;
+
+GetCommandsStats =
+    SELECT AgentId,
+           AssetGroupId,
+           "Delete" AS CommandType,
+           SUM(DeleteCount) AS RetrievedCommand
+    FROM GetCommandsEvents
+    GROUP BY AgentId, AssetGroupId, CommandType
+    HAVING RetrievedCommand != 0
+  UNION ALL
+    SELECT AgentId,
+           AssetGroupId,
+           "AccountClose" AS CommandType,
+           SUM(AccountCloseCount) AS RetrievedCommand
+    FROM GetCommandsEvents
+    GROUP BY AgentId, AssetGroupId, CommandType
+    HAVING RetrievedCommand != 0
+  UNION ALL
+    SELECT AgentId,
+           AssetGroupId,
+           "Export" AS CommandType,
+           SUM(ExportCount) AS RetrievedCommand
+    FROM GetCommandsEvents
+    GROUP BY AgentId, AssetGroupId, CommandType
+    HAVING RetrievedCommand != 0;
+
+CompletedWithZeroRowCount =
+    SELECT AgentId,
+           AssetGroupId,
+           CommandType,
+           COUNT(DISTINCT CommandId) AS CompletedWithZeroRow
+    FROM CheckpointEvents
+    GROUP BY AgentId, AssetGroupId, CommandType
+    WHERE CheckpointStatusCode == "Complete" AND AffectedRows == 0;
+
+CheckpointStatusSummary =
+    SELECT AgentId,
+           AssetGroupId,
+           CommandType,
+           CheckpointStatusCode,
+           COUNT(CommandId) AS RequestCount,
+           COUNT(DISTINCT CommandId) AS DistinctCommandCount
+    FROM CheckpointEvents
+    GROUP BY AgentId, AssetGroupId, CommandType, CheckpointStatusCode;
+
+CheckpointTransform = 
+    SELECT 
+        AgentId,
+        AssetGroupId,
+        CommandType,
+        (CheckpointStatusCode == "Complete" ? DistinctCommandCount : 0) AS CompletedCommands,
+        (CheckpointStatusCode == "SoftDelete" ? DistinctCommandCount : 0) AS SoftDeleteCommands,
+        (CheckpointStatusCode == "Pending" ? DistinctCommandCount : 0) AS PendingCommands,
+        (CheckpointStatusCode == "Failed" ? DistinctCommandCount : 0) AS FailedCommands,
+        (CheckpointStatusCode == "VerificationFailed" ? DistinctCommandCount : 0) AS VerificationFailedCommands,
+        (CheckpointStatusCode == "UnexpectedCommand" ? DistinctCommandCount : 0) AS UnexpectedCommands
+    FROM CheckpointStatusSummary;
+
+CheckpointResult = 
+    SELECT
+        AgentId,
+        AssetGroupId,
+        CommandType,
+        SUM(CompletedCommands) AS CompletedCommands,
+        SUM(SoftDeleteCommands) AS SoftDeleteCommands,
+        SUM(PendingCommands) AS PendingCommands,
+        SUM(FailedCommands) AS FailedCommands,
+        SUM(VerificationFailedCommands) AS VerificationFailedCommands,
+        SUM(UnexpectedCommands) AS UnexpectedCommands
+    FROM CheckpointTransform
+    GROUP BY AgentId, AssetGroupId, CommandType;
+
+AgentKeys = 
+    SELECT AgentId, AssetGroupId, CommandType
+    FROM AddCommandStats
+    UNION
+    SELECT AgentId, AssetGroupId, CommandType
+    FROM GetCommandsStats
+    UNION
+    SELECT AgentId, AssetGroupId, CommandType
+    FROM CheckpointStatusSummary;
+
+AgentCommandProcessStatus=
+    SELECT rs1.AgentId,
+           rs1.AssetGroupId,
+           rs1.CommandType,
+           (rs2.IngestedCommands != NULL ? rs2.IngestedCommands : 0) AS IngestedCommands,
+           (rs3.RetrievedCommand != NULL ? rs3.RetrievedCommand : 0) AS RetrievedCommand,
+           (rs4.CompletedCommands != NULL ? rs4.CompletedCommands : 0) AS CompletedCommands,
+           (rs5.CompletedWithZeroRow != NULL ? rs5.CompletedWithZeroRow : 0) AS CompletedWithZeroRow,
+           (rs4.SoftDeleteCommands != NULL ? rs4.SoftDeleteCommands : 0) AS SoftDeleteCommands,
+           (rs4.PendingCommands != NULL ? rs4.PendingCommands : 0) AS PendingCommands,
+           (rs4.FailedCommands != NULL ? rs4.FailedCommands : 0) AS FailedCommands,
+           (rs4.VerificationFailedCommands != NULL ? rs4.VerificationFailedCommands : 0) AS VerificationFailedCommands,
+           (rs4.UnexpectedCommands != NULL ? rs4.UnexpectedCommands : 0) AS UnexpectedCommands
+    FROM AgentKeys AS rs1
+        LEFT JOIN AddCommandStats AS rs2 
+         ON rs1.AgentId == rs2.AgentId AND rs1.AssetGroupId == rs2.AssetGroupId AND rs1.CommandType == rs2.CommandType
+        LEFT JOIN GetCommandsStats AS rs3
+         ON rs1.AgentId == rs3.AgentId AND rs1.AssetGroupId == rs3.AssetGroupId AND rs1.CommandType == rs3.CommandType
+        LEFT JOIN CheckpointResult AS rs4
+         ON rs1.AgentId == rs4.AgentId AND rs1.AssetGroupId == rs4.AssetGroupId AND rs1.CommandType == rs4.CommandType
+        LEFT JOIN CompletedWithZeroRowCount AS rs5
+         ON rs1.AgentId == rs5.AgentId AND rs1.AssetGroupId == rs5.AssetGroupId AND rs1.CommandType == rs5.CommandType;
+
+
+// Unexpected Command Investigation Details
+UnexpectedCommandDetailsOutput = 
+    SELECT AgentId,
+           CommandType,
+           CommandSubject,
+           CommandDataTypes,
+           COUNT(DISTINCT CommandId) AS CommandCount,
+           COUNT(CommandId) AS CheckpointCount
+    FROM CheckpointEvents
+    WHERE CheckpointStatusCode == "UnexpectedCommand"
+    GROUP BY AgentId, CommandType, CommandSubject, CommandDataTypes;
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT AgentCommandProcessStatus
+TO SSTREAM @hourlyAgentCommandProcessStatus_outputPath
+    HASH CLUSTERED BY AgentId
+    SORTED BY AgentId
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT CheckpointStatusSummary
+TO SSTREAM @hourlyCheckpointStatusSummary_outputPath
+    HASH CLUSTERED BY AgentId
+    SORTED BY AgentId
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT UnexpectedCommandDetailsOutput
+TO SSTREAM @hourlyUnexpectedCommandDetails_outputPath
+    HASH CLUSTERED BY AgentId
+    SORTED BY AgentId
+WITH STREAMEXPIRY @streamExpiry;

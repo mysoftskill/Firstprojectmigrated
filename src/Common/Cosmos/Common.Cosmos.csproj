@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Microsoft.PrivacyServices.Common.Cosmos</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.Common.Cosmos</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Build\InternalKey.snk</AssemblyOriginatorKeyFile>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+	  <PackageReference Include="Microsoft.Azure.DataLake.Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+  </ItemGroup>
+</Project>

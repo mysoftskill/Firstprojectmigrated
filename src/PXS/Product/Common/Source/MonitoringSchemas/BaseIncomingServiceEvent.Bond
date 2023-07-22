@@ -1,0 +1,31 @@
+﻿
+import "Microsoft.Telemetry.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+
+namespace Microsoft.Osgs.Infra.Monitoring
+
+
+[Description("Example event schema")]
+[Provider("Microsoft_Osgs_Infra_Monitoring")]
+
+struct BaseIncomingServiceEvent: Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+	[Description("Activity Id")]
+	10: string ActivityId;
+			
+	[Description("Contract version for the API")]
+	20: string ContractVersion;
+	
+	[Description("Exception raised by server")]
+	30: string ExceptionType;
+
+	[Description("CallStack for raised exception")]
+	40: string CallStack;
+
+	[Description("Any internal server message")]
+	50: string Message;
+
+	[Description("Request's referrer")]
+	60: string Referrer;
+};
+

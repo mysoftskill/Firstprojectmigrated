@@ -1,0 +1,15 @@
+<Project>
+  <!--
+    Set all package versions here. 
+	Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+	Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+	Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+  <Import Project="..\Build\Directory.Build.props" />
+  <ItemGroup>
+		<PackageReference Update="Microsoft.Azure.DataLake.Store" Version="[1.2.3-alpha]" />
+		<PackageReference Update="Microsoft.Cosmos.VcClient" Version="[2.0.8]" />
+  </ItemGroup>
+</Project>

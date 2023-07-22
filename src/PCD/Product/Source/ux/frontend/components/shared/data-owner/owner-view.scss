@@ -1,0 +1,7 @@
+@import "../../../styles/utilities/mixins.scss";
+
+pcd-owner-view {
+    display: block;
+
+    @include resource-view-attributes();
+}

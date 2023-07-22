@@ -1,0 +1,1301 @@
+﻿[
+  /* agent incident filing action */
+
+  {
+    "Tag": "QueryKustoAndFileIncidentsActual",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* execute kusto query */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": { "Agents": { "Select": "Table00" } },
+          "ArgTransform": {
+            "QueryTagOverride": { "Select": "@.Templates.KustoQuery" },
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+
+          },
+          "Inline": {
+            "Tag": "FindOutOfSLAAgents",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "Ngpreporting",
+              "Query": { "Inline": "datatable(AgentId:string) []" }
+            }
+          }
+        },
+
+        /* foreach result in Kusto query, check if we should send an incident and, if so, send it */
+        /*  if this loop sends no incidnet, it will return false and stop further actions from    */
+        /*  executing                                                                             */
+
+        {
+          "ExecutionOrder": 2,
+          "ResultTransform": { "SentIncidents": { "Select": "Incidents" } },
+          "ArgTransform": {
+            "CollectionItemKeyPropertyName": { "Const": "AgentId" },
+            "DataRowPropertyName": { "Const": "AgentDataRow" },
+            "Collection": { "Select": "$.Agents" }
+          },
+
+          /* define the body of the loop, which is to try to acquire a lock that indicates no one is currently */
+          /*  processing or has recently processed this action for this agent.  If that is successful, then    */
+          /*  send the incident for the agent and save off a record of the transmissions for a summary email.  */
+
+          "Inline": {
+            "Tag": "LoopOverKustoAgentIncidentResults",
+            "Type": "LOOP-DATASET",
+            "Def": {
+              "ReturnNotContinueOnEmpty": true,
+              "LoopResultCondition": "FalseIfAll",
+              "Actions": [
+                /* check if its been long enough since we last sent it (or if someone else is currently attempting */
+                /*  to send it. This action acquires a lock and, if successful, extends the lock lease until the   */
+                /*  next time it should be run                                                                     */
+
+                {
+                  "ExecutionOrder": 0,
+                  "ArgTransform": {
+                    "LockGroupName": { "Select": "$.RefConsts.LockGroupName" },
+                    "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+                    "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" },
+                    "LockName": { "Select": "$.AgentDataRow.AgentId" }
+                  },
+                  "Inline": {
+                    "Tag": "SendIncidentIfNoOneElseHasRecently",
+                    "Type": "LOCK-TABLE",
+                    "Def": {
+                      "Actions": [
+                        /* we hold the lock, so send the incident */
+
+                        {
+                          "ExecutionOrder": 0,
+                          "ResultTransform": {
+                            "Incidents": {
+                              "Select": "$",
+                              "Mode": "ArrayAdd"
+                            }
+                          },
+                          "ArgTransform": {
+                            "EventNameOverride": { "Select": "$.RefConsts.EventName" },
+                            "KeywordsOverride": { "Select": "$.RefConsts.IncidentKeywords" },
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "Severity": { "Select": "$.RefConsts.Severity" },
+                            "AgentId": { "Select": "$.AgentDataRow.AgentId" },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SubmitAgentIncident",
+                            "Type": "TRANSMIT-INCIDENT",
+                            "Def": {
+                              "Keywords": { "Inline": "NGPLiveSite" },
+                              "EventName": "DEFAULT",
+                              "Title": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Incomplete [[<var s:$.CommandType var>]] commands older than [[<var s:$.CommandAge var>]] days for data agent [[<var s:$.AgentInfo.AgentId var>]] ([[<var s:$.AgentInfo.TeamName var>]])",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "CommandType": { "Select": "$.RefConsts.CommandType" },
+                                  "CommandAge": { "Select": "$.RefConsts.CommandAge" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "CommandAge": { "Select": "$.RefConsts.CommandAge" }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* finally, send a summary of what we did */
+
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "ngpincstat@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmail",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "[[<var s:$.TitlePrefix var>]]Incidents filed for [[<var s:$.Type var>]] [[<var s:$.Age var>]] days (Sev[[<var s:$.Sev var>]]) at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                "Parameters": {
+                  "Type": { "Select": "$.RefConsts.CommandType" },
+                  "Sev": { "Select": "$.RefConsts.Severity" },
+                  "Age": { "Select": "$.RefConsts.Age" },
+                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                }
+              },
+              "Body": {
+                "TemplateTag": "IncidentSendStatusEmailBody",
+                "Parameters": {
+                  "Incidents": { "Select": "$.Incidents" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+
+  /* agent summary email to GC action */
+
+  {
+    "Tag": "QueryKustoAndSendGCMailActual",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* execute kusto query */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": {
+            "EmailContents": { "Select": "Table00" },
+            "EmailAddressing": { "Select": "Table01" }
+          },
+          "ArgTransform": {
+            "QueryTagOverride": { "Select": "@.Templates.KustoQuery" },
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "FindGCsToEmail",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "Ngpreporting",
+              "Query": { "Inline": "datatable(AgentId:string,TeamName:string) []" }
+            }
+          }
+        },
+
+        /* foreach result in Kusto query, check if we should send an email and, if so, send it */
+        /*  if this loop sends no emails, it will return false and stop further actions from   */
+        /*  executing                                                                          */
+
+        {
+          "ExecutionOrder": 2,
+          "ArgTransform": {
+            /* The LockGroupName and LockName are intentionally the same value */
+            "LockGroupName": { "Select": "$.RefConsts.LockGroupName" },
+            "LockName": { "Select": "$.RefConsts.LockGroupName" },
+
+            "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+            "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" }
+          },
+          "Inline": {
+            "Tag": "SendEmailIfNoOneElseHasRecently",
+            "Type": "LOCK-TABLE",
+            "Def": {
+              "Actions": [
+                /* we hold the lock, so send the email */
+                {
+                  "ExecutionOrder": 0,
+                  "ResultTransform": {
+                    "GCEmails": {
+                      "Select": "$",
+                      "Mode": "ArrayAdd"
+                    }
+                  },
+                  "ArgTransform": {
+                    "BodyTagOverride": { "Select": "@.Templates.EmailBody" },
+                    "To": { "Select": "$.EmailAddressing[0].ToLine" },
+                    "Cc": { "Select": "$.EmailAddressing[0].CcLine" },
+                    "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                  },
+                  "Inline": {
+                    "Tag": "SendResultEmail",
+                    "Type": "TRANSMIT-EMAIL",
+                    "Def": {
+                      "IgnoreSimulationMode": "true",
+
+                      "Subject": { "Inline": "[[<var s:$.TitlePrefix var>]]*Action Required* Old ACTIVE IcM incidents NGP filed as severity 2 for data agents" },
+                      "Parameters": { "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" } },
+                      "Body": {
+                        "Inline": "Your data agents have old high severity incidents assigned to them in IcM",
+                        "Parameters": {
+                          "EmailContents": { "Select": "$.EmailContents" },
+                          "To": { "Select": "$.EmailAddressing[0].ToLine" },
+                          "Cc": { "Select": "$.EmailAddressing[0].CcLine" }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* finally, send a summary of what we did */
+
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "ngpincstat@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmailForGCEmail",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "[[<var s:$.TitlePrefix var>]]Sent email to GCs about incidents at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                "Parameters": { "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" } }
+              },
+              "Body": {
+                "TemplateTag": "GCEMailSendStatusEmailBody",
+                "Parameters": { "Incidents": { "Select": "$.GCEmails" } }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+
+  /* reusable time applicability checks */
+  {
+    "Tag": "IsAllowedRuntimeWorkdays",
+    "Type": "APPLICABILITY-TIME",
+    "Def": {
+      "AllowedDaysAndTimes": {
+        "Weekday": [
+          {
+            "Start": "11:00:00",
+            "End": "17:00:00"
+          }
+        ]
+      },
+      "Overrides": {
+        "2018-11-22": [ { "Exclude": true } ],
+        "2018-11-23": [ { "Exclude": true } ],
+        "2018-12-24": [ { "Exclude": true } ],
+        "2018-12-25": [ { "Exclude": true } ],
+        "2019-01-01": [ { "Exclude": true } ],
+        "2019-01-21": [ { "Exclude": true } ],
+        "2019-02-18": [ { "Exclude": true } ],
+        "2019-05-27": [ { "Exclude": true } ],
+        "2019-07-04": [ { "Exclude": true } ],
+        "2019-09-02": [ { "Exclude": true } ],
+        "2019-11-28": [ { "Exclude": true } ],
+        "2019-11-29": [ { "Exclude": true } ],
+        "2019-12-24": [ { "Exclude": true } ],
+        "2019-12-25": [ { "Exclude": true } ],
+        "2020-01-01": [ { "Exclude": true } ]
+      }
+    }
+  },
+
+
+  /* reusable time applicability checks */
+  {
+    "Tag": "IsAllowedRuntimeWorkdays-Test",
+    "Type": "APPLICABILITY-TIME",
+    "Def": {
+      "AllowedDaysAndTimes": {
+        "Weekday": [
+          {
+            "Start": "11:00:00",
+            "End": "21:00:00"
+          }
+        ]
+      },
+      "Overrides": {
+        "2018-11-22": [ { "Exclude": true } ],
+        "2018-11-23": [ { "Exclude": true } ],
+        "2018-12-24": [ { "Exclude": true } ],
+        "2018-12-25": [ { "Exclude": true } ],
+        "2019-01-01": [ { "Exclude": true } ],
+        "2019-01-21": [ { "Exclude": true } ],
+        "2019-02-18": [ { "Exclude": true } ],
+        "2019-05-27": [ { "Exclude": true } ],
+        "2019-07-04": [ { "Exclude": true } ],
+        "2019-09-02": [ { "Exclude": true } ],
+        "2019-11-28": [ { "Exclude": true } ],
+        "2019-11-29": [ { "Exclude": true } ],
+        "2019-12-24": [ { "Exclude": true } ],
+        "2019-12-25": [ { "Exclude": true } ],
+        "2020-01-01": [ { "Exclude": true } ]
+      }
+    }
+  },
+
+  /* driving actions */
+  {
+    "Tag": "QueryKustoAndFileIncidents",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "IsAllowedRuntimeWorkdays"
+        },
+        {
+          "ExecutionOrder": 1,
+          "Tag": "QueryKustoAndFileIncidentsActual"
+        }
+      ]
+    }
+  },
+  {
+    "Tag": "QueryKustoAndFileIncidentsPPE",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "IsAllowedRuntimeWorkdays-Test"
+        },
+        {
+          "ExecutionOrder": 1,
+          "Tag": "QueryKustoAndFileIncidentsActual"
+        }
+      ]
+    }
+  },
+  {
+    "Tag": "QueryKustoAndSendGCEmail",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "IsAllowedRuntimeWorkdays"
+        },
+        {
+          "ExecutionOrder": 1,
+          "Tag": "QueryKustoAndSendGCMailActual"
+        }
+      ]
+    }
+  },
+  {
+    "Tag": "QueryKustoAndSendGCEmailPPE",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "IsAllowedRuntimeWorkdays-Test"
+        },
+        {
+          "ExecutionOrder": 1,
+          "Tag": "QueryKustoAndSendGCMailActual"
+        }
+      ]
+    }
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "PpeQueryKustoAndFileIncidentsForAgentsExportingMalware",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "PpeFileIncidentsOnAgentsExportingMalwareInMSAExports"
+        }
+      ]
+    }
+  },
+
+  /* PPE Incident filing on agents for Malware Found in MSA Exports */
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "PpeFileIncidentsOnAgentsExportingMalwareInMSAExports",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* execute kusto query */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": { "Agents": { "Select": "Table00" } },
+          "ArgTransform": {
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" },
+            "LockName": { "Select": "$.AgentDataRow.AgentId" }
+          },
+          "Inline": {
+            "Tag": "FindOutOfSLAAgents",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "PcfPpe",
+              "Query": { "Inline": "FnPCFAgentsWithMalwareInMSAExports" }
+            }
+          }
+        },
+
+        /* foreach result in Kusto query, check if we should send an incident and, if so, send it */
+        /*  if this loop sends no incidnet, it will return false and stop further actions from    */
+        /*  executing                                                                             */
+
+        {
+          "ExecutionOrder": 2,
+          "ResultTransform": { "SentIncidents": { "Select": "Incidents" } },
+          "ArgTransform": {
+            "CollectionItemKeyPropertyName": { "Const": "AgentId" },
+            "DataRowPropertyName": { "Const": "AgentDataRow" },
+            "Collection": { "Select": "$.Agents" }
+          },
+
+          /* define the body of the loop, which is to try to acquire a lock that indicates no one is currently */
+          /*  processing or has recently processed this action for this agent.  If that is successful, then    */
+          /*  send the incident for the agent and save off a record of the transmissions for a summary email.  */
+
+          "Inline": {
+            "Tag": "LoopOverKustoAgentIncidentResults",
+            "Type": "LOOP-DATASET",
+            "Def": {
+              "ReturnNotContinueOnEmpty": false,
+              "LoopResultCondition": "FalseIfAll",
+              "Actions": [
+                /* check if its been long enough since we last sent it (or if someone else is currently attempting */
+                /*  to send it. This action acquires a lock and, if successful, extends the lock lease until the   */
+                /*  next time it should be run                                                                     */
+
+                {
+                  "ExecutionOrder": 0,
+                  "ArgTransform": {
+                    "LockGroupName": { "Select": "$.RefConsts.LockGroupName" },
+                    "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+                    "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" },
+                    "LockName": { "Select": "$.AgentDataRow.AgentId" }
+                  },
+                  "Inline": {
+                    "Tag": "SendIncidentIfNoOneElseHasRecently",
+                    "Type": "LOCK-TABLE",
+                    "Def": {
+                      "Actions": [
+                        /* we hold the lock, so send the incident */
+
+                        {
+                          "ExecutionOrder": 0,
+                          "ResultTransform": {
+                            "Incidents": {
+                              "Select": "$",
+                              "Mode": "ArrayAdd"
+                            }
+                          },
+                          "ArgTransform": {
+                            "EventNameOverride": { "Select": "$.RefConsts.EventName" },
+                            "KeywordsOverride": { "Select": "$.RefConsts.IncidentKeywords" },
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "Severity": { "Select": "$.RefConsts.Severity" },
+                            "AgentId": { "Select": "$.AgentDataRow.AgentId" },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SubmitAgentIncident",
+                            "Type": "TRANSMIT-INCIDENT",
+                            "Def": {
+                              "Keywords": { "Inline": "NGPLiveSite" },
+                              "EventName": "DEFAULT",
+                              "Title": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Virus detected in exports from agent with agentId [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": { "AgentInfo": { "Select": "$.AgentDataRow" } }
+                              }
+                            }
+                          }
+                        },
+
+                        /* since we fake send the incident right now, also send email with what would have been in the incident */
+
+                        {
+                          "ExecutionOrder": 1,
+                          "ArgTransform": {
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "To": { "Const": [ "gababu@microsoft.com" ] },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SendResultEmailForAgentIncidents",
+                            "Type": "TRANSMIT-EMAIL",
+                            "Def": {
+                              "IgnoreSimulationMode": "true",
+                              "Subject": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Virus detected in exports from agent with AgentId [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": { "AgentInfo": { "Select": "$.AgentDataRow" } }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* finally, send a summary of what we did */
+
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "gababu@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmail",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "Incidents filed (Sev[[<var s:$.Sev var>]]) at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                "Parameters": { "Sev": { "Select": "$.RefConsts.Severity" } }
+              },
+              "Body": {
+                "TemplateTag": "IncidentSendStatusEmailBody",
+                "Parameters": { "Incidents": { "Select": "$.Incidents" } }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "FilterTags": [ "PROD" ],
+
+    "Tag": "ProdQueryKustoAndFileIncidentsForAgentsExportingMalware",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "ProdFileIncidentsOnAgentsExportingMalwareInMSAExports"
+        }
+      ]
+    }
+  },
+
+  /* PROD Incident filing on agents for Malware Found in MSA Exports */
+  {
+    "FilterTags": [ "PROD" ],
+
+    "Tag": "ProdFileIncidentsOnAgentsExportingMalwareInMSAExports",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* execute kusto query */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": { "Agents": { "Select": "Table00" } },
+          "ArgTransform": {
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" },
+            "LockName": { "Select": "$.AgentDataRow.AgentId" }
+          },
+          "Inline": {
+            "Tag": "FindOutOfSLAAgents",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "PcfProd",
+              "Query": { "Inline": "FnPCFAgentsWithMalwareInMSAExports" }
+            }
+          }
+        },
+
+        /* foreach result in Kusto query, check if we should send an incident and, if so, send it */
+        /*  if this loop sends no incident, it will return false and stop further actions from    */
+        /*  executing                                                                             */
+
+        {
+          "ExecutionOrder": 2,
+          "ResultTransform": { "SentIncidents": { "Select": "Incidents" } },
+          "ArgTransform": {
+            "CollectionItemKeyPropertyName": { "Const": "AgentId" },
+            "DataRowPropertyName": { "Const": "AgentDataRow" },
+            "Collection": { "Select": "$.Agents" }
+          },
+
+          /* define the body of the loop, which is to try to acquire a lock that indicates no one is currently */
+          /*  processing or has recently processed this action for this agent.  If that is successful, then    */
+          /*  send the incident for the agent and save off a record of the transmissions for a summary email.  */
+
+          "Inline": {
+            "Tag": "LoopOverKustoAgentIncidentResults",
+            "Type": "LOOP-DATASET",
+            "Def": {
+              "ReturnNotContinueOnEmpty": false,
+              "LoopResultCondition": "FalseIfAll",
+              "Actions": [
+                /* check if its been long enough since we last sent it (or if someone else is currently attempting */
+                /*  to send it. This action acquires a lock and, if successful, extends the lock lease until the   */
+                /*  next time it should be run                                                                     */
+
+                {
+                  "ExecutionOrder": 0,
+                  "ArgTransform": {
+                    "LockGroupName": { "Select": "$.RefConsts.LockGroupName" },
+                    "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+                    "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" },
+                    "LockName": { "Select": "$.AgentDataRow.AgentId" }
+                  },
+                  "Inline": {
+                    "Tag": "SendIncidentIfNoOneElseHasRecently",
+                    "Type": "LOCK-TABLE",
+                    "Def": {
+                      "Actions": [
+                        /* we hold the lock, so send the incident */
+
+                        {
+                          "ExecutionOrder": 0,
+                          "ResultTransform": {
+                            "Incidents": {
+                              "Select": "$",
+                              "Mode": "ArrayAdd"
+                            }
+                          },
+                          "ArgTransform": {
+                            "EventNameOverride": { "Select": "$.RefConsts.EventName" },
+                            "KeywordsOverride": { "Select": "$.RefConsts.IncidentKeywords" },
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "Severity": { "Select": "$.RefConsts.Severity" },
+                            "AgentId": { "Select": "$.AgentDataRow.AgentId" },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SubmitAgentIncident",
+                            "Type": "TRANSMIT-INCIDENT",
+                            "Def": {
+                              "Keywords": { "Inline": "NGPLiveSite" },
+                              "EventName": "DEFAULT",
+                              "Title": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Virus detected in exports from agent with agentId [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": { "AgentInfo": { "Select": "$.AgentDataRow" } }
+                              }
+                            }
+                          }
+                        },
+
+                        /* since we fake send the incident right now, also send email with what would have been in the incident */
+
+                        {
+                          "ExecutionOrder": 1,
+                          "ArgTransform": {
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "To": { "Const": [ "gababu@microsoft.com" ] },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SendResultEmailForAgentIncidents",
+                            "Type": "TRANSMIT-EMAIL",
+                            "Def": {
+                              "IgnoreSimulationMode": "true",
+                              "Subject": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Virus detected in exports from agent with AgentId [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": { "AgentInfo": { "Select": "$.AgentDataRow" } }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* finally, send a summary of what we did */
+
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "gababu@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmail",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "Incidents filed (Sev[[<var s:$.Sev var>]]) at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                "Parameters": { "Sev": { "Select": "$.RefConsts.Severity" } }
+              },
+              "Body": {
+                "TemplateTag": "IncidentSendStatusEmailBody",
+                "Parameters": { "Incidents": { "Select": "$.Incidents" } }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+
+  /* Run multiple Kusto Queries and send status */
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "RunKustoQueriesAndSendStatusEmail",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        {
+          "ExecutionOrder": 0,
+          "Tag": "RunKustoQueriesAndSendStatusEmailActual"
+        }
+      ]
+    }
+  },
+
+  /* Run Kusto Query and send status email */
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "RunKustoQueriesAndSendStatusEmailActual",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* get a list of kusto queries to execute */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": {
+            "Queries": { "Select": "Table00" }
+          },
+          "ArgTransform": {
+            "QueryTagOverride": { "Select": "@.Templates.KustoQuery" },
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "GetKustoQueryList",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "NgpInfo",
+              "Query": { "Inline": "datatable(QueryName:string, QueryKey:string) []" }
+            }
+          }
+        },
+
+        /* foreach item in the Kusto query list, run the query and collect the result; */
+        {
+          "ExecutionOrder": 2,
+          "ResultTransform": {
+            "AllQueryResults": {
+              "Select": "$",
+              "Mode": "ArrayAdd"
+            }
+          },
+          "ArgTransform": {
+            "CollectionItemKeyPropertyName": { "Const": "QueryName" },
+            "DataRowPropertyName": { "Const": "QueryDataRow" },
+            "Collection": { "Select": "$.Queries" }
+          },
+
+          /* define the body of the loop, which runs each query.  If that is successful, then    */
+          /* save off a record of the transmissions for a summary email.  */
+
+          "Inline": {
+            "Tag": "LoopOverKustoQueries",
+            "Type": "LOOP-DATASET",
+            "Def": {
+              "ReturnNotContinueOnEmpty": false,
+              "LoopResultCondition": "FalseIfAny",
+              "Actions": [
+                /* check if its been long enough since we last sent it (or if someone else is currently attempting */
+                /*  to send it). This action acquires a lock and, if successful, extends the lock lease until the   */
+                /*  next time it should be run                                                                     */
+                {
+                  "ExecutionOrder": 0,
+                  "ResultTransform": {
+                    "QueryResults": {
+                      "Select": "$",
+                      "Mode": "ArrayUnion"
+                    }
+                  },
+                  "ArgTransform": {
+                    "LockGroupName": { "Select": "$.QueryDataRow.QueryName" },
+                    "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+                    "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" },
+                    "LockName": { "Select": "$.QueryDataRow.QueryName" }
+                  },
+                  "Inline": {
+                    "Tag": "SendResultIfNoOneElseHasRecently",
+                    "Type": "LOCK-TABLE",
+
+                    "Def": {
+                      "Actions": [
+                        /* we hold the lock, so run the query */
+
+                        /* execute kusto query */
+                        {
+                          "ExecutionOrder": 0,
+                          "ResultTransform": {
+                            "QueryName": { "Select": "$.CurrentQueryName" },
+                            "QueryResult": { "Select": "Table00[0]" } // Only save the first entry
+                          },
+                          "ArgTransform": {
+                            "QueryTagOverride": { "Select": "$.QueryDataRow.QueryName" },
+                            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" },
+                            "CurrentQueryName": { "Select": "$.QueryDataRow.QueryName" },
+                            "CurrentQueryKey": { "Select": "$.QueryDataRow.QueryKey" }
+                          },
+                          "Inline": {
+                            "Tag": "RunKustoQuery",
+                            "Type": "MODELBUILD-QUERY-KUSTO",
+                            "Def": {
+                              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+                              "Database": "NgpInfo",
+                              "Query": {
+                                "Inline": "[[<var s:$.QueryName var>]]"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* send a summary of what we did */
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "adgpdmsauditdri@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmail",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "Official Kusto Query Summary at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]"
+              },
+              "Body": {
+                "TemplateTag": "AllOfficialKustoQueryResultsBody",
+                "Parameters": {
+                  "QueryList": { "Select": "$.Queries" },
+                  "FullQueryResults": { "Select": "$.AllQueryResults" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+
+  /* run a query to check for anomalies in the audit pipeline and fire an incident of any anomalies are found */
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Tag": "RunKustoQueryAuditPipelineAlert",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* execute kusto query */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": {
+            "AgentInfo": { "Select": "Table00" },
+            "AuditEmail": { "Select": "Table01" }
+          },
+          "ArgTransform": {
+            "QueryTagOverride": { "Select": "@.Templates.KustoQuery" },
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "RunPipelineAuditQuery",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "NgpInfo",
+              "Query": { "Inline": "datatable(AgentId:string) []" }
+            }
+          }
+        },
+
+        /* send the results to AuditEmail */
+        {
+          "ExecutionOrder": 2,
+          "ArgTransform": {
+            /* The LockGroupName and LockName are intentionally the same value */
+            "LockGroupName": { "Select": "$.RefConsts.LockGroupName" },
+            "LockName": { "Select": "$.RefConsts.LockGroupName" },
+            "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+            "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" }
+          },
+          "Inline": {
+            "Tag": "SendEmailIfNoOneElseHasRecently",
+            "Type": "LOCK-TABLE",
+            "Def": {
+              "Actions": [
+                /* we hold the lock, so send the incident/email */
+                {
+                  "ExecutionOrder": 0,
+                  "ResultTransform": {
+                    "Incidents": {
+                      "Select": "$",
+                      "Mode": "ArrayAdd"
+                    }
+                  },
+                  "ArgTransform": {
+                    "Severity": { "Select": "$.RefConsts.Severity" },
+                    "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" },
+                    "AgentId": { "Const": "fff9bff1-7e6f-4dab-8a44-53b1a08d5969" } // Cosmos Fake Agent
+                  },
+                  "Inline": {
+                    "Tag": "SubmitAuditIncident",
+                    "Type": "TRANSMIT-INCIDENT",
+                    "Def": {
+                      "Keywords": { "Inline": "NGPAuditPipeline" },
+                      "EventName": "NGPAuditPipelineIncident",
+                      "Title": {
+                        "Inline": "[[<var s:$.TitlePrefix var>]]Unusual Signal Activity at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                        "Parameters": {
+                          "Type": { "Select": "$.RefConsts.CommandType" },
+                          "Sev": { "Select": "$.RefConsts.Severity" },
+                          "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                        }
+                      },
+                      "Body": {
+                        "TemplateTag": "IncidentAuditPipelineAlertBody",
+                        "Parameters": {
+                          "AgentInfo": { "Select": "$.AgentInfo" },
+                          "ThresholdPercent": { "Select": "$.RefConsts.ThresholdPercent" }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  /* Since the incident is currently fake, send an email instead */
+                  "ExecutionOrder": 1,
+                  "ArgTransform": {
+                    "To": { "Select": "$.AuditEmail[0].ToLine" },
+                    "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                  },
+                  "Inline": {
+                    "Tag": "SendResultEmail",
+                    "Type": "TRANSMIT-EMAIL",
+                    "Def": {
+                      "IgnoreSimulationMode": "true",
+                      "Subject": {
+                        "Inline": "[[<var s:$.TitlePrefix var>]]Unusual Signal Activity at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                        "Parameters": {
+                          "Type": { "Select": "$.RefConsts.CommandType" },
+                          "Sev": { "Select": "$.RefConsts.Severity" },
+                          "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                        }
+                      },
+                      "Body": {
+                        "TemplateTag": "IncidentAuditPipelineAlertBody",
+                        "Parameters": {
+                          "AgentInfo": { "Select": "$.AgentInfo" },
+                          "ThresholdPercent": { "Select": "$.RefConsts.ThresholdPercent" }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* finally, send a summary of what we did */
+
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "ngpincstat@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmailForAuditPipelineAlert",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "[[<var s:$.TitlePrefix var>]]Sent email to NGP Audit DRI about signal anomalies at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                "Parameters": { "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" } }
+              },
+              "Body": {
+                "TemplateTag": "AuditPipelineAlertSendStatusEmailBody",
+                "Parameters": {
+                  "AgentInfo": { "Select": "$.AgentInfo" },
+                  "ThresholdPercent": { "Select": "$.RefConsts.ThresholdPercent" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }  
+  }, // Testing Batch agents, to be removed after initial set of testing!
+    {
+      "Tag": "QueryKustoAndFileIncidents-Test",
+      "Type": "ACTIONSET",
+      "Def": {
+        "Actions": [
+          {
+            "ExecutionOrder": 0,
+            "Tag": "IsAllowedRuntimeWorkdays"
+          },
+          {
+            "ExecutionOrder": 1,
+            "Tag": "QueryKustoAndFileIncidentsActual-Test"
+          }
+        ]
+      }
+  
+  },
+  {
+    "Tag": "QueryKustoAndFileIncidentsActual-Test",
+    "Type": "ACTIONSET",
+    "Def": {
+      "Actions": [
+        /* execute kusto query */
+
+        {
+          "ExecutionOrder": 1,
+          "ResultTransform": { "Agents": { "Select": "Table00" } },
+          "ArgTransform": {
+            "QueryTagOverride": { "Select": "@.Templates.KustoQuery" },
+            "QueryParameters": { "Select": "$.RefConsts.KustoParameters" },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+
+          },
+          "Inline": {
+            "Tag": "FindOutOfSLAAgents",
+            "Type": "MODELBUILD-QUERY-KUSTO",
+            "Def": {
+              "ClusterUrl": "https://ngpreporting.kusto.windows.net",
+              "Database": "Ngpreporting",
+              "Query": { "Inline": "datatable(AgentId:string) []" }
+            }
+          }
+        },
+
+        /* foreach result in Kusto query, check if we should send an incident and, if so, send it */
+        /*  if this loop sends no incidnet, it will return false and stop further actions from    */
+        /*  executing                                                                             */
+
+        {
+          "ExecutionOrder": 2,
+          "ResultTransform": { "SentIncidents": { "Select": "Incidents" } },
+          "ArgTransform": {
+            "CollectionItemKeyPropertyName": { "Const": "AgentId" },
+            "DataRowPropertyName": { "Const": "AgentDataRow" },
+            "Collection": { "Select": "$.Agents" }
+          },
+
+          /* define the body of the loop, which is to try to acquire a lock that indicates no one is currently */
+          /*  processing or has recently processed this action for this agent.  If that is successful, then    */
+          /*  send the incident for the agent and save off a record of the transmissions for a summary email.  */
+
+          "Inline": {
+            "Tag": "LoopOverKustoAgentIncidentResults",
+            "Type": "LOOP-DATASET",
+            "Def": {
+              "ReturnNotContinueOnEmpty": true,
+              "LoopResultCondition": "FalseIfAll",
+              "Actions": [
+                /* check if its been long enough since we last sent it (or if someone else is currently attempting */
+                /*  to send it. This action acquires a lock and, if successful, extends the lock lease until the   */
+                /*  next time it should be run                                                                     */
+
+                {
+                  "ExecutionOrder": 0,
+                  "ArgTransform": {
+                    "LockGroupName": { "Select": "$.RefConsts.LockGroupName" },
+                    "RunFrequency": { "Select": "$.RefConsts.RunFrequency" },
+                    "LeaseTime": { "Select": "$.RefConsts.LoopMaxRuntime" },
+                    "LockName": { "Select": "$.AgentDataRow.AgentId" }
+                  },
+                  "Inline": {
+                    "Tag": "SendIncidentIfNoOneElseHasRecently",
+                    "Type": "LOCK-TABLE",
+                    "Def": {
+                      "Actions": [
+                        /* we hold the lock, so send the incident */
+
+                        {
+                          "ExecutionOrder": 0,
+                          "ResultTransform": {
+                            "Incidents": {
+                              "Select": "$",
+                              "Mode": "ArrayAdd"
+                            }
+                          },
+                          "ArgTransform": {
+                            "EventNameOverride": { "Select": "$.RefConsts.EventName" },
+                            "KeywordsOverride": { "Select": "$.RefConsts.IncidentKeywords" },
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "Severity": { "Select": "$.RefConsts.Severity" },
+                            "AgentId": { "Select": "$.AgentDataRow.AgentId" },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SubmitAgentIncident",
+                            "Type": "TRANSMIT-INCIDENT",
+                            "Def": {
+                              "Keywords": { "Inline": "NGPLiveSite" },
+                              "EventName": "DEFAULT",
+                              "Title": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Incomplete [[<var s:$.CommandType var>]] commands older than [[<var s:$.CommandAge var>]] days for data agent [[<var s:$.AgentInfo.AgentId var>]] ([[<var s:$.AgentInfo.TeamName var>]])",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "CommandType": { "Select": "$.RefConsts.CommandType" },
+                                  "CommandAge": { "Select": "$.RefConsts.CommandAge" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "CommandAge": { "Select": "$.RefConsts.CommandAge" }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        //since we fake incident, send email
+                        {
+                          "ExecutionOrder": 1,
+                          "ArgTransform": {
+                            "BodyTagOverride": { "Select": "@.Templates.IncidentBody" },
+                            "To": { "Const": [ "varungo@microsoft.com" ] },
+                            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+                          },
+                          "Inline": {
+                            "Tag": "SendResultEmailForAgentIncidents",
+                            "Type": "TRANSMIT-EMAIL",
+                            "Def": {
+                              "IgnoreSimulationMode": "true",
+                              "Subject": {
+                                "Inline": "[[<var s:$.TitlePrefix var>]]Virus detected in exports from agent with AgentId [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": {
+                                  "AgentInfo": { "Select": "$.AgentDataRow" },
+                                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                                }
+                              },
+                              "Body": {
+                                "Inline": "Incident for agent [[<var s:$.AgentInfo.AgentId var>]]",
+                                "Parameters": { "AgentInfo": { "Select": "$.AgentDataRow" } }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+
+        /* finally, send a summary of what we did */
+
+        {
+          "ExecutionOrder": 3,
+          "ResultTransform": { "MailResult": { "Select": "$" } },
+          "ArgTransform": {
+            "To": { "Const": [ "varungo@microsoft.com" ] },
+            "CounterSuffix": { "Select": "$.RefConsts.LockGroupName" }
+          },
+          "Inline": {
+            "Tag": "SendResultEmail",
+            "Type": "TRANSMIT-EMAIL",
+            "Def": {
+              "IgnoreSimulationMode": "true",
+              "Subject": {
+                "Inline": "[[<var s:$.TitlePrefix var>]]Incidents filed for [[<var s:$.Type var>]] [[<var s:$.Age var>]] days (Sev[[<var s:$.Sev var>]]) at [[<var s:'#.Time.Now.Local(\"Pacific Standard Time\")' f:'yyyy-MM-dd HH:mm:ss' var>]]",
+                "Parameters": {
+                  "Type": { "Select": "$.RefConsts.CommandType" },
+                  "Sev": { "Select": "$.RefConsts.Severity" },
+                  "Age": { "Select": "$.RefConsts.Age" },
+                  "TitlePrefix": { "Select": "$.RefConsts.TitlePrefix" }
+                }
+              },
+              "Body": {
+                "TemplateTag": "IncidentSendStatusEmailBody",
+                "Parameters": {
+                  "Incidents": { "Select": "$.Incidents" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,540 @@
+[
+  {
+    "id": "01e82b16ccb5446ba672eb8b3124852c2a10139d960e42f782c676cd2ff18cba",
+    "AgentId": "01e82b16ccb5446ba672eb8b3124852c",
+    "AssetGroupId": "2a10139d960e42f782c676cd2ff18cba",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=cf3f402d-aa79-48d8-8fcd-8cb8bef4b4f1;TableName=dc5a1a10-b4f2-49a2-b7c5-0f429e5ef80e",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 130,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness":  "ProdReady" 
+  },
+  {
+    "id": "04587bab95fc4afdad777d9ca8fb9b8411bcb47877a0496facf071787d453c05",
+    "AgentId": "04587bab95fc4afdad777d9ca8fb9b84",
+    "AssetGroupId": "11bcb47877a0496facf071787d453c05",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=6389ea80-0d5f-4879-9d58-abf67a8295a3;DatabaseName=6cb88704-c0fd-4818-926d-1f3704204852;TableName=6d306a21-7ad2-47c3-af78-b8a9c713a4c5",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 66,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "04587bab95fc4afdad777d9ca8fb9b8429ea488c00be4251b8040842ef84d153",
+    "AgentId": "04587bab95fc4afdad777d9ca8fb9b84",
+    "AssetGroupId": "29ea488c00be4251b8040842ef84d153",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=f12b45e5-945a-429f-8fc8-95fddee501b4;DatabaseName=6d5d27fa-9f5c-49b4-80bb-27074f497b58;TableName=160db2a2-6ffc-438b-97e3-2e0dec95d9df",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 66,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "23e89e6f914e4bb88a71413fb419fb22ef15cc5819f3443084f997a350b34ec1",
+    "AgentId": "23e89e6f914e4bb88a71413fb419fb22",
+    "AssetGroupId": "ef15cc5819f3443084f997a350b34ec1",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=98a6b0be-bdd9-4425-a10d-9cb63da00de0;TableName=1a309c62-390b-4f3d-aaf0-4c38b7b19c9f",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 11,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "4a8f77ea603844b381cfd2788fb699bbfa70b1330a064d6eb63b403a1f415c1d",
+    "AgentId": "4a8f77ea603844b381cfd2788fb699bb",
+    "AssetGroupId": "fa70b1330a064d6eb63b403a1f415c1d",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=9f5a8819-6892-462e-9714-893cdd18ac59;TableName=6d7c3f03-8c5e-4802-a243-054940c3a23a",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 130,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "5a2d6fcbe6434d81a619a9eb901347cf247513a03bd34e4a8b651edfc0fa67ce",
+    "AgentId": "5a2d6fcbe6434d81a619a9eb901347cf",
+    "AssetGroupId": "247513a03bd34e4a8b651edfc0fa67ce",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=f8b46005-ea3e-431c-b92e-8acfae7fd83c;DatabaseName=0539bf56-079d-42e0-b065-41bab6dfcf5e;TableName=074dd70d-527b-4cf7-b35c-afd3e49d3a5f",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose",
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 194,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "84132a6361f646a5b272c4891fa08924ff3b6e3c6ad34b4889933c7062c3ffbc",
+    "AgentId": "84132a6361f646a5b272c4891fa08924",
+    "AssetGroupId": "ff3b6e3c6ad34b4889933c7062c3ffbc",
+    "AssetGroupQualifier": "AssetType=SqlServer;ServerName=bbde26b1-8f9a-4cc6-ac6d-5fe840b3ebc9;DatabaseName=ad13186c-9875-42a3-9e4a-4a87c8a7bfc7;TableName=098f2f7e-8afe-4b1e-878d-e925e49e89de",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 55,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "f047079f3abe42118ed8c2d84796da2629ea488c00be4251b8040842ef84d153",
+    "AgentId": "f047079f3abe42118ed8c2d84796da26",
+    "AssetGroupId": "29ea488c00be4251b8040842ef84d153",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=f12b45e5-945a-429f-8fc8-95fddee501b4;DatabaseName=6d5d27fa-9f5c-49b4-80bb-27074f497b58;TableName=160db2a2-6ffc-438b-97e3-2e0dec95d9df",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 80,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "01e82b16ccb5446ba672eb8b3124852cef15cc5819f3443084f997a350b34ec1",
+    "AgentId": "01e82b16ccb5446ba672eb8b3124852c",
+    "AssetGroupId": "ef15cc5819f3443084f997a350b34ec1",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=98a6b0be-bdd9-4425-a10d-9cb63da00de0;TableName=1a309c62-390b-4f3d-aaf0-4c38b7b19c9f",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 130,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "1a37a8b1ae6445839930a0ece0f5af0568d83ffd3d2b4dd8a0bd46780c386c2c",
+    "AgentId": "1a37a8b1ae6445839930a0ece0f5af05",
+    "AssetGroupId": "68d83ffd3d2b4dd8a0bd46780c386c2c",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=26fd68bb-851a-4cf1-8545-c5d92b65aba3;DatabaseName=d732910a-22c4-4c03-87ce-9c5e06f0d175;TableName=ae2b4843-e20e-4c03-92ee-fb66be6e6ef0",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 66,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "23e89e6f914e4bb88a71413fb419fb222b625d5eaf3440269e01aa32c7359049",
+    "AgentId": "23e89e6f914e4bb88a71413fb419fb22",
+    "AssetGroupId": "2b625d5eaf3440269e01aa32c7359049",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=882462ac-0767-4de4-bdde-213fc087223e;TableName=96849e20-6160-406f-887e-5f3f3c54d549",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 11,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "23e89e6f914e4bb88a71413fb419fb2235cd301e7f984c7aa1b8a15565d07540",
+    "AgentId": "23e89e6f914e4bb88a71413fb419fb22",
+    "AssetGroupId": "35cd301e7f984c7aa1b8a15565d07540",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=78f66180-f04c-4181-9e88-953013b4b497;TableName=7f0cd38d-60e7-4338-97e8-bd88e60b7f59",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 11,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "23e89e6f914e4bb88a71413fb419fb22f9fbce66ea9e43669bcb999b5cb3ad71",
+    "AgentId": "23e89e6f914e4bb88a71413fb419fb22",
+    "AssetGroupId": "f9fbce66ea9e43669bcb999b5cb3ad71",
+    "AssetGroupQualifier": "AssetType=AzureSql;ServerName=82cb460d-7d86-431c-8353-78ede51b7c7c;DatabaseName=54bb7811-2d2f-4646-8f64-a226057658ed;TableName=34a82afa-1e44-450b-acc6-caeaf76fa6e4",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose",
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 11,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "3402442329a543c997b9bd4d846ec2def468be1754a84c4b89d44bf15f5d42d0",
+    "AgentId": "3402442329a543c997b9bd4d846ec2de",
+    "AssetGroupId": "f468be1754a84c4b89d44bf15f5d42d0",
+    "AssetGroupQualifier": "AssetType=CosmosStructuredStream;PhysicalCluster=PC9;VirtualCluster=VC9",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 1,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "5a2d6fcbe6434d81a619a9eb901347cf18cf2126722b4523b3b4cba4b14df292",
+    "AgentId": "5a2d6fcbe6434d81a619a9eb901347cf",
+    "AssetGroupId": "18cf2126722b4523b3b4cba4b14df292",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=abde9da4-c037-4174-913f-62dfe14197a3;TableName=3ad82fcd-83f5-439c-919f-38f6dc65425f",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 194,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "5a2d6fcbe6434d81a619a9eb901347cf5198705b98c34476b1a0fb78a16f0bb6",
+    "AgentId": "5a2d6fcbe6434d81a619a9eb901347cf",
+    "AssetGroupId": "5198705b98c34476b1a0fb78a16f0bb6",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=e6b320ab-786b-45cc-adc7-d0694e0b9a09;TableName=b7a03bb5-55d9-418f-a992-d364083036b5",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 194,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "5a2d6fcbe6434d81a619a9eb901347cf856f42784c834026a3614232ebeacc38",
+    "AgentId": "5a2d6fcbe6434d81a619a9eb901347cf",
+    "AssetGroupId": "856f42784c834026a3614232ebeacc38",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=0faaa256-b0c5-4944-bdf0-e6b14ac6af67;TableName=39de52f5-0600-492e-94d1-47c3f3e0fc2c",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 194,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "613edb0cdda84195a32376aa49f0c8b3196347eadf994718ab3df8798c7ac05d",
+    "AgentId": "613edb0cdda84195a32376aa49f0c8b3",
+    "AssetGroupId": "196347eadf994718ab3df8798c7ac05d",
+    "AssetGroupQualifier": "AssetType=SqlServer;ServerName=b05e80c6-66e8-4677-a08f-7f828a7152fb;DatabaseName=75a7ec65-d0af-46bc-bbc5-7bc31bd9f7ee;TableName=8fde236a-af83-46e5-981c-60f9cd8e9e71",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 83,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "84132a6361f646a5b272c4891fa089246b184793c81349ad8309019e1a9e4794",
+    "AgentId": "84132a6361f646a5b272c4891fa08924",
+    "AssetGroupId": "6b184793c81349ad8309019e1a9e4794",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=136c0c67-9ea4-45e0-9b5b-a9e3add58c5b;DatabaseName=b6a47c62-80ea-4721-94f5-a2c0234b0c2d;TableName=c44fb630-6a0b-48e9-b76f-7e4a55a6df92",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose",
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 55,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "84132a6361f646a5b272c4891fa0892493912f51fbc74e60a7b79fe54e6df098",
+    "AgentId": "84132a6361f646a5b272c4891fa08924",
+    "AssetGroupId": "93912f51fbc74e60a7b79fe54e6df098",
+    "AssetGroupQualifier": "AssetType=SqlServer;ServerName=50abb54b-c956-4ba3-90a8-201e322dfb4e;DatabaseName=7abd28dd-714d-424e-980f-a66b5a00e008;TableName=a833a8e8-620e-4eb4-a40b-aded13968993",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 55,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "84132a6361f646a5b272c4891fa08924c04ec1ce76dd4c028a4719e1d890b2b1",
+    "AgentId": "84132a6361f646a5b272c4891fa08924",
+    "AssetGroupId": "c04ec1ce76dd4c028a4719e1d890b2b1",
+    "AssetGroupQualifier": "AssetType=SqlServer;ServerName=0f0f81d6-2428-476f-bdcf-2f024df97d6a;DatabaseName=2fa7e556-133b-4eda-b6ad-1a26d9ac42f4;TableName=cfa7be26-520d-40bd-934f-8fd83ce0afe9",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 55,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "9903477e316b41be86572ca58552afed61fc17f5ee7046388e7ae53ac53bf71b",
+    "AgentId": "9903477e316b41be86572ca58552afed",
+    "AssetGroupId": "61fc17f5ee7046388e7ae53ac53bf71b",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=500c3e46-8151-4385-8975-b3231c4cdbac;TableName=9d2eac23-5e4c-4265-9cf1-0ee6ffb2c931",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 58,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "bce29a2f51f04d9493e52f5193c4f440c04ec1ce76dd4c028a4719e1d890b2b1",
+    "AgentId": "bce29a2f51f04d9493e52f5193c4f440",
+    "AssetGroupId": "c04ec1ce76dd4c028a4719e1d890b2b1",
+    "AssetGroupQualifier": "AssetType=SqlServer;ServerName=0f0f81d6-2428-476f-bdcf-2f024df97d6a;DatabaseName=2fa7e556-133b-4eda-b6ad-1a26d9ac42f4;TableName=cfa7be26-520d-40bd-934f-8fd83ce0afe9",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 83,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "bce29a2f51f04d9493e52f5193c4f440f5ef8d69d02a4fb9aec96acda70254a0",
+    "AgentId": "bce29a2f51f04d9493e52f5193c4f440",
+    "AssetGroupId": "f5ef8d69d02a4fb9aec96acda70254a0",
+    "AssetGroupQualifier": "AssetType=SqlServer;ServerName=445cb8eb-c24a-4e27-8198-6e0b8c8fb272;DatabaseName=af69e4d1-8531-473a-9470-c7d4f1988e69;TableName=0c8cf335-6551-4c43-bbbd-cbfd08219bd4",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 83,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "cae2abba560d4f5ab20a84dae1b3bb254774af9981c84ac481014ba5528062d3",
+    "AgentId": "cae2abba560d4f5ab20a84dae1b3bb25",
+    "AssetGroupId": "4774af9981c84ac481014ba5528062d3",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=cd83f3ae-c2b6-46ff-a20b-c8c6de7f9d78;TableName=89c589df-d20b-45fd-b12d-d4843f90a0a8",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 58,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "cae2abba560d4f5ab20a84dae1b3bb255198705b98c34476b1a0fb78a16f0bb6",
+    "AgentId": "cae2abba560d4f5ab20a84dae1b3bb25",
+    "AssetGroupId": "5198705b98c34476b1a0fb78a16f0bb6",
+    "AssetGroupQualifier": "AssetType=AzureTable;AccountName=e6b320ab-786b-45cc-adc7-d0694e0b9a09;TableName=b7a03bb5-55d9-418f-a992-d364083036b5",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 58,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "f047079f3abe42118ed8c2d84796da262ed4bfdb33d340b1abe7c3746b4671b2",
+    "AgentId": "f047079f3abe42118ed8c2d84796da26",
+    "AssetGroupId": "2ed4bfdb33d340b1abe7c3746b4671b2",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=2fe925e1-497f-4cdb-a6d1-d64a160e712b;DatabaseName=45f281e2-b6be-421a-aef6-d7b8bf71332d;TableName=30906dab-18ca-43f8-b5d0-3ff93311bb56",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 80,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "f047079f3abe42118ed8c2d84796da26352b3dab169e4839b4f561e7d34093c1",
+    "AgentId": "f047079f3abe42118ed8c2d84796da26",
+    "AssetGroupId": "352b3dab169e4839b4f561e7d34093c1",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=6b381754-589b-4441-b469-7e63b39e59c4;DatabaseName=7d7fc1a5-7737-4ec2-8553-025d81cad7b2;TableName=ad462d68-60fa-49d2-b460-74c692bf8b39",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "Delete"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 80,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  },
+  {
+    "id": "f047079f3abe42118ed8c2d84796da26c2384422b6404ceb9cb16a044c8390db",
+    "AgentId": "f047079f3abe42118ed8c2d84796da26",
+    "AssetGroupId": "c2384422b6404ceb9cb16a044c8390db",
+    "AssetGroupQualifier": "AssetType=Kusto;ClusterName=8403a86c-bfd0-4cea-9d81-cd28ef54e848;DatabaseName=10026ab5-f146-42c2-a16d-61ef41f7440d;TableName=910761bf-149b-4316-9687-640a1dce8365",
+    "AuthenticationType": "MsaSiteBasedAuth",
+    "Capabilities": [
+      "AccountClose",
+      "Delete",
+      "Export"
+    ],
+    "DataTypes": null,
+    "IsDeprecated": false,
+    "IsRealTimeStore": false,
+    "MsaSiteId": 80,
+    "AadAppId": null,
+    "SubjectTypes": null,
+    "Variants": null,
+    "AgentReadiness": "ProdReady"
+  }
+]

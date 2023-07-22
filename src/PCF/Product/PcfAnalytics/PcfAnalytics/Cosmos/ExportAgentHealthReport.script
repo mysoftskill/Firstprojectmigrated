@@ -1,0 +1,151 @@
+﻿//Script GUID:fd66657b-c026-4fe4-ace5-527b09d6f2df
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      version             = @@version@@
+
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@");
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE outputRootFolderName string = "ExportHealthSummary";
+
+#DECLARE hourlyPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/%Y/%m/%d/{{0}}_%Y_%m_%d_%h.ss?date={{1:yyyy-MM-dd}}&hour={{1:HH}}", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+
+//INPUTS
+#DECLARE past35DaysLogRollupStreamFormat string = "/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/prod/ExportAuditLogRollup/v2/{0:yyyy}/{0:MM}/{0:dd}/ExportAuditLogRollup_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.ss";
+
+#DECLARE past35DaysLogRollupStream string = string.Format(@past35DaysLogRollupStreamFormat, @startDate);
+
+//OUTPUTS
+#DECLARE exportAgent35DaysHealthRollup_outputPath string = string.Format(@hourlyPathFormat, "ExportAgent35DaysHealthRollup", @startDate);
+#DECLARE exportCommand35DaysStatusRollup_outputPath string = string.Format(@hourlyPathFormat, "ExportCommand35DaysStatusRollup", @startDate);
+#DECLARE streamExpiry string = "180";
+
+//output for test
+#IF (@localRun)
+    #SET exportAgent35DaysHealthRollup_outputPath = string.Concat("/my", @exportAgent35DaysHealthRollup_outputPath);
+    #SET streamExpiry = "7";
+#ENDIF
+
+exportLogRollup = 
+    SELECT *
+    FROM (SSTREAM @past35DaysLogRollupStream);
+
+agentHealthRollup = 
+    SELECT AgentId,
+           AssetGroupId,
+           ANY_VALUE(AssetGroupQualifier) AS AssetGroupQualifier,
+           COUNTIF(IngestedTime != NULL) AS TotalIngestedCommands,
+           COUNTIF(CompletedTime != NULL && IgnoredTime == NULL) AS CompletedByAgentCommands,
+           COUNTIF(IgnoredTime != NULL) AS IgnoredByVariantCommands,
+           COUNTIF(CompletedTime == NULL && IgnoredTime == NULL) AS PendingCommands
+    FROM exportLogRollup
+    GROUP BY AgentId, AssetGroupId;
+
+oldestPendingInfo =
+    SELECT AgentId,
+           AssetGroupId,
+           MIN(IngestedTime) AS OldestPendingCommandIngestedTime
+    FROM exportLogRollup
+    WHERE CompletedTime == NULL AND IgnoredTime == NULL
+    GROUP BY AgentId, AssetGroupId;
+
+latestCompletedInfo = 
+    SELECT AgentId,
+           AssetGroupId,
+           MAX(IngestedTime) AS LatestCompletedCommandIngestedTime,
+           ARGMAX(IngestedTime, CompletedTime) AS LatestCompletedTime
+    FROM exportLogRollup
+    WHERE CompletedTime != NULL
+    GROUP BY AgentId, AssetGroupId;
+
+combinedAgentHealthRollup = 
+    SELECT rs1.*,
+           rs2.OldestPendingCommandIngestedTime AS OldestPendingCommandIngestedTime,
+           rs3.LatestCompletedCommandIngestedTime AS LatestCompletedCommandIngestedTime,
+           rs3.LatestCompletedTime AS LatestCompletedTime
+    FROM agentHealthRollup AS rs1
+         LEFT JOIN oldestPendingInfo AS rs2
+         ON rs1.AgentId == rs2.AgentId AND rs1.AssetGroupId == rs2.AssetGroupId
+         LEFT JOIN latestCompletedInfo AS rs3
+         ON rs1.AgentId == rs3.AgentId AND rs1.AssetGroupId == rs3.AssetGroupId;
+
+CommandStatusRollup = 
+    SELECT CommandId,
+           COUNT(AssetGroupId) AS TotalAgentAssetGroups,
+           COUNTIF(CompletedTime != NULL && IgnoredTime == NULL) AS AgentAssetGroupsCompleted,
+           COUNTIF(IgnoredTime != NULL) AS AgentAssetGroupsIgnoredByVariant,
+           COUNTIF(CompletedTime == NULL && IgnoredTime == NULL) AS AgentAssetGroupsNotCompleted,
+           SUM(RowCount) AS TotalAffectedRowCount
+    FROM exportLogRollup
+    GROUP BY CommandId;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT combinedAgentHealthRollup
+TO SSTREAM @exportAgent35DaysHealthRollup_outputPath
+    HASH CLUSTERED BY AgentId, AssetGroupId
+    SORTED BY AgentId, AssetGroupId
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT CommandStatusRollup
+TO SSTREAM @exportCommand35DaysStatusRollup_outputPath
+    HASH CLUSTERED BY CommandId
+    SORTED BY CommandId
+WITH STREAMEXPIRY @streamExpiry;
+
+#CS
+public static class InlineCSHelper
+{
+    public static bool PickPreviousRollup(
+            DateTime? previousRollupTime, 
+            DateTime? currentTime)
+    {   
+        if (previousRollupTime == null)
+        {
+            return false;
+        }
+        else
+        {
+            if (currentTime == null)
+            {
+                return true;
+            }
+            else
+            {
+                return previousRollupTime < currentTime;
+            }
+        }
+    }
+}
+#ENDCS

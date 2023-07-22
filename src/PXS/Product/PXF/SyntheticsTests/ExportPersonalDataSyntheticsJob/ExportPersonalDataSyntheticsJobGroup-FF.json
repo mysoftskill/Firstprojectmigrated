@@ -1,0 +1,29 @@
+{
+  "SyntheticJobGroup": {
+    "Name": "ExportPersonalDataSyntheticsJobGroup",
+    "SyntheticJobs": [
+      {
+        "ExecutionIntervalSeconds": 3600,
+        "JobName": "ExportPersonalDataSyntheticsJob",
+        "AssemblyFilePath": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob.dll",
+        "FullyQualifiedClassName": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob.ExportPersonalDataSyntheticsJob",
+        "Regions": [ "USGovTexas" ],
+        "Parameters": {
+          "ApiUrlEndpoint": "https://graph.microsoft.us/beta",
+          "ApiPathTemplate": "users/{0}/exportPersonalData",
+          "ClientId": "1b9960bc-6b66-448b-8ad7-4b4105ff1d90",
+          "KeyVaultUrl": "https://ngpproxy-prod-ame.vault.usgovcloudapi.net/",
+          "UserPasswordSecretName": "ff-user1-password",
+          "UserUpnSecretName": "ff-user1-upn",
+          "BlobStorageConnectionStringSecretName": "pxs-test-blob-storage-connection-string",
+          "Authority": "https://login.microsoftonline.us"
+        },
+        "SyntheticJobInstances": [
+          {
+            "InstanceNamePrefix": "Fairfax"
+          }
+        ]
+      }
+    ]
+  }
+}

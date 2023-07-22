@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyExperience.FunctionalTests</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).PrivacyExperience.FunctionalTests</AssemblyName>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <DefaultTestCategory>FCT</DefaultTestCategory>
+    <TestGroupAreaPath>$(MemberServiceAreaPath)</TestGroupAreaPath>
+    <TestGroupName>$(AssemblyName)</TestGroupName>
+    <Owner>meems</Owner>
+    <ReleaseSubDir>FunctionalTests</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <ExecuteAs64Bit>true</ExecuteAs64Bit>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\AnaheimIdLib\AnaheimIdLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\DSRContracts\DSR.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\..\Test\Common\TestCommon.csproj" />
+    <ProjectReference Include="..\..\..\Test\EventHubTestCommon\EventHubTestCommon.csproj" />
+    <ProjectReference Include="..\..\..\Worker\AadAccountCloseWorker\AadAccountCloseWorker.csproj" />
+    <ProjectReference Include="..\..\..\Worker\PrivacyAqsWorker\PrivacyAqsWorker.csproj" />
+    <ProjectReference Include="..\..\..\Worker\RecurrentDeleteWorker\RecurrentDeleteWorker.csproj" />
+    <ProjectReference Include="..\..\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+    <ProjectReference Include="..\..\PrivacyExperienceClientLibrary\Source\PrivacyExperienceClientLibrary.csproj" />
+    <ProjectReference Include="..\Common\PrivacyTestCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Int_Accounts.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Microsoft.Membership.MemberServices.PrivacyExperience.FunctionalTests.tpproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SetTestSecrets.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Test.runsettings">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" />
+    <PackageReference Include="Azure.Messaging.EventHubs.Processor" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.Identity.Client" />
+    <PackageReference Include="Microsoft.IdentityModel.S2S.Tokens" />
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CloudTest\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

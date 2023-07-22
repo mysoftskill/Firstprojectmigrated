@@ -1,0 +1,53 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading data-use-cms text="Variant request details" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page provides detailed information regarding a variant request. Specifically a detailed list of variants and data assets linked to the request.
+            If this request was created by mistake or no longer needed, you can delete this variant request by clicking the
+            <span class="view-label">Delete</span> button below.
+        </p>
+        <p mee-paragraph data-use-cms>
+            For more information regarding the variant approval process and to find other variants that have already been approved, see the following:
+        </p>
+        <p mee-paragraph>
+            <a href="https://aka.ms/NGPVariant" mee-hyperlink target="_blank" data-use-cms>
+                Variant Process &amp; Status
+            </a>
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeVariantRequestDetailsComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-variant-request-id="$ctrl.variantRequestId"></pcd-default-page-context>
+
+                <h5 mee-heading="subheading5" data-use-cms>ID: {{$ctrl.request.id}}</h5>
+
+                <pcd-variant-request-details-view pcd-variant-request="$ctrl.request"></pcd-variant-request-details-view>
+                <div data-grid="col-6">
+                    <h3 mee-heading="heading4" data-use-cms>Delete variant request</h3>
+                    <p mee-paragraph data-use-cms>
+                        If this variant request was created by mistake or is no longer needed, please go to https://aka.ms/ngpsupport for information on how to file a support incident.
+                    </p>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

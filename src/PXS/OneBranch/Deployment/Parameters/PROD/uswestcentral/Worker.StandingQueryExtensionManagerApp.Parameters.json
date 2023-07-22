@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pxsprod"
+    },
+    "applicationTypeName": {
+      "value": "WorkerStandingQueryExtensionManagerAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "5.2.105"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\StandingQueryExtensionManagerApp\\WorkerStandingQueryExtensionManagerApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "WorkerStandingQueryExtensionManagerApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "Svc_PlacementConstraints": "(NodeTypeName==Worker)",
+        "SQE_MAMetricsAccount": "adgcsprod",
+        "SQE_MAConfigNamespace": "adgcs",
+        "SQE_MonitoringTenant": "ADGCS-westcentralus",
+        "SQE_MonitoringRole": "PXS.Worker",
+        "SQE_MonitoringListeningPort": "5010",
+        "SQE_ClusterName": "pxsprod",
+        "SQE_ClusterPath": "pxsprod.westcentralus.cloudapp.azure.com:19000",                     
+        "CertificateThumbprint": "",
+        "CertificateSubjectName": "adg-cs.cluster.prod.microsoft.com",
+        "RunDebug": "false"
+      }
+    }
+  }
+}

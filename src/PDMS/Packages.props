@@ -1,0 +1,28 @@
+<Project>
+  <!--
+    Set all package versions here. 
+	Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+	Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+	Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+  <Import Project="..\Build\Directory.Build.props" />
+  <ItemGroup>
+	<PackageReference Update="Autofac" Version="[6.2.0]" />
+	<PackageReference Update="Autofac.Extras.DynamicProxy" Version="[6.0.0]" />
+	<PackageReference Update="Autofac.Owin" Version="[6.0.1]" />
+	<PackageReference Update="Autofac.WebApi2" Version="[6.0.1]" />
+	<PackageReference Update="Autofac.WebApi2.Owin" Version="[6.0.0]" />
+	<PackageReference Update="Azure.Security.KeyVault.Secrets" Version="[4.2.0]" />
+	<PackageReference Update="DataGrid.Discovery.DiscoveryClient" Version="[9.1.22229.28]" />
+	<PackageReference Update="Elasticsearch.Net" Version="[7.16.0]" />
+	<PackageReference Update="FileHelpers" Version="[3.5.0]" />
+	<PackageReference Update="Microsoft.IdentityModel.S2S.Extensions.Owin" Version="[3.42.3]" />
+	<PackageReference Update="Microsoft.Identity.ServiceEssentials.Owin" Version="[1.14.1]" />
+	<PackageReference Update="Microsoft.Graph" Version="[3.35.0]" />
+	<PackageReference Update="Microsoft.Rest.ClientRuntime" Version="[2.3.23]" />
+	<PackageReference Update="Owin" Version="[1.0.0]" />
+	<PackageReference Update="WebApiThrottle" Version="[1.5.4]" />
+  </ItemGroup>
+</Project>

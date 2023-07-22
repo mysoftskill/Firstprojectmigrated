@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pcfppe"
+    },
+    "applicationTypeName": {
+      "value": "PcfAutoscalerAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\PcfAutoscalerApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "PcfAutoscalerApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "EnvironmentName": "PXS-PPE-MW1P",
+        "Svc_PlacementConstraints": "(NodeTypeName==Worker)"
+      }
+    }
+  }
+}

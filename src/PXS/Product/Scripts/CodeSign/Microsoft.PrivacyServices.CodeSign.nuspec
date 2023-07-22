@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Microsoft.PrivacyServices.CodeSign</id>
+        <version>$version$</version>
+        <title>Microsoft.PrivacyServices.CodeSign</title>
+        <authors>meepxseng@microsoft.com</authors>
+        <owners>meepxseng@microsoft.com</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Scripts used for code signing.</description>
+        <releaseNotes />
+        <copyright>Copyright 2017</copyright>
+        <dependencies>
+            <dependency id="Microsoft.PrivacyServices.CodeSign.Dependencies" version="1.0.0.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="tools\Delete-EmptyFiles.ps1" target="tools\Delete-EmptyFiles.ps1" />
+        <file src="tools\CreateCatalogFiles.cmd" target="tools\CreateCatalogFiles.cmd" />
+        <file src="tools\Collect-CatalogFiles.ps1" target="tools\Collect-CatalogFiles.ps1" />
+        <file src="tools\Update-CatalogFiles.ps1" target="tools\Update-CatalogFiles.ps1" />
+        <file src="readme.txt" target="readme.txt" />
+    </files>
+</package>

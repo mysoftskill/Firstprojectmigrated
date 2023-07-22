@@ -1,0 +1,510 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "pafConfigEndPoint": {
+      "type": "string",
+      "metadata": {
+        "description": "App config endpoint."
+      }
+    },
+    "deploymentEnvironment": {
+      "type": "string",
+      "allowedValues": [
+        "ONEBOX",
+        "CI1",
+        "CI2",
+        "PPE",
+        "INT",
+        "PROD"
+      ],
+      "metadata": {
+        "description": "Deployment environment"
+      }
+    },
+    "azureRegion": {
+      "type": "string",
+      "allowedValues": [
+        "EastUS",
+        "EastUS2",
+        "SouthCentralUS",
+        "WestUS2",
+        "WestUS",
+        "WestCentralUS"
+      ],
+      "metadata": {
+        "description": "Azure region"
+      }
+    },
+    "appName": {
+      "type": "string",
+      "defaultValue": "[concat('fnapp', uniqueString(resourceGroup().id))]",
+      "metadata": {
+        "description": "The name of the function app."
+      }
+    },
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS"
+      ],
+      "metadata": {
+        "description": "Storage Account type"
+      }
+    },
+    "storageAccountKind": {
+      "type": "string",
+      "defaultValue": "StorageV2",
+      "allowedValues": [
+        "Storage",
+        "StorageV2"
+      ],
+      "metadata": {
+        "description": "Storage Account kind"
+      }
+    },
+    "msdeployPackageUrl": {
+      "type": "securestring"
+    },
+    "storageName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of storage account for the function app"
+      }
+    },
+    "runtime": {
+      "type": "string",
+      "defaultValue": "dotnet",
+      "allowedValues": [
+        "node",
+        "dotnet",
+        "java"
+      ],
+      "metadata": {
+        "description": "The language worker runtime to load in the function app."
+      }
+    },
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the key vault that contains secrets."
+      }
+    },
+    "pdmsResourceId": {
+      "type": "string",
+      "metadata": {
+        "description": "The app id for pdms-resource-*."
+      }
+    },
+    "pdmsBaseUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "The base url for API calls to PDMS."
+      }
+    },
+    "pafCoreResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "The resource group for the core PAF resources (kv, uami, etc)."
+      }
+    },
+    "pafCoreResourceLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "The location of the core paf resources."
+      }
+    },
+    "pafUamiId": {
+      "type": "string",
+      "metadata": {
+        "description": "The app Id for the NGP-PAF-* UAMI."
+      }
+    },
+    "pafUamiName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name for the NGP-PAF-* UAMI."
+      }
+    },
+    "variantUpdateTiming": {
+      "type": "string",
+      "metadata": {
+        "description": "The timing settings for UpdateApprovedVariantRequest function"
+      }
+    },
+    "variantRemoveTiming": {
+      "type": "string",
+      "metadata": {
+        "description": "The timing settings for RemoveRejectedVariantRequest function"
+      }
+    },
+    "variantRequestQueue": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the variant request function input queue."
+      }
+    },
+    "variantRequestProjectUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "The url of the VSO location for Variant-Asset Linking requests."
+      }
+    },
+    "variantRequestProjectName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the VSO project for Variant-Asset Linking requests."
+      }
+    },
+    "enableNonProdFunctionality": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ],
+      "metadata": {
+        "description": "true if in a non-production environment to allow typically prohibited scenarios such as deleting a workItem."
+      }
+    },
+    "virtualNetwork_name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the virtual network"
+      }
+    },
+    "genevaMonitoringTenant": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_TENANT environment variable "
+      },
+      "allowedValues": [
+        "ADGCS-CI1-WESTUS2",
+        "ADGCS-CI2-WESTUS2",
+        "ADGCS-INT-WESTUS2",
+        "ADGCS-PPE-WESTUS2",
+        "ADGCS-PPE-SCUS",
+        "ADGCS-USWC",
+        "ADGCS-SCUS"
+      ]
+    },
+    "genevaMonitoringRole": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_ROLE environment variable"
+      }
+    },
+    "genevaMetricPrefixName": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the METRIC_PREFIX_NAME environment variable"
+      }
+    },
+    "genevaMetricAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the METRIC_ACCOUNT environment variable "
+      },
+      "allowedValues": [
+        "ADGCS_NonProdHotPath",
+        "adgcsprod"
+      ]
+    },
+    "ShouldUseAADToken": {
+      "type": "bool",
+      "metadata": {
+        "description": "Should the AAD apptoken be used to create and manage ADO workitems"
+      },
+      "allowedValues": [
+        true, false
+      ]
+    }
+  },
+  "variables": {
+    "functionAppName": "[parameters('appName')]",
+    "functionAppResourceGroup": "[resourceGroup().name]",
+    "functionAppId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('appName'))]",
+    "functionAppLocation": "[resourceGroup().location]",
+    "hostingPlanName": "[parameters('appName')]",
+    "storageAccountName": "[parameters('storageName')]",
+    "functionWorkerRuntime": "[parameters('runtime')]",
+    "keyVaultName": "[parameters('keyVaultName')]",
+    "variantUpdateTiming": "[parameters('variantUpdateTiming')]",
+    "variantRemoveTiming": "[parameters('variantRemoveTiming')]",
+    "variantRequestQueueName": "[parameters('variantRequestQueue')]",
+    "variantRequestProjectUrl": "[parameters('variantRequestProjectUrl')]",
+    "variantRequestProjectName": "[parameters('variantRequestProjectName')]",
+    "enableNonProdFunctionality": "[parameters('enableNonProdFunctionality')]",
+    "networkSecurityGroupName": "[concat(parameters('virtualNetwork_name'), '-nsg')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-05-01",
+      "name": "[variables('networkSecurityGroupName')]",
+      "location": "[variables('functionAppLocation')]",
+      "tags": {
+        "SkipNRMSSAW": "Hypernet",
+        "SkipNRMSDatabricks": "Hypernet",
+        "SkipNRMSCorp": "Hypernet",
+        "NRMSProd102": "Hypernet",
+        "SkipNRMSVNet": "Hypernet"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-05-01",
+      "name": "[parameters('virtualNetwork_name')]",
+      "location": "[variables('functionAppLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+      ],
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24",
+              "delegations": [
+                {
+                  "name": "delegation",
+                  "properties": {
+                    "serviceName": "Microsoft.Web/serverfarms"
+                  }
+                }
+              ],
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+              },
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('hostingPlanName')]",
+      "location": "[variables('functionAppLocation')]",
+      "sku": {
+        "name": "EP1",
+        "tier": "ElasticPremium"
+      },
+      "properties": {
+        "name": "[variables('hostingPlanName')]",
+        "computeMode": "Dynamic"
+      }
+    },
+    {
+      "apiVersion": "2020-10-01",
+      "name": "pafResourceDeploymentTemplate",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[parameters('pafCoreResourceGroup')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2019-06-01",
+              "name": "[variables('storageAccountName')]",
+              "location": "[parameters('pafCoreResourceLocation')]",
+              "properties": { "allowBlobPublicAccess": false },
+              "sku": {
+                "name": "[parameters('storageAccountType')]"
+              },
+              "kind": "[parameters('storageAccountKind')]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('functionAppName')]",
+      "location": "[variables('functionAppLocation')]",
+      "kind": "functionapp",
+      "identity": {
+        "type": "SystemAssigned,UserAssigned",
+        "userAssignedIdentities": {
+          "[resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.ManagedIdentity/userAssignedIdentities', parameters('pafUamiName'))]": {}
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+        "[resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.Resources/deployments', 'pafResourceDeploymentTemplate')]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false
+        }
+      },
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2020-06-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]",
+            "[concat('Microsoft.Web/Sites/', variables('functionAppName'), '/Extensions/ZipDeploy')]"
+          ],
+          "properties": {
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value)]",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value)]",
+            "WEBSITE_CONTENTSHARE": "[toLower(variables('functionAppName'))]",
+            "FUNCTIONS_EXTENSION_VERSION": "~3",
+            "WEBSITE_NODE_DEFAULT_VERSION": "~10",
+            "FUNCTIONS_WORKER_RUNTIME": "[variables('functionWorkerRuntime')]",
+            "WEBSITE_ENABLE_SYNC_UPDATE_SITE": "true",
+            "WEBSITE_FIRST_PARTY_ID": "AntMDS",
+            "VariantRequestStorage": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.KeyVault/vaults/secrets', variables('keyVaultName'), 'VariantRequestStorage'), '2019-09-01').secretUriWithVersion, ')')]",
+            "VariantRequestQueueName": "[variables('variantRequestQueueName')]",
+            "VariantUpdateTiming": "[variables('variantUpdateTiming')]",
+            "VariantRemoveTiming": "[variables('variantRemoveTiming')]",
+            "AzureDevOpsAccessToken": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.KeyVault/vaults/secrets', variables('keyVaultName'), 'VsoAccessToken'), '2019-09-01').secretUriWithVersion, ')')]",
+            "AadClientSecret": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.KeyVault/vaults/secrets', variables('keyVaultName'), 'NGPVariantLinkingBotSecret'), '2019-09-01').secretUriWithVersion, ')')]",
+            "AadClientId": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId(parameters('pafCoreResourceGroup'), 'Microsoft.KeyVault/vaults/secrets', variables('keyVaultName'), 'AadClientId'), '2019-09-01').secretUriWithVersion, ')')]",
+            "MSTenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+            "AzureDevOpsProjectUrl": "[variables('variantRequestProjectUrl')]",
+            "AzureDevOpsProjectName": "[variables('variantRequestProjectName')]",
+            "EnableNonProdFunctionality": "[variables('enableNonProdFunctionality')]",
+            "PafUamiId": "[parameters('pafUamiId')]",
+            "PdmsResourceId": "[parameters('pdmsResourceId')]",
+            "PdmsBaseUrl": "[parameters('pdmsBaseUrl')]",
+            "AzureRegion": "[parameters('azureRegion')]",
+            "DeploymentEnvironment": "[parameters('deploymentEnvironment')]",
+            "MONITORING_TENANT": "[parameters('genevaMonitoringTenant')]",
+            "MONITORING_ROLE": "[parameters('genevaMonitoringRole')]",
+            "METRIC_PREFIX_NAME": "[parameters('genevaMetricPrefixName')]",
+            "METRIC_ACCOUNT": "[parameters('genevaMetricAccount')]",
+            "ShouldUseAADToken": "[parameters('ShouldUseAADToken')]",
+            "App_Name": "[variables('functionAppName')]",
+            "PAF_APP_CONFIG_ENDPOINT": "[parameters('pafConfigEndPoint')]"
+          }
+        },
+        {
+          "name": "virtualNetwork",
+          "type": "config",
+          "apiVersion": "2018-02-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork_name'))]"
+          ],
+          "location": "[variables('functionAppLocation')]",
+          "properties": {
+            "subnetResourceid": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork_name'), 'default')]",
+            "swiftSupported": true
+          }
+        },
+        {
+          "name": "ZipDeploy",
+          "type": "extensions",
+          "apiVersion": "2020-06-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+          ],
+          "properties": {
+            "packageUri": "[parameters('msdeployPackageUrl')]",
+            "SCM_DO_BUILD_DURING_DEPLOYMENT": "true"
+          }
+        }
+      ]
+    },
+    {
+      "apiVersion": "2020-10-01",
+      "name": "keyVaultUpdateTemplate",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "[resourceId(variables('functionAppResourceGroup'), 'Microsoft.Web/sites', variables('functionAppName'))]"
+      ],
+      "resourceGroup": "[parameters('pafCoreResourceGroup')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "name": "[concat(parameters('keyvaultName'), '/PafFunctionKey')]",
+              "apiVersion": "2019-09-01",
+              "properties": {
+                "value": "[listkeys(concat(variables('functionAppId'), '/host/default/'),'2016-08-01').masterKey]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/accessPolicies",
+              "name": "[concat(parameters('keyVaultName'), '/add')]",
+              "apiVersion": "2019-09-01",
+              "properties": {
+                "accessPolicies": [
+                  {
+                    "tenantId": "[reference(resourceId(variables('functionAppResourceGroup'), 'Microsoft.Web/sites', variables('functionAppName')), '2019-08-01', 'full').identity.tenantId]",
+                    "objectId": "[reference(resourceId(variables('functionAppResourceGroup'), 'Microsoft.Web/sites', variables('functionAppName')), '2019-08-01', 'full').identity.principalId]",
+                    "permissions": {
+                      "keys": [],
+                      "secrets": [
+                        "list",
+                        "get"
+                      ],
+                      "certificates": [
+                        "list",
+                        "get"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(variables('functionAppName'), '/scm')]",
+      "location": "[variables('functionAppLocation')]",
+      "kind": "string",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+      ],
+      "properties": {
+        "allow": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(variables('functionAppName'), '/ftp')]",
+      "location": "[variables('functionAppLocation')]",
+      "kind": "string",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+      ],
+      "properties": {
+        "allow": false
+      }
+    }
+  ]
+}

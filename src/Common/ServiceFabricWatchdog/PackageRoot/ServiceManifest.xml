@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest Name="WatchdogSvcPkg"
+                 Version="1.0.0"
+                 xmlns="http://schemas.microsoft.com/2011/01/fabric"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ServiceTypes>
+    <!-- This is the name of your ServiceType. 
+         This name must match the string used in the RegisterServiceAsync call in Program.cs. -->
+    <StatelessServiceType ServiceTypeName="WatchdogSvcType" />
+  </ServiceTypes>
+
+  <!-- Code package is your service executable. -->
+  <CodePackage Name="Code" Version="1.0.0">
+    <EntryPoint>
+      <ExeHost>
+        <Program>WatchdogSvc.exe</Program>
+        <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="51200"/><!-- 50 MB -->
+      </ExeHost>
+    </EntryPoint>
+    <EnvironmentVariables>
+      <EnvironmentVariable Name="WD_UptimeCheckEnabled" Value="false"/>
+      <EnvironmentVariable Name="WD_UptimeCheckProcessName" Value=""/>
+      <EnvironmentVariable Name="WD_ProbeCheckEnabled" Value="false"/>
+      <EnvironmentVariable Name="WD_ProbeCheckUri" Value=""/>
+      <EnvironmentVariable Name="WD_ReportServiceManifestName" Value=""/>
+    </EnvironmentVariables>
+  </CodePackage>
+
+  <!-- Config package is the contents of the Config directory under PackageRoot that contains an 
+       independently-updateable and versioned set of custom configuration settings for your service. -->
+  <ConfigPackage Name="Config" Version="1.0.0" />
+
+  <Resources>
+    <Endpoints>
+      <!-- This endpoint is used by the communication listener to obtain the port on which to 
+           listen. Please note that if your service is partitioned, this port is shared with 
+           replicas of different partitions that are placed in your code. -->
+      <Endpoint Name="ServiceEndpoint" />
+    </Endpoints>
+  </Resources>
+</ServiceManifest>

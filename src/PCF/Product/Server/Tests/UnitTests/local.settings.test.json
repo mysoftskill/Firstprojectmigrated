@@ -1,0 +1,43 @@
+{
+  "FeatureManagement": {
+    "PublishUncompressedMessage": false
+  },
+  "PCF.CommandLifecycleEventPublisher.MaxPublishBytes": 500000,
+  "PCF.CONFIGURED_PCD_APP_IDS": "foo,bar",
+
+  "PCF.ApiTrafficPercantage_ShouldNotThrottleTraffic": [],
+  "PCF.ApiTrafficPercantage_ShouldThrottleAllTraffic": [
+    {
+      "TrafficKey": "*.*.*",
+      "Percentage": 0
+    },
+    {
+      "TrafficKey": "ApiName1.AgentId1.*",
+      "Percentage": 100
+    },
+    {
+      "TrafficKey": "ApiName2.AgentId2.*",
+      "Percentage": 100
+    }
+  ],
+  "PCF.ApiTrafficPercantage_ShouldThrottleGivenTraffic": [
+    {
+      "TrafficKey": "*.*.*",
+      "Percentage": 100
+    },
+    {
+      "TrafficKey": "ApiName.AgentId.*",
+      "Percentage": 0
+    }
+  ],
+  "PCF.ApiTrafficPercantage_ShouldThrottleAtGivenPercentage": [
+    {
+      "TrafficKey": "*.*.*",
+      "Percentage": 100
+    },
+    {
+      "TrafficKey": "ApiName.AgentId.*",
+      "Percentage": 50
+    }
+  ]
+}

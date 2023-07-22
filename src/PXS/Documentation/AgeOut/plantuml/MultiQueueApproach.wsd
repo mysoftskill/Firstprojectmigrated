@@ -1,0 +1,28 @@
+@startuml MultiQueue
+
+database AQS
+
+
+node PrivacyWorker {
+    component AqsWorkerHost
+    folder AzureStorage {
+        database Queue24
+        database Queue60
+    }
+
+    component Queue24Worker
+    component Queue60Worker
+}
+
+AQS --> AqsWorkerHost
+
+AqsWorkerHost --> Queue24 : Age outs with last login in 2 years
+AqsWorkerHost --> Queue60 : Age outs with last login in 5 years
+
+Queue24 --> Queue24Worker : Dequeue
+Queue60 --> Queue60Worker : Dequeue
+
+Queue24Worker --> [PCF] : Batch post command
+Queue60Worker --> [PCF] : Batch post command
+
+@enduml

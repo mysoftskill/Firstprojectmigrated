@@ -1,0 +1,18 @@
+import "Microsoft.Telemetry.bond"
+
+namespace Microsoft.PrivacyServices.Common.Telemetry
+
+struct TaskTelemetryEvent : Microsoft.Telemetry.Base
+{
+    // id of the task that is being reported on
+    10 : required string TaskId;
+
+    // id of the item being operated on when the event was raised
+    20 : required string Item;
+
+    // operation being performed on the item when the event was raised
+    30 : required string Operation;
+
+    // some details about the operation 
+    40 : optional string Details;
+}

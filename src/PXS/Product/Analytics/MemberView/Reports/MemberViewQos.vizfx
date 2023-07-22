@@ -1,0 +1,422 @@
+﻿<?xml  version="1.0"  encoding="utf-8" ?>
+<visualization  xmlns:vz="http://insights5"  vz:type="Dashboard"  vz:connection="Data Source=DMQUALITY;Initial Catalog=MemberViewAnalytics;Integrated Security=true">
+  <vz:section  vz:type="header">
+    <vz:title>MemberView Qos</vz:title>
+    <vz:inputs>
+
+      <style>
+        .dashTile
+        {
+        background-color:white;
+        width: 420px;
+        margin-top: 20px;
+        margin-left: 20px;
+        padding: 10px 10px 10px 10px;
+        float:left
+        }
+        .dashHeader
+        {
+        font-family:'Segoe UI Light', 'Segoe UI';
+        font-size: 36px;
+        color: #00B0F0;
+        padding-bottom: 10px;
+        }
+        .data-renderer
+        {
+        height:250px;
+        }
+        .dashboard
+        {
+        display: inline-block;
+        width: 48%;
+        }
+      </style>
+
+      <div>
+        Date Picker
+        <vz:input  id="startDate" vz:type="DatePicker" vz:dataSourceType="VizFx.Data.Sql.Text" vz:cascadeType="None" style="width:300px">
+          <vz:dataSource>
+            <![CDATA[
+                    SELECT 
+                    DateAdd("hh",-48,GetDate()) AS CurrentReportDate,
+                    MIN(Timestamp) AS LowerDate, 
+                    MAX(Timestamp) AS UpperDate
+                    FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+               ]]>
+          </vz:dataSource>
+          <vz:properties>
+            <!-- Max Date field mapping  -->
+            <vz:property  vz:name ="minDate"  vz:value="LowerDate"/>
+            <vz:property  vz:name ="maxDate"  vz:value="UpperDate"/>
+            <vz:property  vz:name="currentDate"  vz:value="CurrentReportDate"/>
+          </vz:properties>
+        </vz:input>
+        <vz:input  id="endDate" vz:type="DatePicker" vz:dataSourceType="VizFx.Data.Sql.Text" vz:cascadeType="None" style="width:300px">
+          <vz:dataSource>
+            <![CDATA[
+                    SELECT 
+                    GetDate() AS CurrentReportDate,
+                    MIN(Timestamp) AS LowerDate, 
+                    MAX(Timestamp) AS UpperDate
+                    FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              ]]>
+          </vz:dataSource>
+          <vz:properties>
+            <!-- Max Date field mapping  -->
+            <vz:property  vz:name ="minDate"  vz:value="LowerDate"/>
+            <vz:property  vz:name ="maxDate"  vz:value="UpperDate"/>
+            <vz:property  vz:name="currentDate"  vz:value="CurrentReportDate"/>
+          </vz:properties>
+        </vz:input>
+      </div>
+    </vz:inputs>
+  </vz:section>
+  <vz:section vz:type="content">
+    <vz:view vz:name="Summary">
+      <div style="display:inline-block; width:100%">
+        <div id="IncomingHealth" style="width: 49%; display: inline-block;">
+          <div id="ReliabilityGraph" class="dashboard">
+            <h3>Reliability</h3>
+            <vz:renderer  vz:type="line" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,OperationName
+                ,CAST((CAST(SUM([Success]) AS numeric)/SUM([Total])) AS decimal(8,7)) AS Qos
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'IncomingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), OperationName
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="OperationName"/>
+                <vz:property  vz:name="valueAxis"  vz:value="Qos" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"#.##%"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# Qos: #= kendo.toString(value, \"0.00000%\") # Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="markers"  vz:value="false" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+          <div id="VolumeGraph" class="dashboard">
+            <h3>RPS</h3>
+            <vz:renderer  vz:type="line" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,OperationName
+                ,CAST(CAST(SUM([Total]) AS numeric)/(1080) AS decimal(8,3)) AS RPS -- 15 min * 60 sec = 1080 Sec
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'IncomingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), OperationName
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="OperationName"/>
+                <vz:property  vz:name="valueAxis"  vz:value="RPS" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"##.###"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# RPS: #= kendo.toString(value, \"0.000\") # Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="markers"  vz:value="false" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+          <div id="ResponseGraph" class="dashboard">
+            <h3>Failure Response Codes</h3>
+            <vz:renderer  vz:type="column" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,CONCAT(OperationName, '.', ProtocolStatusCode) AS ErrorSource
+                ,COUNT(*) AS ErrorCount
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'IncomingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59') AND Success = 0
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), CONCAT(OperationName, '.', ProtocolStatusCode)
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="ErrorSource"/>
+                <vz:property  vz:name="valueAxis"  vz:value="ErrorCount" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"#"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# Count: #= value # Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="stack"  vz:value="true" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+          <div id="LatencyGraph" class="dashboard">
+            <h3>Average Latency</h3>
+            <vz:renderer  vz:type="line" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,OperationName
+                ,CAST(CAST(SUM(AverageLatency*Total) AS numeric)/SUM(Total) AS decimal(6,0)) AS AverageLatency
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'IncomingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), OperationName
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="OperationName"/>
+                <vz:property  vz:name="valueAxis"  vz:value="AverageLatency" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"###"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# Latency: #= value #ms Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="markers"  vz:value="false" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+        </div>
+        <div id="OutgoingHealth" style="width: 40%; display: inline-block;">
+          <div id="OutgoingReliabilityGraph" class="dashboard">
+            <h3>Reliability</h3>
+            <vz:renderer  vz:type="line" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,CONCAT(DependencyName, '.', DependencyOperationName) AS OperationName
+                ,CAST((CAST(SUM([Success]) AS numeric)/SUM([Total])) AS decimal(8,7)) AS Qos
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'OutgoingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), CONCAT(DependencyName, '.', DependencyOperationName)
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="OperationName"/>
+                <vz:property  vz:name="valueAxis"  vz:value="Qos" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"#.##%"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# Qos: #= kendo.toString(value, \"0.00000%\") # Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="markers"  vz:value="false" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+          <div id="OutgoingVolumeGraph" class="dashboard">
+            <h3>RPS</h3>
+            <vz:renderer  vz:type="line" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,CONCAT(DependencyName, '.', DependencyOperationName) AS OperationName
+                ,CAST(CAST(SUM([Total]) AS numeric)/(1080) AS decimal(8,3)) AS RPS -- 15 min * 60 sec = 1080 Sec
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'OutgoingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), CONCAT(DependencyName, '.', DependencyOperationName)
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="OperationName"/>
+                <vz:property  vz:name="valueAxis"  vz:value="RPS" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"##.###"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# RPS: #= kendo.toString(value, \"0.000\") # Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="markers"  vz:value="false" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+          <div id="OutgoingResponseGraph" class="dashboard">
+            <h3>Failure Response Codes</h3>
+            <vz:renderer  vz:type="column" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,CONCAT(DependencyName, '.', DependencyOperationName, '.', ProtocolStatusCode) AS ErrorSource
+                ,COUNT(*) AS ErrorCount
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'OutgoingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59') AND Success = 0
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), CONCAT(DependencyName, '.', DependencyOperationName, '.', ProtocolStatusCode)
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="ErrorSource"/>
+                <vz:property  vz:name="valueAxis"  vz:value="ErrorCount" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"#"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# Count: #= value # Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="stack"  vz:value="true" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+          <div id="OutgoingLatencyGraph" class="dashboard">
+            <h3>Average Latency</h3>
+            <vz:renderer  vz:type="line" vz:dataSourceType="VizFx.Data.Sql.Text" class="data-renderer">
+              <vz:dataSource>
+                <![CDATA[
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd HH:00') AS Timestamp
+                ,CONCAT(DependencyName, '.', DependencyOperationName) AS OperationName
+                ,CAST(CAST(SUM(AverageLatency*Total) AS numeric)/SUM(Total) AS decimal(6,0)) AS AverageLatency
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'OutgoingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd HH:00'), CONCAT(DependencyName, '.', DependencyOperationName)
+              ]]>
+              </vz:dataSource>
+              <vz:properties>
+                <vz:property  vz:name="seriesName"  vz:value="OperationName"/>
+                <vz:property  vz:name="valueAxis"  vz:value="AverageLatency" />
+                <vz:property  vz:name="valueAxes" vz:value='
+                            [{
+                              "labels": {
+                                "format":"###"
+                              }
+                            }]' />
+
+                <vz:property  vz:name="categoryAxis"  vz:value="Timestamp"/>
+                <vz:property  vz:name="categoryAxisRotation" vz:value="0"/>
+                <vz:property  vz:name="categoryAxisStep" vz:value="999999"/>
+
+                <vz:property  vz:name="tooltip" vz:value='{"template":"#=series.name# Latency: #= value #ms Time: #= kendo.toString(category, \"yyyy-MM-dd HH:mm\") #"}'/>
+                <vz:property  vz:name="markers"  vz:value="false" />
+              </vz:properties>
+            </vz:renderer>
+          </div>
+        </div>
+
+        <!-- Start JavaScript -->
+        <vz:renderer  vz:type="javascript"  vz:dataSourceType="VizFx.Data.Sql.Text">
+          <vz:dataSource>
+            <![CDATA[ 
+              SELECT FORMAT(Timestamp, 'yyyy-MM-dd') AS Timestamp
+                ,OperationName
+                ,CAST((CAST(SUM([Success]) AS numeric)/SUM([Total])) AS decimal(8,7)) AS Qos
+              FROM MemberViewAnalytics.dbo.MemberViewQos soh (NOLOCK)
+              WHERE BaseType = 'IncomingServiceRequest' AND Timestamp BETWEEN @startDate AND CONCAT(@endDate, ' 23:59')
+              GROUP BY FORMAT(Timestamp, 'yyyy-MM-dd'), OperationName 
+            ]]>
+          </vz:dataSource>
+          <vz:properties>
+            <!-- In this example we are using a script template to map data back -->
+            <!--<vz:property vz:name="templateId" vz:value="scriptTemplate1" />-->
+          </vz:properties>
+        </vz:renderer>
+        <!--
+ 
+             Optionally, a custom script template can be defined to create different data shape based on templatized values from the data source.
+ 
+           
+        <script>
+          <![CDATA[
+          var myDataArray = [];
+          $(VizFx).bind(VizFx.afterDataRenderersLoaded,
+          function() {
+          var content = "<h1>myDataArray</h1><p>{0}</p>".format(JSON.stringify(myDataArray));
+          $("#custom-ui-pane").append(content);
+          });
+          ]]>
+        </script>
+        <script  type="text/html"  id="scriptTemplate1">
+          myDataArray.push({'Timestamp': '#=Timestamp#', 'OperationName': '#=OperationName#', 'Qos': '#=Qos#'});
+        </script>-->
+        <!-- End JavaScript -->
+        <div id="custom-ui-pane"></div>
+        <script>
+          <![CDATA[$(VizFx).bind(VizFx.afterDataRenderersLoaded, adjustGraphs);
+          function readjustTimeAxis(kendoGraph) {
+            var numberOfDates = kendoGraph.options.categoryAxis.dataItems.length;
+            kendoGraph.options.categoryAxis.labels.step = Math.round(numberOfDates / 7);
+            if (kendoGraph.options.categoryAxis.labels.step < (48*4)) {
+              kendoGraph.options.categoryAxis.labels.format = "HH:mm\nMM/dd";
+            }
+            else {
+              kendoGraph.options.categoryAxis.labels.format = "MM/dd";
+            }
+            
+            //kendoGraph.options.categoryAxis.baseUnit = "minutes";
+            //kendoGraph.options.categoryAxis.baseUnitStep = 15;
+                
+            kendoGraph.setOptions(kendoGraph.options);
+          }
+          
+          function getKendoGraph(id) {
+            var graphDiv = document.getElementById(id)
+            var kendoGraphId = graphDiv.getElementsByClassName("k-chart")[0].id;
+            var kendoGraphDiv = $('#' + kendoGraphId);
+            var kendoGraph = kendoGraphDiv.getKendoChart();
+            
+            return kendoGraph;
+          }
+          
+          function fixGraph(id) {
+            var kendoGraph = getKendoGraph(id);
+            readjustTimeAxis(kendoGraph);
+          }
+          
+          function adjustGraphs() {
+            fixGraph("ReliabilityGraph");
+            fixGraph("VolumeGraph");
+            fixGraph("ResponseGraph");
+            fixGraph("LatencyGraph");
+            
+            fixGraph("OutgoingReliabilityGraph");
+            fixGraph("OutgoingVolumeGraph");
+            fixGraph("OutgoingResponseGraph");
+            fixGraph("OutgoingLatencyGraph");
+          }]]>
+        </script>
+      </div>
+    </vz:view>
+  </vz:section>
+</visualization>

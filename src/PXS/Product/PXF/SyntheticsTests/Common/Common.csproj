@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <Platform>x64</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyExperience.SyntheticsTests.Common</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).PrivacyExperience.SyntheticsTests.Common</AssemblyName>
+    <ReleaseSubDir>SyntheticsTests</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <ExecuteAs64Bit>true</ExecuteAs64Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\Test\Common\PrivacyTestCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="SyntheticsJobGroup.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <ProjectGuid>{0346E87C-98FB-487E-AD37-4424F4CA1F2A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Microsoft.Membership.MemberServices.Privacy.GenevaTest</RootNamespace>
+    <AssemblyName>GenevaTest</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>GenevaTest</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AzureInfraCommon\Source\AzureInfraCommon.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\PXF\Core\Source\PrivacyCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GenevaMonitoringAgent" />
+    <PackageReference Include="GenevaMonitoringAgentLibs" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>PdmsWorker</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.Worker</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Exe</OutputType>
+    <OutputPath>$(OutputPath)\..\ServiceFabricRelease\$(MSBuildProjectName)</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\$(Platform)\PdmsWorker.xml</DocumentationFile>
+    <SignAssembly>false</SignAssembly>
+    <FlattenIniOneboxUnderVisualStudio>True</FlattenIniOneboxUnderVisualStudio>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="FileHelpers" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Core" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" />
+    <PackageReference Include="ServiceManager.Tools" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+  </ItemGroup>  
+  
+  <Import Project="$(ServiceRoot)\Build\core.common.targets" />
+  <Import Project="$(ServiceRoot)\Build\flattenini_onebox.targets" />
+</Project>

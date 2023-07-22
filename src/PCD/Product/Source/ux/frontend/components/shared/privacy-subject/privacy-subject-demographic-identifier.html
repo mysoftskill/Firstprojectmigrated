@@ -1,0 +1,115 @@
+<section>
+    <div data-grid="col-12">
+        <div data-grid="col-6">
+
+                <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.names"
+                                                 pcd-error-id="{{$ctrl.errorCategory}}.names"
+                                                 pcd-added-resource-padding="true"
+                                                 pcd-resource-type="named-resource"
+                                                 pcd-selector-label="Name" data-use-cms
+                                                 pcd-placeholder="e.g., John Doe"
+                                                 pcd-add-on-blur="true"
+                                                 pcd-add-on-enter="true"
+                                                 i9n-name-selector
+                                                 ng-model="$ctrl.namesSelectorData"></pcd-directory-resource-selector>
+
+                <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.emails"
+                                                 data-required-field="{{$ctrl.isEmailMandatory()}}"
+                                                 pcd-error-id="{{$ctrl.errorCategory}}.emails"
+                                                 pcd-added-resource-padding="true"
+                                                 pcd-resource-type="named-resource"
+                                                 pcd-selector-label="Email" data-use-cms
+                                                 pcd-placeholder="e.g., jdoe@outlook.com"
+                                                 pcd-add-on-blur="true"
+                                                 pcd-add-on-enter="true"
+                                                 i9n-email-selector
+                                                 ng-model="$ctrl.emailsSelectorData"></pcd-directory-resource-selector>
+                <mee-inline-error error-id="{{$ctrl.errorCategory}}.email-id"></mee-inline-error>
+
+                <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.phone-numbers"
+                                                 pcd-error-id="{{$ctrl.errorCategory}}.phone-numbers"
+                                                 pcd-added-resource-padding="true"
+                                                 pcd-resource-type="named-resource"
+                                                 pcd-selector-label="Phone number" data-use-cms
+                                                 pcd-placeholder="e.g., 2065551234"
+                                                 pcd-add-on-blur="true"
+                                                 pcd-add-on-enter="true"
+                                                 i9n-phone-selector
+                                                 ng-model="$ctrl.phoneNumbersSelectorData"></pcd-directory-resource-selector>
+        </div>
+    </div>
+
+    <div data-grid="col-12">
+        <div data-grid="col-6">
+            <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.postal-address.unit-numbers"
+                                                pcd-error-id="{{$ctrl.errorCategory}}.postal-address.unit-numbers"
+                                                pcd-added-resource-padding="true"
+                                                pcd-resource-type="named-resource"
+                                                pcd-selector-label="Unit number" data-use-cms
+                                                pcd-placeholder="e.g., 84"
+                                                pcd-add-on-blur="true"
+                                                pcd-add-on-enter="true"
+                                                i9n-unit-selector
+                                                ng-model="$ctrl.unitNumbersSelectorData"></pcd-directory-resource-selector>
+
+            <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.postal-address.street-numbers"
+                                                pcd-error-id="{{$ctrl.errorCategory}}.postal-address.street-numbers"
+                                                pcd-added-resource-padding="true"
+                                                pcd-resource-type="named-resource"
+                                                pcd-selector-label="Street number" data-use-cms
+                                                pcd-placeholder="e.g., 123"
+                                                pcd-add-on-blur="true"
+                                                pcd-add-on-enter="true"
+                                                i9n-street-number-selector
+                                                ng-model="$ctrl.streetNumbersSelectorData"></pcd-directory-resource-selector>
+
+            <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.postal-address.street-names"
+                                                pcd-error-id="{{$ctrl.errorCategory}}.postal-address.street-names"
+                                                pcd-added-resource-padding="true"
+                                                pcd-resource-type="named-resource"
+                                                pcd-selector-label="Street name" data-use-cms
+                                                pcd-placeholder="e.g., Pike St"
+                                                pcd-add-on-blur="true"
+                                                pcd-add-on-enter="true"
+                                                i9n-street-name-selector
+                                                ng-model="$ctrl.streetNamesSelectorData"></pcd-directory-resource-selector>
+        </div>
+
+        <div data-grid="col-6 pad-2x">
+            <div data-grid>
+                <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.postal-address.cities"
+                                                    pcd-error-id="{{$ctrl.errorCategory}}.postal-address.cities"
+                                                    pcd-added-resource-padding="true"
+                                                    pcd-resource-type="named-resource"
+                                                    pcd-selector-label="City" data-use-cms
+                                                    pcd-placeholder="e.g., Redmond"
+                                                    pcd-add-on-blur="true"
+                                                    pcd-add-on-enter="true"
+                                                    i9n-city-selector
+                                                    ng-model="$ctrl.citiesSelectorData"></pcd-directory-resource-selector>
+
+                <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.postal-address.regions"
+                                                    pcd-error-id="{{$ctrl.errorCategory}}.postal-address.regions"
+                                                    pcd-added-resource-padding="true"
+                                                    pcd-resource-type="named-resource"
+                                                    pcd-selector-label="State" data-use-cms
+                                                    pcd-placeholder="e.g., WA"
+                                                    pcd-add-on-blur="true"
+                                                    pcd-add-on-enter="true"
+                                                    i9n-state-selector
+                                                    ng-model="$ctrl.regionsSelectorData"></pcd-directory-resource-selector>
+
+                <pcd-directory-resource-selector data-error-id="{{$ctrl.errorCategory}}.postal-address.postal-codes"
+                                                    pcd-error-id="{{$ctrl.errorCategory}}.postal-address.postal-codes"
+                                                    pcd-added-resource-padding="true"
+                                                    pcd-resource-type="named-resource"
+                                                    pcd-selector-label="Postal code" data-use-cms
+                                                    pcd-placeholder="e.g., 98052"
+                                                    pcd-add-on-blur="true"
+                                                    pcd-add-on-enter="true"
+                                                    i9n-postal-code-selector
+                                                    ng-model="$ctrl.postalCodesSelectorData"></pcd-directory-resource-selector>
+            </div>
+        </div>
+    </div>
+</section>

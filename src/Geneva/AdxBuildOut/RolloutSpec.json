@@ -1,0 +1,23 @@
+{
+    "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutSpec.json",
+    "ContentVersion": "1.0.0.0",
+    "RolloutMetadata": {
+        "ServiceModelPath": "ServiceModel.json",
+        "scopeBindingsPath": "ScopeBindings.json",
+        "Name": "ADX Cluster BuildOut",
+        "RolloutType": "Major",
+        "BuildSource": {
+            "Parameters": {
+                "VersionFile": "buildver.txt"
+            }
+        }
+    },
+    "OrchestratedSteps": [
+        {
+            "Name": "createClusterAndDB",
+            "TargetType": "ServiceResource",
+            "TargetName": "ClusterDB",
+            "Actions": [ "deploy" ]
+        }
+    ]
+}

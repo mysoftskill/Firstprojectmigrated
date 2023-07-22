@@ -1,0 +1,44 @@
+﻿<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page displays all <span class="view-label">data agent</span> and <span class="view-label">owner</span> information for each privacy action on the selected data asset.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+
+        <mee-progress-view watch-operation="initializePrivacyActionsDetails">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed.
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-asset-group-id="$ctrl.assetGroupId"></pcd-default-page-context>
+
+                <div ng-if="$ctrl.hasPrivacyActionDetails()" ng-repeat="detail in $ctrl.privacyActionDetails track by $index">
+                    <h3 mee-heading="heading4">{{ detail.type }}</h3>
+                    <pcd-owner-view-drawer-trigger pcd-owner="detail.owner"></pcd-owner-view-drawer-trigger>
+                    <pcd-agent-view-drawer-trigger pcd-agent="detail.agent"></pcd-agent-view-drawer-trigger>
+                </div>
+
+                <div ng-if="!$ctrl.hasPrivacyActionDetails()">
+                    <p mee-paragraph data-use-cms>You don't currently have any privacy actions on this data asset.</p>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

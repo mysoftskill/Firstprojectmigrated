@@ -1,0 +1,69 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "msdeployPackageUrl"
+  ],
+  "parameters": {
+    "deploymentEnvironment": {
+      "value": "PPE"
+    },
+    "azureRegion": {
+      "value": "SouthCentralUS"
+    },
+    "appName": {
+      "value": "AnaheimIdProcessorPPESCUS"
+    },
+    "msdeployPackageUrl": {
+      "value": "Bin\\AnaheimIdProcessor.zip"
+    },
+    "storageAccountName": {
+      "value": "aidinfrascusppe"
+    },
+    "storageAccountKind": {
+      "value": "StorageV2"
+    },
+    "identityResourceGroup": {
+      "value": "PAF-NONPROD-RG"
+    },
+    "aIdUamiId": {
+      "value": "9396613a-ec0d-4102-83a2-b079b69566f9"
+    },
+    "aIdUamiName": {
+      "value": "NGP-PAF-NonProd"
+    },
+    "virtualNetwork_name": {
+      "value": "aid-vnet-ppe-scus"
+    },
+    "aidBlobStorageAccountName": {
+      "value": "aidstorageppe"
+    },
+    "aidEventHubAccountName": {
+      "value": "aid-eventhub-ppe"
+    },
+    "pafConfigEndPoint": {
+      "value": "https://adgcs-nonprod-config.azconfig.io"
+    },
+    "pxsEventHubAccountName": {
+      "value": "aid-eventhub-ppe"
+    },
+    "aidRedisCacheEndPoint": {
+      "value": "adgcs-nonprod-cache.redis.cache.windows.net"
+    },
+    "aidRedisPasswordKeyVaultEndpoint": {
+      "value": "https://aid-akv-ppe.vault.azure.net/"
+    },
+    "genevaMonitoringTenant": {
+      "value": "ADGCS-PPE-SCUS"
+    },
+    "genevaMonitoringRole": {
+      "value": "PAF.AIdFunction"
+    },
+    "genevaMetricPrefixName": {
+      "value": "PAF.Function"
+    },
+    "genevaMetricAccount": {
+      "value": "ADGCS_NonProdHotPath"
+    }
+  }
+}

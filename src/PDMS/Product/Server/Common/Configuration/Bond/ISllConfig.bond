@@ -1,0 +1,9 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct ISllConfig 
+{
+    1   :   required    list<string>    EventLevels;
+    2   :   required    string          LocalLogDir;
+    3   :   required    string          TopicName;
+    4   :   required    bool            EnableConsoleLog;
+};

@@ -1,0 +1,114 @@
+%UseOneboxSecrets%|true
+%UseKvSecretsForStorageConnectionString%|false
+%UseKvSecretsForRedisPassword%|false
+%LocalLogDir%|Logs
+
+%AzureKeyVaultBaseUrl%|c:\keyvault.uri.txt
+%CertificateKeyVaultOverride%|https://pcf-int-ame.vault.azure.net/
+
+%AllowSdkWithoutVerifier%|true
+
+<!-- Item ttl 1 day -->
+%CosmosDBQueueTimeToLiveDays%|1
+<!-- Min lease duration 10 secs -->
+%CosmosDbQueueMinLeaseDurationSecs%|10
+<!-- Max lease duration 1 day -->
+%CosmosDbQueueMaxLeaseDurationSecs%|86400
+%CosmosDBList%|MULTI
+    <CosmosDB>
+        <Moniker cg:Type="System.String">1</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri oneboxsecret="true">C:\cosmosdb.uri.txt</Uri>
+        <Key kvsecret="true">onebox-docdb-key</Key>
+        <Weight>1</Weight>
+        <UsesCompoundKeyIndex>true</UsesCompoundKeyIndex>
+    </CosmosDB>
+.
+
+%PdmsDatabaseUri%|https://pcf-nonprod-pdmscache.documents.azure.com:443/
+%PdmsDatabaseKey%|test-pdmscache-key
+%PdmsOnDiskCacheDirectory%|.
+
+%AzureBlobConnectionString%|UseDevelopmentStorage=true
+
+%CosmosVcPath%|https://cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod
+
+%AssetGroupCosmosStreamTemplate%|https://cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}.ss
+%AssetGroupHourlyCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}T{0:HH}_00_00.ss
+
+%AssetGroupVariantInfoCosmosStreamTemplate%|https://cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/AssetGroupVariantInfo/{0:yyyy}/{0:MM}/AssetGroupVariantInfo_{0:yyyy}_{0:MM}_{0:dd}.ss
+
+%AzureStorageAccounts%|MULTI
+    <Item>%AzureBlobConnectionString%</Item>
+.
+
+%EventHubList%|MULTI
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">onebox-eventhub-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecyclea</LeaseContainerName>
+        <Moniker>pcf-onebox-eventhub</Moniker>
+        <CheckpointAccountConnectionString>%AzureBlobConnectionString%</CheckpointAccountConnectionString>
+      </Item>
+.
+
+%CommandHistoryCosmosDbUri%|C:\cosmosdb.uri.txt
+%CommandHistoryCosmosDbKey%|onebox-docdb-key
+
+%ExportStorageConnectionStringA%|%AzureBlobConnectionString%
+%ExportStorageConnectionStringB%|%AzureBlobConnectionString%
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/onebox/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/onebox/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/onebox/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/onebox/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+%CosmosPipelineEnabled%|false
+
+%DefenderPipelineEnabled%|true
+%DefenderFileDownloadTempDirectory%|.
+
+%ExportToCSVEnabled%|true
+
+%MaxWorkingSetMb%|5000
+%StopService%|true
+
+%CommandReplayDocDBUri%|C:\cosmosdb.uri.txt
+%CommandReplayDocDBKey%|onebox-docdb-key
+
+%QueueDepthBaselineFrequencyMinutes%|10
+%TelemetryTimeToLiveDays%|7
+%TelemetryMaxItemCount%|100
+
+%AgentAzureQueuesStorageAccounts%|MULTI
+    <AzureQueue>
+        <ConnectionString>%AzureBlobConnectionString%</ConnectionString>
+        <Weight>1</Weight>
+    </AzureQueue>
+.
+
+%DeviceIdExpirationMinutes%|1
+%EventHubCheckpointExpirationSeconds%|1
+%NonWindowsDeviceEventHubConfig%|MULTI
+    <Moniker>onebox-nonwindowsdevice-eventhub</Moniker>
+    <ConnectionString kvsecret="true">onebox-eventhub-cs</ConnectionString>
+    <EventHubName>altdevicedelete</EventHubName>
+    <ConsumerGroupName>$Default</ConsumerGroupName>
+    <BlobContainerName>altdevicedelete</BlobContainerName>
+    <StorageConnectionString>%AzureBlobConnectionString%</StorageConnectionString>
+.
+
+%PxsPostCommandAadCallerList%|MULTI
+  <Item>975e1332-de26-4ac9-b120-fe35fa68adf1</Item>
+.
+
+%AdlsAccountName%|pxscosmos15-prod-c15
+%AdlsTenantId%|33e01921-4d64-4f8c-a055-5bdaffd5e33d
+%AdlsAccountSuffix%|azuredatalakestore.net
+%AdlsClientAppId%|975e1332-de26-4ac9-b120-fe35fa68adf1
+%AdlsClientAppCertificateName%|aad-auth-ppe
+
+%PCFv2CosmosDbExportExpectationsContainerName%|exportexpectations
+%PCFv2CosmosDbCompletedCommandsContainerName%|completedexports
+%PCFv2CosmosDbDatabaseName%|db01
+%PCFv2CosmosDbEndpointName%|https://pcfci2cosmosdbeus.documents.azure.com:443/

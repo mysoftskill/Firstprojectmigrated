@@ -1,0 +1,17 @@
+pcd-service-tree-selector {
+    display: block;
+
+    .search-area {
+        display: flex;
+
+        // Styling to help the progress bar aline with the search box.
+        .search-progress {
+            margin-top: 55px;
+            margin-left: 15px;
+        }
+
+        mee-text-action {
+            width: 92%;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+﻿@import "../../../styles/utilities.scss";
+
+pcd-landing-pivot {
+    display: block;
+    margin-top: 8px;
+
+    @include clearfix;
+
+    mee-nav-pivot .c-pivot > [role="tablist"] > [role="tab"] {
+        font-size: 15px;
+    }
+}

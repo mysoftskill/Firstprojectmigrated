@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "CI2.WestUs2.ServiceModel.json",
+    "Name": "PCD-CI2-WESTUS2-CLUSTER-RG",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-PcdServiceFabric-Cluster-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PcdServiceFabric-Cluster-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    }
+  ]
+}

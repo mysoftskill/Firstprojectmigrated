@@ -1,0 +1,57 @@
+# ADG Complience Services pipeline.user.yml
+# See Pipeline Spec YAML Concepts for details: https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FPipeline%20Spec%20YAML%20Concepts&wikiVersion=GBwikiMaster&pageId=301
+# For full annotated example, please visit: https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FPipeline%20Spec%20YAML%20Concepts%2FAnnotated%20Example&wikiVersion=GBwikiMaster&pageId=302
+# YAML File Naming: pipeline.user.<os>.<buildtype>.<tag>.<phase>.<config>.<branch>.yml
+# https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FMulti%252DPhase%20and%20Multi%252DConfiguration%20Builds&wikiVersion=GBwikiMaster&pageId=291&anchor=yaml-file-naming
+
+environment:
+  host:
+    os: windows                                 # used to verify at runtime that correct host pool is being used
+  runtime:
+    provider: appcontainer                      # Currently only appcontainer is supported; future will bring oscontainer and virtualmachine
+                                                # This is the image that your pipeline will run in, except for PCD
+    #image: 'cdpxwin.azurecr.io/global/vse2017u5-external-azsdk-ext-win14393.1884:4.2'
+    #PCD image: cdpxwin.azurecr.io/global/vse2017u7/vse2017u7-external-winltsc2016-20190731:latest
+    image: 'cdpxwin1809.azurecr.io/global/vse2019:latest' # This is the image that your pipeline will run in.
+    source_mode: 'map'                          # 'link' is default and should work for most users. However, use 'map' if you are building Ruby or NodeJS applications. 
+                                                # 'copy' can be used for any non-standard image, that is, any image not created by the CDP team.
+version:
+  tag: 'beta'                                   # Tag to use for semantic versioning.
+  name: 'ADG Compliance Services'
+  major: 2                                      # The major version number. Matches PCF SDK version.
+  minor: 5                                      # The minor version number. Matches PCF SDK version.
+  exclude_commit: true                          # Defaults to false, set this to true if you would like to exclude the commit hash from the build number
+  system: 'revisioncounter'                     # Versioning scheme to use.
+                                                # patch         - 1.0.MMddyyrrrr will be generated
+                                                # buildrevision - 1.0.MMddyy.rrrr will be generated.
+                                                                        
+package_sources:
+  nuget:
+    config_files:
+      - include:
+        - "nuget.config"
+
+  npm:
+    config_files:
+      - include:
+        - 'src\PCD\Product\Source\ux\.npmrc'
+# Only official builds will be signed
+signing_options:
+  profile: 'internal_azure_service'           # This service deploys to Azure!
+  codesign_validation_glob_pattern: 'regex|.+(?:dll|exe|sys|ps1|ps1xml|psc1|psd1|cdxml|vbs|js|wsf)$;-:file|**\*cppsdk.zip*\**;-|**'
+  
+
+# Use the newer/faster artifact store
+# https://onebranch.visualstudio.com/OneBranch/_wiki/wikis/OneBranch.wiki/4782/Artifact-Publish-Options
+artifact_publish_options:
+  publish_to_legacy_artifacts: false
+  publish_to_pipeline_artifacts: true
+  publish_to_cloudvault_artifacts: true
+
+static_analysis_options:
+  fxcop_options:
+    # workaround to disable fxcop, it is not supported anymore: Incident 250576120 : PROD build blocked by fxcop task in cdpx
+    disable_tool_scan: false
+    files_to_scan:
+      - exclude:
+        - '**/*'

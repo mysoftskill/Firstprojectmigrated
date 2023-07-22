@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:simpleType name="nameType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+      <xs:pattern value="[A-Za-z0-9_.]+"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="booleanType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[tT][rR][uU][eE]|[fF][aA][lL][sS][eE]|[01]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="dependenciesType">
+    <xs:sequence>
+      <xs:element name="Dependency" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Name" type="nameType" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="PrefixWorkflowName" type="booleanType" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="parametersType">
+    <xs:sequence>
+      <xs:element name="Parameter" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Name" type="nameType" use="required"/>
+          <xs:attribute name="Value" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="activitiesType">
+    <xs:sequence>
+      <xs:element name="Activity" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Dependencies" type="dependenciesType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Parameters" type="parametersType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Activities" type="activitiesType" minOccurs="0" maxOccurs="1"/>
+          </xs:all>
+          <xs:attribute name="Name" type="nameType" use="required"/>
+          <xs:attribute name="Config" type="xs:string" use="optional"/>
+          <xs:attribute name="ConfigBase" type="xs:string" use="optional"/>
+          <xs:attribute name="Class" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+                <xs:maxLength value="256"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="MaxRetries" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:nonNegativeInteger"/>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="Enabled" type="booleanType" use="optional"/>
+          <xs:attribute name="Linear" type="booleanType" use="optional"/>
+          <xs:attribute name="AllowedResources" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="configBasesType">
+    <xs:sequence>
+      <xs:element name="ConfigBase" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="Name" type="nameType" use="required"/>
+              <xs:attribute name="File" type="xs:string" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Workflows">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Workflow" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="ConfigBases" type="configBasesType" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="Parameters" type="parametersType" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="Activities" type="activitiesType" minOccurs="0" maxOccurs="1"/>
+            </xs:all>
+            <xs:attribute name="Name" type="nameType" use="required"/>
+            <xs:attribute name="Start" type="xs:dateTime" use="optional"/>
+            <xs:attribute name="RecurrenceUnit" use="optional">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:minInclusive value="0"/>
+                  <xs:maxInclusive value="5"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="RecurrenceAmount" type="xs:nonNegativeInteger" use="optional"/>
+            <xs:attribute name="ReadOnly" type="booleanType" use="optional"/>
+            <xs:attribute name="AuthorizedUsers" type="xs:string" use="optional"/>
+            <xs:attribute name="Email" type="xs:string" use="optional"/>
+            <xs:attribute name="Enabled" type="booleanType" use="optional"/>
+            <xs:attribute name="Linear" type="booleanType" use="optional"/>
+            <xs:attribute name="TriggeredByWorkflow" type="nameType" use="optional"/>
+            <xs:attribute name="TriggeredByActivity" type="nameType" use="optional"/>
+            <xs:attribute name="Version" type="xs:string" use="optional"/>
+            <xs:attribute name="SkipIfRunning" type="booleanType" use="optional"/>
+            <xs:attribute name="Schedule" type="booleanType" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

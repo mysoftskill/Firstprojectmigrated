@@ -1,0 +1,73 @@
+{
+  "SyntheticJobGroup": {
+    "Name": "SyntheticsJobGroup",
+    "SyntheticJobs": [
+      {
+        "ExecutionIntervalSeconds": 3600,
+        "JobName": "ExportPersonalDataSyntheticsJob",
+        "AssemblyFilePath": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob.dll",
+        "FullyQualifiedClassName": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob.ExportPersonalDataSyntheticsJob",
+        "Regions": [ "USWest2" ],
+        "Parameters": {
+          "ApiUrlEndpoint": "https://graph.microsoft.com/v1.0",
+          "ApiPathTemplate": "users/{0}/exportPersonalData",
+          "ClientId": "90b23419-a7ce-4459-95e1-8f251ea7f606",
+          "KeyVaultUrl": "https://pxs-test-ame.vault.azure.net/",
+          "UserPasswordSecretName": "user1-password",
+          "UserUpnSecretName": "user1-upn",
+          "BlobStorageConnectionStringSecretName": "pxs-test-blob-storage-connection-string"
+        },
+        "SyntheticJobInstances": [
+          {
+            "InstanceNamePrefix": "PPE"
+          }
+        ]
+      },
+      {
+        "ExecutionIntervalSeconds": 300,
+        "JobName": "DeviceDeleteSyntheticsJob",
+        "AssemblyFilePath": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.DeviceDeleteSyntheticsJob.dll",
+        "FullyQualifiedClassName": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.DeviceDeleteSyntheticsJob.DeviceDeleteSyntheticsJob",
+        "Regions": [ "USWest2" ],
+        "Parameters": {
+          "AppConfigUrl": "https://adgcs-nonprod-config.azconfig.io",
+          "CertificateName": "cloudtest-privacy-int",
+          "EnableFeatureFlagName": "DeviceDeleteSyntheticsRunnerEnabled",
+          "KeyVaultUrl": "https://adgcs-ame-kv.vault.azure.net/",
+          "ManagedIdentityClientId": "bdf0f348-c44a-478d-b7c4-d68e34cd06ab",
+          "PXSApiEndpoint": "https://pxs.api.account.microsoft-ppe.com",
+          "NumParallelRequestsName": "DeviceDeleteNumParallelRequests",
+          "RPMConfigName": "DeviceDeleteRPM"
+        },
+        "SyntheticJobInstances": [
+          {
+            "InstanceNamePrefix": "PPE"
+          }
+        ]
+      },
+      {
+        "ExecutionIntervalSeconds": 3600,
+        "JobName": "RemovePersonalDataSyntheticsJob",
+        "AssemblyFilePath": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.RemovePersonalDataSyntheticsJob.dll",
+        "FullyQualifiedClassName": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.RemovePersonalDataSyntheticsJob.RemovePersonalDataSyntheticsJob",
+        "Regions": [ "USWest2" ],
+        "Parameters": {
+          "ApiUrlEndpoint": "https://graph.microsoft.com/beta",
+          "ApiPathTemplate": "directory/inboundSharedUserProfiles/{0}/removePersonalData",
+          "HomeTenantClientId": "90b23419-a7ce-4459-95e1-8f251ea7f606",
+          "ResourceTenantClientId": "f107c8c7-500f-406f-84b1-5b90576a8297",
+          "KeyVaultUrl": "https://pxs-test-ame.vault.azure.net/",
+          "User1PasswordSecretName": "user1-password",
+          "User1UpnSecretName": "user1-upn",
+          "User2PasswordSecretName": "user2-password",
+          "User2UpnSecretName": "user2-upn"
+        },
+        "SyntheticJobInstances": [
+          {
+            "InstanceNamePrefix": "TestUser1"
+          }
+        ]
+      }
+    ]
+  }
+}

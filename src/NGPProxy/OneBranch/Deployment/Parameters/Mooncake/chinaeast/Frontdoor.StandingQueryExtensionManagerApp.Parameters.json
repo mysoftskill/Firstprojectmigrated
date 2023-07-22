@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "ngpproxymc"
+    },
+    "applicationTypeName": {
+      "value": "FrontdoorStandingQueryExtensionManagerAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "5.2.105"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\StandingQueryExtensionManagerApp\\FrontdoorStandingQueryExtensionManagerApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "FrontdoorStandingQueryExtensionManagerApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)",
+        "SQE_MAMetricsAccount": "NGPProxy-MCPROD",
+        "SQE_MAConfigNamespace": "NGPProxy",
+        "SQE_MonitoringTenant": "ADGCS-MC-chinaeast",
+        "SQE_MonitoringRole": "NGPProxy.Frontdoor",
+        "SQE_MonitoringListeningPort": "5010",
+        "SQE_ClusterName": "ngpproxymc",
+        "SQE_ClusterPath": "ngpproxymc.chinaeast.cloudapp.chinacloudapi.cn:19000",
+        "CertificateThumbprint": "",
+        "CertificateSubjectName": "adg-cs.cluster.prod.ngpproxy.microsoftonline.cn",
+        "RunDebug": "false"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IPdmsClientConfig
+{
+    10: required string Endpoint;
+}

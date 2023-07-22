@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyExperienceContracts.UnitTests</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).PrivacyExperienceContracts.UnitTests</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <DefaultTestCategory>CheckIn</DefaultTestCategory>
+    <TestGroupAreaPath>$(MemberServiceAreaPath)</TestGroupAreaPath>
+    <TestGroupName>$(AssemblyName)</TestGroupName>
+    <Owner>meems</Owner>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Source\PrivacyExperienceContracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+  <Import Project="$(ProductBuildPath)\core.common.targets" />
+</Project>

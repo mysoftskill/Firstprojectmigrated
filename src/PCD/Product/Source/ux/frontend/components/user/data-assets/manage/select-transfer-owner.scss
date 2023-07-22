@@ -1,0 +1,10 @@
+@import "../../../../styles/utilities.scss";
+
+.c-dialog [role=dialog] pcd-select-transfer-owner {
+    @include select-modal-data;
+
+    // Styling to make the progress bar viewable to users.
+    .search-progress {
+        margin-top: 60px;
+    }
+}

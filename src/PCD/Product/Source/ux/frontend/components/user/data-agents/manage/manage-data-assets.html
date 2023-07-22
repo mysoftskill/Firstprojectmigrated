@@ -1,0 +1,78 @@
+﻿<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page displays data assets linked to the data agent in context. Privacy actions shown here includes actions linked to other data agents.
+        </p>
+
+        <p mee-paragraph><span class="view-label" data-use-cms>Linking privacy actions to the data agent in context</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Link to a data agent</span>.</li>
+            <li data-use-cms>Select privacy actions you want to link with the data agent in context.</li>
+            <li data-use-cms>Then click <span class="view-label">Link</span> to perform linking.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            At least one privacy action listed in privacy actions column is linked to data agent in context.
+        </p>
+        <p mee-paragraph data-use-cms>
+            Linking privacy actions to the current data agent will cause those previously linked actions to be overwritten. In the case where a request is pending, that request will be cancelled.
+        </p>
+        <p mee-paragraph data-use-cms><span class="view-label">Unlinking privacy actions from data agents</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Unlink from a data agent</span>.</li>
+            <li data-use-cms>Select privacy actions to unlink.</li>
+            <li data-use-cms>Then click <span class="view-label">Unlink</span> to perform unlinking.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            Unlinking privacy actions will cause any previous linking pending requests to be cancelled for those privacy actions.
+        </p>
+        <p mee-paragraph data-use-cms>Use <span class="view-label">View data assets to link</span> to start adding data assets to
+            this data agent.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="fetchDataForAgent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed to get data assets.
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-agent="$ctrl.dataAgent"></pcd-default-page-context>
+
+                <mee-alert ng-if="$ctrl.dataAgent.hasSharingRequests" kind="use-glyph info">
+                        <alert-content data-use-cms>
+                            This agent has pending requests.
+                        </alert-content>
+                        <alert-actions>
+                            <a ui-sref="data-agents.manage.pending-sharing-requests({ agentId: $ctrl.dataAgent.id, ownerId: $ctrl.ownerId })" data-use-cms>View requests</a>
+                        </alert-actions>
+                </mee-alert>
+
+                <pcd-asset-groups-manage pcd-asset-groups="$ctrl.assetGroups" pcd-data-agent="$ctrl.dataAgent" pcd-refresh-list="$ctrl.getData()">
+                    <pcd-additional-controls>
+                        <a ui-sref="data-assets.manage({ ownerId: $ctrl.ownerId })"
+                           data-glyph="bulleted-list"
+                           mee-action-trigger="align-margin"
+                           data-use-cms>
+                            View data assets to link
+                        </a>
+                    </pcd-additional-controls>
+                </pcd-asset-groups-manage>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

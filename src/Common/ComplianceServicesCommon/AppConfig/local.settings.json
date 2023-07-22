@@ -1,0 +1,477 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+
+  "PXS.VortexDeviceDeleteWorker.EnableDequeuing": true,
+  "PXS.VortexDeviceDeleteWorker.DelayPerMessageInMilliSeconds": 0,
+  "PXS.VortexDeviceDeleteWorker.EnableProcessing": true,
+  "PXS.DeviceDeleteMaxVisibilityTimeoutInMinutes": 1,
+  "PXS.AnaheimIdEventsPublishEnabled": true,
+
+  "PXS.DataActionRunner.EnableJobScheduler": true,
+
+  "PXS.AadAccountCloseWorker.EnableDequeuing": true,
+  "PXS.AadAccountCloseWorker.EnableProcessing": true,
+
+  
+  "PDMS.ServiceTreeMetadataWorker.WorkerEnabled":true,
+  "PDMS.ServiceTreeMetadataWorker.Frequency": 2,
+  "PDMS.ServiceTreeMetadataWorker.GetServicesWithMetadataQuery": "let Services = ServiceTreePpe_ServiceHierarchy_Snapshot | where Level == \"Service\" and Status == 1;let Metadatas = ServiceTreePpe_ServiceMetadata_Snapshot | where MetadataDefinitionInternalId == 1337 and Status == 1;Services  | join Metadatas on $left.InternalId == $right.ServiceInternalId| project Id, Name, Value;",
+  "PDMS.ServiceTreeMetadataWorker.GetServicesUnderDivisionQuery": "let DivisionInternalIds = ServiceTreePpe_OrganizationHierarchy_Snapshot\r\n| where Status == 1 and Id in (<DivisionIds>)\r\n| project InternalId;\r\nlet OrgIds = ServiceTreePpe_OrganizationHierarchy_Snapshot\r\n| where Status == 1 and (ParentDivisionInternalId in (DivisionInternalIds) or InternalId in (DivisionInternalIds))\r\n| project InternalId;\r\nlet SGIds = ServiceTreePpe_OrganizationHierarchy_Snapshot\r\n| where Status == 1 and (ParentOrganizationInternalId in (OrgIds) or InternalId in (OrgIds))\r\n| project InternalId;\r\nlet TGIds = ServiceTreePpe_OrganizationHierarchy_Snapshot\r\n| where Status == 1 and (ParentOrganizationInternalId in (OrgIds) or ParentServiceGroupInternalId in (SGIds) or InternalId in (SGIds))\r\n| project InternalId;\r\nServiceTreePpe_ServiceHierarchy\r\n| where Level == \"Service\" and Status == 1 and (ParentTeamGroupInternalId in (TGIds) or ParentServiceGroupInternalId in (SGIds))\r\n| project Id;\r\n",
+  "PDMS.ServiceTreeMetadataWorker.WhiteListedServices.Divisions": "\"85dd10f4-5484-48fa-b11f-6e6ab07f8d4c\"",
+  "PDMS.ServiceTreeMetadataWorker.WhiteListedServices.Services": "",
+  "PDMS.ServiceTreeMetadataWorker.BlackListedServices.Services": "",
+  "PDMS.ServiceTreeMetadataWorker.NGPPowerBIUrlTemplate": "https://msit.powerbi.com/groups/me/apps/15b4d804-6ae2-4bca-8019-f45f82d8ed79/reports/1cad80c7-f7ab-4f99-9f5d-7693ef03481d/ReportSection284b807dd91f43a4f94f?ctid=72f988bf-86f1-41af-91ab-2d7cd011db47&experience=power-bi&filter=DataOwnerAssetCountsV3%2FServiceId%20eq%20%27<ServiceId>%27",
+  "PDMS.ServiceTreeMetadataWorker.PrivacyComplianceDashboardTemplate": "https://manage.privacy.microsoft-ppe.com/data-owners/edit/",
+
+  "PXS.DataActionRunner.ActionRefsOverrides": [
+    {
+      "Id": "QueryKustoAndFileIncidentsExportSev3",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "05d315e9-5514-4b42-bae8-ee7f299209bd",
+          "Expires": null
+        },
+        {
+          "AgentId": "06013e5b-9295-4afd-968b-f74415d4dfb7",
+          "Expires": null
+        },
+        {
+          "AgentId": "0974a0e7-e479-42a5-87f8-b7cf64543045",
+          "Expires": null
+        },
+        {
+          "AgentId": "13406d06-96bf-47b0-9d70-4f1b7eaf84ed",
+          "Expires": null
+        },
+        {
+          "AgentId": "20b75cfc-0875-4ebe-98e4-71e814f396ca",
+          "Expires": null
+        },
+        {
+          "AgentId": "23728d96-e32b-4401-8c12-93b5a3a975c7",
+          "Expires": null
+        },
+        {
+          "AgentId": "2ca4f8cc-6a57-4122-ba8d-15626bc12dea",
+          "Expires": null
+        },
+        {
+          "AgentId": "3e57b3e8-7592-4b46-912c-7a1fe5d9dd55",
+          "Expires": null
+        },
+        {
+          "AgentId": "54a7a20c-3218-45fc-83eb-01d36a0f1d1c",
+          "Expires": null
+        },
+        {
+          "AgentId": "71606698-e519-499d-96e8-f0ba4fd723bf",
+          "Expires": null
+        },
+        {
+          "AgentId": "82ff94e7-d5f6-45d9-8271-d5f4123822f0",
+          "Expires": null
+        },
+        {
+          "AgentId": "dc4a1d58-7cfb-4246-8b2f-47d85eb1a039",
+          "Expires": null
+        },
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        },
+        {
+          "AgentId": "fe5c5513-764d-42d8-9605-88cec1d0adbd",
+          "Expires": null
+        },
+        {
+          "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+          "Expires": null
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsExportSev2",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "05d315e9-5514-4b42-bae8-ee7f299209bd",
+          "Expires": null
+        },
+        {
+          "AgentId": "06013e5b-9295-4afd-968b-f74415d4dfb7",
+          "Expires": null
+        },
+        {
+          "AgentId": "0974a0e7-e479-42a5-87f8-b7cf64543045",
+          "Expires": null
+        },
+        {
+          "AgentId": "13406d06-96bf-47b0-9d70-4f1b7eaf84ed",
+          "Expires": null
+        },
+        {
+          "AgentId": "20b75cfc-0875-4ebe-98e4-71e814f396ca",
+          "Expires": null
+        },
+        {
+          "AgentId": "23728d96-e32b-4401-8c12-93b5a3a975c7",
+          "Expires": null
+        },
+        {
+          "AgentId": "2ca4f8cc-6a57-4122-ba8d-15626bc12dea",
+          "Expires": null
+        },
+        {
+          "AgentId": "3e57b3e8-7592-4b46-912c-7a1fe5d9dd55",
+          "Expires": null
+        },
+        {
+          "AgentId": "54a7a20c-3218-45fc-83eb-01d36a0f1d1c",
+          "Expires": null
+        },
+        {
+          "AgentId": "71606698-e519-499d-96e8-f0ba4fd723bf",
+          "Expires": null
+        },
+        {
+          "AgentId": "82ff94e7-d5f6-45d9-8271-d5f4123822f0",
+          "Expires": null
+        },
+        {
+          "AgentId": "dc4a1d58-7cfb-4246-8b2f-47d85eb1a039",
+          "Expires": null
+        },
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        },
+        {
+          "AgentId": "fe5c5513-764d-42d8-9605-88cec1d0adbd",
+          "Expires": null
+        },
+        {
+          "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+          "Expires": null
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsPCFDeleteSev4",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "2cabbb18-acdd-4438-882d-58f23f8e5a40",
+          "Expires": null
+        },
+        {
+          "AgentId": "5b14db11-3097-46e0-b283-b6d1c857a5c9",
+          "Expires": null
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        },
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        },
+        {
+          "AgentId": "1957b372-a107-4e50-88e4-f5252f9fa409",
+          "Expires": null
+        },
+        {
+          "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "7fbd5963-93e9-454a-8feb-e44ad75b2ce7",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "c4bd3e7c-9f2e-438f-a910-ae60e0be1c4e",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsPCFV2BatchDeleteSev2",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "2cabbb18-acdd-4438-882d-58f23f8e5a40",
+          "Expires": null
+        },
+        {
+          "AgentId": "5a001046-0c59-4304-9f0a-df54007f942c",
+          "Expires": "null"
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsPCFDeleteSev3",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        },
+        {
+          "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "7fbd5963-93e9-454a-8feb-e44ad75b2ce7",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "c4bd3e7c-9f2e-438f-a910-ae60e0be1c4e",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsPCFDeleteSev2",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        },
+        {
+          "AgentId": "7fbd5963-93e9-454a-8feb-e44ad75b2ce7",
+          "Expires": "9999-12-31"
+        },
+        {
+          "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+          "Expires": null
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsCosmosDeleteSev2",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        },
+        {
+          "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+          "Expires": null
+        },
+        {
+          "AgentId": "36ee4db5-6d84-403e-a906-36c0e77041c6",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndFileIncidentsPPE",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+          "Expires": null
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndSendGCEmail",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "00000000-0000-0000-0000-000000000000",
+          "Expires": "2000-01-01"
+        }
+      ]
+    },
+    {
+      "Id": "QueryKustoAndSendGCEmailPPE",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "00000000-0000-0000-0000-000000000000",
+          "Expires": "2000-01-01"
+        }
+      ]
+    },
+    {
+      "Id": "ProdMalwareFoundInMSAExports",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "00000000-0000-0000-0000-000000000000",
+          "Expires": "2000-01-01"
+        }
+      ]
+    },
+    {
+      "Id": "PpeMalwareFoundInMSAExports",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "00000000-0000-0000-0000-000000000000",
+          "Expires": "2000-01-01"
+        }
+      ]
+    },
+    {
+      "Id": "KustoQueryAuditPipelineAlert",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "00000000-0000-0000-0000-000000000000",
+          "Expires": "2000-01-01"
+        }
+      ]
+    },
+    {
+      "Id": "RunKustoQueriesAndSendStatus",
+      "ExcludedAgentsJson": [
+        {
+          "AgentId": "00000000-0000-0000-0000-000000000000",
+          "Expires": "2000-01-01"
+        }
+      ]
+    }
+  ],
+  "PCF.CommandLifecycleEventPublisher.MaxPublishBytes": 500000,
+  "PXS.ScopedDeleteService.DeleteRequestsBatchSize": 200,
+
+  "PXS.AnaheimIdQueueWorkerDelayInMilliSeconds": 0,
+  "PXS.AnaheimIdQueueWorkerMinVisibilityTimeoutInSeconds": 4,
+  "PXS.AnaheimIdQueueWorkerMaxVisibilityTimeoutInSeconds": 4,
+  "PXS.AnaheimIdQueueWorkerMaxCount": 32,
+  "PXS.AnaheimIdThrottledRequestsMaxVisibilityTimeoutInMinutes": 1,
+
+  "PCF.CommandLifecycleEventPublisher.PxsCommandsBatchSize": 300,
+  "PCF.InsertIntoQueue.MaxRetryWaitTimeInSeconds": 300,
+  "PXS.CosmosWorkerChunkReadSizeMultiple": 1,
+  "PXS.CosmosWorkerWorkItemLeaseTimeMultiple": 1,
+  "PXS.TimelineAggregateCountAPIEnabled": true,
+
+  // Throttling example for PCFV1
+  // TrafficKey: API.AgentId.AssetGroupId. AssetGroupId can only be specified when QueryCommandByCommandId API
+  "PCF.ApiTrafficPercantage": [
+    {
+      "TrafficKey": "*.*.*",
+      "Percentage": 90
+    },
+    {
+      "TrafficKey": "PostCheckpoint.05d315e955144b42bae8ee7f299209bd.*",
+      "Percentage": 90
+    },
+    {
+      "TrafficKey": "PostBatchCompleteCheckpoint.b663d8e9ab284d2fafebc47f62f0cf37.*",
+      "Percentage": 30
+    },
+    {
+      "TrafficKey": "QueryCommandByCommandId.fb03df890301425badf76879067ef731.956726acaf8145abbb5b142752580699",
+      "Percentage": 30
+    }
+  ],
+
+  "FeatureManagement": {
+    "PCDPXS.PRCMakeEmailMandatory": false,
+    "PCD.EUDB.Residency": true,
+    "PCD.EUDB.SelfAttest": true,
+    "PCD.EUDB.NonBatchAgentPreProd": true,
+    "PCD.EUDB.NonBatchAgent": true,
+    "PCD.PRCAllowMicrosoftEmployeeAndAltIdSubject": true,
+    "PCD.NonV2ProtocolsPreProd": true,
+    "PCD.NonV2Protocols": true,
+    "PDMS.DualAppIdSupport": true,
+    "PDMS.MiseAuthEnabled": true,
+    "PXS.AnaheimIdQueueWorker_Enabled": true,
+    "MultiTenantCollaboration": true,
+    "AgentAzureQueueStoragePopEnabled": true,
+    "AVScan_Enable": true,
+    "CheckpointQueryFromCommandHistoryRepository": true,
+    "CommandStatusBatchWorkItem_AutoCompleteOnError": true,
+    "PXS_AuthenticationLogging": true,
+    "PXS.RecurringDeleteAPIEnabled": true,
+    "PXS.ScheduleDbDiagnosticLoggingEnabled": true,
+    "PXS.RecurringDeleteWorkerEnabled": true,
+    "PXS.UseMise": true,
+    "PXS.UseMisePFT": true,
+    "ExportToCsvBySubject_Enabled": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Key": "OID",
+            "Operator": "%",
+            "Value": 0
+          }
+        },
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Key": "PUID",
+            "Operator": "%",
+            "Value": 100
+          }
+        }
+      ]
+    },
+    "QueueDepth_AllowedAgentIds": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Key": "AgentId",
+            "Operator": "Include",
+            "Value": "04950e12942d4c34aee445299941d74b,14b1e8de19ad41329344abfe28f37d04,1ec222890387431ea1a576b127ab2a50,3d11009ab43841d398ae7402baa5b025,5fe67412a49b4aa883577f52c4723bbe,64cfad242c694a7b83f37188af3396f4,945E022BBCC9439C8490AD7CEAD518DC,9a1893f8cead4b06a5a2f3ab51c26b09,9b112dd7f9b1418eae4007831bb42108,9e7567c76bda462ca6dbe958acde9fa0,a914eab8a70c45a6bed3a80fc82973ff,ce63fa7d735b469a8fd6ade928d7fd59,d48c0f2897bd411ea01def90a754b2d1,eb948dd24ec74119b20926cf70f4ef03,efde18ca75354e008cf4fa343e3e7b31,945e022bbcc9439c8490ad7cead518dc,340d2e1672fd4e95957ef5ceffd21391,365ce298107345bbb1a622515f8ef32c,15f8dde5f2fb43dbab3ac30f125dccff,9099820294564b5e835de8bc4b6614aa"
+          }
+        }
+      ]
+    },
+    "Tests_FlightingEnabled": true,
+    "PXS.DeleteDeviceRequestEnabled": {
+      "EnabledFor": [
+        {
+          "Name": "Microsoft.Percentage",
+          "Parameters": {
+            "Value": 100
+          }
+        }
+      ]
+    },
+    "PXS.AnaheimIdRequestToPcfEnabled": {
+      "EnabledFor": [
+        {
+          "Name": "Microsoft.Percentage",
+          "Parameters": {
+            "Value": 100
+          }
+        }
+      ]
+    },
+    "PublishUncompressedMessage": false,
+    "TimelineApiBlocked": {
+      "EnabledFor": [
+        {
+          "Name": "CustomOperatorFilter",
+          "Parameters": {
+            "Operator": "Include",
+            "Value": "844427484909586"
+          }
+        }
+      ]
+    },
+    "PCF.CONFIGURED_PCD_APP_IDS": "foo,bar"
+  }
+}

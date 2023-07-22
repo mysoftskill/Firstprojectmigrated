@@ -1,0 +1,27 @@
+steps:
+- task: CmdLine@2
+  displayName: Package
+  inputs:
+    script: $(PXSBuildRootDirectory)\OneBranch\Build\package.cmd Release
+
+- task: PowerShell@2
+  displayName: Create directories
+  inputs:
+    targetType: inline
+    script: |
+      New-Item -ItemType Directory -Force -Path $(PXSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\Ev2
+      New-Item -ItemType Directory -Force -Path $(PXSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\FCT
+
+- task: PowerShell@2
+  displayName: Move FCTs to FCT Artifacts
+  inputs:
+    targetType: inline
+    script: |
+      Move-Item -Path $(PXSBuildRootDirectory)\bin\Release\x64\FunctionalTests\** -Destination $(PXSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\FCT -Force
+
+- task: PowerShell@2
+  displayName: Move Build to Ev2 Artifacts
+  inputs:
+    targetType: inline
+    script: |
+      Move-Item -Path $(PXSBuildRootDirectory)\OneBranch\Release\** -Destination $(PXSBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\Ev2 -Force

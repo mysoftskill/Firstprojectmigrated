@@ -1,0 +1,11 @@
+@import "../../../styles/utilities.scss";
+
+pcd-page-context-drawer {
+    display: block;
+
+    .context-content {
+        display: block;
+        @include clearfix;
+        margin-bottom: 12px;
+    }
+}

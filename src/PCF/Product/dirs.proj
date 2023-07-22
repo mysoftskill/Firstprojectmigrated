@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="Build">
+    <PropertyGroup>
+      <!-- default to release; allow people to override to debug -->
+      <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+      <Platform>x64</Platform>
+    </PropertyGroup>
+      
+    <MSBuild 
+      Projects="CommandFeed.sln" 
+			Targets="Build" 
+			ContinueOnError="false"
+      Properties="Configuration=$(Configuration);Platform=$(Platform);" />
+      
+    <MSBuild 
+      Projects="Deployment\postBuild.proj" 
+			Targets="Build" 
+			ContinueOnError="false"
+      Properties="Configuration=$(Configuration);Platform=$(Platform);" />
+  </Target>
+  
+  <Target Name="Clean">
+    <MSBuild 
+      Projects="CommandFeed.sln" 
+			Targets="Clean" 
+			ContinueOnError="false"
+      Properties="Configuration=$(Configuration);Platform=$(Platform);" />
+  </Target>
+</Project>

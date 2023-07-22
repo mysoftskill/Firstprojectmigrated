@@ -1,0 +1,58 @@
+<pcd-view-status-line display-by-status="{{$ctrl.displayByStatus}}"
+                      state-label="{{$ctrl.agentHealth.agent.name}}"
+                      icon-state="$ctrl.agentHealth.agentHealthIcon"
+                      category="agent-health">
+    <pcd-body>
+        <div ng-if="$ctrl.agentHealth.registrationStatus">
+            <pcd-view-status-line data-use-cms
+                                  display-by-status="{{$ctrl.displayByStatus}}"
+                                  state-label="Protocols:"
+                                  state="$ctrl.agentHealth.registrationStatus.protocolStatus"
+                                  category="protocols">
+                <pcd-inline>
+                    <span class="view-label">{{$ctrl.getProtocols()}}</span>
+                </pcd-inline>
+            </pcd-view-status-line>
+            <pcd-view-status-line data-use-cms
+                                  display-by-status="{{$ctrl.displayByStatus}}"
+                                  state-label="Environments:"
+                                  state="$ctrl.agentHealth.registrationStatus.environmentStatus"
+                                  category="environments">
+                <pcd-inline>
+                    <span class="view-label">{{$ctrl.getEnvironments()}}</span>
+                </pcd-inline>
+            </pcd-view-status-line>
+            <pcd-view-status-line data-use-cms
+                                  display-by-status="{{$ctrl.displayByStatus}}"
+                                  state-label="Capabilities:"
+                                  state="$ctrl.agentHealth.registrationStatus.capabilityStatus"
+                                  category="capabilities">
+                <pcd-inline>
+                        <span class="view-label">{{$ctrl.getCapabilities()}}</span>
+                </pcd-inline>
+            </pcd-view-status-line>
+            <pcd-view-status-line data-use-cms
+                                  display-by-status="{{$ctrl.displayByStatus}}"
+                                  state-label="Asset groups status"
+                                  state="$ctrl.agentHealth.registrationStatus.assetGroupsStatus"
+                                  category="asset-groups-status">
+                <pcd-body>
+                    <div>
+                        <div>
+                            <span data-use-cms>Data types:</span>
+                            <span>{{$ctrl.getDataTypes()}}</span>
+                        </div>
+                        <div>
+                            <span data-use-cms>Subjects:</span>
+                            <span>{{$ctrl.getSubjectTypes()}}</span>
+                        </div>
+
+                        <pcd-view-asset-groups-health pcd-asset-groups="$ctrl.agentHealth.registrationStatus.assetGroups"
+                                                      pcd-agent-owner-id="$ctrl.agentHealth.owner.id"
+                                                      display-by-status="{{$ctrl.displayByStatus}}"></pcd-view-asset-groups-health>
+                    </div>
+                </pcd-body>
+            </pcd-view-status-line>
+        </div>
+    </pcd-body>
+</pcd-view-status-line>

@@ -1,0 +1,23 @@
+﻿
+import "BaseEvent.bond"
+
+namespace Microsoft.Osgs.Infra.Monitoring
+
+
+[Description("Base event!")]
+[Provider("Microsoft_Osgs_Infra_Monitoring")]
+
+struct UnhandledExceptionEvent : BaseEvent
+{
+	[Description("ActivityId")]
+	10: string ActivityId;
+
+	[Description("Message")]
+	20: string Message;
+
+	[Description("Exception raised by server")]
+	30: string ExceptionType;
+
+	[Description("CallStack for raised exception")]
+	40: string CallStack;
+};

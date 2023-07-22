@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>PDMS.DataAccess</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.DataAccess</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Autofac.Extras.DynamicProxy" />
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="Castle.Core" />
+    <PackageReference Include="Microsoft.AspNet.OData" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" />
+    <PackageReference Include="Microsoft.Azure.Storage.Queue" />
+    <PackageReference Include="Microsoft.AzureAd.Icm.Types.amd64" />
+    <PackageReference Include="Microsoft.AzureAd.Icm.WebService.Client.amd64" />
+    <PackageReference Include="Microsoft.Data.OData" />
+    <PackageReference Include="Microsoft.Data.Services.Client" />
+    <PackageReference Include="Microsoft.Graph" />
+    <PackageReference Include="Microsoft.OData.Core" />
+    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory" />
+    <PackageReference Include="Microsoft.PrivacyServices.DataManagement.Models" />
+    <PackageReference Include="Microsoft.PrivacyServices.DocumentDB.Models" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
+    <PackageReference Include="Microsoft.IdentityModel.S2S.Extensions.Owin" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Authentication" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Core" />
+    <PackageReference Include="Microsoft.Identity.ServiceEssentials.Owin" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.ValueTuple" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\ClientSdks\Pdms.Client.Aad\Pdms.Client.Aad.csproj" />
+    <ProjectReference Include="..\..\ClientSdks\ServiceTree\ServiceTree.Client.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DataGrid\DataGridService.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icm\agentRegistration.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icm\ownerRegistration.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StoredProcedures\Installation.xml" />
+    <EmbeddedResource Include="StoredProcedures\V1.BulkUpsert.2.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>

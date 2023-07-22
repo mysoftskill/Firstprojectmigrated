@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0.25420" DefaultTargets="BondCodegenCs" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(NugetPackages)\bond.csharp\$(BondCSharpPackageVersion)\build\Bond.CSharp.props" Condition="Exists('$(NugetPackages)\bond.csharp\$(BondCSharpPackageVersion)\build\Bond.CSharp.props')" />
+  <Import Project="$(NugetPackages)\microsoft.commonschema.bond\$(BondCommonSchemaPackageVersion)\build\Microsoft.CommonSchema.Bond.props" Condition="Exists('$(NugetPackages)\microsoft.commonschema.bond\$(BondCommonSchemaPackageVersion)\build\Microsoft.CommonSchema.Bond.props')" />
+  <Import Project="$(NuGetPackages)\ms.qos\$(BondCommonSchemaPackageVersion)\build\Ms.Qos.props" Condition="Exists('$(NuGetPackages)\ms.qos\$(BondCommonSchemaPackageVersion)\build\Ms.Qos.props')" />
+  <Import Project="$(NuGetPackages)\ms.qos.outgoingservicerequest\$(BondCommonSchemaPackageVersion)\build\Ms.Qos.OutgoingServiceRequest.props" Condition="Exists('$(NuGetPackages)\ms.qos.outgoingservicerequest\$(BondCommonSchemaPackageVersion)\build\Ms.Qos.OutgoingServiceRequest.props')" />
+  <Import Project="$(NuGetPackages)\ms.qos.incomingservicerequest\$(BondCommonSchemaPackageVersion)\build\Ms.Qos.IncomingServiceRequest.props" Condition="Exists('$(NuGetPackages)\ms.qos.incomingservicerequest\$(BondCommonSchemaPackageVersion)\build\Ms.Qos.IncomingServiceRequest.props')" />
+
+  <PropertyGroup>
+    <BondOutputDirectory>$(MSBuildThisFileDirectory)generated</BondOutputDirectory>
+    <BaseMonitoringSchemaInclude>$(NugetPackages)\microsoft.osgs.infra.monitoring.resources\$(OsgsInfraResourcesPackageVersion)\Content\MonitoringSchemas\</BaseMonitoringSchemaInclude>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <BondImportDirectory Include="$(BaseMonitoringSchemaInclude)" />
+      <BondCodegen Include="$(MSBuildThisFileDirectory)Schemas\*.bond" />
+  </ItemGroup>
+
+  <Target Name="CoreCompile" />
+
+  <Import Project="$(NugetPackages)\bond.csharp\$(BondCSharpPackageVersion)\build\Bond.CSharp.targets" Condition="Exists('$(NugetPackages)\bond.csharp\$(BondCSharpPackageVersion)\build\Bond.CSharp.targets')" />
+</Project>

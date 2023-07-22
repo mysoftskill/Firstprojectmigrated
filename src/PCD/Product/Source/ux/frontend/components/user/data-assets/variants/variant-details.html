@@ -1,0 +1,47 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page provides detailed information regarding selected variant. These details
+            are managed by the NGP Cabinet and cannot be modified.
+        </p>
+        <p mee-paragraph data-use-cms>
+            For more information regarding the variant approval process and to find other variants that have already been approved, see the following:
+        </p>
+        <p mee-paragraph>
+            <a href="https://aka.ms/NGPVariant" mee-hyperlink target="_blank" data-use-cms>
+                Learn more about variant process and status.
+            </a>
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeVariantDetailsComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-asset-group-id="$ctrl.assetGroupId"></pcd-default-page-context>
+
+                <pcd-variant-details-view pcd-qualifier="$ctrl.assetGroup.qualifier"
+                                          pcd-variant-definition="$ctrl.variantDefinition"
+                                          pcd-tfs-tracking-uris="$ctrl.tfsTrackingUris"
+                                          pcd-disabled-signal-filtering="$ctrl.disabledSignalFiltering"></pcd-variant-details-view>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

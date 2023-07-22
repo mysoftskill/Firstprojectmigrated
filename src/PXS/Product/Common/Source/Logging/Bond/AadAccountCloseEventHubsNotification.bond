@@ -1,0 +1,17 @@
+﻿import "Microsoft.Telemetry.bond"
+
+namespace Microsoft.Membership.MemberServices.Common.Logging
+
+[Description("Event for Aad-Account-Close that corresponds to the raw event received from EventHubs")]
+struct AadAccountCloseEventHubsNotification : Microsoft.Telemetry.Base
+{
+    1  : string CommandId;
+    2  : string EventHubEndpoint;
+    3  : string EventHubPartitionId;
+    4  : string RequestGuid;
+    5  : string TenantId;
+    6  : string CloudInstance;
+    7  : string RequestTimestamp;
+    8  : string HomeTenantId;
+}
+

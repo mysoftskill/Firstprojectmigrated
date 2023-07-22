@@ -1,0 +1,12 @@
+<section>
+    <div data-grid="col-12">
+        <div data-grid="col-6">
+            <mee-text-area data-required-field="true"
+                        data-error-id="{{$ctrl.errorCategory}}.proxy-ticket">
+                <label data-use-cms>MSA proxy ticket</label>
+                <textarea rows="8" cols="80" ng-model="$ctrl.identifierFormData.proxyTicket"></textarea>
+            </mee-text-area>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.proxy-ticket"></mee-inline-error>
+        </div>
+    </div>
+</section>

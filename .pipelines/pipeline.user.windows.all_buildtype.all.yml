@@ -1,0 +1,78 @@
+# For full annotated example, please visit: https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FPipeline%20Spec%20YAML%20Concepts%2FAnnotated%20Example&wikiVersion=GBwikiMaster&pageId=302
+# YAML File Naming: pipeline.user.<os>.<buildtype>.<tag>.<phase>.<config>.<branch>.yml
+# https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FMulti%252DPhase%20and%20Multi%252DConfiguration%20Builds&wikiVersion=GBwikiMaster&pageId=291&anchor=yaml-file-naming
+
+
+restore:                                          # Stage for restoring dependencies.
+  commands:                                       # Sequence of commands to execute in this stage.
+    - !!defaultcommand                            # Any of the documented commands may be used, but !!defaultcommand is the most useful.
+      name: 'Restore Packages'                    # A user defined name for this step.
+      command: '.build\restore.cmd'         # The repository relative path to the script to run to restore packages.
+    
+build:
+  commands:
+    - !!buildcommand
+      name: 'Build The VS Code'
+      command: '.build\build.cmd'
+      arguments: 'Debug'
+      artifacts:
+        - from: 'PXS\Bin\Debug\x64'
+          to: 'PXS'
+          include:
+            - '**/*'
+        - from: 'PCF\bin\Debug\x64\AutopilotRelease'
+          to: 'PCF'
+          include:
+            - '**/*'
+      logs:
+        - from: 'PXS\Product\Build\OneBranch'
+          to: 'PXS Build Logs'
+          include:
+            - '**/build*.log'
+        - from: 'PCF\Product\Build\OneBranch'
+          to: 'PCF Build Logs'
+          include:
+            - '**/build*.log'
+
+test:
+  commands:
+    - !!testcommand                               # We are going to run tests and collect back the test results for publishing
+      name: 'Run all unittests'                   # If your test run does not have a name, this will be used.
+      command: '.build\test.cmd'                   # Script that runs tests. 
+      fail_on_stderr: true                        # Force pipeline to fail if the task writes to standard error stream; default is true.
+      skip_on_developer_box: true                 # If running locally on a developer host instead of the pipeline managed hosts, skip this task. Default is false.
+      testresults:                                # Sequence of entries indicating which test results files to collect.
+        - title: 'PCF Tests'                      # Test run title. Used by VSTS.
+          configuration: 'Debug'                  # Optional build configuration.
+          platform: 'x64'                         # Optional build platform.
+          type: 'VSTest'                          # Test engine type. Used by VSTS. Supported values are JUnit, NUnit, VSTest and xUnit.
+          include:                                # Sequence of glob patterns indicating which test results file to associate with this test run.
+            - 'src\PCF\Product\Build\OneBranch\TestResults\*.trx'      # Include all TRX files under any TestResults folder under the src folder.                            
+        - title: 'PXS Tests'                      # Test run title. Used by VSTS.
+          configuration: 'Debug'                  # Optional build configuration.
+          platform: 'x64'                         # Optional build platform.
+          type: 'VSTest'                          # Test engine type. Used by VSTS. Supported values are JUnit, NUnit, VSTest and xUnit.
+          include:                                # Sequence of glob patterns indicating which test results file to associate with this test run.
+            - 'src\PXS\Product\Build\OneBranch\TestResults\*.trx'      # Include all TRX files under any TestResults folder under the src folder.                                                    
+
+static_analysis_options:
+  policheck_options:
+    scan_comments: false
+    files_to_scan:
+      - from: 'src'
+  moderncop_options:
+    files_to_scan:
+      - from: 'src'
+        exclude:                         
+          - '**/FlushAgentQueue.js'
+          - '**/PopFromQueue.js'
+          - '**/GetQueueStat.js'
+  binskim_options:
+    files_to_scan:
+      - from: '**/AutopilotRelease'
+        exclude:                         
+          - '**/Microsoft.IdentityModel.dll'
+          - '**/MicrosoftMicrosoft.Internal.APMoetUtilities.dll'
+          - '**/CommonSetup/*'
+      - exclude:
+        - '**/ApAutoIIS/*'

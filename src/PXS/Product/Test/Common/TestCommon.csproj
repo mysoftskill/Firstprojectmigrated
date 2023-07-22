@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).Test.Common</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).Test.Common</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\Adapters\Source\Adapters.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\PXF\Core\Source\PrivacyCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Microsoft.WindowsLive.Test.WinLiveUser.AuthInterface.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Microsoft.PrivacyServices.CommandFeed.Contracts" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Server" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="WinLiveIdToolkit.Library" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

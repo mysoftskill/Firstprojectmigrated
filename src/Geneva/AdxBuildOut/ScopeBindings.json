@@ -1,0 +1,51 @@
+{
+  "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/ScopeBindings.json",
+  "contentVersion": "1.0.0.0",
+  "scopeBindings": [
+    {
+      "scopeTagName": "adxBuildOut",
+      "bindings": [
+        {
+          "find": "__LOCATION__",
+          "replaceWith": "West US"
+        },
+        {
+          "find": "__CLUSTERNAME__",
+          "replaceWith": "AdgcsGeneva"
+        },
+        {
+          "find": "__DBNAMENONPROD__",
+          "replaceWith": "GenevaNonProd"
+        },
+        {
+          "find": "__DBNAMEPROD__",
+          "replaceWith": "GenevaProd"
+        },		
+        {
+          "find": "__APPID__",
+          "replaceWith": "a974e85e-8a08-4f74-bfbc-7284218bc5ab"
+        },
+        {
+          "find": "__TENANTID__",
+          "replaceWith": "33e01921-4d64-4f8c-a055-5bdaffd5e33d"
+        },
+        {
+          "find": "__SUBID__",
+          "replaceWith": "4e261d67-9395-4cec-a519-14053c4765e3"
+        },
+        {
+          "find": "__RESOURCEGROUP__",
+          "replaceWith": "ADG-CS-GENEVA-KUSTO-RG"
+        },
+        {
+          "find": "__CERTIFICATEPATH__",
+          "replaceWith": "https://adg-cs-prod-kv.vault.azure.net/secrets/geneva-kusto"
+        },
+        {
+          "find": "__CLUSTERURL__",
+          "replaceWith": "https://adgcsgeneva.westus.kusto.windows.net"
+        }
+      ]
+    }
+  ]
+}

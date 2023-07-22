@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net472</TargetFrameworks>
+        <RootNamespace>Microsoft.PrivacyServices.Testing</RootNamespace>
+        <AssemblyName>Microsoft.PrivacyServices.Testing</AssemblyName>
+        <Platforms>x64</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" />
+        <PackageReference Include="AutoFixture.AutoMoq" />
+        <PackageReference Include="AutoFixture.Xunit2" />
+        <PackageReference Include="Microsoft.PrivacyServices.Identity" />
+        <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+        <PackageReference Include="Moq" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="SemanticComparison" />
+        <PackageReference Include="xunit.abstractions" />
+        <PackageReference Include="xunit.assert" />
+        <PackageReference Include="xunit.core" />
+        <PackageReference Include="xunit.extensibility.core" />
+    </ItemGroup>
+   
+</Project>

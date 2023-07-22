@@ -1,0 +1,8 @@
+<mee-alert ng-if="$ctrl.showLockdownWarning()" kind="use-glyph warning">
+    <alert-content>
+        <span class="lockdown-message">{{$ctrl.getLockdownMessage()}}</span>
+    </alert-content>
+    <alert-actions>
+        <a mee-no-href ng-click="$ctrl.contactAdmins()">{{$ctrl.contactAdminsLinkText}}</a>
+    </alert-actions>
+</mee-alert>

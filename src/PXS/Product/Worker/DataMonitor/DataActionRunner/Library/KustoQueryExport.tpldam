@@ -1,0 +1,61 @@
+﻿declare query_parameters (ExcludedAgentsJson:string, Age:timespan); 
+//
+let minDate = ago(30d);
+let threshold = ago(Age);
+let maxSampleCommands = 20;
+//
+let ExcludedAgentsRaw = datatable(junk:int) [ 1 ] 
+| extend ListColumn = todynamic(ExcludedAgentsJson) 
+| project ListColumn 
+| mvexpand ListColumn 
+| evaluate bag_unpack(ListColumn) 
+| project AgentId=tostring(AgentId), Expires=todatetime(Expires)
+| where AgentId != "00000000-0000-0000-0000-000000000000"; 
+//
+let ExcludedAgents = ExcludedAgentsRaw
+| where isnull(Expires) or Expires > now() 
+| project AgentId;
+//
+let Incomplete = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').ExportAuditLogSnapshotV3
+    | where isnull(CompletedTime)
+    | where IngestedTime >= minDate and IngestedTime < threshold
+    | join kind=leftantisemi ExcludedAgents on AgentId
+    | join kind=inner 
+        (
+            cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+            | where AgentReadiness == "ProdReady"
+            | summarize by AgentId, AgentName, AgentType, TeamName=ServiceName
+        ) on AgentId
+    | summarize 
+        IngestedTime=min(IngestedTime) 
+        by AgentId, CommandId, AgentName, AgentType, TeamName
+    | order by AgentId, IngestedTime, CommandId
+    | summarize 
+        CountMissing=count(CommandId), 
+        Missing=makelist(pack("c", CommandId, "t", IngestedTime), maxSampleCommands)
+        by AgentId, AgentName, AgentType, TeamName
+);
+let Total = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').ExportAuditLogSnapshotV3
+    | where IngestedTime >= minDate and IngestedTime < threshold
+    | join kind=inner (Incomplete | distinct AgentId) on AgentId
+    | summarize by AgentId, CommandId
+    | summarize CountTotal=count(CommandId) by AgentId
+);
+//
+// By Agent, AssetGroupId
+Incomplete
+| join kind=inner Total on AgentId
+| project 
+    AgentId, 
+    AgentName, 
+    AgentType, 
+    TeamName, 
+    CountMissing, 
+    CountTotal, 
+    PercentComplete=((CountTotal - CountMissing) * 100) / todouble(CountTotal), 
+    Missing
+| order by AgentId asc, AgentName, AgentType;

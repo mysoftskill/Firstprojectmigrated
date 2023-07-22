@@ -1,0 +1,358 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "subscriptionId": {
+        "type": "string",
+        "metadata": {
+          "description": "The ID of the subscription the Azure App Service Plan belongs to."
+        }
+      },
+      "appServicePlanResourceGroup": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the resource group the Azure App Service Plan belongs to."
+        }
+      },
+      "location": {
+      "type": "string",
+      "metadata": {
+        "description": "The location of the service plan resource group."
+        }
+      },
+      "appName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the function app."
+        }
+      },
+      "storageResourceGroup": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the resource group the storage account belongs to."
+        }
+      },
+      "storageName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of storage account for the function app"
+        }
+      },
+      "storageAccountType": {
+        "type": "string",
+        "defaultValue": "Standard_LRS",
+        "allowedValues": [
+          "Standard_LRS",
+          "Standard_GRS",
+          "Standard_RAGRS"
+        ],
+        "metadata": {
+          "description": "Storage Account type"
+        }
+      },
+      "storageAccountKind": {
+        "type": "string",
+        "defaultValue": "StorageV2",
+        "allowedValues": [
+          "Storage",
+          "StorageV2"
+        ],
+        "metadata": {
+          "description": "Storage Account kind"
+        }
+      },
+      "genevaCertVaultId": {
+        "type": "string",
+        "metadata": {
+          "description": "The CSM ID of the KeyVault instance containing the AntMDS certificate."
+        }
+      },
+      "genevaCertSecretName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the AntMDS certificate."
+        }
+      },
+      "monitoringTenant": {
+        "type": "string",
+        "metadata": {
+          "description": "Sets the MONITORING_TENANT environment variable "
+        },
+        "allowedValues": [
+            "ADGCS-CI1-WESTUS2",
+            "ADGCS-CI2-WESTUS2",
+            "ADGCS-INT-WESTUS2",
+            "ADGCS-PPE-WESTUS2",
+            "ADGCS-PPE-SCUS",
+            "ADGCS-USWC",
+            "ADGCS-SCUS"
+        ]
+      },
+      "monitoringRole": {
+        "type": "string",
+        "metadata": {
+          "description": "Sets the MONITORING_ROLE environment variable"
+        }
+      },
+      "monitoringGcsEnvironment": {
+        "type": "string",
+        "allowedValues": [
+          "Diagnostics Prod",
+          "Test",
+          "Stage",
+          "FirstPartyProd",
+          "BillingProd",
+          "ExternalProd",
+          "CA BlackForest",
+          "CA Fairfax",
+          "CA Mooncake"
+        ],
+        "metadata": {
+          "description": "The endpoint for your Geneva Account.  Sets the MONITORING_GCS_ENVIRONMENT environment variable."
+        }
+      },
+      "monitoringGcsAccount": {
+        "type": "string",
+        "metadata": {
+          "description": "Sets the MONITORING_GCS_ACCOUNT environment variable."
+        }
+      },
+      "monitoringGcsNamespace": {
+        "type": "string",
+        "metadata": {
+          "description": "Sets the MONITORING_GCS_NAMESPACE environment variable"
+        }
+      },
+      "monitoringGcsAuthId": {
+        "type": "string",
+        "metadata": {
+          "description": "Sets the MONITORING_GCS_AUTH_ID environment variable."
+        }
+      },
+      "monitoringConfigVersion": {
+        "type": "string",
+        "metadata": {
+          "description": "Sets the MONITORING_CONFIG_VERSION environment variable."
+        }
+      },
+      "computeRegionOverride": {
+        "type": "string",
+        "metadata": {
+          "description": "Allows user to target a region other than the resource group region."
+        },
+        "defaultValue": ""
+      }
+    },
+    "variables": {
+      "functionAppName": "[parameters('appName')]",
+      "hostingPlanName": "[parameters('appName')]",
+      "storageAccountName": "[parameters('storageName')]",
+      "siteLocation": "[if(empty(parameters('computeRegionOverride')), parameters('location'), parameters('computeRegionOverride'))]",
+      "configJson": {
+        "MONITORING_TENANT": "[parameters('monitoringTenant')]",
+        "MONITORING_ROLE": "[parameters('monitoringRole')]",
+        "MONITORING_XSTORE_ACCOUNTS": "GCSPlaceholder",
+        "AdditionalEnvironmentVariables": [
+          {
+            "Key": "DATACENTER",
+            "Value": "[variables('siteLocation')]"
+          },
+          {
+            "Key": "MONITORING_GCS_ENVIRONMENT",
+            "Value": "[parameters('monitoringGcsEnvironment')]"
+          },
+          {
+            "Key": "MONITORING_GCS_ACCOUNT",
+            "Value": "[parameters('monitoringGcsAccount')]"
+          },
+          {
+            "Key": "MONITORING_GCS_NAMESPACE",
+            "Value": "[parameters('monitoringGcsNamespace')]"
+          },
+          {
+            "Key": "MONITORING_GCS_REGION",
+            "Value": "[variables('siteLocation')]"
+          },
+          {
+            "Key": "MONITORING_GCS_AUTH_ID",
+            "Value": "[parameters('monitoringGcsAuthId')]"
+          },
+          {
+            "Key": "MONITORING_GCS_AUTH_ID_TYPE",
+            "Value": "AuthKeyVault"
+          },
+          {
+            "Key": "MONITORING_CONFIG_VERSION",
+            "Value": "[parameters('monitoringConfigVersion')]"
+          },
+          {
+            "Key": "MONITORING_USE_GENEVA_CONFIG_SERVICE",
+            "Value": "true"
+          }
+        ]
+      }
+    },
+    "resources": [
+      {
+        "comments": "Defines an Azure App Service Plan.",
+        "type": "Microsoft.Web/serverfarms",
+        "name": "[variables('hostingPlanName')]",
+        "apiVersion": "2018-02-01",
+        "location": "[variables('siteLocation')]",
+        "sku": {
+          "name": "EP1",
+          "tier": "ElasticPremium"
+        },
+        "properties": {
+          "name": "[variables('hostingPlanName')]"
+        },
+        "resources": [
+          {
+            "comments": "Defines how the Geneva Monitoring Agent should be configured.",
+            "type": "Microsoft.Web/serverfarms/firstPartyApps/settings",
+            "name": "[concat(variables('hostingPlanName'), '/AntMDS/ConfigJson')]",
+            "apiVersion": "2020-12-01",
+            "location": "[variables('siteLocation')]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+              "firstPartyId": "AntMDS",
+              "settingName": "ConfigJson",
+              "settingValue": "[string(variables('configJson'))]"
+            }
+          },
+          {
+            "comments": "Defines what events the Geneva Monitoring Agent should upload. This should be a placeholder configuration for services using GCS.",
+            "type": "Microsoft.Web/serverfarms/firstPartyApps/settings",
+            "name": "[concat(variables('hostingPlanName'), '/AntMDS/MdsConfigXml')]",
+            "apiVersion": "2020-12-01",
+            "location": "[variables('siteLocation')]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+              "firstPartyId": "AntMDS",
+              "settingName": "MdsConfigXml",
+              "settingValue": ""
+            }
+          },
+          {
+            "type": "Microsoft.Web/serverfarms/firstPartyApps/keyVaultSettings",
+            "name": "[concat(variables('hostingPlanName'), '/AntMDS/CERTIFICATE_PFX_GENEVACERT')]",
+            "apiVersion": "2020-12-01",
+            "location": "[variables('siteLocation')]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+              "firstPartyId": "AntMDS",
+              "settingName": "CERTIFICATE_PFX_GENEVACERT",
+              "vaultId": "[parameters('genevaCertVaultId')]",
+              "secretName": "[parameters('genevaCertSecretName')]"
+            }
+          },
+          {
+            "type": "Microsoft.Web/serverfarms/firstPartyApps/settings",
+            "name": "[concat(variables('hostingPlanName'), '/AntMDS/CERTIFICATE_PASSWORD_GENEVACERT')]",
+            "apiVersion": "2020-12-01",
+            "location": "[variables('siteLocation')]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+              "firstPartyId": "AntMDS",
+              "settingName": "CERTIFICATE_PASSWORD_GENEVACERT",
+              "settingValue": ""
+            }
+          }
+        ]
+      },
+      {
+        "apiVersion": "2018-02-01",
+        "name": "GenevaResourceDeploymentTemplate",
+        "type": "Microsoft.Resources/deployments",
+        "resourceGroup": "[parameters('storageResourceGroup')]",
+        "properties": {
+          "mode": "Incremental",
+          "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {},
+            "variables": {},
+            "resources": [
+              {
+                "type": "Microsoft.Storage/storageAccounts",
+                "apiVersion": "2018-02-01",
+                "name": "[variables('storageAccountName')]",
+                "location": "[variables('siteLocation')]",
+                "properties": {"allowBlobPublicAccess": false},
+                "sku": {
+                  "name": "[parameters('storageAccountType')]"
+                },
+                "kind": "[parameters('storageAccountKind')]"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "comments": "Defines an Azure Function App integrated with Geneva.",
+        "apiVersion": "2018-02-01",
+        "name": "[variables('functionAppName')]",
+        "type": "Microsoft.Web/sites",
+        "kind": "functionapp",
+        "location": "[variables('siteLocation')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+          "ConfigJson",
+          "MdsConfigXml",
+          "CERTIFICATE_PFX_GENEVACERT",
+          "CERTIFICATE_PASSWORD_GENEVACERT",
+          "[resourceId(parameters('storageResourceGroup'), 'Microsoft.Resources/deployments', 'GenevaResourceDeploymentTemplate')]"
+        ],
+        "properties": {
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+          "siteConfig": {
+            "appSettings": [
+              {
+                "Name": "WEBSITE_FIRST_PARTY_ID",
+                "Value": "AntMDS"
+              },
+              {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~3"
+              },
+              {
+                "name": "FUNCTIONS_WORKER_RUNTIME",
+                "value": "dotnet"
+              },
+              {
+                "name": "AzureWebJobsStorage",
+                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId(parameters('storageResourceGroup'), 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value)]"
+              },
+              {
+                "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId(parameters('storageResourceGroup'), 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value)]"
+              },
+              {
+                "name": "MONITORING_TENANT",
+                "value": "[parameters('monitoringTenant')]"
+              },
+              {
+                "name": "MONITORING_ROLE",
+                "value": "[parameters('monitoringRole')]"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "outputs": {
+      "jsonconfig": {
+        "type": "object",
+        "value": "[variables('configJson')]"
+      }
+    }
+  }
+  

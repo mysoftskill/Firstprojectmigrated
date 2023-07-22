@@ -1,0 +1,17 @@
+<h2 mee-heading="subheading2" data-use-cms>Remove data asset</h2>
+
+<p mee-paragraph data-use-cms>You are about to remove data asset</p>
+<pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.assetGroup.qualifier" pcd-hide-data-grid-link="true"></pcd-asset-group-qualifier-view>
+<p mee-paragraph data-use-cms>
+    If this asset is linked to a production agent, then this change will result in signal loss.
+    Only proceed if you do not need to handle any new signals for this asset.
+    If you want to move it to a new team, navigate back to the manage data assets page, select the assets you want to transfer and click the <q>Transfer to another team</q> button. 
+</p>
+<p mee-paragraph data-use-cms>Are you sure?</p>
+
+<mee-checkbox ng-model="$ctrl.hasAcknowledgedDelete"
+              data-use-cms>
+    I understand that the data asset will be deleted
+</mee-checkbox>
+
+<pcd-confirmation-modal-actions></pcd-confirmation-modal-actions>

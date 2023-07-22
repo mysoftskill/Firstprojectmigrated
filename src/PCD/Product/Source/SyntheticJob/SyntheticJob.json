@@ -1,0 +1,30 @@
+{
+    "SyntheticJobGroup": {
+      "Name": "PCDSyntheticJobGroup",
+      "SyntheticJobs": [
+        {
+          "ExecutionIntervalSeconds": 60,
+          "JobName": "SyntheticJob",
+          "AssemblyFilePath": "PCD.SyntheticJob.dll",
+          "FullyQualifiedClassName": "PCD.SyntheticJob.SyntheticJob",
+          "SyntheticJobInstances": [
+		        {
+			        "InstanceNamePrefix": "PPE",
+              "Parameters": {
+                "EndPoint": "https://manage.privacy.microsoft-ppe.com/healthcheck"
+              },
+              "Regions": [ "USWest2" ]
+		        },
+		        {
+			        "InstanceNamePrefix": "Prod",
+              "Parameters": {
+                "EndPoint": "https://manage.privacy.microsoft.com/healthcheck"
+              },
+              "Regions": [ "USWest2" ]
+		        }
+            
+          ]
+        }
+      ]
+    }
+  }

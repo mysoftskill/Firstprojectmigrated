@@ -1,0 +1,9 @@
+﻿<div ng-show="$ctrl.isAuthorized">
+    <button mee-button
+            ng-click="$ctrl.onClick()"
+            ng-disabled="!$ctrl.hasIcmConnectorId()"
+            ng-attr-title="{{ $ctrl.getButtonTitle() }}"
+            data-use-cms>
+        Create IcM Incident
+    </button>
+</div>

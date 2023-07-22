@@ -1,0 +1,647 @@
+<MonitoringManagement version="1.0" namespace="Ma" timestamp="2020-10-05T23:53:58.6321183Z">
+  <TaggedData name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PXS.Frontdoor$PXS.Worker">
+    <Data>
+      <StandingQueries>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS IncomingComponentApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@component) && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS IncomingComponentApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@component) && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingComponentApiRequests
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest")
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingComponentApiCallerErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@component) && (@requestStatus == 4)
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingComponentApiTransportErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@component) && (@requestStatus == 5)
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingComponentApiServiceErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@component) && (@requestStatus == 6)
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@latencyMs) AS IncomingComponentApiSuccessLatency
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@component) && (@requestStatus == 3)
+                            GROUPBY @component AS Component
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS IncomingApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS IncomingApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingApiRequests
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest")
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingApiCallerErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 4)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingApiTransportErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 5)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingApiServiceErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 6)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@latencyMs) AS IncomingApiSuccessLatency
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS IncomingScenarioApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@scenarioId) && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS IncomingScenarioApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@scenarioId) && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingScenarioApiRequests
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest")
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingScenarioApiCallerErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@scenarioId) && (@requestStatus == 4)
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingScenarioApiTransportErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@scenarioId) && (@requestStatus == 5)
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS IncomingScenarioApiServiceErrors
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@scenarioId) && (@requestStatus == 6)
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@latencyMs) AS IncomingScenarioApiSuccessLatency
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@scenarioId) && (@requestStatus == 3)
+                            GROUPBY @scenarioId AS Scenario
+                            GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS OutgoingApiReliability
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS OutgoingApiReliability
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 4 || @requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS OutgoingApiReliabilityExcluding400Errors
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS OutgoingApiReliabilityExcluding400Errors
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS OutgoingApiReliabilityPDOS
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4) && (@dependencyOperationVersion == "PdApiV2")
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS OutgoingApiReliabilityPDOS
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6) && (@dependencyOperationVersion == "PdApiV2")
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS OutgoingApiRequests
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest")
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS OutgoingApiCallerErrors
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 4)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS OutgoingApiTransportErrors
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 5)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate(1.0) AS OutgoingApiServiceErrors
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 6)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@latencyMs) AS OutgoingApiSuccessLatency
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@latencyMs) AS OutgoingApiSuccessLatencyPDOS
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3) && (@dependencyOperationVersion == "PdApiV2")
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS IncomingApiErrorCount
+                    WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && Exists(@protocolStatusCode) && (@requestStatus == 4 || @requestStatus == 5 || @requestStatus == 6)
+                    GROUPBY @operationName AS OperationName
+                    GROUPBY @protocolStatusCode AS ReturnCode
+                    GROUPBY Map(@requestStatus, "4=CallerError,5=TransportError,6=ServiceError", "Other") AS ReturnType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS OutgoingApiErrorCount
+                    WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && Exists(@protocolStatusCode) && (@requestStatus == 4 || @requestStatus == 5 || @requestStatus == 6)
+                    GROUPBY @dependencyOperationName AS DependencyOperationName
+                    GROUPBY @protocolStatusCode AS ReturnCode
+                    GROUPBY Map(@requestStatus, "4=CallerError,5=TransportError,6=ServiceError", "Other") AS ReturnType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS OutgoingApiErrorCountPDOS
+                    WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && Exists(@protocolStatusCode) && (@requestStatus == 4 || @requestStatus == 5 || @requestStatus == 6) && (@dependencyOperationVersion == "PdApiV2")
+                    GROUPBY @dependencyOperationName AS DependencyOperationName
+                    GROUPBY @protocolStatusCode AS ReturnCode
+                    GROUPBY Map(@requestStatus, "4=CallerError,5=TransportError,6=ServiceError", "Other") AS ReturnType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>        
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS IncomingApiRequestCount
+                    WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest")
+                    GROUPBY @operationName AS OperationName
+                    GROUPBY @requestStatus AS RequestStatus]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS PCFDocDbThrottlingCount
+              WHERE @Throttled == "true" && @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CosmosDbOutgoingServiceRequest"
+              GROUPBY @Collection as Collection
+              GROUPBY @Moniker as DbMoniker
+              GROUPBY @dependencyOperationName as API
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS PCFDocDbRequestCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CosmosDbOutgoingServiceRequest"
+              GROUPBY @Collection as Collection
+              GROUPBY @Moniker as DbMoniker
+              GROUPBY @dependencyOperationName as API
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@RequestCharge) AS PCFDocDbRequestCharge
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CosmosDbOutgoingServiceRequest"
+              GROUPBY @Collection as Collection
+              GROUPBY @Moniker as DbMoniker
+              GROUPBY @dependencyOperationName as API
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT MAX(@AgeInHours) AS PCFPdmsDataSetMaxAge 
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.PdmsDataSetAgeEvent"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() AS PCFInvalidVerifierReceivedCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CommandReceivedInvalidVerifierEvent"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() AS PCFDataAgentValidationError
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.SllDataAgentValidationErrorEvent"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() AS PCFUnrecognizedDataType
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.SllDataAgentUnrecognizedDataType"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() AS PCFCheckpointsCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" &&  @operationName == "API.PostCheckpoint.1.0"
+              GROUPBY @LeaseRecieptAgentId as AgentId
+              GROUPBY @LeaseReceiptAssetGroupId as AssetGroupId
+              GROUPBY @CommandType as CommandType
+              GROUPBY @CheckpointStatusCode as CheckpointStatusCode
+            Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT MAX(@QueueDepth) AS PCFCommandQueueDepthAggregated
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.SllCommandQueueDepthAggregated"
+              GROUPBY @AgentId as AgentId
+              GROUPBY @AssetGroupId as AssetGroupId
+              GROUPBY @CommandType as CommandType
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT MAX(@QueueDepth) AS PCFCommandQueueDepth
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.SllCommandQueueDepthBaseline"
+              GROUPBY @DbMoniker as DbMoniker
+              GROUPBY @CollectionId as CollectionId
+              GROUPBY @AgentId as AgentId
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@RequestCharge) AS PCFQueueDepthRequestCharge
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.SllCommandQueueDepthBaseline"
+              GROUPBY @DbMoniker as DbMoniker
+              GROUPBY @CollectionId as CollectionId
+              GROUPBY @AgentId as AgentId
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@CommandCount) AS PCFCommandTransferCount 
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CommandsTransferredEvent"
+              GROUPBY @TransferPoint
+              GROUPBY @AgentId
+              GROUPBY @AssetGroupId]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@DurationSeconds) AS PCFQueueDepthDurationSeconds
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.SllCommandQueueDepthBaseline"
+              GROUPBY @DbMoniker as DbMoniker
+              GROUPBY @CollectionId as CollectionId
+              GROUPBY @AgentId as AgentId
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT MAX(@Depth) as PCFWorkerAzureQueueDepth
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.AzureQueueDepthEvent"
+              GROUPBY @QueueName AS AzureQueueName
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT MAX(@HoursPending) as PCFWorkerAzureQueueWorkItemAge
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" AND @HoursPending > 0
+              GROUPBY @QueueName AS AzureQueueName
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Max(@HoursPending) as PCFDefenderWorkItemAge
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" AND @QueueName == "checkcompletionworkitem" 
+                AND @Status == "Completed" AND @ExceptionType == "System.TimeoutException" 
+                AND @operationName == "CheckCompletionWorkItemQueueHandler.ProcessWorkItemAsync" 
+                AND @ErrorMessage.Contains("Could not complete AV Scan") AND @HoursPending > 0
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() as PCFAgentCommandIngestionCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.AddCommandEvent"
+              GROUPBY @AgentId AS AgentId
+              GROUPBY @AssetGroupId AS AssetGroupId
+              GROUPBY @CommandType AS CommandType
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() AS PCFIncomingCommandCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+                AND @operationName == "FilterAndRouteCommandWorkItemHandler.ProcessWorkItemAsync"
+              GROUPBY @SubjectType AS SubjectType
+              GROUPBY @CommandType AS CommandType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate() AS PCFIncomingCommandRate
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+                AND @operationName == "FilterAndRouteCommandWorkItemHandler.ProcessWorkItemAsync"
+              GROUPBY @SubjectType AS SubjectType
+              GROUPBY @CommandType AS CommandType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(Double.Parse(@EventCount)) as PCFEventHubEventPublishCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.OutgoingServiceRequest" && @dependencyOperationName == "CommandLifecycleEventPublisher.PublishAsync"             
+              GROUPBY @EventHubName AS EventHubName
+              GROUPBY @dependencyName AS OperationName
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(Double.Parse(@MessageCount)) as PCFEventHubMessageProcessCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" && Exists(@EventHubName)
+              GROUPBY @EventHubName AS EventHubName
+              GROUPBY @operationName AS OperationName
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(Double.Parse(@TotalSizeBytes)) as PCFEventHubPublishSizeByte
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" && Exists(@EventHubName)
+              GROUPBY @EventHubName AS EventHubName
+              GROUPBY @operationName AS OperationName
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT COUNT() as PCFAgentCommandIngestionByCommandTypeCount
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.AddCommandEvent"
+              GROUPBY @CommandType AS CommandType
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(Double.Parse(@AgeOutCommandCount)) as AgeOutCommandCount
+                WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" and @operationName == "API.GetCommands.1.0" and @CommandCount > 0
+                Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(Double.Parse(@NumOfDeleteRequests)) as  NonWindowsDeviceDeletesIncoming
+              WHERE @name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest" and @operationName == "EventHubProcessorHandler.ProcessEventHandlerAsync"
+              Properties { Version = 2 }]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@latencyMs) AS QuickExportLatency
+              WHERE @baseType == "Ms.Qos.IncomingServiceRequest" && @operationName == "ExportTask"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS QuickExportSuccessQos
+              WHERE @baseType == "Ms.Qos.IncomingServiceRequest" && @operationName == "ExportTask" && @ExportStatus == "Success"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS QuickExportFailureQos
+              WHERE @baseType == "Ms.Qos.IncomingServiceRequest" && @operationName == "ExportTask" && @ExportStatus != "Success"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT DistinctCount(@"ext.device.id") AS UniqueDeviceDeletes
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.RequestExpansionEvent" and @Portal == "VortexDeviceDeleteSignal")]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT DistinctCount(@"ext.device.id") AS UniqueDeviceId
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.RequestExpansionEvent")]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT DistributionDigest(@latencyMs) AS IncomingApiSuccessLatencyPercentile
+              WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3)
+              GROUPBY @operationName AS OperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(@FiltersCount) AS BrowseFiltersCount 
+              WHERE @name == "Microsoft.Membership.MemberServices.Common.Logging.OutgoingApiEvent" && @dependencyOperationName == "Delete_BrowseHistoryId_PDOSGriffinAPI_BrowsingHistory"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT DistinctCount(@"ext.user.id") AS DistinctUserId
+              GROUPBY @"data.baseData.callerName" + "--" + @"data.baseData.operationName"
+              Properties {Version = 2}]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS ErrorEvents
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.ErrorEvent" or @baseType == "Microsoft.Membership.MemberServices.Common.Logging.ErrorEvent")
+              GROUPBY @ComponentName AS ComponentName
+              GROUPBY @ErrorMethod AS ErrorMethodName
+              GROUPBY @ErrorCode AS ErrorCode]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS Deadlettercount
+              WHERE ((@name == "Microsoft.Membership.MemberServices.Common.Logging.ErrorEvent") && (@ErrorType == "DeadLetter") && (@ErrorCode == "AadAccountCloseDeadLetter"))]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(100.0) AS OutgoingApiReliabilityWithIncomingOperation
+              WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4)
+              GROUPBY @operationName AS IncomingOperationName
+              GROUPBY @dependencyName AS DependencyName
+              GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Average(0.0) AS OutgoingApiReliabilityWithIncomingOperation
+              WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6)
+              GROUPBY @operationName AS IncomingOperationName
+              GROUPBY @dependencyName AS DependencyName
+              GROUPBY @dependencyOperationName AS DependencyOperationName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS BadRequestsToPCF
+              WHERE (@protocolStatusCode == "400" && @dependencyName == "PcfAdapter" && @name == "Microsoft.Membership.MemberServices.Common.Logging.OutgoingApiEvent")]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() As DataSubjectRightsRequestCount
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.DataSubjectRightsRequest")
+              GROUPBY @SubjectType AS SubjectType
+              GROUPBY @RequestType AS RequestType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate() As DataSubjectRightsRequestRate
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.DataSubjectRightsRequest")
+              GROUPBY @SubjectType AS SubjectType
+              GROUPBY @RequestType AS RequestType]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() As MsaAgeOutSuspendedCount
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.DataSubjectRightsRequest" and @SubjectType == "MSA" and @RequestType == "AgeOut")
+              GROUPBY @Suspended]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Rate() As MsaAgeOutSuspendedRate
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.DataSubjectRightsRequest" and @SubjectType == "MSA" and @RequestType == "AgeOut")
+              GROUPBY @Suspended]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@UserDelete - 1) As AQSAccountCloseDuplicateCount
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.AqsWorkReceivedEvent" and @UserDelete > 1)]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@UniqueUsers) As AQSAccountCloseUniqueUsersCount
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.AqsWorkReceivedEvent" and @UserDelete >= 1)]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT MAX(@QueueDepth) as QueueDepthAccountDeleteInformation
+                WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.QueueDepthEvent" and @QueueName == "accountdeleteinformation")
+                GROUPBY @AccountName]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[select Count() as DequeueCountErrorThresholdReached
+              where @name == "Microsoft.Membership.MemberServices.Common.Logging.ErrorEvent" && @ComponentName == "MsaAccountDeleteQueueProcessor" && @ErrorCode == "DequeueCountErrorThresholdReached"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT SUM(@Count) As AADAccountCloseCount
+              WHERE (@name == "Microsoft.Membership.MemberServices.Common.Logging.AADAccountCloseEvent")]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count(1.0) as PRCMSAExports
+              WHERE @operationName == "ManualRequestApi.ExportMsaSelfAuthSubjectRequest"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count(1.0) as PRCMSADeletes
+              WHERE @operationName == "ManualRequestApi.DeleteMsaSelfAuthSubjectRequest"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count(1.0) as PRCDemoDeletes
+              WHERE @operationName == "ManualRequestApi.DeleteDemographicSubjectRequest"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[Let eventParts = @@.Split(" ")
+        Let iisLog = eventParts[0].EndsWith(".log:") AND In(eventParts[2], "GET,PUT,DELETE,HEAD,POST,TRACE,OPTIONS,CONNECT,PATCH")
+        Let iisName = eventParts[2]
+
+        Let apLogParts = eventParts[0].Split("_")
+        Let apLevel = eventParts[2] == "Error:" ? "Error" : eventParts[2] == "Warning:" ? "Warning" : eventParts[2] == "Information:" ? "Information" : "UnknownLevel"
+        Let apLog = eventParts[0].EndsWith(".log:") AND !iisLog AND apLogParts[1].Length > 4 AND Double.Parse(apLogParts[1].SubString(0, apLogParts[1].Length - 4)) > 0
+        Let apName = apLog ? apLogParts[0] : "UnknownName"
+
+        Let CDLParts = eventParts[0].Split("-")
+        Let CDLLog = CDLParts[0] == "CosmosDataLoader_CDLClient"
+        Let CDLLevel = CDLParts[1].StartsWith("Info") ? "Information" : CDLParts[1].StartsWith("Error") ? "Error" : CDLParts[1].StartsWith("Warning") ? "Warning" : "UnknownLevel"
+
+        Let jsonSllLevel = GetJsonString("ext.sll.level")
+        Let sllEvent = @"ext.sll" != ""
+        Let sllLevel = jsonSllLevel == "1" ? "Critical" : jsonSllLevel == "2" ? "Error" : jsonSllLevel == "3" ? "Informational" : jsonSllLevel == "4" ? "LogAlways" : jsonSllLevel == "5" ? "Verbose" : jsonSllLevel == "6" ? "Warning" : "UnknownLevel"
+
+        Let eventType  = apLog ? "APLog" : sllEvent ? "SLL"                 : iisLog ? "IIS"         : CDLLog ? "CDL"       : "Other"
+        Let eventLevel = apLog ? apLevel : sllEvent ? sllLevel              : iisLog ? "Information" : CDLLog ? CDLLevel    : "UnknownLevel"
+        Let eventName  = apLog ? apName  : sllEvent ? GetJsonString("name") : iisLog ? iisName       : CDLLog ? "CDLClient" : "UnknownName"
+
+        select Sum(@@.Length * 2) as EventsSentToIndexing
+        GroupBy eventType
+        GroupBy eventLevel
+        GroupBy eventName
+
+        Properties { Version = 2 }
+
+      Where (!Exists(@flags) or (Exists(@flags) and @flags & 0x02 == 0)) AND !((@name == "StreamingQueueOutgoingQosEvent" && @appId == "S:Xpert.Agent.exe") OR false)]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS PCFSingleEventTooBig
+              WHERE @ErrorMessage.Contains("Single event is too big") && @ExceptionType == "System.InvalidOperationException"]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery namespace="ApplicationMetrics">
+          <Query><![CDATA[SELECT Count() AS PDMSDataOwnerWorkerException
+              WHERE @ErrorMessage.Contains("TaskCanceledException caused failure to update data owners for:")]]></Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+      </StandingQueries>
+    </Data>
+  </TaggedData>
+</MonitoringManagement>

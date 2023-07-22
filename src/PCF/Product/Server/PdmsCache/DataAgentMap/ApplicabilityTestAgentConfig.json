@@ -1,0 +1,1288 @@
+{
+  "AgentId": "A31C85ECC1B4464C9FD49EA0DE48F98A",
+  "AssetGroups": [
+    {
+      "AssetGroupId": "C2B94394F1AC4A17A0650010B35C1010",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AgeOut"
+      ],
+      "ExtendedProps": {
+        "MaxDataAgeMonths": "9999", // If 'MaxDataAgeMonths' > age of signal, then signal is applicable. In other words, pick a large number so this AssetGroup is applicable for AgeOut.
+        "OptionalFeatures": "[ \"MsaAgeOutOptIn\" ]"
+      },
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Xbox"
+      ],
+      "VariantInfosAppliedByPcf": null,
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "A647B6F084D441B280F58361262C846A",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "A119E0D8D9384B32BE925242DEC553EA",
+        "VariantName": "AC Export Msa-Demo LAP-DI",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "B647B6F084D441B280F58361262C846B",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "B119E0D8D9384B32BE925242DEC553EB",
+        "VariantName": "AC Export AAD-Dev LAP-DI",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "C647B6F084D441B280F58361262C846C",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "C119E0D8D9384B32BE925242DEC553EC",
+        "VariantName": "AC Export Msa-Demo PS",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "D647B6F084D441B280F58361262C846D",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "AgeOut"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "D119E0D8D9384B32BE925242DEC553ED",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "E647B6F084D441B280F58361262C846E",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "E119E0D8D9384B32BE925242DEC553EE",
+        "VariantName": "AC Export Msa-Demo PS",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "F647B6F084D441B280F58361262C846F",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "F119E0D8D9384B32BE925242DEC553EF",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "1A47B6F084D441B280F58361262C84A1",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1A19E0D8D9384B32BE925242DEC553A1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "1B47B6F084D441B280F58361262C84B1",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export",
+        "AgeOut"
+      ],
+      "ExtendedProps": {
+        "MaxDataAgeMonths": "9999",
+        "OptionalFeatures": "[ \"MsaAgeOutOptIn\" ]"
+      },
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "B119E0D8D9384B32BE925242DEC553EB",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "1C47B6F084D441B280F58361262C84C1",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "AgeOut"
+      ],
+      "ExtendedProps": {
+        "OptionalFeatures": "[ \"MsaAgeOutOptIn\" ]"
+      },
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "1D47B6F084D441B280F58361262C84D1",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "1E47B6F084D441B280F58361262C84E1",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export",
+        "AgeOut"
+      ],
+      "ExtendedProps": {
+        "MaxDataAgeMonths": "9999"
+      },
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "1F47B6F084D441B280F58361262C84F1",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "2A47B6F084D441B280F58361262C84A2",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": []
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "2B47B6F084D441B280F58361262C84B2",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "AgeOut"
+      ],
+      "ExtendedProps": {
+        "MaxDataAgeMonths": "1",
+        "OptionalFeatures": "[ \"MsaAgeOutOptIn\" ]"
+      },
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "EdgeBrowser",
+          "NonWindowsDevice"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage",
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "2C47B6F084D441B280F58361262C84C2",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage",
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "2D47B6F084D441B280F58361262C84D2",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage",
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "2E47B6F084D441B280F58361262C84E2",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser",
+          "AADUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": []
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "2F47B6F084D441B280F58361262C84F2",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser",
+          "AADUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": []
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "3A47B6F084D441B280F58361262C84A3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [
+          "AccountClose",
+          "Delete",
+          "Export"
+        ],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "3B47B6F084D441B280F58361262C84B3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "EdgeBrowser",
+          "NonWindowsDevice"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "3C47B6F084D441B280F58361262C84C3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "3D47B6F084D441B280F58361262C84D3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "3E47B6F084D441B280F58361262C84E3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export",
+        "AgeOut"
+      ],
+      "ExtendedProps": {
+        "OptionalFeatures": "[]"
+      },
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "3F47B6F084D441B280F58361262C84F3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "ProductAndServiceUsage"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "4A47B6F084D441B280F58361262C84A4",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [
+          "MSAUser",
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "ProductAndServiceUsage",
+          "LicensingAndPurchase",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "4B47B6F084D441B280F58361262C84B4",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "AADUser",
+        "EdgeBrowser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [
+          "AADUser",
+          "Windows10Device",
+          "NonWindowsDevice",
+          "EdgeBrowser"
+        ],
+        "DataTypes": []
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "4C47B6F084D441B280F58361262C84C4",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "MSAUser",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "1119E0D8D9384B32BE925242DEC553E1",
+        "VariantName": "var name",
+        "Capabilities": [],
+        "SubjectTypes": [],
+        "DataTypes": [
+          "ProductAndServiceUsage",
+          "DemographicInformation"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "7647B6F084D441B280F58361262C8460",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "MSAUser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": null,
+      "SupportedCloudInstances": [
+        "Public",
+        "US.Azure.Fairfax",
+        "CN.Azure.Mooncake"
+      ]
+    },
+    {
+      "AssetGroupId": "C006733D4CBA4C9496E192E47ABD54DD",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=C006733D4CBA4C9496E192E47ABD54DD;",
+      "Capabilities": [
+        "AccountClose",
+        "Delete"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "AADUser",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "A119E0D8D9384B32BE925242DEC553EA",
+        "VariantName": "Export Msa LAP",
+        "Capabilities": [
+          "Export"
+        ],
+        "SubjectTypes": [
+          "MSAUser"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "0C993DC8F43241BD8C857B71EBB548D3",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=0C993DC8F43241BD8C857B71EBB548D3;",
+      "Capabilities": [
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "EdgeBrowser",
+        "MSAUser",
+        "AADUser"
+      ],
+      "VariantInfosAppliedByPcf": {
+        "VariantId": "A119E0D8D9384B32BE925242DEC553EA",
+        "VariantName": "Delete AccountClose Demographic LAP",
+        "Capabilities": [
+          "AccountClose",
+          "Delete"
+        ],
+        "SubjectTypes": [
+          "DemographicUser",
+          "MicrosoftEmployee"
+        ],
+        "DataTypes": [
+          "LicensingAndPurchase"
+        ]
+      },
+      "SupportedCloudInstances": [
+        "Public"
+      ]
+    },
+    {
+      "AssetGroupId": "89FB2A408DDC4EEAA32F2A46620594F6",
+      "AssetGroupQualifier": "AssetType=PlatformService;Host=7647B6F0-84D4-41B2-80F5-8361262C8460;",
+      "Capabilities": [
+        "AccountClose",
+        "Export"
+      ],
+      "DataTypes": [
+        "ProductAndServiceUsage",
+        "LicensingAndPurchase",
+        "DemographicInformation"
+      ],
+      "SubjectTypes": [
+        "DeviceOther",
+        "Windows10Device",
+        "NonWindowsDevice",
+        "MSAUser",
+        "AADUser",
+        "AADUser2",
+        "DemographicUser",
+        "MicrosoftEmployee",
+        "Other"
+      ],
+      "VariantInfosAppliedByPcf": null,
+      "SupportedCloudInstances": [
+        "Public",
+        "US.Azure.Fairfax",
+        "CN.Azure.Mooncake"
+      ]
+    }
+  ]
+}

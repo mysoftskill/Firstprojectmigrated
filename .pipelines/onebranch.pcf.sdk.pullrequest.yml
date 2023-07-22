@@ -1,0 +1,74 @@
+#################################################################################
+#                        OneBranch Pipelines - Buddy                            #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: none
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: debug
+  displayName: Enable debug output
+  type: boolean
+  default: false
+
+variables:
+  # needed for onebranch.pipeline.version task https://aka.ms/obpipelines/versioning
+  CDP_DEFINITION_BUILD_COUNT: $[counter('', 0)] 
+  system.debug: ${{ parameters.debug }}
+  NUGET_XMLDOC_MODE: none
+  WindowsContainerImage: 'onebranch.azurecr.io/windows/ltsc2019/vse2022:latest'
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates
+  parameters:
+    featureFlags:
+      ensureArtifactsDirExists: true
+    cloudvault:
+      enabled: false
+    globalSdl:
+      sbom:
+        enabled: true
+      antimalwareScan:
+        enabled: false
+      binskim:
+        enabled: true
+        break: true
+      credscan:
+        enabled: false
+      policheck:
+        enabled: false
+      tsa:
+        # If TSA is disabled all SDL tools will forced into 'break' build mode.
+        enabled: false
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows
+        variables:
+          ob_outputDirectory: $(Build.SourcesDirectory)\src\PCF\OneBranch\Deployment\outputs
+          ob_sdl_binskim_break: true
+
+        steps:
+          - template: .pipelines/HelperTemplates/version.restore.build.test.yml@self
+            parameters:
+              buildConfiguration: Debug
+              productName: PCFSDK
+              pathToRestore: $(Build.SourcesDirectory)\src\PCF\Product\CommandFeed.sln
+              projectsToBuild:   
+                - $(Build.SourcesDirectory)\src\PCF\Product\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj
+                - $(Build.SourcesDirectory)\src\PCF\Product\Client\Source\PrivacyCommandProcessor.csproj

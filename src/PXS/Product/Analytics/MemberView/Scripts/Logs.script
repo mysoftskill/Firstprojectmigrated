@@ -1,0 +1,142 @@
+﻿//
+//  (C) Copyright 2014 Microsoft Corporation. All Rights Reserved.
+//
+//  Description - 
+//
+//      This SCOPE script snippet is automatically generated for jobs, using AsimovEventView. It has been generated 
+//      by https://microsoft.sharepoint.com/teams/WindowsTelemetry/Content/csq/csquery.aspx for - 
+//        
+//         Schema Sources - ext-schemas-part-a-sll-v2.xml;all-schemas-v2.xml;all-schema-cooking-sll-v2.xml
+//        EventNamesRegEx - Microsoft.Membership.Communications.Monitoring.
+// 
+//      Note: This code may not work as is (it's intended only to "bootstrap" the final SCOPE script); 
+//            take a look at the parameters below (Cll, Sll, etc.) and adjust them as appropriate. 
+//
+//      IMPORTANT: Make sure the following [Resource Path] (SCOPE_PATH) is added to either the project
+//                 settings (ScopeStudio) or as a SCOPE_PATH parameter (scope.exe) to properly reference
+//                 the needed resources from the Cosmos cluster - 
+// 
+//      $(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov
+//
+
+//
+// Resolved event names - Microsoft.Membership.Communications.Monitoring.BaseOutgoingServiceEvent,Microsoft.Membership.Communications.Monitoring.InMemorySuppressionListRefreshedEvent,Microsoft.Membership.Communications.Monitoring.ManagementIncomingServiceEvent,Microsoft.Membership.Communications.Monitoring.MessageChannelDeliveryEvent,Microsoft.Membership.Communications.Monitoring.MessageDispatchedEvent,Microsoft.Membership.Communications.Monitoring.MucpIncomingServiceEvent,Microsoft.Membership.Communications.Monitoring.MucpOutgoingServiceEvent,Microsoft.Membership.Communications.Monitoring.RenderingEngineIncomingServiceEvent,Microsoft.Membership.Communications.Monitoring.UnhandledExceptionEvent
+//
+
+//
+// Base path for cooked event data - the view will combine the various retention
+// groups automatically. 
+//
+
+//
+// REVIEW: This will load only data from the default isolation group (Public); consider defining
+// extra input paths and call the view for each one of them, in case more isolation groups should 
+// be used (like UserSensitive, for example)
+//
+#DECLARE inputPath string = "shares/asimov.prod.data/Public/Collection/Asimov/Sll";
+
+//
+// Flag, indicating exact input path; useful for local debugging as well as referencing 
+// "standalone" event data source
+//
+#DECLARE useExactInputPath bool = false;
+
+
+// Telemetry Asimov stack
+REFERENCE "Microsoft.Telemetry.AsimovInterface.dll";
+REFERENCE "Microsoft.Telemetry.AsimovModuleCosmos.dll";
+REFERENCE "Microsoft.Telemetry.AsimovCosmosExtensions.dll";
+
+// Reference the namespaces
+USING Microsoft.Telemetry.Asimov;
+USING Microsoft.Telemetry.Asimov.Cosmos;
+USING System.Globalization;
+
+// Reference the Asimov (consumption) module
+MODULE "Asimov.module" AS Asimov;
+
+// Common schema sources
+#DECLARE schemaFile1 string = "ext-schemas-cooking-v2.xml";
+RESOURCE @schemaFile1;
+
+#DECLARE schemaFile2 string = "ext-schemas-part-a-sll-v2.xml";
+RESOURCE @schemaFile2;
+
+#DECLARE schemaFile3 string = "all-schemas-v2.xml";
+RESOURCE @schemaFile3;
+
+// Bug 1072589:Outgoing schema was not part of the Asimov Schema files
+// We are using a MemberView work around version of this schema file
+// it was modified to include the schema for Outgoing Qos events.
+// I opened the bug to figure out why Outgoing schema was not part of 
+// the main schema file and, once fixed, remove this workaround.
+#DECLARE schemaFile4 string = "all-schema-cooking-sll-v2_MemberView.xml";
+RESOURCE @schemaFile4;
+
+// View parameter for schema sources list
+#DECLARE schemaFiles string = String.Join(",", @schemaFile1, @schemaFile2, @schemaFile3, @schemaFile4);
+
+//
+// Define the start/end date of the events
+// Right now, we are substracting 2 hours to the parameter specified by 
+// the RecurrentScopeActivityV2 that invokes this script. We do this because
+// the date provided in the parameters will be UtcNow at the time of execution
+// When the workflow executes, we can't be sure that the stream related to UtcNow
+// exists. We can't even be sure that the one 2 hours ago exists, but the chances
+// of that are higher. It means that hour data will always be 2 hours late.
+// The Recurrent activity provides a way to wait for a particular stream to appear
+// so we will spend some time figuring out how to enable that feature and then 
+// update this to not substract 2 hours. 
+// 
+
+#DECLARE startDate DateTime = DateTime.Parse("@@startDate@@", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).AddHours(-2);
+#DECLARE endDate DateTime = DateTime.Parse("@@endDate@@", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).AddHours(-2); 
+#DECLARE endDateString string = @endDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+
+// Constants
+#DECLARE reportName string = @"@@MemberViewServiceLogsStreamName@@";
+
+// Define the names (REGEX) for our events
+#DECLARE eventNamesRegEx string = @"^Microsoft.Membership.MemberServices.Common.Logging.((Incoming)|(Outgoing))";
+
+// Define output
+#DECLARE outputStream string = string.Format(@"@@MemberViewServiceStagingPath@@/@@HourlyStreamPathPattern@@?datetime={1}", @reportName, @endDateString);
+
+//
+// REVIEW: Consider using NULL reduction keys, as needed, based on common
+// identifiers across the selected events
+//#DECLARE nullReductionKeys string = "A_deviceId";
+//
+
+// Pull the event data
+eventData = Asimov.AsimovEventView (
+    startDate = @startDate, 
+    endDate = @endDate,
+
+    inputPath = @inputPath, 
+    useExactInputPath = @useExactInputPath, 
+
+    eventNamesRegEx = @eventNamesRegEx, 
+    schemaFiles = @schemaFiles, 
+
+    // REVIEW: Enable this, if NULL reduction keys should used
+    // nullReductionKeys = @nullReductionKeys, 
+
+    //
+    // Keep all PartA fields; alternatively a list of fields can be specified. 
+    // For example - "name, time, deviceId". Note that "*" is the default 
+    // value for this parameter, but we are including here for demo purposes. 
+    //
+    partAToKeep = "*"
+    );
+
+
+//
+// Output the events
+//
+
+OUTPUT eventData 
+TO SSTREAM @outputStream
+WITH STREAMEXPIRY "30.00:00";
+
+

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PdmsCi1WestUs-ServiceGroup",
+    "Environment": "Test"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PdmsServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.2NodeType.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\GenevaMonitoringAgentConsoleApp.Template.json"
+        },
+        {
+          "Name": "PdmsFrontdoorApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PdmsWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PDMS-CI1-WESTUS2-CLUSTER-RG",
+      "Location": "westus2",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "b4b176cf-fe78-4b59-bd1a-9b8c11536f4d",
+      "ServiceResources": [
+        {
+          "Name": "PdmsServiceFabric-Cluster-Resources",
+          "InstanceOf": "PdmsServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\ServiceFabricCluster.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "PdmsFrontdoorApp-Resources",
+          "InstanceOf": "PdmsFrontdoorApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PdmsFrontdoorApp.Parameters.json"
+        },
+        {
+          "Name": "PdmsWorkerApp-Resources",
+          "InstanceOf": "PdmsWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\PdmsWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\CI1\\WestUs2\\Frontdoor.StandingQueryExtensionManagerApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

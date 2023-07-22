@@ -1,0 +1,13 @@
+<div data-grid="col-12" class="commit-request-button-div">
+    <mee-progress-ants-mwf mee-progress-visible="{{$ctrl.operationName}}"></mee-progress-ants-mwf>
+    <mee-inline-error error-id="{{$ctrl.errorId}}"></mee-inline-error>
+    <button ng-if="!$ctrl.isUsingCustomRequestButton"
+            ng-attr-id="{{$ctrl.buttonId}}"
+            mee-button="primary"
+            ng-disabled="$ctrl.buttonDisabled"
+            mee-progress-disabled="{{$ctrl.operationName}}"
+            ng-click="$ctrl.buttonOnClickOperation()">
+        {{$ctrl.buttonLabel}}
+    </button>
+    <ng-transclude ng-transclude-slot="requestButton"></ng-transclude>
+</div>

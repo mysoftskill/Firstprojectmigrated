@@ -1,0 +1,85 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).Test.PartnerTestClient</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).Test.PartnerTestClient</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The SqlServerTypes cannot be loaded by PackageReference, this is the workaround until a new package supports this in the new format.
+         https://developercommunity.visualstudio.com/content/problem/91318/reference-dlls-from-nuget-package.html
+    -->
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+      <Link>PrivacyExperienceService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MockPxfAdapters.ini">
+      <Link>MockPxfAdapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Adapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\PxfAdapters.ini">
+      <Link>PxfAdapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+      <Link>MsaIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\Adapters\Source\Adapters.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\PXF\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\PXF\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\PXF\Host\Source\PrivacyHost.csproj" />
+    <ProjectReference Include="..\..\PXF\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+    <ProjectReference Include="..\..\PXF\PrivacyExperienceService\Source\PrivacyExperienceService.csproj" />
+    <ProjectReference Include="..\..\PXF\Test\Client\PrivacyExperienceTestClient.csproj" />
+    <ProjectReference Include="..\..\Test\Common\TestCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="ServiceManager.Tools" />
+  </ItemGroup>
+  <Target Name="CopyLocalParallaxFiles" AfterTargets="Build">
+    <ItemGroup>
+      <ParallaxInterfacesToCopy Include="$(OutDir)**\*.ParallaxInterfaces.dll" />
+    </ItemGroup>
+    <Message Importance="high" Text="Copying files from output path to output" />
+    <Copy SourceFiles="@(ParallaxInterfacesToCopy)" DestinationFiles="@(ParallaxInterfacesToCopy->'$(OutDir)%(FileName)%(Extension)')" />
+  </Target>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

@@ -1,0 +1,13 @@
+.c-dialog [role=dialog] pcd-select-variant
+{
+    display: block;
+
+    .select-variant-area {
+        min-height: 250px;
+    }
+    
+    // This override is to show inline ants while mee-select data is loading (without this ants show up at the top of modal)
+    .c-progress.f-indeterminate-regional {
+        position: static;
+    }
+}

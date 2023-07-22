@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.props))\build.props" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+
+  <PropertyGroup>
+    <AutopilotReleaseRoot>$(ReleasePath)\AutopilotRelease\</AutopilotReleaseRoot>
+  </PropertyGroup>
+
+  <Target Name="CopyDeploymentFiles" AfterTargets="Build">
+    <ItemGroup>
+      <DataAgentWatchdogFiles Include="$(MSBuildThisFileDirectory)Watchdog\DataAgentWatchdog\*.*" />
+      <QueueDepthWatchdogFiles Include="$(MSBuildThisFileDirectory)Watchdog\QueueDepthWatchdog\*.*" />
+      <PcfAutoscalerWatchdogFiles Include="$(MSBuildThisFileDirectory)Watchdog\PcfAutoscalerWatchdog\*.*" />
+    </ItemGroup>
+
+    <!-- Copy the service map to the AP drop. We copy the same file multiple times to mimic what PXS does. -->
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)CosmosDataLoader\ServiceConfig.ini" DestinationFolder="$(AutopilotReleaseRoot)CosmosDataLoader\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)CosmosDataLoader\CosmosDataLoader.ini" DestinationFolder="$(AutopilotReleaseRoot)CosmosDataLoader\" />
+
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(DataAgentWatchdogFiles)" DestinationFolder="$(AutopilotReleaseRoot)DataAgentWatchdog\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(QueueDepthWatchdogFiles)" DestinationFolder="$(AutopilotReleaseRoot)QueueDepthWatchdog\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(PcfAutoscalerWatchdogFiles)" DestinationFolder="$(AutopilotReleaseRoot)PcfAutoscalerWatchdog\" />
+
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)Watchdog\Scripts\ProcessStatusCheck.ps1" DestinationFolder="$(AutopilotReleaseRoot)FrontdoorWatchdog\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)Watchdog\Scripts\ProcessStatusCheck.ps1" DestinationFolder="$(AutopilotReleaseRoot)WorkerWatchdog\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)Watchdog\Scripts\ProcessStatusCheck.ps1" DestinationFolder="$(AutopilotReleaseRoot)DataAgentWatchdog\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)Watchdog\Scripts\ProcessStatusCheck.ps1" DestinationFolder="$(AutopilotReleaseRoot)QueueDepthWatchdog\" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="$(MSBuildThisFileDirectory)Watchdog\Scripts\ProcessStatusCheck.ps1" DestinationFolder="$(AutopilotReleaseRoot)PcfAutoscalerWatchdog\" />
+  </Target>
+</Project>

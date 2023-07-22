@@ -1,0 +1,43 @@
+@import "../../../styles/utilities.scss";
+
+pcd-storage-picker {
+    display: block;
+
+    pcd-more-controls {
+        display: block;
+    }
+
+    div[data-error-not-found] {
+        margin: 4px;
+        padding-bottom: 16px;
+
+        p {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        p:first-child {
+            padding-top: 16px;
+            padding-bottom: 16px;
+            color: white;
+            background-color: #d02e00;
+        }
+
+        p.storage-picker-error-question {
+            font-weight: bold;
+            margin-top: 4px;
+        }
+    }
+
+    .description {
+        padding: 12px 0 0;
+        line-height: 20px;
+        margin-bottom: 0;
+    }
+
+    pcd-commit-request-button a.c-action-trigger {
+        margin-left: 15px;
+    }
+
+    @include clearfix;
+}

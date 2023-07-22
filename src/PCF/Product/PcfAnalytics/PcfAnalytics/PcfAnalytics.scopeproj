@@ -1,0 +1,133 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>41d0444d-c9bb-4870-9cf8-efcff1e2ccb8</ProjectGuid>
+    <OutputType>File</OutputType>
+    <AssemblyName>Algebra.xml</AssemblyName>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <Name>PcfAnalytics</Name>
+    <RootNamespace>PcfAnalytics</RootNamespace>
+    <VCSelectionInProjectProperty>vc://cosmos15/asimov.partner.ust</VCSelectionInProjectProperty>
+    <CosmosRuntimeVersion>Default</CosmosRuntimeVersion>
+    <ScopePath>%24(SCRIPT_DIR);%24(CLUSTER_ROOT);%24(SCOPE_DIR);%24(PROJECT_DIR);%24(CLUSTER_ROOT)/shares/asimov.prod.data/AsimovApi/v3/</ScopePath>
+    <InputStreamSearchPath>%24(PROJECT_DIR);%24(SCRIPT_DIR);%24(CLUSTER_ROOT)</InputStreamSearchPath>
+    <VertexDebugSolution>false</VertexDebugSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Cosmos" />
+    <Folder Include="Cosmos\Sample Scripts" />
+    <Folder Include="Workflow" />
+    <Folder Include="Workflow\PPE" />
+    <Folder Include="Workflow\PROD" />
+  </ItemGroup>
+  <ItemGroup>
+    <Script Include="Cosmos\AgentCommandProcessStatus.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>localRun=(true)</ScopeOldParameters>
+      <ScopeClusterParameters>localRun=(true)</ScopeClusterParameters>
+    </Script>
+    <Script Include="Cosmos\ExportFileSizeDetails.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeClusterParameters>startDate=(\"2018-08-28T00:00:00\"),endDate=(\"2018-08-29T00:00:00\"),pcfEnv=(PROD),version=(v1)</ScopeClusterParameters>
+    </Script>
+    <Script Include="Cosmos\DataAgentOwnerInfo.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>localRun=(true)</ScopeOldParameters>
+      <ScopeClusterParameters>localRun=(false)</ScopeClusterParameters>
+    </Script>
+    <Script Include="Cosmos\ExportAuditLogHourly35DaysRollup.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>version=(\"v2\"),localRun=(true)</ScopeOldParameters>
+      <ScopeClusterParameters>version=(\"v2\"),localRun=(true)</ScopeClusterParameters>
+    </Script>
+    <Script Include="Cosmos\ExportAgentHealthReport.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>version=(\"v2\"),localRun=(true)</ScopeOldParameters>
+      <ScopeClusterParameters>version=(\"v2\"),localRun=(true)</ScopeClusterParameters>
+    </Script>
+    <Script Include="Cosmos\Sample Scripts\AgentCloudInstanceConfiguration.script" />
+    <Script Include="Cosmos\Sample Scripts\AgentIssuer.script" />
+    <Script Include="Cosmos\Sample Scripts\AgentIssuerException.script" />
+    <Script Include="Cosmos\Sample Scripts\DataTypeApplicability.script" />
+    <Script Include="Cosmos\Sample Scripts\FilterAndRouteComparison.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>startDate=(\"2020-07-08\"),endDate=(\"2020-07-08\"),cloudEnv=(\"PPE\"),localRun=(true)</ScopeOldParameters>
+      <ScopeClusterParameters>startDate=(\"2020-07-08\"),endDate=(\"2020-07-08\"),pcfEnv=(\"PPE\"),cloudEnv=(\"PPE\"),localRun=(true)</ScopeClusterParameters>
+    </Script>
+    <Script Include="Cosmos\Sample Scripts\ExportCommands.script" />
+    <Script Include="Cosmos\Sample Scripts\PdmsConfig.script" />
+  </ItemGroup>
+  <ItemGroup>
+    <ScriptCode Include="Cosmos\AgentCommandProcessStatus.script.cs">
+      <DependentUpon>Cosmos\AgentCommandProcessStatus.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\ExportFileSizeDetails.script.cs">
+      <DependentUpon>Cosmos\ExportFileSizeDetails.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\DataAgentOwnerInfo.script.cs">
+      <DependentUpon>Cosmos\DataAgentOwnerInfo.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\ExportAuditLogHourly35DaysRollup.script.cs">
+      <DependentUpon>Cosmos\ExportAuditLogHourly35DaysRollup.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\ExportAgentHealthReport.script.cs">
+      <DependentUpon>Cosmos\ExportAgentHealthReport.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\AgentCloudInstanceConfiguration.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\AgentCloudInstanceConfiguration.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\AgentIssuer.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\AgentIssuer.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\AgentIssuerException.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\AgentIssuerException.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\DataTypeApplicability.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\DataTypeApplicability.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\FilterAndRouteComparison.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\FilterAndRouteComparison.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\ExportCommands.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\ExportCommands.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Cosmos\Sample Scripts\PdmsConfig.script.cs">
+      <DependentUpon>Cosmos\Sample Scripts\PdmsConfig.script</DependentUpon>
+    </ScriptCode>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Workflow\PPE\PCF.FilterAndRouteComparison.HourlyProcess.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Workflow\PROD\AgentCommandProcessHourlyStatus.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Workflow\PROD\ExportFileSizesDaily.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Workflow\PROD\DataAgentOwnerInfo.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Workflow\PROD\ExportAuditLogHourly35DaysRollup.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Workflow\PROD\ExportHealth35DaysRollupSummary.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Workflow\PROD\PCF.FilterAndRouteComparison.HourlyProcess.wfdef">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(AppData)\Microsoft\ScopeStudio\MsBuild\1.0\Scope.targets" />
+</Project>

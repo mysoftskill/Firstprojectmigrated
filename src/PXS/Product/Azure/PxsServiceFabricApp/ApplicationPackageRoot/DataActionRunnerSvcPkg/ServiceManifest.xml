@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest Name="DataActionRunnerSvcPkg"
+                 Version="1.0.0"
+                 xmlns="http://schemas.microsoft.com/2011/01/fabric"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ServiceTypes>
+    <!-- This is the name of your ServiceType. 
+         The UseImplicitHost attribute indicates this is a guest executable service. -->
+    <StatelessServiceType ServiceTypeName="DataActionRunnerSvcType" UseImplicitHost="true" />
+  </ServiceTypes>
+
+  <!-- Code package is your service executable. -->
+  <CodePackage Name="Code" Version="1.0.0">
+    <SetupEntryPoint>
+      <ExeHost>
+        <Program>ServiceFabricSetup.bat</Program>
+        <Arguments></Arguments>
+        <WorkingFolder>CodePackage</WorkingFolder>
+        <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="51200"/> <!-- 50 MB -->
+      </ExeHost>
+    </SetupEntryPoint>
+    
+    <!--
+      1. This service (and any PXS service) uses AP config files. Until we move to a new configuration system,
+      they need to be flattened. The above batch file calls a powershell scrip that calls the AP IniFlatten.exe
+      for each of our ini files. It will need to be parameterized at some point.
+      
+      2. Counters are currently just disabled pending geneva work. Logging just does trace/console logging and
+      thus why the console redirection is enabled here. Also pending geneva work.
+      
+      3. For this service, no certificates need to be installed locally, but the code is modified to use
+      AzureKeyVault in a ServiceFabric environment. This loads certs direct from AzureKeyVault instead of the
+      local machine store, which works in all the cases this service needs (but might not work for other services like
+      PXS that need to register a server side certificate for https.
+      
+      4. For #3 to work, the cluster's scaleset must be granted list/get on secrets and certificates in the respective
+      (prod, ppe) PXS azure keyvault.
+    -->
+    <EntryPoint>
+      <ExeHost>
+        <Program>Microsoft.PrivacyServices.DataMonitor.DataActionRunner.exe</Program>
+        <WorkingFolder>CodePackage</WorkingFolder>
+        <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="51200"/> <!-- 50 MB -->
+      </ExeHost>
+    </EntryPoint>
+    <EnvironmentVariables>
+      <EnvironmentVariable Name="PXS_EnvironmentName" Value="" />
+      <EnvironmentVariable Name="AzureServicesAuthConnectionString" Value=""/>
+    </EnvironmentVariables>
+  </CodePackage>
+
+  <!-- Config package is the contents of the Config directoy under PackageRoot that contains an 
+       independently-updateable and versioned set of custom configuration settings for your service. -->
+  <ConfigPackage Name="Config" Version="1.0.0" />
+
+  <Resources>
+    <Endpoints>
+      <!-- This endpoint is used by the communication listener to obtain the port on which to 
+           listen. Please note that if your service is partitioned, this port is shared with 
+           replicas of different partitions that are placed in your code. -->
+      <Endpoint Name="DataActionRunnerSvcTypeEndpoint" />
+    </Endpoints>
+  </Resources>
+</ServiceManifest>

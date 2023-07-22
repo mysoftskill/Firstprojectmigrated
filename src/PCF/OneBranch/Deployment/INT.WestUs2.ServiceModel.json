@@ -1,0 +1,98 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "serviceIdentifier": "eda3dc03-5654-43a9-a6fa-468706c89c97",
+    "ServiceGroup": "PcfIntWestUs2-ServiceGroup",
+    "Environment": "Test"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PcfServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\GenevaMonitoringAgentConsoleApp.Template.json"
+        },
+        {
+          "Name": "PcfFrontdoorApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcfWorkerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "QueueDepthApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "WorkerStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcfWhatIfApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PCF-INT-WESTUS2-CLUSTER-RG",
+      "Location": "westus2",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "b4b176cf-fe78-4b59-bd1a-9b8c11536f4d",
+      "ServiceResources": [
+        {
+          "Name": "PcfServiceFabric-Cluster-Resources",
+          "InstanceOf": "PcfServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\ServiceFabricCluster.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "PcfFrontdoorApp-Resources",
+          "InstanceOf": "PcfFrontdoorApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\PcfFrontdoorApp.Parameters.json"
+        },
+        {
+          "Name": "PcfWorkerApp-Resources",
+          "InstanceOf": "PcfWorkerApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\PcfWorkerApp.Parameters.json"
+        },
+        {
+          "Name": "QueueDepthApp-Resources",
+          "InstanceOf": "QueueDepthApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\QueueDepthApp.Parameters.json"
+        },
+        {
+          "Name": "WorkerStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "WorkerStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\Worker.StandingQueryExtensionManagerApp.Parameters.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\Frontdoor.StandingQueryExtensionManagerApp.Parameters.json"
+        },
+        {
+          "Name": "PcfWhatIfApp-Resources",
+          "InstanceOf": "PcfWhatIfApp-Definition",
+          "ArmParametersPath": "Parameters\\INT\\WestUs2\\PcfWhatIfApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

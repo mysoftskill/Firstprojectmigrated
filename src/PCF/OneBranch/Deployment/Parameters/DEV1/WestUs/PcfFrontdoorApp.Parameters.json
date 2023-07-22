@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pcfdev1"
+    },
+    "applicationTypeName": {
+      "value": "PcfFrontdoorAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\PcfFrontdoorApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "PcfFrontdoorApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "EnvironmentName": "PXSDEV1-Test-MW1P",
+        "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)"
+      }
+    }
+  }
+}

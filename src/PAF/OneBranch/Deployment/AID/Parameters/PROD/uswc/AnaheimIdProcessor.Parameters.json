@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "paths": [
+      "msdeployPackageUrl"
+    ],
+  "parameters": {
+    "deploymentEnvironment": {
+      "value": "PROD"
+    },
+    "azureRegion": {
+      "value": "WestCentralUS"
+    },
+    "appName": {
+      "value": "AnaheimIdProcessorProdUSWC"
+    },
+    "msdeployPackageUrl": {
+      "value": "Bin\\AnaheimIdProcessor.zip"
+    },
+    "storageAccountName": {
+      "value": "aidinfrauswcprod"
+    },
+    "storageAccountKind": {
+      "value": "StorageV2"
+    },
+    "identityResourceGroup": {
+      "value": "PAF-PROD-RG"
+    },
+    "aIdUamiId": {
+      "value": "e0e21f83-d8a1-4226-910b-26d5c9b06b40"
+    },
+    "aIdUamiName": {
+      "value": "NGP-PAF-Prod"
+    },
+    "virtualNetwork_name": {
+      "value": "aid-vnet-prod-uswc"
+    },
+    "aidBlobStorageAccountName": {
+      "value": "aidstorageprodwestus2"
+    },
+    "aidEventHubAccountName": {
+      "value": "aid-eventhub-prod-westus2"
+    },
+    "pafConfigEndPoint": {
+      "value": "https://adgcs-prod-config.azconfig.io"
+    },
+    "pxsEventHubAccountName": {
+      "value": "aid-eventhub-prod-westus2"
+    },
+    "aidRedisCacheEndPoint": {
+      "value": "adgcs-prod-cache.redis.cache.windows.net"
+    },
+    "aidRedisPasswordKeyVaultEndpoint": {
+      "value": "https://aid-akv-wcus-prod.vault.azure.net/"
+    },
+    "genevaMonitoringTenant": {
+      "value": "ADGCS-USWC"
+    },
+    "genevaMonitoringRole": {
+      "value": "PAF.AIdFunction"
+    },
+    "genevaMetricPrefixName": {
+      "value": "PAF.Function"
+    },
+    "genevaMetricAccount": {
+      "value": "adgcsprod"
+    }
+  }
+  }

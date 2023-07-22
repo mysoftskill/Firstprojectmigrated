@@ -1,0 +1,22 @@
+@startuml PrivacyWorkerCallFlow
+
+Worker -> AzureQueue : Get Events
+AzureQueue --> Worker : Events Response
+
+loop for each event
+    Worker -> MSA : Get Device Delete Verifier
+    alt success
+        MSA --> Worker : Device Delete Verifier Response
+        Worker -> PCF : Post Requests
+        PCF --> Worker : Post Requests Success
+        Worker -> DeleteFeed : Write Requests
+        DeleteFeed --> Worker : Written Requests Response
+        Worker -> AzureQueue : Delete event from queue
+    else failure
+        MSA --> Worker : Get Verifier Failure
+        Worker -> AzureQueue : Requeue event
+        note right: Any failure causes the event to be requeued
+    end
+end
+
+@enduml

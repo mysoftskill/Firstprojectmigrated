@@ -1,0 +1,258 @@
+@import "styles/utilities.scss";
+
+html {
+    // Addresses the problem where the addition of a scroll bar changes the page width (surfaces as the page width "jumping").
+    // Always show the scroll bar to keep the page width consistent.
+    overflow-y: scroll;
+}
+
+footer {
+    * {
+        font-size: 11px;
+        color: $uhf-footer-color;
+    }
+
+    #site-footer-links li {
+        @include float(left);
+        @include margin-right(8px);
+        padding-bottom: 20px;
+
+        .privacy-footer-link {
+            @include padding-right(15px);
+        }
+
+        &:last-child {
+            @include float(right);
+        }
+    }
+}
+
+pcd-feedback {
+    background-color: $standard-blue-color;
+
+    position: fixed;
+    bottom: 0;
+    @include set-right(10px);       //  Fallback value.
+    @include set-right(5vw);
+
+    text-align: center;
+
+    @include breakpoint-vp5 {
+        @include set-right(78px);   //  Fallback value.
+        @include set-right(20vw);
+    }
+
+    #feedback-floater-link {
+        margin-top: 0;
+        color: white;
+    }
+}
+
+.pcd-section-lede, pcd-lede:not(.pcd-landing-page-lede) {
+    margin-bottom: 12px;
+}
+
+.pcd-connection-hint {
+    margin-bottom: 0px;
+
+    p, ol, ul, span {
+        font-size: 13px !important;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.c-call-to-action {
+    text-transform: uppercase;
+}
+
+mee-progress-ants-mwf.inline-progress {
+    display: inline-block;
+}
+
+@keyframes highlight-modified {
+    0% {
+        background-color: lavender;
+    }
+
+    100% {
+        background-color: initial;
+    }
+}
+
+tr.record-updated {
+    animation: highlight-modified 2s ease-out;
+}
+
+td.force-wrapped {
+    @extend %force-wrap-element-contents;
+}
+
+[data-required-field="true"] label:after {
+    color: red;
+    content: " * ";
+}
+
+.view-label {
+    font-weight: bold;
+}
+
+pcd-default-progress-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+span.alert-content {
+    //  Allow alert buttons to stay on the same row.
+    width: 80%;
+}
+
+#test-environment-warning .m-alert {
+    margin-top: 0;
+}
+
+//  Default styling for tables.
+.c-table tbody > tr {
+    vertical-align: top;
+
+    td {
+        :first-child {
+            padding-top: 0;
+        }
+        //  Control vertical spacing around action trigger within the cell.
+        a[mee-action-trigger] {
+            display: block;
+            padding-bottom: 3px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+}
+
+//  Make glyph look closer to the link/button label.
+a.c-action-trigger.c-glyph:before, button.c-action-trigger.c-glyph:before {
+    @include set-margin(0, 5px, 0, 10px);
+    forced-color-adjust: auto;
+}
+
+//  Accomodate 2px border around the link, introduced for accessibility.
+//  Due to the border, links that are wrapped, have top lines indented by 2px on the left margin.
+a.c-hyperlink {
+    @include margin-left(-2px);
+}
+
+ul.horizontal-nav {
+    display: block;
+    @include clearfix;
+
+    li {
+        @include float(left);
+        @include margin-right(12px);
+    }
+}
+
+/* Workaround for 12393115 (relevant for MWF v1.23). Remove the whole rule, when MWF deploys fixed CSS. Verify on "Register new team" page. */
+.c-textarea label.c-label {
+    margin-top: 21px;
+    padding-bottom: 7px;
+}
+
+#modal-dialog {
+    //  Prevent modal dialog from using a horizontal scroll bar by breaking long strings.
+    word-wrap: break-word;
+
+    // TODO Remove after Bug 15120914. Workaround to make the modal not blurry.
+    & [ui-view="modalContent"] {
+        margin-bottom: 1px;
+    }
+}
+
+.sharing-request-view-container {
+    overflow: auto;
+    display: block;
+    max-height: 400px;
+
+    > p {
+        font-weight: bold !important;
+    }
+}
+
+//  Hides search box in UHF to avoid confusion with our search functionality.
+.c-uhfh-actions .c-search {
+    visibility: hidden !important;
+}
+
+//  We have text area side by side to other content, so the minimum width makes it larger than it's container.
+.c-textarea textarea {
+    min-width: unset;
+}
+
+body.cms-xray {
+    [data-use-cms] {
+        background-color: yellow !important;
+
+        a::before, p::before, span::before, label::before, button::before,
+        h1::before, h2::before, h3::before, h4::before, h5::before, h6::before,
+        caption::before, th::before, td::before, li::before {
+            display: inline;
+            content: "** ";
+        }
+    }
+
+    a[data-use-cms]::before, p[data-use-cms]::before, span[data-use-cms]::before, label[data-use-cms]::before, button[data-use-cms]::before,
+    h1[data-use-cms]::before, h2[data-use-cms]::before, h3[data-use-cms]::before, h4[data-use-cms]::before, h5[data-use-cms]::before, h6[data-use-cms]::before,
+    caption[data-use-cms]::before, th[data-use-cms]::before, td[data-use-cms]::before, li[data-use-cms]::before{
+        display: inline;
+        content: "** ";
+    }
+}
+
+.progress-local-small {
+    /* Shrinking the size of progress ants circle. */
+    .c-progress.f-indeterminate-local.f-progress-small span {
+        width: 12px;
+        height: 12px;
+        @include margin-left(5px);
+
+        /* Shrinking the size of progress ants. */
+        &:after {
+            width: 2px;
+            height: 2px;
+        }
+    }
+}
+
+// Keep headings "slim" (against MWF) per Alex
+.c-heading-3 {
+    font-weight: 100
+}
+.c-heading-4 {
+    font-weight: 200
+}
+.c-heading-5 {
+    font-weight: 400
+}
+.c-heading-6 {
+    font-weight: 400
+}
+.c-subheading-1 {
+    font-weight: 100
+}
+.c-subheading-2 {
+    font-weight: 200
+}
+.c-subheading-3 {
+    font-weight: 400
+}
+.c-subheading-4 {
+    font-weight: 400
+}
+.c-subheading-5,.c-subheading-6 {
+    font-weight: 400
+}

@@ -1,0 +1,28 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeViewOwnerComponent">
+            <inert-view>
+            </inert-view>
+
+            <inprogress-view>
+                <mee-progress-ants-mwf></mee-progress-ants-mwf>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-owner-view pcd-owner="$ctrl.owner"></pcd-owner-view>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

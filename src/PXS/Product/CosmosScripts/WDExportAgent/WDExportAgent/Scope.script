@@ -1,0 +1,48 @@
+﻿// Watch Dog Export Synthetic Agent
+
+#DECLARE agentId string = @@AGENTID@@;
+#DECLARE exportPath string = string.Format("/local/ExportAndAuditDrop/PPE/v2/ExportData/{0}", @agentId);
+
+// Process events from the previous hour
+#DECLARE eventTime DateTime = DateTime.UtcNow.AddHours(-1);
+
+#DECLARE exportFile string = string.Format("WatchDog_{0:yyyy_MM_dd_HH}.txt", @eventTime);
+#DECLARE exportStream string = @exportPath + "/" + @exportFile;
+
+// MISC Product ID
+#DECLARE exportProductId int = 0;
+
+#DECLARE signalPath string = "/local/PXS-WD/export/PPE/SyntheticSignals/{0}";
+#DECLARE signalFile string = string.Format("{0:yyyy-MM-dd-HH}.tsv", @eventTime);
+#DECLARE signalStream string = string.Format(@signalPath, @signalFile);
+
+#IF (EXISTS(@signalStream))
+
+Commands = 
+    EXTRACT
+        CmdId : string,
+        Data : string
+    FROM @signalStream
+    USING DefaultTextExtractor();
+
+ExportData = SELECT Commands.CmdId, @exportProductId AS ExportId, Commands.Data AS Payload FROM Commands;
+
+OUTPUT ExportData
+TO @exportStream;
+
+#ELSE
+
+#DECLARE empty string = "/local/PXS-WD/empty.tsv";
+
+Empty =
+    EXTRACT
+        Nothing : string,
+        NoData : string
+    FROM @empty
+    USING DefaultTextExtractor();
+
+OUTPUT Empty
+TO "/local/PXS-WD/empty-out.tsv"
+WITH STREAMEXPIRY "1";
+
+#ENDIF

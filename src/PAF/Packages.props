@@ -1,0 +1,29 @@
+<Project>
+  <!--
+    Set all package versions here. 
+	Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+	Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+	Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+  <Import Project="..\Build\Directory.Build.props" />
+  <ItemGroup>
+    <PackageReference Update="Apache.Avro" Version="[1.11.0]" />
+    <PackageReference Update="Azure.Core" Version="[1.25.0]" />
+    <PackageReference Update="Azure.Identity" Version="[1.5.0]" />
+    <PackageReference Update="Azure.Security.KeyVault.Certificates" Version="[4.2.0]" />
+    <PackageReference Update="Azure.Security.KeyVault.Secrets" Version="[4.2.0]" />
+    <PackageReference Update="AzureFunctions.Extensions.DependencyInjection" Version="[1.1.3]" />
+    <PackageReference Update="Microsoft.AspNetCore.Http" Version="[2.2.2]" />
+    <PackageReference Update="Microsoft.Azure.Functions.Extensions" Version="[1.1.0]" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Extensions" Version="[4.0.1]" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Extensions.EventHubs" Version="[5.0.0]" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Extensions.Http" Version="[3.0.12]" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Extensions.Storage" Version="[5.0.0]" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Extensions.Storage.Blobs" Version="[5.0.0]" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Script.ExtensionsMetadataGenerator" Version="[4.0.1]" />
+    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="[3.0.13]" />
+    <PackageReference Update="Microsoft.TeamFoundationServer.Client" Version="[16.170.0]" />
+  </ItemGroup>
+</Project>

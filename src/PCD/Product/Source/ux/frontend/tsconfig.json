@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [ "dom", "es5", "es6" ],
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+
+    "outDir": "../wwwroot/js/",
+
+    "typeRoots": [
+      "../node_modules/@types/"
+    ],
+    "types": [
+      "jasmine",
+      "angular",
+      "angular-cookies",
+      "angular-mocks",
+      "angular-ui-router"
+    ]
+  },
+
+  "exclude": [
+    "../node_modules"
+  ]
+}

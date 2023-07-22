@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Workflows>
+  <Workflow Name="PCF.FilterAndRouteComparison.HourlyProcessor.PPE" 
+            PrefixParentName="0" 
+            Start="2020-07-08T00:00:00.0000000" 
+            RecurrenceUnit="1" 
+            RecurrenceAmount="30" 
+            Email="adgpdmsauditdri@microsoft.com" 
+            FolderName="PCF.Analytics" 
+            Author="wwue" 
+            Enabled="1" 
+            MaxParallelExecution="1" 
+            TimeOutInMinutes="0">
+    <ConfigBases>
+      <ConfigBase Name="PCF.FilterAndRouteComparison.HourlyProcessConfig" File="..\..\Cosmos\Sample Scripts\FilterAndRouteComparison.script" />
+    </ConfigBases>
+    <Parameters>
+      <Parameter Name="__vc" Value="https://cosmos15.osdinfra.net/cosmos/asimov.partner.ust" />
+      <Parameter Name="_customProperties" Value="JobOwner=ust.membership.family.analytics" />
+      <Parameter Name="_dependencyCheckMissingAction" Value="CompleteNotWriteTracker" />
+      <Parameter Name="_dependencyStreams" Value="/shares/asimov.prod.data/Public/Collection/Asimov/Api/v3/SllCloudR1/%Y/%m/%d/%h_00_00.done?date={_endDate}&amp;hour={_endHour}" />
+      <Parameter Name="_lookBehind" Value="300" />
+      <Parameter Name="_maxJobs" Value="1" />
+      <Parameter Name="_recurrence" Value="HourlyTracker" />
+      <Parameter Name="_scheduleOrder" Value="OldestFirst" />
+      <Parameter Name="_scopePath" Value="$(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Api/v3/" />
+      <Parameter Name="_startDate" Value="2020-07-08T00:00:00" />
+      <Parameter Name="_trackerFolder" Value="/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/Trackers/ppe" />
+      <Parameter Name="_useLittleDelta" Value="false" />
+      <Parameter Name="pcfEnv" Value="PPE" />
+      <Parameter Name="cloudEnv" Value="PPE" />
+      <Parameter Name="version" Value="v1" />
+    </Parameters>
+    <Activities>
+      <Activity Name="PCF.FilterAndRouteComparison.HourlyProcess.PPE" ConfigBase="PCF.FilterAndRouteComparison.HourlyProcessConfig" Class="Microsoft.Xflow.Activities.Scope.RecurrentScopeActivityV3" MaxRetries="3" CredentialName="ScopeJob.Asimov.Partner.Public" RetryWaitInterval="3">
+      </Activity>
+    </Activities>
+  </Workflow>
+</Workflows>

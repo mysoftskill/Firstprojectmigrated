@@ -1,0 +1,28 @@
+﻿<h2>Summary</h2>
+<h2>Asset Count Change &gt; [[<var s:$.ThresholdPercent var>]]%:</h2>
+<p>
+  <table>
+    <thead>
+      <tr>
+        <!--td>Agent Id</td-->
+        <!--td>Agent Type</td-->
+        <!--td>Signal Date</td-->
+        <td>Previous Count Total</td>
+        <td>Current Count Total</td>
+        <td>Percent Difference</td>
+      </tr>
+    </thead>
+    <tbody>
+    [[<foreach sel:$.AgentInfo foreach>]]
+      <tr>
+        <!--td>[[<var s:$.AgentId var>]]</td-->
+        <!--td>[[<var s:$.AgentType var>]]</td-->
+        <!--td>[[<var s:$.SignalDate f:'yyyy-MM-dd HH:mm:ss' var>]]</td-->
+        <td>[[<var s:$.CurrentAssetCountTotal var>]]</td>
+        <td>[[<var s:$.PreviousAssetCountTotal var>]]</td>
+        <td>[[<var s:$.PercentDifference var>]]</td>
+      </tr>
+    [[<foreachend>]]
+    </tbody>
+  </table>
+</p>

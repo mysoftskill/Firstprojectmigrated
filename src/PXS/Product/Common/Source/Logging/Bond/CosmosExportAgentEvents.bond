@@ -1,0 +1,42 @@
+import "Microsoft.Telemetry.bond"
+import "MultiInstanceTaskEvents.bond"
+
+namespace Microsoft.PrivacyServices.Common.CosmosExport.Telemetry
+
+struct BatchChangedEvent : Microsoft.PrivacyServices.Common.Telemetry.TaskTelemetryEvent
+{
+    10 : required string AgentId;
+    20 : required string FileName;
+    30 : required string OriginalTime;
+    40 : required string CurrentTime;
+    50 : required string OriginalHash;
+    60 : required string CurrentHash;
+}
+
+struct ExcessiveBatchFileSizeEvent : Microsoft.PrivacyServices.Common.Telemetry.TaskTelemetryEvent
+{
+    10 : required string AgentId;
+    20 : required string ManifestPath;
+    30 : required string FileName;
+    40 : required int64 FileSize;
+}
+
+struct CosmosReturnedEarlyEmptyStreamEvent : Microsoft.PrivacyServices.Common.Telemetry.TaskTelemetryEvent
+{
+    10 : required string AgentId;
+    20 : required string ManifestPath;
+    30 : required string FileName;
+    40 : required int64 FileSize;
+    50 : required int64 ReadOffset;
+    60 : required int64 ReadSize;
+}
+
+struct FileWriterLeaseRenewWaitedTooLong : Microsoft.PrivacyServices.Common.Telemetry.TaskTelemetryEvent
+{
+    10 : required string AgentId;
+    20 : required string ManifestPath;
+    30 : required string FileName;
+    40 : required double MinutesActual;
+    50 : required double MinutesExpected;
+    60 : required double MinutesLease;
+}

@@ -1,0 +1,644 @@
+%DataFolderName%|Prod
+%IsProductionEnvironment%|true
+%IsTestEnvironment%|false
+%IsStressEnvironment%|false
+%IsPreProdEnvironment%|false
+%UseKvSecrets%|true
+%UseKvSecretsForStorageConnectionString%|true
+%UseKvSecretsForRedisPassword%|true
+%UseOneboxSecrets%|false
+%ServiceToServiceSiteId%|296240
+%AzureActiveDirectoryValidAudience%|https://pcf.privacy.microsoft.com
+%AzureActiveDirectoryValidAudienceAME%|https://MSAzureCloud.onmicrosoft.com/469dcb1e-f765-4199-b091-1907c74d8a22
+%PPEHackEnabled%|false
+%FailedCommandReplayTimeSecs%|86400
+%ApplyTestDataAgentMapDecorator%|false
+%CarbonFlightingEnvironmentName%|PROD
+%ExportInitialVisibilityDelayMinutes%|10
+
+%CertificateKeyVaultOverride%|
+%AzureKeyVaultBaseUrl%|https://pcf-prod-ame.vault.azure.net/
+
+%AzureManagementApplicationId%|8e3f545f-453c-4246-8717-7ab4f36c0696
+%AzureManagementSubscriptionId%|610969d3-9c37-49e2-9c52-63f3834d2042
+%AzureManagementUAMISubscriptionId%|4e261d67-9395-4cec-a519-14053c4765e3
+%AzureManagementResourceGroupName%|PCF-Prod
+%AzureRedisCacheEndpoint%|adgcs-prod-cache.redis.cache.windows.net
+
+%AzureBlobConnectionString%|prod-storage-east-cs
+
+%PCFV2AzureStorageAccountName%|pcfprod
+
+%CosmosDbDefaultRuPerSecond%|50000
+
+%CertificateName%|pcf-sts-onecert
+
+%SytheticCommandInsertionEnabled%|false
+
+<!-- Item ttl 35 days -->
+%CosmosDBQueueTimeToLiveDays%|35
+<!-- Min lease duration 15 mins -->
+%CosmosDbQueueMinLeaseDurationSecs%|900
+<!-- Max lease duration 1 day -->
+%CosmosDbQueueMaxLeaseDurationSecs%|86400
+
+%ClientCertSubject%|CN=a248.e.akamai.net, O="Akamai Technologies, Inc.", L=Cambridge, S=Massachusetts, C=US
+
+%Gen8AccountList%|MULTI
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db24</Moniker>
+        <DatabaseId>db24</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db31</Moniker>
+        <DatabaseId>db31</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db32</Moniker>
+        <DatabaseId>db32</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+     <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db31</Moniker>
+        <DatabaseId>db31</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+     <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db32</Moniker>
+        <DatabaseId>db32</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+     <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db31</Moniker>
+        <DatabaseId>db31</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+     <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db32</Moniker>
+        <DatabaseId>db32</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db24</Moniker>
+        <DatabaseId>db24</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db24</Moniker>
+        <DatabaseId>db24</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db25</Moniker>
+        <DatabaseId>db25</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db25</Moniker>
+        <DatabaseId>db25</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db25</Moniker>
+        <DatabaseId>db25</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db26</Moniker>
+        <DatabaseId>db26</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db26</Moniker>
+        <DatabaseId>db26</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db26</Moniker>
+        <DatabaseId>db26</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db27</Moniker>
+        <DatabaseId>db27</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db27</Moniker>
+        <DatabaseId>db27</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db27</Moniker>
+        <DatabaseId>db27</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db28</Moniker>
+        <DatabaseId>db28</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db28</Moniker>
+        <DatabaseId>db28</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db28</Moniker>
+        <DatabaseId>db28</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db29</Moniker>
+        <DatabaseId>db29</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db29</Moniker>
+        <DatabaseId>db29</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db29</Moniker>
+        <DatabaseId>db29</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-east-04.db30</Moniker>
+        <DatabaseId>db30</DatabaseId>
+        <Uri>https://pcfprod-east-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-east-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-southcentral-04.db30</Moniker>
+        <DatabaseId>db30</DatabaseId>
+        <Uri>https://pcfprod-southcentral-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-southcentral-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfprod-west-04.db30</Moniker>
+        <DatabaseId>db30</DatabaseId>
+        <Uri>https://pcfprod-west-04.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">prod-commandqueue-west-04-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+.
+
+%CosmosDBList%|MULTI
+    %Gen8AccountList%
+.
+
+%CosmosVcPath%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod
+
+%AssetGroupCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_Prod/V2/{0:yyyy}/{0:MM}/PcfConfig_Prod_{0:yyyy}_{0:MM}_{0:dd}.ss
+%AssetGroupHourlyCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_Prod/V2/{0:yyyy}/{0:MM}/PcfConfig_Prod_{0:yyyy}_{0:MM}_{0:dd}T{0:HH}_00_00.ss
+
+%AssetGroupVariantInfoCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/AssetGroupVariantInfo/{0:yyyy}/{0:MM}/AssetGroupVariantInfo_{0:yyyy}_{0:MM}_{0:dd}.ss
+%EnablePdmsDataRefresh%|true
+%PdmsDatabaseUri%|https://pcf-prod-usw-pdmscache.documents.azure.com:443/
+%PdmsDatabaseKey%|prod-pdmscache-key
+
+%AllowSdkWithoutVerifier%|false
+
+%EventHubEnablePeriodicNoOpEvents%|false
+
+%EventHubList%|MULTI
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-east-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecyclea</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-east</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-east-cs</CheckpointAccountConnectionString>
+      </Item>
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-west-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecycleb</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-west</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-west-cs</CheckpointAccountConnectionString>
+      </Item>
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-north-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>eh-commandlifecycle-north</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-north</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-southcentral-03-cs</CheckpointAccountConnectionString>
+      </Item>
+        <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-south-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>eh-commandlifecycle-south</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-south</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-southcentral-01-cs</CheckpointAccountConnectionString>
+      </Item>
+
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-east-02-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecyclec</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-east2</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-east-02-cs</CheckpointAccountConnectionString>
+      </Item>
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-west-02-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecycled</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-west2</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-west-02-cs</CheckpointAccountConnectionString>
+      </Item>
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-north-02-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>eh-commandlifecycle-north2</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-north2</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-east-01-cs</CheckpointAccountConnectionString>
+      </Item>
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">prod-eventhub-south-02-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>eh-commandlifecycle-south2</LeaseContainerName>
+        <Moniker>pcf-prod-eventhub-south2</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">prod-storage-southcentral-02-cs</CheckpointAccountConnectionString>
+      </Item>
+.
+
+%AzureStorageAccounts%|MULTI
+     <Item kvsecret="true">prod-storage-east-cs</Item>
+     <Item kvsecret="true">prod-storage-west-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-01-cs</Item>
+     <Item kvsecret="true">prod-storage-west-01-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-01-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-02-cs</Item>
+     <Item kvsecret="true">prod-storage-west-02-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-02-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-03cs</Item>
+     <Item kvsecret="true">prod-storage-west-03-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-03-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-04-cs</Item>
+     <Item kvsecret="true">prod-storage-west-04-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-04-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-05-cs</Item>
+     <Item kvsecret="true">prod-storage-west-05-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-05-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-06-cs</Item>
+     <Item kvsecret="true">prod-storage-west-06-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-06-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-07-cs</Item>
+     <Item kvsecret="true">prod-storage-west-07-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-07-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-08-cs</Item>
+     <Item kvsecret="true">prod-storage-west-08-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-08-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-09-cs</Item>
+     <Item kvsecret="true">prod-storage-west-09-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-09-cs</Item>
+
+     <Item kvsecret="true">prod-storage-east-10-cs</Item>
+     <Item kvsecret="true">prod-storage-west-10-cs</Item>
+     <Item kvsecret="true">prod-storage-southcentral-10-cs</Item>
+
+     <Item kvsecret="true">prod-storage-west2-01-cs</Item>
+     <Item kvsecret="true">prod-storage-west2-02-cs</Item>
+     <Item kvsecret="true">prod-storage-west2-03-cs</Item>
+     <Item kvsecret="true">prod-storage-west2-04-cs</Item>
+.
+
+<!--
+Oct 3, 2022 Increased MaxAgeDays for both MSA and AAD by 20 days to force complete
+commands which were not completed due to ingestion failure.
+-->
+%OldExportForceCompleteTaskEnabled%|true
+%OldExportForceCompleteMinAgeDays%|21
+%OldExportForceCompleteMaxAgeDays%|51
+%MinCompletionAgeDaysAad%|29
+%MaxCompletionAgeDaysAad%|51
+
+%IngestionRecoveryTaskEnabled%|true
+%PartiallyIngestedMinCreatedAgeDays%|1
+%PartiallyIngestedMaxCreatedAgeDays%|3
+
+%CommandHistoryCosmosDbUri%|https://pcf-prod-commandhistory.documents.azure.com:443/
+%CommandHistoryCosmosDbKey%|prod-commandhistory-key
+
+# 25 hours
+%ColdStorageCompletionBackoffSeconds%|90000
+%CommandHistoryEventHubCheckpointFrequencySeconds%|60
+
+%AzureQueueMaxBackoffMs%|5000
+
+%ExportStorageConnectionStringA%|prod-exportstorage-01-cs
+%ExportStorageConnectionStringB%|prod-exportstorage-02-cs
+
+<!--     PCF PPE/INT site ID (available to dev)     -->
+%PCF_PPE-INT_SiteId%|296170
+%PCF_PROD_SiteId%|296240
+%PDMS_PROD_FP_AppId%|b1b98629-ed2f-450c-9095-b895d292ccf1
+%PDMS_PPE_FP_AppId%|ff3a41f1-6748-48fa-ba46-d19a123ae965
+%PCF_PPE-INT_AppId%|7819dd7c-2f73-4787-9557-0e342743f34b
+%PXS_PROD_AppId%|877310d5-c81c-45d8-ba2d-bf935665a43a
+%PXS_ProxyMooncake_AppId%|ef1e1e2b-f688-4695-ade7-41c5981b9e2c
+%PXS_ProxyFairfax_AppId%|95838274-7d53-4c29-b556-24147a7abf8c
+%PXS_PRODEUDB_AppId%|a9fc952e-88ae-450c-bf4f-d66026a44d99
+%PXS_PPE_AppId%|705363a0-5817-47fb-ba32-59f47ce80bb7
+
+%GetFullCommandStatusCallerList%|MULTI
+  <Item>%PCF_PROD_SiteId%</Item>
+.
+
+%GetFullCommandStatusAadCallerList%|MULTI
+  <Item>%PXS_PROD_AppId%</Item>
+  <Item>%PXS_ProxyMooncake_AppId%</Item>
+  <Item>%PXS_ProxyFairfax_AppId%</Item>
+  <Item>%PXS_PRODEUDB_AppId%</Item>
+.
+
+%DebugApisCallerList%|MULTI
+  <Item>%PCF_PPE-INT_SiteId%</Item>
+.
+
+%DebugApisAadCallerList%|MULTI
+  <Item>%PXS_PROD_AppId%</Item>
+  <Item>%PXS_ProxyMooncake_AppId%</Item>
+  <Item>%PXS_ProxyFairfax_AppId%</Item>
+  <Item>%PXS_PPE_AppId%</Item>
+  <Item>%PDMS_PROD_FP_AppId%</Item>
+  <Item>%PDMS_PPE_FP_AppId%</Item>
+.
+
+%TestHooksCallerList%|MULTI
+  <Item>%PCF_PPE-INT_SiteId%</Item>
+.
+
+%TestHooksAadCallerList%|MULTI
+  <Item>%PCF_PPE-INT_AppId%</Item>
+.
+
+%KnownCallersList%|MULTI
+  <Caller>
+    <Id cg:Type="System.String">%PCF_PPE-INT_SiteId%</Id>
+    <Name>PCF-PPE/INT-SiteId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PDMS_PPE_FP_AppId%</Id>
+    <Name>PDMS-PPE/INT-FP-AppId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PDMS_PROD_FP_AppId%</Id>
+    <Name>PDMS-PROD-FP-AppId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PCF_PPE-INT_AppId%</Id>
+    <Name>PCF-PPE/INT-AppId</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PXS_PROD_AppId%</Id>
+    <Name>PXS-Prod</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PXS_ProxyMooncake_AppId%</Id>
+    <Name>PXS-Prod-Mooncake</Name>
+  </Caller>
+    <Caller>
+    <Id cg:Type="System.String">%PXS_ProxyFairfax_AppId%</Id>
+    <Name>PXS-Prod-Fairfax</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PXS_PRODEUDB_AppId%</Id>
+    <Name>PXS-Prod-EUDB</Name>
+  </Caller>
+  <Caller>
+    <Id cg:Type="System.String">%PXS_PPE_AppId%</Id>
+    <Name>PXS-PPE</Name>
+  </Caller>
+.
+
+%ExportStorageGetAccountsCallerList%|%GetFullCommandStatusCallerList%
+
+%ExportStorageGetAccountsAadCallerList%|%GetFullCommandStatusAadCallerList%
+
+%PxsPostCommandCallerList%|%GetFullCommandStatusCallerList%
+
+%PxsPostCommandAadCallerList%|%GetFullCommandStatusAadCallerList%
+
+%CosmosExporterAgentId%|3134bf67-a6a9-405f-b334-4e5f287f7e87
+
+%SyntheticAgentsList%|MULTI
+  <!-- PXS Cosmos Export Reader PROD -->
+  <Item>3134bf67-a6a9-405f-b334-4e5f287f7e87</Item>
+  
+  <!-- PXS Synthetic Agent PROD -->
+  <Item>6087968f-e1cc-4789-a2a5-3edd9cb7464e</Item>
+.
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/PROD/CommandFeedProcessors/PrivacyCommand/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/PROD/CommandFeedProcessors/PrivacyCommand/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+%PrivacyCommandStreamExpirationDays%|60
+%PrivacyCommandMaxCheckpointQueueSizeBytes%|3000000
+%PrivacyCommandMaxCheckpointIntervalSecs%|60
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/PROD/CommandFeedProcessors/AuditLog/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/PROD/CommandFeedProcessors/AuditLog/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+%AuditLogStreamExpirationDays%|60
+%AuditLogMaxCheckpointQueueSizeBytes%|3000000
+%AuditLogMaxCheckpointIntervalSecs%|60
+%CosmosPipelineEnabled%|true
+%AccountCloseCommandMaxIngestionDelaySeconds%|1500
+
+%DefenderPipelineEnabled%|true
+%DefenderFileMetaDataServiceUri%|https://wdprodfpusapi.azure-api.net/fms
+
+%ExportToCSVEnabled%|true
+
+%MaxWorkingSetMb%|10000
+%StopService%|true
+
+%ReplayProcessDelayEnabled%|true
+%MinReplayWorkerSleepSeconds%|3
+%MaxReplayWorkerSleepSeconds%|10
+%CommandReplayDocDBUri%|https://pcf-prod-commandreplay.documents.azure.com:443/
+%CommandReplayDocDBKey%|prod-commandreplay-key
+
+%KustoClusterName%|Ngpreporting
+%KustoDatabaseName%|PcfProd
+
+<!--     4 days     -->
+%QueueDepthBaselineFrequencyMinutes%|5760
+%TelemetryTimeToLiveDays%|30
+%TelemetryMaxItemCount%|500
+
+%CosmosDbAutoscalerEnabled%|true
+
+%AzureQueueCommandQueueDepthCheckerEnabled%|true
+
+<!-- AgentAzureQueuesStorageAccounts
+As of April 2020, these Storage Accounts are only used to store Agent Queues for MSA Age Out. 
+But, they can be used for any Agent Queue so the name of this is not specific to MSA Age Out -->
+<!-- IMPORTANT: WHEN ADDING A NEW STORAGE ACCOUNT, FOLLOW THIS PROCESS
+1. Add a new Storage Account with Weight set to 0 and deploy it to all production regions.
+2. Once all production regions have the weight 0 deployed, create another change and set the Weight to 1 and deploy it.
+If you do not do this, agents will experience QoS degradation on Checkpoint because when agents checkpoint it may be routed to a frontend machine that is not aware of a storage account, which will cause the request to fail.
+-->
+%AgentAzureQueuesStorageAccounts%|MULTI
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-east-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-east-2-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-east-3-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-west-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-west-2-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-scus-1-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-usc-1-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-uswc-1-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">prod-agentqueue-storage-uswc-2-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+.
+
+%DeviceIdExpirationMinutes%|7200
+%EventHubCheckpointExpirationSeconds%|60
+%NonWindowsDeviceEventHubConfig%|MULTI
+    <Moniker>prod-nonwindowsdevice-eventhub</Moniker>
+    <ConnectionString kvsecret="true">prod-altdevice-eventhub-cs</ConnectionString>
+    <EventHubName>adgcs-altdevicedelete-prod</EventHubName>
+    <ConsumerGroupName>$Default</ConsumerGroupName>
+    <BlobContainerName>altdevicedelete</BlobContainerName>
+    <StorageConnectionString kvsecret="true">%AzureBlobConnectionString%</StorageConnectionString>
+.
+
+%IncomingApiSamplingRate%|50
+%IncomingApiSamplingList%|MULTI
+  <Item>AuditLogReceiver.ProcessEventsAsync</Item>
+  <Item>CommandHistoryAggregationReceiver.ProcessEventsAsync</Item>
+  <Item>CommandRawDataReceiver.ProcessEventsAsync</Item>
+  <Item>CommandStatusBatchWorkItemQueueHandler.ProcessWorkItemAsync</Item>
+  <Item>DeleteFromQueueWorkItemHandler.ProcessWorkItemAsync</Item>
+  <Item>InsertIntoQueueWorkItemHandler.ProcessWorkItemAsync</Item>
+  <Item>TelemetryLifecycleCheckpointProcessor.ProcessEventsAsync</Item>
+.
+
+%OutgoingApiSamplingRate%|50
+%OutgoingApiSamplingList%|MULTI
+  <Item>AzureQueueCloudQueue.EnsureQueueExistsAsync</Item>
+  <Item>AzureQueueStorageCommandQueue.DeleteAsync</Item>
+  <Item>AzureQueueStorageCommandQueue.EnqueueAsync</Item>
+  <Item>AzureQueueStorageCommandQueue.PopAsync</Item>
+  <Item>AzureWorkItemQueue.DeleteMessageAsync</Item>
+  <Item>AzureWorkItemQueue.PublishBytesAsync</Item>
+  <Item>CommandHistoryBlobClient.ReadBlobAsync</Item>
+  <Item>CommandHistoryBlobClient.ReplaceBlobAsync</Item>
+  <Item>CommandHistoryDocDbClient.PointQueryAsync</Item>
+  <Item>CommandHistoryDocDbClient.ReplaceAsync</Item>
+  <Item>CommandLifecycleEventPublisher.PublishAsync</Item>
+  <Item>CosmosDbQueueCollection.DeleteAsync</Item>
+  <Item>CosmosDbQueueCollection.InsertAsync</Item>
+  <Item>CommandHistoryDocDbClient.PointQueryAsync</Item>
+  <Item>CommandHistoryDocDbClient.ReplaceAsync</Item>
+  <Item>CosmosDbStoredProceduresService.PopNextItemsByCompoundKeyAsync</Item>
+.
+
+%AzureAppConfigEndpoint%|https://adgcs-prod-config.azconfig.io
+
+%AdlsAccountName%|pxscosmos15-prod-c15
+%AdlsTenantId%|33e01921-4d64-4f8c-a055-5bdaffd5e33d
+%AdlsAccountSuffix%|azuredatalakestore.net
+%AdlsClientAppId%|12586d9c-4361-4ed3-9e88-17c1b23f6c91
+%AdlsClientAppCertificateName%|aad-auth-prod
+
+%PCFv2CosmosDbExportExpectationsContainerName%|exportexpectations
+%PCFv2CosmosDbCompletedCommandsContainerName%|completedexports
+%PCFv2CosmosDbDatabaseName%|db01
+%PCFv2CosmosDbEndpointName%|https://pcfprod.documents.azure.com:443/
+
+%CosmosDbPartitionSizeWorkerEnabled%|true
+%CosmosDbResourceGroup%|PCF-PROD
+%AzureLogAnalyticsWorkspaceId%|9707cabd-59fa-4ae2-849b-3513f20f52e3

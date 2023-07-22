@@ -1,0 +1,28 @@
+<mee-progress-view watch-operation="fetchPageContext">
+    <inert-view>
+        <mee-progress-ants-mwf></mee-progress-ants-mwf>
+    </inert-view>
+
+    <inprogress-view>
+        <mee-progress-ants-mwf></mee-progress-ants-mwf>
+    </inprogress-view>
+
+    <failed-view>
+        <mee-alert kind="use-glyph error">
+            <alert-content data-use-cms>
+                Failed to load context. Please ensure any actions taken are being applied to the correct entity, or attempt to reload this.
+            </alert-content>
+            <alert-actions>
+                <a ng-click="$ctrl.getPageContextTrigger()" mee-no-href data-use-cms>Retry</a>
+            </alert-actions>
+        </mee-alert>
+    </failed-view>
+
+    <finished-view>
+        <pcd-owner-view-drawer-trigger pcd-owner="$ctrl.owner"></pcd-owner-view-drawer-trigger>
+
+        <pcd-agent-view-drawer-trigger pcd-agent="$ctrl.agent"></pcd-agent-view-drawer-trigger>
+
+        <pcd-asset-group-view-drawer-trigger pcd-asset-group="$ctrl.assetGroup"></pcd-asset-group-view-drawer-trigger>
+    </finished-view>
+</mee-progress-view>

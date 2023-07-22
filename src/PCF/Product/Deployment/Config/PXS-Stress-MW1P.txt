@@ -1,0 +1,105 @@
+%AzureManagementResourceGroupName%|PCF-Stress
+%DataFolderName%|Stress
+%IsStressEnvironment%|true
+%IsTestEnvironment%|false
+%ApplyTestDataAgentMapDecorator%|false
+
+%AzureKeyVaultBaseUrl%|https://pcf-stress-ame.vault.azure.net/
+
+%CosmosDBList%|MULTI
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfstress-east</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcf-stress-queue-east.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">stress-commandqueue-east-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfstress-southcentral</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcf-stress-queue-southcentral.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">stress-commandqueue-southcentral-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcfstress-west</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcf-stress-queue-west.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">stress-commandqueue-west-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+.
+
+%AzureBlobConnectionString%|stress-storage-southcentral-01-cs
+
+%AzureStorageAccounts%|MULTI
+     <Item kvsecret="true">stress-storage-east-01-cs</Item>
+     <Item kvsecret="true">stress-storage-east-02-cs</Item>
+     <Item kvsecret="true">stress-storage-southcentral-01-cs</Item>
+     <Item kvsecret="true">stress-storage-southcentral-02-cs</Item>
+     <Item kvsecret="true">stress-storage-west-01-cs</Item>
+     <Item kvsecret="true">stress-storage-west-02-cs</Item>
+.
+
+%EventHubList%|MULTI
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">stress-eventhub-east-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>eventhub-pcf-stress-east</LeaseContainerName>
+        <Moniker>eventhub-pcf-stress-east</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">stress-storage-east-01-cs</CheckpointAccountConnectionString>
+      </Item>      
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">stress-eventhub-west-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>eventhub-pcf-stress-west</LeaseContainerName>
+        <Moniker>eventhub-pcf-stress-west</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">stress-storage-west-01-cs</CheckpointAccountConnectionString>
+      </Item>
+.
+
+%CommandHistoryCosmosDbUri%|https://pcf-stress-commandhistory.documents.azure.com:443/
+%CommandHistoryCosmosDbKey%|stress-commandhistory-key
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/ci1/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/ci1/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/ci1/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/ci1/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%AssetGroupCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_Prod/V2/{0:yyyy}/{0:MM}/PcfConfig_Prod_{0:yyyy}_{0:MM}_{0:dd}.ss
+%AssetGroupHourlyCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}T{0:HH}_00_00.ss
+
+%AssetGroupVariantInfoCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/AssetGroupVariantInfo/{0:yyyy}/{0:MM}/AssetGroupVariantInfo_{0:yyyy}_{0:MM}_{0:dd}.ss
+
+%CommandReplayDocDBUri%|https://pcf-stress-commandreplay.documents.azure.com:443/
+%CommandReplayDocDBKey%|stress-commandreplay-key
+
+%QueueDepthBaselineFrequencyMinutes%|10
+%TelemetryTimeToLiveDays%|7
+%TelemetryMaxItemCount%|100
+
+%PdmsDatabaseUri%|https://pcf-stress-pdmscache.documents.azure.com:443/
+%PdmsDatabaseKey%|stress-pdmscache-key
+
+%AgentAzureQueuesStorageAccounts%|MULTI
+     <AzureQueue>
+        <ConnectionString kvsecret="true">stress-agentqueue-storage-east-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+     <AzureQueue>
+        <ConnectionString kvsecret="true">stress-agentqueue-storage-west-cs</ConnectionString>
+        <Weight>1</Weight>
+     </AzureQueue>
+.
+
+%DeviceIdExpirationMinutes%|1
+%EventHubCheckpointExpirationSeconds%|60
+%NonWindowsDeviceEventHubConfig%|MULTI
+    <Moniker>stress-nonwindowsdevice-eventhub</Moniker>
+    <ConnectionString kvsecret="true">stress-eventhub-east-cs</ConnectionString>
+    <EventHubName>altdevicedelete</EventHubName>
+    <ConsumerGroupName>$Default</ConsumerGroupName>
+    <BlobContainerName>altdevicedelete</BlobContainerName>
+    <StorageConnectionString kvsecret="true">%AzureBlobConnectionString%</StorageConnectionString>
+.

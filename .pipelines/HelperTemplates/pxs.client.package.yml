@@ -1,0 +1,25 @@
+parameters:
+# Assigns "-pre"" suffix if Non-PROD release
+- name: packageSuffix
+  displayName: Package Suffix
+  type: string
+  default: PRE
+  values:
+  - PRE
+  - PROD
+
+steps:
+- task: CmdLine@2
+  displayName: Package PXS Client
+  inputs:
+    script: $(Build.SourcesDirectory)\src\PXS\OneBranch\Build\package-pxs-client.cmd ${{parameters.packageSuffix}} Release
+
+- task: PowerShell@2
+  displayName: Move Outputs
+  inputs:
+    targetType: inline
+    script: |
+      robocopy $(Build.SourcesDirectory)\src\PXS\bin $(Build.SourcesDirectory)\src\PXS\OneBranch\Deployment\drop\outputs\build\bin *.dll *.exe *.ps1 /s
+      robocopy $(Build.SourcesDirectory)\src\PXS\nupkgs $(Build.SourcesDirectory)\src\PXS\OneBranch\Deployment\drop\outputs\build\nupkgs * /s
+      # robocopy exit codes 1-8 are actually passing, but need to be converted to 0 so the OneBranch doesn't fail out.
+      if ($Lastexitcode -lt 9) {$global:LastExitcode=0}

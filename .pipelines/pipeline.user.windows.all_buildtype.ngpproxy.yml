@@ -1,0 +1,77 @@
+# For full annotated example, please visit: https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FPipeline%20Spec%20YAML%20Concepts%2FAnnotated%20Example&wikiVersion=GBwikiMaster&pageId=302
+# YAML File Naming: pipeline.user.<os>.<buildtype>.<tag>.<phase>.<config>.<branch>.yml
+# https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FMulti%252DPhase%20and%20Multi%252DConfiguration%20Builds&wikiVersion=GBwikiMaster&pageId=291&anchor=yaml-file-naming
+
+versioning:
+  commands:
+    - !!defaultcommand
+      name: 'Update Version'
+      command: 'src\NGPProxy\OneBranch\Build\versioning.cmd'
+
+restore:
+  commands:
+    - !!defaultcommand
+      name: 'Restore Packages'
+      command: 'src\NGPProxy\OneBranch\Build\restore.cmd'
+    
+build:
+  commands:
+    - !!buildcommand
+      name: 'Build'
+      command: 'src\NGPProxy\OneBranch\Build\build.cmd'
+      arguments: 'Release'
+      logs:
+        - from: 'src\NGPProxy\OneBranch\Build'
+          to: 'Build Logs'
+          include:
+            - '**/build*.log'
+      artifacts:
+        - from: 'src\NGPProxy'
+          to: 'Codesign'
+          include:
+            - '**/*.dll'
+            - '**/*.exe'
+            - '**/*.ps1'
+          signing_options:
+            sign_inline: true  # Sign immediately after this build command so the next build command can package it!
+        - from: 'src\PXS\Bin\Release\x64\PrivacyFunctionalTests'  # FCT still builds at its original location
+          to: 'FCT'
+          include:
+            - '**/*'
+    - !!buildcommand
+      name: 'Package Release'
+      command: 'src\NGPProxy\OneBranch\Build\package.cmd'
+      arguments: 'Release'
+      artifacts:
+        - from: 'src\NGPProxy\OneBranch\Release'
+          to: 'Ev2'
+          include:
+            - '**/*'
+
+test:
+  commands:
+    - !!testcommand                               # We are going to run tests and collect back the test results for publishing
+      name: 'UnitTests'                                # If your test run does not have a name, this will be used.
+      command: 'src\NGPProxy\OneBranch\Build\test.cmd'              # Script that runs tests. 
+      arguments: 'Release'
+      fail_on_stderr: true                        # Force pipeline to fail if the task writes to standard error stream; default is true.
+      skip_on_developer_box: true                 # If running locally on a developer host instead of the pipeline managed hosts, skip this task. Default is false.
+      testresults:                                # Sequence of entries indicating which test results files to collect.
+        - title: 'All Tests'                      # Test run title. Used by VSTS.
+          configuration: 'Release'                  # Optional build configuration.
+          platform: 'x64'                         # Optional build platform.
+          type: 'VSTest'                          # Test engine type. Used by VSTS. Supported values are JUnit, NUnit, VSTest and xUnit.
+          include:                                # Sequence of glob patterns indicating which test results file to associate with this test run.
+            - 'src\NGPProxy\OneBranch\Build\TestResults\*.trx'      # Include all TRX files under any TestResults folder under the src folder.                
+
+static_analysis_options:
+  policheck_options:
+    scan_comments: false
+    files_to_scan:
+      - from: 'src\NGPProxy'
+  moderncop_options:
+    files_to_scan:
+      - from: 'src\NGPProxy'
+  binskim_options:
+    files_to_scan:
+      - from: 'src\NGPProxy\*'

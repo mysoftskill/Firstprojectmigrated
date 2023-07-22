@@ -1,0 +1,29 @@
+@startuml AAD Account Close Worker Sequence
+
+participant "AAD Account Close Worker"
+participant "AAD RVS"
+participant PCF
+
+    "AAD Account Close Worker" --> "Azure Queue" : Dequeue batch
+
+
+loop for each event
+    "AAD Account Close Worker" -> "AAD Account Close Worker" : Parse event pre-Verifier
+
+    "AAD Account Close Worker" -> "AAD RVS" : Get Verifier using Pre-Verifier
+    "AAD RVS" --> "AAD Account Close Worker" : Return Verifier
+
+    "AAD Account Close Worker" -> "AAD Account Close Worker" : Read puid from verifier token
+
+    alt if AADRVS request succeeded
+        "AAD Account Close Worker" -> PCF : Post Commands to PCF
+        PCF --> "AAD Account Close Worker" : Ack Commands Posted
+    else if AADRVS or PCF failed and dequeue count < x
+        "AAD Account Close Worker" --> "Azure Queue" : Extend lease with exponential backoff time
+    else max retry limit reached
+        "AAD Account Close Worker" --> "Dead-letter storage" : Write to dead-letter storage. Xpert alert fires.
+        "AAD Account Close Worker" --> "Azure Queue" : Delete from queue
+    end
+end
+
+@enduml

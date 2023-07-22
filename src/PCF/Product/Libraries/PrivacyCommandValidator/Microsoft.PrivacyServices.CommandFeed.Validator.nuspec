@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Microsoft.PrivacyServices.CommandFeed.Validator</id>
+    <version>$version$</version>
+    <authors>MEE PrivacyServices (ngppoeng@microsoft.com)</authors>
+    <owners>MEE PrivacyServices (ngppoeng@microsoft.com)</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NGPX Privacy Command Validator SDK.</description>
+    <copyright>Copyright 2017</copyright>
+    <tags>ngp ngpx privacy pcf verifier</tags>
+  </metadata>
+</package>

@@ -1,0 +1,62 @@
+<pcd-default-page-layout>
+    <pcd-heading>
+        <pcd-default-page-heading text="Welcome to the Privacy Compliance Dashboard!" data-use-cms></pcd-default-page-heading>
+        <pcd-landing-pivot></pcd-landing-pivot>
+    </pcd-heading>
+    <pcd-lede class="pcd-landing-page-lede">
+        <p mee-paragraph data-use-cms>
+        </p>
+    </pcd-lede>
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Useful links:
+        </p>
+        <ul data-use-cms mee-list="lean">
+            <li>
+                <a href="https://aka.ms/PcdRegistration"
+                   target="_blank"
+                   mee-hyperlink>
+                    PDMS Onboarding doc
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/datagrid"
+                   target="_blank"
+                   mee-hyperlink>
+                    DataGrid Wiki
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/ngphome"
+                   target="_blank"
+                   mee-hyperlink>
+                    NGP Site
+                </a>
+            </li>
+            <li>
+                <a href="https://aka.ms/FindGCContact"
+                   target="_blank"
+                   mee-hyperlink>
+                    GC Contacts
+                </a>
+            </li>
+        </ul>
+    </pcd-sidebar>
+    <pcd-content>
+        <section class="pcd-search-box">
+            <form>
+                <mee-text-field kind="flex" mee-auto-focus>
+                    <label><!-- Make component happy. --></label>
+                    <input ng-model="$ctrl.searchTerms" aria-label="Search" placeholder="type a name, an ID or an asset group qualifier to search for" data-use-cms>
+                </mee-text-field>
+
+                <button mee-button="primary" data-use-cms ng-click="$ctrl.search()">Search</button>
+            </form>
+
+        </section>
+
+        <section class="pcd-search-results">
+            <div ui-view="searchResults"></div>
+        </section>
+    </pcd-content>
+</pcd-default-page-layout>

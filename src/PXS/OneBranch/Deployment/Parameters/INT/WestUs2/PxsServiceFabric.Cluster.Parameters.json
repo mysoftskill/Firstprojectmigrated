@@ -1,0 +1,86 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "westus2"
+    },
+    "keyVaultManagedIdentityName": {
+      "value": "ADG-CS-UAMI"
+    },
+    "uamiResourceGroup": {
+      "value": "ADG-CS-WESTUS2-RG"
+    },
+    "clusterName": {
+      "value": "pxsint"
+    },
+    "certificateCommonName": {
+      "value": "adg-cs.cluster.nonprod.microsoft.com"
+    },
+    "adminUserName": {
+      "value": "b1e4d9d3709c46b9a4ea"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/b4b176cf-fe78-4b59-bd1a-9b8c11536f4d/resourceGroups/ADG-CS-WESTUS2-RG/providers/Microsoft.KeyVault/vaults/ADG-CS-WESTUS2-KV"
+        },
+        "secretName": "AdminPassword"
+      }
+    },
+    "durabilityLevel": {
+      "value": "Silver"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
+    },
+    "vmImageSku": {
+      "value": "2022-datacenter-azure-edition"
+    },
+    "maxBatchInstancePercent": {
+      "value": 50
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2ds_v4"
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType1Size": {
+      "value": "Standard_D2ds_v4"
+    },
+    "nt2InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType2Size": {
+      "value": "Standard_D2ds_v4"
+    },
+    "kvvmextPollingInterval": {
+      "value": "3600"
+    },
+    "kvvmextObservedCertificates": {
+      "value": [
+        "https://adg-cs-southcentralus-kv.vault.azure.net/secrets/cluster",
+        "https://adg-cs-southcentralus-kv.vault.azure.net/secrets/geneva"
+      ]
+    },
+    "allowedApplicationOutboundPorts": {
+      "value": [
+        "80",
+        "443"
+      ]
+    },
+    "monitoringTenant": {
+      "value": "ADGCS-INT"
+    },
+    "monitoringRoleForNodeType1": {
+      "value": "PXS.Frontdoor"
+    },
+    "monitoringRoleForNodeType2": {
+      "value": "PXS.Worker"
+    }
+  }
+}

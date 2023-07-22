@@ -1,0 +1,23 @@
+steps:
+- task: CmdLine@2
+  displayName: Package
+  inputs:
+    script: $(PAFBuildRootDirectory)\OneBranch\Build\package.cmd Debug
+    
+- task: PowerShell@2
+  displayName: Move output
+  inputs:
+    targetType: inline
+    script: |
+        robocopy  $(PAFBuildRootDirectory)\Product\Tests\Functions.FunctionalTests\bin\x64\Release\ $(PAFOutputDirectory)\outputs\build\fct\PAF * /s
+        robocopy  $(PAFBuildRootDirectory)\Product\Tests\Functions.AIdFunctionalTests\bin\x64\Release\ $(PAFOutputDirectory)\outputs\build\fct\AID * /s                  
+        robocopy  $(PAFBuildRootDirectory)\Product\Tests\Functions.FunctionalTests\CloudTest\  $(PAFOutputDirectory)\outputs\build\fct\PAF\CloudTest * /s
+        robocopy  $(PAFBuildRootDirectory)\Product\Tests\Functions.AIdFunctionalTests\CloudTest\ $(PAFOutputDirectory)\outputs\build\fct\AID\CloudTest * /s
+        robocopy $(PAFBuildRootDirectory)\OneBranch\Release\ $(PAFOutputDirectory)\outputs\build\Ev2 * /s
+       
+        # copy the buildversion into relavant directories
+        robocopy $(PAFBuildRootDirectory)\OneBranch\Deployment $(PAFOutputDirectory)\outputs\build\Ev2\PAF BuildVer.txt
+        robocopy $(PAFBuildRootDirectory)\OneBranch\Deployment $(PAFOutputDirectory)\outputs\build\Ev2\AID BuildVer.txt
+
+        # robocopy exit codes 1-8 are actually passing, but need to be converted to 0 so the OneBranch doesn't fail out.
+        if ($Lastexitcode -lt 9) {$global:LastExitcode=0}

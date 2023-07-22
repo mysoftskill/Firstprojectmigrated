@@ -1,0 +1,4 @@
+[UserProperty]
+ServiceFabric=true
+envnamespace=onebox
+IsDocdbAutoscaleMaster=true

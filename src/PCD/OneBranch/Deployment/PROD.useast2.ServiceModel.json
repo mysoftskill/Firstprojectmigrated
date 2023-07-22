@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PCD-PROD-USEAST2",
+    "Environment": "Prod"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PcdServiceFabric-Cluster-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricCluster.2NodeType.NonHyperNet.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\GenevaMonitoringAgentConsoleApp.Template.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        },
+        {
+          "Name": "PcdUxApp-Definition",
+          "ArmTemplatePath": "Templates\\ServiceFabricApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PCD-PROD-USEAST2-CLUSTER-RG",
+      "Location": "eastus2",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "4e261d67-9395-4cec-a519-14053c4765e3",
+      "ServiceResources": [
+        {
+          "Name": "PcdServiceFabric-Cluster-Resources",
+          "InstanceOf": "PcdServiceFabric-Cluster-Definition",
+          "ArmParametersPath": "Parameters\\PROD\\useast2\\ServiceFabricCluster.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\PROD\\GenevaMonitoringAgentConsoleApp.Parameters.json"
+        },
+        {
+          "Name": "FrontdoorStandingQueryExtensionManagerApp-Resources",
+          "InstanceOf": "FrontdoorStandingQueryExtensionManagerApp-Definition",
+          "ArmParametersPath": "Parameters\\PROD\\useast2\\Frontdoor.StandingQueryExtensionManagerApp.Parameters.json"
+        },
+        {
+          "Name": "PcdUxApp-Resources",
+          "InstanceOf": "PcdUxApp-Definition",
+          "ArmParametersPath": "Parameters\\PROD\\useast2\\PcdUxApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

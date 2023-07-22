@@ -1,0 +1,8 @@
+<mee-alert ng-if="$ctrl.isVisible" id="auth-warning-banner" kind="use-glyph warning">
+    <alert-content data-use-cms>
+        It seems that your session is expired. You'll need to renew it to continue. Your work will not be lost.
+    </alert-content>
+    <alert-actions>
+        <a ng-click="$ctrl.dismissBanner()" ui-sref="bootstrap-re-auth" target="_blank" data-use-cms>Renew now</a>
+    </alert-actions>
+</mee-alert>

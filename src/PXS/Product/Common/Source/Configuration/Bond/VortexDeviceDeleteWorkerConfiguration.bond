@@ -1,0 +1,18 @@
+﻿import "CommonConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IVortexDeviceDeleteQueueProccessorConfiguration
+{
+    4 : required int32 WaitOnQueueEmptyMilliseconds;
+    5 : required int32 ProcessorCount;
+    8 : required IServicePointConfiguration ServicePointConfiguration;
+    9 : required list<IAzureStorageConfiguration> AzureQueueStorageConfigurations;
+};
+
+struct IVortexDeviceDeleteWorkerConfiguration
+{
+    1 : optional bool EnableConsoleLogging = false;
+    2 : required IVortexDeviceDeleteQueueProccessorConfiguration QueueProccessorConfig;
+};

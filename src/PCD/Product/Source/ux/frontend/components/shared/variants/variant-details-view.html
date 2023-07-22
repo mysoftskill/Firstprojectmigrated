@@ -1,0 +1,60 @@
+<div>
+    <div ng-if="$ctrl.isReady()" data-grid="pad-2x">
+        <div data-grid="col-6">
+            <div>
+                <label mee-label data-use-cms>Variant ID</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.variantDefinition.id}}</p>
+            </div>  
+
+            <div>
+                <label mee-label data-use-cms>Approver</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.variantDefinition.approver}}</p>
+            </div>
+
+            <div>
+                <label mee-label data-use-cms>ADO links</label>
+            </div>
+            <div class="resource-view-attributes">
+                <span ng-if="$ctrl.tfsTrackingUris.length" ng-repeat="link in $ctrl.tfsTrackingUris track by $index" class="tfs-tracking">
+                    <a mee-hyperlink ng-href="{{link}}" target="_blank" data-use-cms>Link{{$ctrl.getLinkSuffix($index)}}</a>
+                </span>
+                <p class="mee-paragraph" ng-if="!$ctrl.tfsTrackingUris.length" data-use-cms>None</p>
+            </div>
+
+            <div>
+                <label mee-label data-use-cms>Signal filtering</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{ $ctrl.getDisabledSignalFilteringDisplayString() }}</p>
+            </div>
+        </div>
+
+        <div data-grid="col-6">
+            <div>
+                <label mee-label data-use-cms>Capabilities</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.getCapabilityDisplayString()}}</p>
+            </div>
+
+            <div>
+                <label mee-label data-use-cms>Data types</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.getDataTypeDisplayString()}}</p>
+            </div>
+
+            <div>
+                <label mee-label data-use-cms>Subject types</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.getSubjectTypeDisplayString()}}</p>
+            </div>
+
+        </div>
+    </div>
+</div>

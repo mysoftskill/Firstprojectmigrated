@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Microsoft.PrivacyServices.Common.Azure</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.Common.Azure</AssemblyName>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Build\InternalKey.snk</AssemblyOriginatorKeyFile>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Bond.CSharp" />
+    <PackageReference Include="Bond.Core.CSharp" />
+    <PackageReference Include="Bond.Runtime.CSharp" />
+    <PackageReference Include="Microsoft.Cloud.InstrumentationFramework"/>
+    <PackageReference Include="Microsoft.Cloud.InstrumentationFramework.Metrics.Extensions" />
+    <!-- Newtonsoft.Json < v13.0.1 has a security issue. Enforcing versioning for the dependency here -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PackageId>Microsoft.PrivacyServices.Common.Azure</PackageId>
+    <Title>Microsoft.PrivacyServices.Common.Azure</Title>
+    <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+    <Description>PrivacyServices.Common.Azure</Description>
+    <Copyright>Copyright 2022</Copyright>
+    <PackageTags>ngp privacy sdk</PackageTags>
+  </PropertyGroup>
+</Project>

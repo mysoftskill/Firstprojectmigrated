@@ -1,0 +1,17 @@
+@startuml AAD Account Close Worker Sequence
+
+participant "AAD NS: EventHubs"
+participant "AAD Account Close Worker" #SeaGreen
+participant "AAD RVS"
+participant PCF #SeaGreen
+
+"AAD NS: EventHubs" -> "AAD Account Close Worker" : Send AAD Account Close Events
+
+loop for each event
+    "AAD Account Close Worker" -> "Azure Queue" : Enqueue
+end
+
+    "AAD Account Close Worker" --> "AAD NS: EventHubs" : Checkpoint Complete
+
+
+@enduml

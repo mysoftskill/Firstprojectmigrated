@@ -1,0 +1,92 @@
+declare query_parameters (ExcludedAgentsJson:string, ThresholdValue:string); 
+// This query compares the asset counts for the specified date against the values
+// from the previous day to look for wild variations in counts
+// Date Constants
+let reportDate = toscalar(DataOwnerAssetCountsV2 | summarize max(SQLizerStreamDateId));
+//let reportDate = todatetime(ReportDateString);
+let reportDatePrevious = datetime_add('day', -1, reportDate);
+let interval = 1d;
+let thresholdValue = todouble(ThresholdValue);
+let ExcludedAgentsRaw = datatable(junk:int) [ 1 ] 
+| extend ListColumn = todynamic(ExcludedAgentsJson) 
+| project ListColumn 
+| mvexpand ListColumn 
+| evaluate bag_unpack(ListColumn) 
+| project AgentId=tostring(AgentId), Expires=todatetime(Expires)
+| where AgentId != "00000000-0000-0000-0000-000000000000"; 
+//
+let ExcludedAgents = ExcludedAgentsRaw 
+| where isnull(Expires) or Expires > now() 
+| project AgentId;
+//
+// Only look at production agents
+let AgentOwnerInfo = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+    | where AgentReadiness == "ProdReady" // Filters to only ProdReady agents.
+); 
+// Current Asset Level information
+let CurrentAssetLevelData = materialize
+(
+    DataOwnerAssetCountsV2
+    | where SQLizerStreamDateId == reportDate
+	//| where DeleteAgentId !in (ExcludedAgents) and ExportAgentId !in (ExcludedAgents)
+    | summarize 
+        CurrentAssetCountTotal=sum(TotalAssetCount),
+        CurrentNonPersonalAssetCountTotal=sum(NonPersonalAssetCount),
+        CurrentPartiallyTaggedAssetCountTotal=sum(PartiallyTaggedAssetCount)
+        by SQLizerStreamDateId
+    | project ReportDate=reportDate, CurrentAssetCountTotal, CurrentNonPersonalAssetCountTotal, CurrentPartiallyTaggedAssetCountTotal
+);
+//CurrentAssetLevelData;
+// Previous day's asset counts
+let PreviousAssetLevelData = materialize
+(
+    DataOwnerAssetCountsV2
+    | where SQLizerStreamDateId == reportDatePrevious
+	//| where DeleteAgentId !in (ExcludedAgents) and ExportAgentId !in (ExcludedAgents)
+    | summarize 
+        PreviousAssetCountTotal=sum(TotalAssetCount),
+        PreviousNonPersonalAssetCountTotal=sum(NonPersonalAssetCount),
+        PreviousPartiallyTaggedAssetCountTotal=sum(PartiallyTaggedAssetCount)
+        by SQLizerStreamDateId
+    | project ReportDate=reportDate, PreviousAssetCountTotal, PreviousNonPersonalAssetCountTotal, PreviousPartiallyTaggedAssetCountTotal
+);
+//PreviousAssetLevelData;
+// Combine the Totals and calculate the percent change
+let AssetLevelDataDiffs = materialize
+(
+    PreviousAssetLevelData
+        | union CurrentAssetLevelData 
+        | extend TotalDiff=PreviousAssetCountTotal-CurrentAssetCountTotal
+        | extend PctDiff=toreal(TotalDiff)/toreal(PreviousAssetCountTotal) 
+);
+//AssetLevelDataDiffs;
+let anomaliesTable = materialize
+(
+    AssetLevelDataDiffs
+        | where abs(PctDiff) > thresholdValue
+        | project  
+            CurrentAssetCountTotal, 
+            PreviousAssetCountTotal, 
+            AssetCountDifference=TotalDiff,
+            PercentDifference=round((PctDiff*100.00),2)
+);
+// If anomaliesTable is not empty, set up the email address to send the results to;
+// otherwise use "NothingToSend" to indicate that there is nothing to send (this is
+// used when we are running in simulation mode and an override action is set to send an email) 
+let emailAddressingTable = materialize
+(
+    datatable(junk2:int) [ 1 ]
+    | extend 
+        ToLine = toscalar(
+          anomaliesTable | summarize Count=count()  | extend AuditEmail=iff(Count > 0, "adgpdmsauditdri@microsoft.com", "NothingToSend")
+              | summarize ToLine = makelist(AuditEmail))
+    | project ToLine
+);
+anomaliesTable;
+emailAddressingTable; 
+
+
+
+    

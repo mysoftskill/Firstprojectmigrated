@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutParameters.json",
+  "contentVersion": "1.0.0.0",
+  "extensions": [
+    {
+      "name": "Deploy",
+      "type": "Microsoft.Geneva.Synthetics/JobGroup",
+      "version": "2021-09-27",
+      "connectionProperties": {
+        "maxExecutionTime": "PT24H",
+        "authentication": {
+          "type": "CertificateAuthentication",
+          "reference": {
+            "provider": "AzureKeyVault",
+            "parameters": {
+              "secretId": "https://adg-cs-nonprod-kv.vault.azure.net/secrets/SyntheticsEv2ExtensionAuthCert"
+            }
+          }
+        }
+      },
+      "payloadProperties": {
+        "Account": {
+          "value": "adgcsprod"
+        },
+        "JobGroupName": {
+          "value": "PCDSyntheticJobGroup"
+        },
+        "ConfigPath": {
+          "reference": {
+            "path": "Bin\\SyntheticJob.json",
+            "enableScopeTagBindings": "false"
+          }
+        },
+        "PackagePath": {
+          "reference":  {
+            "path": "Bin\\SyntheticsTests.zip" 
+          }
+        },
+        "Deleted": {
+            "value": false
+        }
+      }
+    }
+  ]
+}

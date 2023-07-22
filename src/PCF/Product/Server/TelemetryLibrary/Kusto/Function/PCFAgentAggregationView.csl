@@ -1,0 +1,137 @@
+﻿.create-or-alter function with (folder = "", docstring = "PCF Agent Statistics aggregator", skipvalidation = "false") PCFAgentAggregationView(agentId:string) {
+    ///
+    /// Merge Baseline and Agent checkpoint events happend since last baseline calculation, or for last 30 days if no baseline found.
+    ///
+    let DefaultStartDate = now() - time(30d);
+    let AgentLastTimeStamp = toscalar(
+        PCFAgentStatisticV2
+        | where AgentId == agentId
+        | summarize TimeStamp = max(TimeStamp) 
+        | project TimeStamp);
+    let ResultDataStartTime = iif(isnull(AgentLastTimeStamp), DefaultStartDate, AgentLastTimeStamp);
+    // Completed tatsks
+    let CompletedTasks = PCFBaselineTaskV2
+        | where AgentId == agentId
+        | summarize 
+            Created = countif(Action=="Create"),
+            Completed = countif(Action=="Complete")
+            by CreateTime
+        | where Created == Completed
+        | extend TaskCreateTime = CreateTime 
+        | project  TaskCreateTime;
+    // Get latest/previous completed baseline
+    let BaselineTaskCreateTime1 = toscalar(
+        CompletedTasks
+            | top 1 by TaskCreateTime desc
+            | project TaskCreateTime);
+    let BaselineTaskCreateTime = iif(isnull(BaselineTaskCreateTime1), DefaultStartDate, BaselineTaskCreateTime1);
+    // Baselines since last time
+    let Baseline = PCFCollectionBaselineV2
+        | where TaskCreateTime >= BaselineTaskCreateTime
+        | where AgentId == agentId
+        | join kind = inner CompletedTasks on TaskCreateTime
+        | summarize 
+            CommandCount = sum(CommandCount),
+            BaseLineStartTime = min(StartTime),
+            BaseLineEndTime = max(EndTime)
+            by TaskCreateTime, AgentId, AssetGroupId, CommandType
+        | project TaskCreateTime, BaseLineStartTime, BaseLineEndTime, AgentId, AssetGroupId, CommandType, CommandCount;
+    let BaseLineStartTimeValue1 = toscalar(Baseline | where TaskCreateTime == BaselineTaskCreateTime | summarize max(BaseLineStartTime));
+    let BaseLineStartTimeValue = iif(isnull(BaseLineStartTimeValue1), DefaultStartDate, BaseLineStartTimeValue1);
+    let BaseLineEndTimeValue1 = toscalar(Baseline | where TaskCreateTime == BaselineTaskCreateTime | summarize max(BaseLineEndTime));
+    let BaseLineEndTimeValue = iif(isnull(BaseLineEndTimeValue1), DefaultStartDate, BaseLineEndTimeValue1);
+    let Table1 = 
+            // distinct complete events
+            PCFLifecycleEventsV2
+            | where TimeStamp > BaseLineStartTimeValue + 1m
+            | where AgentId == agentId
+            | where EventType == "CommandCompletedEvent" or EventType == "CommandStartedEvent" or EventType == "CommandCompletedByPcfEvent"
+            | summarize hint.shufflekey = CommandId TimeStamp=min(TimeStamp) by AgentId, AssetGroupId, CommandId, CommandType, EventType;
+    let Table2 =
+            // other events
+            PCFLifecycleEventsV2
+                | where TimeStamp > BaseLineStartTimeValue + 1m
+                | where AgentId == agentId
+                | where EventType != "CommandCompletedEvent" and EventType != "CommandStartedEvent" and EventType != "CommandCompletedByPcfEvent";
+    let AggregatedEvents = union Table1, Table2;                 
+    // Compressed events
+    let CompressedEvents = AggregatedEvents
+        | summarize 
+            CompletedCheckpointCount = countif(EventType=="CommandCompletedEvent"), 
+            SoftDeletedCheckpointCount = countif(EventType=="CommandSoftDeleteEvent"), 
+            CreatedCheckpointCount = countif(EventType=="CommandStartedEvent"),
+            SentToAgentCheckpointCount = countif(EventType=="CommandSentToAgentEvent"),
+            PendingCheckpointCount = countif(EventType=="CommandPendingEvent"),
+            FailedCheckpointCount = countif(EventType=="CommandFailedEvent"),
+            UnexpectedCheckpointCount = countif(EventType=="CommandUnexpectedEvent"),
+            VerificationFailureCheckpointCount = countif(EventType=="CommandVerificationFailedEvent"),
+            UnexpectedVerificationFailureCheckpointCount = countif(EventType=="CommandUnexpectedVerificationFailureEvent"),
+			CompletedByPcfEventCount = countif(EventType=="CommandCompletedByPcfEvent")
+            by AgentId, AssetGroupId, CommandType, bin(TimeStamp, 1m)
+        | project 
+			TimeStamp, 
+			AgentId, 
+			AssetGroupId, 
+			CommandType, 
+			CompletedCheckpointCount, 
+			CreatedCheckpointCount, 
+			SoftDeletedCheckpointCount, 
+			SentToAgentCheckpointCount, 
+			PendingCheckpointCount, 
+			FailedCheckpointCount, 
+			UnexpectedCheckpointCount, 
+			VerificationFailureCheckpointCount, 
+			UnexpectedVerificationFailureCheckpointCount,
+			CompletedByPcfEventCount;
+    // Join baseline and Events
+    let Statistic = Baseline
+        | union kind=fullouter CompressedEvents
+        | extend TimeStamp = coalesce(BaseLineStartTime, TimeStamp)
+        | extend PartitionKey = strcat(tostring(AssetGroupId), ":", CommandType, ":", tostring(BaseLineStartTime))
+        | order by AssetGroupId, CommandType, TimeStamp asc
+        | extend CompletedCheckpointCount = coalesce(CompletedCheckpointCount, 0) 
+        | extend SoftDeletedCheckpointCount = coalesce(SoftDeletedCheckpointCount, 0) 
+        | extend CreatedCheckpointCount = coalesce(CreatedCheckpointCount, 0)
+        | extend SentToAgentCheckpointCount = coalesce(SentToAgentCheckpointCount, 0)
+        | extend PendingCheckpointCount = coalesce(PendingCheckpointCount, 0)
+        | extend FailedCheckpointCount = coalesce(FailedCheckpointCount, 0)
+        | extend UnexpectedCheckpointCount = coalesce(UnexpectedCheckpointCount, 0)
+        | extend VerificationFailureCheckpointCount = coalesce(VerificationFailureCheckpointCount, 0)
+        | extend UnexpectedVerificationFailureCheckpointCount = coalesce(UnexpectedVerificationFailureCheckpointCount, 0)
+	    | extend CompletedByPcfEventCount = coalesce(CompletedByPcfEventCount, 0) 
+	    | serialize
+        | extend CompletedDelta = row_cumsum(CompletedCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend CompletedByPcfDelta = row_cumsum(CompletedByPcfEventCount, PartitionKey!=prev(PartitionKey))
+        | extend CreatedDelta = row_cumsum(CreatedCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend SoftDeletedDelta = row_cumsum(SoftDeletedCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend SentToAgentDelta = row_cumsum(SentToAgentCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend PendingDelta = row_cumsum(PendingCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend FailedDelta = row_cumsum(FailedCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend UnexpectedCommandDelta = row_cumsum(UnexpectedCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend VerificationFailedDelta = row_cumsum(VerificationFailureCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend UnexpectedVerificationFailureDelta = row_cumsum(UnexpectedVerificationFailureCheckpointCount, PartitionKey!=prev(PartitionKey))
+        | extend BaselineCommandCount = row_cumsum(CommandCount, isnotnull(CommandCount))
+        // adjust command count due to already substructed Complete events
+        | extend CommandCount = iif(
+            BaselineCommandCount - CompletedDelta - CompletedByPcfDelta + CreatedDelta < 0, 
+            iif(CreatedDelta - CompletedDelta - CompletedByPcfDelta< 0, 0, CreatedDelta - CompletedDelta - CompletedByPcfDelta), 
+            BaselineCommandCount - CompletedDelta - CompletedByPcfDelta + CreatedDelta)
+        | project 
+            TimeStamp, 
+            AgentId, 
+            AssetGroupId, 
+            CommandType, 
+            CommandCount, 
+            BaselineCommandCount, 
+            CompletedCheckpointCount, 
+            CreatedCheckpointCount, 
+            SoftDeletedCheckpointCount, 
+            SentToAgentCheckpointCount, 
+            PendingCheckpointCount, 
+            FailedCheckpointCount, 
+            UnexpectedCheckpointCount, 
+            VerificationFailureCheckpointCount, 
+            UnexpectedVerificationFailureCheckpointCount,
+		    CompletedByPcfEventCount;
+    Statistic | where TimeStamp > ResultDataStartTime and TimeStamp < now(-5m)
+} 

@@ -1,0 +1,17 @@
+<div ng-if="!$ctrl.countryListPickerModel.items.length">
+    <div data-required-field="true">
+        <label class="c-label" data-use-cms>Country of residence</label>
+    </div>
+    <mee-progress-ants-mwf mee-progress-visible="initializeCountryListSelectorComponent"></mee-progress-ants-mwf>
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.generic"></mee-inline-error>
+</div>
+
+<mee-select ng-if="$ctrl.countryListPickerModel.items.length"
+            data-required-field="true"
+            ng-model="$ctrl.countryListPickerModel.selectedId"
+            menu-style="border scroll">
+    <label data-use-cms>Country of residence</label>
+    <select>
+        <option ng-repeat="item in $ctrl.countryListPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+    </select>
+</mee-select>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="RunTests">
+  <PropertyGroup>
+    <DefaultTestCategory>FCT</DefaultTestCategory>
+    <Owner>meems</Owner>
+    <TestGroupAreaPath>WPS\MEE\MemberServices</TestGroupAreaPath>
+    <TestGroupId>0</TestGroupId>
+    <TestGroupName>Microsoft.Membership.MemberServices.PrivacyExperience.FunctionalTests</TestGroupName>
+    <IsSequential>True</IsSequential>
+    <ExecuteAs64Bit>True</ExecuteAs64Bit>
+    <ParallelTestCount>1</ParallelTestCount>
+  </PropertyGroup>
+  <ItemGroup>
+    <TestContainer Include="Microsoft.Membership.MemberServices.PrivacyExperience.FunctionalTests.dll" />
+  </ItemGroup>
+</Project>

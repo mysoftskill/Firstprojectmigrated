@@ -1,0 +1,48 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>Useful links:</p>
+        <ul mee-list="lean">
+            <li>
+                <a mee-hyperlink
+                   data-use-cms
+                   target="_blank"
+                   href="https://datagrid.microsoft.com/Tagging/MyTeams">Explore your team's assets on DataGrid</a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                   data-use-cms
+                   target="_blank"
+                   href="https://datagrid.microsoft.com/Tagging/NGPReport">Real-time tagging completeness report</a>
+            </li>
+        </ul>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeViewAssetGroupComponent">
+            <inert-view>
+            </inert-view>
+
+            <inprogress-view>
+                <mee-progress-ants-mwf></mee-progress-ants-mwf>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner="$ctrl.owner"></pcd-default-page-context>
+
+                <pcd-asset-group-view pcd-asset-group="$ctrl.assetGroup"></pcd-asset-group-view>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

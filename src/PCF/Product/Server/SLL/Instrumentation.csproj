@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.Instrumentation</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+      
+  <ItemGroup>
+    <PackageReference Include="Bond.CSharp" />
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.CommonSchema.Services.Owin" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="Microsoft.CommonSchema.Services.ServiceFabricContainer" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Ms.Qos.IncomingServiceRequest" />
+    <PackageReference Include="Ms.Qos.OutgoingServiceRequest" />
+    <PackageReference Include="Ms.Security.Audit" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

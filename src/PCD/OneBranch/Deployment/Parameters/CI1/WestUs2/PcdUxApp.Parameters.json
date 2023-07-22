@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pcdci1"
+    },
+    "applicationTypeName": {
+      "value": "PcdUxAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\PcdUxApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "PcdUxApp"
+    },
+    "applicationParameters": {
+        "value": {
+            "EnvironmentName": "int",
+            "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)",
+            "AspNetCoreEnvironment": "Development",
+            "CoreUrl": "https://*:443"
+        }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "ngpproxymc"
+    },
+    "applicationTypeName": {
+      "value": "PcfDataAgentV2AppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\PcfDataAgentV2App.sfpkg"
+    },
+    "applicationName": {
+      "value": "PcfDataAgentV2App"
+    },
+    "applicationParameters": {
+      "value": {
+        "EnvironmentName": "mcprod",
+        "AzureServicesAuthConnectionString": "RunAs=App",
+        "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)"
+      }
+    }
+  }
+}

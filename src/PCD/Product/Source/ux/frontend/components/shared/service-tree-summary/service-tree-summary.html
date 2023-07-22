@@ -1,0 +1,13 @@
+<div ng-if="$ctrl.stService" class="summary-content">
+    <h4 mee-heading="subheading4">{{$ctrl.stService.name}}</h4>
+
+    <p mee-paragraph class="description">{{$ctrl.stService.description}}</p>
+
+    <h4 mee-heading="subheading4" data-use-cms>Administrators</h4>
+    <!-- TODO: Investigate using pcd-directory-resource-view for each admin -->
+    <span>{{$ctrl.commaSeparateAdminSecurityGroups()}}</span>
+
+    <p mee-paragraph>
+        <a mee-hyperlink ng-href="{{$ctrl.getServiceTreeLink()}}" target="_blank" data-use-cms>View in Service Tree</a>
+    </p>
+</div>

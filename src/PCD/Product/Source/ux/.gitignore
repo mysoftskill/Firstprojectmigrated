@@ -1,0 +1,16 @@
+# Generated frontend code files.
+wwwroot/js
+wwwroot/lib
+wwwroot/css
+
+# Generated frontend test reports.
+test-reports
+
+# Do not allow to check in anything...
+appconfig/secrets/**/*.*
+# ...but encrypted files into the configuration secrets folder.
+!appconfig/secrets/**/*.encr
+
+# Do not allow to check in any flattened files
+**/*.flattened.ini
+props.txt

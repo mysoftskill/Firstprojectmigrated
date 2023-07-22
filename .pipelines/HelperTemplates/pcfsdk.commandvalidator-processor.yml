@@ -1,0 +1,95 @@
+parameters:
+- name: ReleaseType
+  displayName: Release Type can be PRE or PROD
+  values:
+  - PRE
+  - PROD
+
+stages:
+- stage: BuildAndPackageCommandValidatorAndCommandProcessor
+  dependsOn: setup
+  jobs:
+  - job: BuildCommandValidatorAndCommandProcessor
+    pool:
+      type: windows
+    variables:
+      ob_outputDirectory: $(PCFBuildRootDirectory)\OneBranch\Deployment\drop
+      ob_sdl_binskim_break: true
+      ob_artifactBaseName: drop_validator_processor
+      ob_sdl_codeSignValidation_excludes: -|**\*.nupkg\**;
+    steps:
+      - task: UseDotNet@2
+        inputs:
+          packageType: sdk
+          version: "3.1.x"
+          workingDirectory: $(Build.SourcesDirectory)
+
+      - task: UseDotNet@2
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+          performMultiLevelLookup: true
+      
+      - task: CmdLine@2
+        displayName: Restore Service Fabric Packages
+        inputs:
+          script: nuget restore $(PCFSolution)
+
+      - task: CmdLine@2
+        displayName: Restore
+        inputs:
+          script: $(PCFBuildRootDirectory)\OneBranch\Build\restore.cmd
+      
+      - task: RoslynAnalyzers@3
+        displayName: DotNet build privacy command validator with RoslynAnalyzers
+        inputs:
+          userProvideBuildInfo: msBuildInfo
+          msBuildVersion: '16.7'
+          msBuildArchitecture: x86
+          rulesetName: Custom
+          customRuleset: $(Build.SourcesDirectory)\src\Build\build.ruleset
+          msBuildCommandline: dotnet.exe build $(PrivacyCommandValidatorProject) --no-restore -p:Configuration=Release -p:ForcePackageTarget=true  -p:platform=AnyCPU -p:Version=$(Build.BuildNumber) -p:CompileTestHooks=true
+
+      - task: RoslynAnalyzers@3
+        displayName: DotNet build privacy command processor with RoslynAnalyzers
+        inputs:
+          userProvideBuildInfo: msBuildInfo
+          msBuildVersion: '16.7'
+          msBuildArchitecture: x86
+          rulesetName: Custom
+          customRuleset: $(Build.SourcesDirectory)\src\Build\build.ruleset
+          msBuildCommandline: dotnet.exe build $(PrivacyCommandProcessorProject) --no-restore -p:Configuration=Release -p:ForcePackageTarget=true  -p:platform=AnyCPU -p:Version=$(Build.BuildNumber) -p:CompileTestHooks=true
+
+      - task: onebranch.pipeline.signing@1
+        displayName: Sign binaries
+        inputs:
+          command: sign
+          signing_environment: azure-ado
+          signing_profile: external_distribution
+          files_to_sign: '**\*.exe;**\*.dll;**\*.ps1;**\*.psm1'
+          search_root: $(Build.SourcesDirectory)\src\PCF\bin
+
+      - task: CmdLine@2
+        displayName: Package PCF SDK
+        inputs:
+          script: $(PCFBuildRootDirectory)\OneBranch\Build\package-pcf-sdk.cmd ${{parameters.ReleaseType}} Release
+          workingDirectory: $(PCFBuildRootDirectory)\OneBranch
+
+      - task: onebranch.pipeline.signing@1
+        displayName: Sign nupkg
+        inputs:
+          command: sign
+          signing_environment: azure-ado
+          signing_profile: external_distribution
+          files_to_sign: '**\*.nupkg'
+          search_root: $(Build.SourcesDirectory)\src\PCF\nupkgs
+
+      - task: PowerShell@2
+        displayName: Move Outputs
+        inputs:
+          targetType: inline
+          script: |
+            robocopy $(PCFBuildRootDirectory)\bin\Release\x64 $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\ *.dll *.exe *.ps1 /s
+            robocopy $(PCFBuildRootDirectory)\nupkgs $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\ * /s
+            # robocopy exit codes 1-8 are actually passing, but need to be converted to 0 so the OneBranch doesn't fail out.
+            if ($Lastexitcode -lt 9) {$global:LastExitcode=0}

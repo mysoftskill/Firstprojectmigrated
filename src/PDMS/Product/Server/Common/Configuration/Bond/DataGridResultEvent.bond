@@ -1,0 +1,11 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successfull outgoing call to data grid.")]
+struct DataGridResultEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string assetType;
+    20: required string searchTerms;
+    30: required int32 totalHits;
+}

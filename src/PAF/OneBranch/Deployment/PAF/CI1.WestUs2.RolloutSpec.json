@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "CI1.WestUs2.ServiceModel.json",
+    "Name": "PAF-CI1-WESTUS2-CLUSTER-RG",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-GenevaMonitoringAgentApp-Resources",
+        "TargetType": "ServiceResource",
+        "TargetName": "GenevaMonitoringAgentApp-Resources",
+        "Actions": [
+            "Deploy"
+        ]
+    },
+    {
+        "Name": "Deploy-PafWorkItemCreator-Resources",
+        "TargetType": "ServiceResource",
+        "TargetName": "PafWorkItemCreator-Resources",
+        "Actions": [
+            "Deploy"
+        ],
+        "DependsOn": [
+          "Deploy-GenevaMonitoringAgentApp-Resources"
+        ]
+    }
+  ]
+}

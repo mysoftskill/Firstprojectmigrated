@@ -1,0 +1,70 @@
+﻿<h2>Summary</h2>
+<p>This incident has been filed for:</p>
+<p>
+<table>
+<tr><th style="text-align:right;padding:1px 5px">Team Name</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.TeamName var>]]</td></tr>
+<tr><th style="text-align:right;padding:1px 5px">Agent Name</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentName var>]]</td></tr>
+<tr><th style="text-align:right;padding:1px 5px">Agent Id</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentId var>]]</td></tr>
+<tr><th style="text-align:right;padding:1px 5px">Agent Type</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentType var>]]</td></tr>
+</table>
+</p>
+<h2>Missing Commands</h2>
+<p>
+You have uncompleted delete commands that have exceeded the 30-day SLA. Completion must be recorded even if an agent was mis-configured.
+</p>
+<p>
+<table>
+<tr>
+  <th style="padding:0px 5px;text-align: left;">Completion Rate</th>
+  <th style='padding:0px 5px;text-align: left;'>Expected Rate</th>
+  <th style='padding:0px 5px;text-align: left;'>Signal Age</th>
+</tr>
+<tr>
+  <td style="padding:0px 5px;text-align: left;color:[DSPARAM:Color];">[[<var s:$.AgentInfo.CompletionRate var>]]%</td>
+  <td style='padding:0px 5px;text-align: left;color:[DSPARAM:Color];'>[[<var s:$.AgentInfo.ExpectedRate var>]]%</td>
+  <td style='padding:0px 5px;text-align: left;color:[DSPARAM:Color];'>[[<var s:$.AgentInfo.SignalAge var>]]+ days old</td>
+</tr>
+</table>
+</p>
+<p>
+<ul>
+<li>View your agent's health: <a href="https://aka.ms/agentdrilldown">https://aka.ms/agentdrilldown</a></li>
+<li>For troubleshooting: <a href="https://aka.ms/ngpCosmosCmdDebug">Cosmos Delete Command Debugging Guide</a></li>
+</ul>
+</p>
+<p><b>Exceeding SLA is a compliance violation and you will need to review the business risk and mitigations with your management and CELA.</b></p>
+
+<br />
+<hr/>
+
+<h2>Background</h2>
+<p>
+NGP Common Infrastructure auditing enables Microsoft to demonstrate delete and export customer 
+promises to a regulatory or audit agency.  The NGP Common Infra team has identified several scenarios 
+where auditing is expecting agents to complete commands based on registration and those agents have large 
+amounts of pending (non-completed) commands.
+</p>
+
+
+<h2>Incident Workflow</h2>
+<ol>
+<li>If you do not have enough troubleshooting information to investigate this incident yourself, engage the <a href="https://manage.privacy.microsoft.com/data-agents/view/{6}" target="_blank">agent owners</a>.</li>  
+<li>Acknowledge the Incident if you are the person investigating it.</li>
+<li>Debug and fix.
+<li>Mitigate the incident when you have published the fix into production.</li>
+<li>Resolve the incident when the fix is reflected in the reports: <a href="https://aka.ms/agentdrilldown" target="_blank">https://aka.ms/agentdrilldown</a>.</li>
+  <ol>
+  <li>Here are examples of <a href="https://microsoft.sharepoint.com/teams/ngphome/SitePages/Healthy%20Data%20Agent%20Examples.aspx" target="_blank">healthy agents</a>.</li>
+  </ol>
+</ol>
+
+<h2>Resources</h2>
+<ul>
+    <li>For additional support go to <a href="https://aka.ms/ngpsupport" target="_blank">NGP support</a>, <b>after reading the debugging guide</b> for assistance.</li>
+    <li>COSMOS Announcements are archived <a href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/Shared%20Documents/Forms/AllItems.aspx?id=%2Fteams%2Fngphome%2Fngpx%2Fexecution%2FShared%20Documents%2FNGP%20Cosmos%20Announcements" target="_blank">here</a></li>
+    <li>NGP Common Infrastructure Feature Announcements are archived <a href="https://microsoft.sharepoint.com/teams/ngphome/Shared%20Documents/Forms/AllItems.aspx?id=%2Fteams%2Fngphome%2FShared%20Documents%2FNGP%20Feature%20Announcements" target="_blank">here</a></li>
+</ul>
+
+<br />
+<hr />
+If you want to receive data agent updates, please join <a href="https://idweb/identitymanagement/aspx/groups/mydls.aspx?popupFromClipboard=https%3A%2F%2Fidweb%2Fidentitymanagement%2Faspx%2FGroups%2FEditGroup.aspx%3Fid%3D3ceb0f3a-0e0f-46cf-9549-ffca3fed0046">NGP Data Agent Updates</a> DL. 

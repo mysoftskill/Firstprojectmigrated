@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Microsoft.PrivacyServices.NgpProxy.PrivacyExperienceServiceProxy</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.NgpProxy.PrivacyExperienceServiceProxy</AssemblyName>
+    <UseDefaultBinplacing>false</UseDefaultBinplacing>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>PrivacyExperienceServiceProxy</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+    <DocumentationFile>\Bin\$(AssemblyName).xml</DocumentationFile>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\ApiNames.cs" />
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\ApiRouteMapping.cs" />
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\DataPolicyOperationsController.cs">
+      <Link>Controllers\DataPolicyOperationsController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\DirectoryController.cs">
+      <Link>Controllers\DirectoryController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\KeepAliveController.cs">
+      <Link>Controllers\KeepAliveController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\ODataPrivacyController.cs">
+      <Link>Controllers\ODataPrivacyController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\UsersController.cs">
+      <Link>Controllers\UsersController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\Helpers\ExportPersonalDataHelper.cs">
+      <Link>Controllers\Helpers\ExportPersonalDataHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Controllers\Helpers\RemovePersonalDataHelper.cs">
+      <Link>Controllers\Helpers\RemovePersonalDataHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\ErrorHttpActionResult.cs">
+      <Link>ErrorHttpActionResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Extensions\ApiControllerExtensions.cs">
+      <Link>Extensions\ApiControllerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Extensions\HttpRequestExtensions.cs">
+      <Link>Extensions\HttpRequestExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Common\Owin\NoSniffXContentTypeOptionsMiddleware.cs">
+      <Link>Extensions\NoSniffXContentTypeOptionsMiddleware.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Filters\OdataUnhandledExceptionFilterAttribute.cs">
+      <Link>Filters\OdataUnhandledExceptionFilterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Filters\UnhandledExceptionFilterAttribute.cs">
+      <Link>Filters\UnhandledExceptionFilterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Handlers\IncomingLogicalOperationHandler.cs">
+      <Link>Handlers\IncomingLogicalOperationHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Handlers\PerfCounterHandler.cs">
+      <Link>Handlers\PerfCounterHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Host\HostApplication.cs">
+      <Link>Host\HostApplication.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Host\StartupSuccessDecorator.cs">
+      <Link>Host\StartupSuccessDecorator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\HttpStatusCodeMapping.cs">
+      <Link>HttpStatusCodeMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\ODataConfigs\ModelBuilder.cs">
+      <Link>ODataConfigs\ModelBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Security\CallerPrincipal.cs">
+      <Link>Security\CallerPrincipal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Security\PrivacyExperienceAuthenticationFilter.cs">
+      <Link>Security\PrivacyExperienceAuthenticationFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Security\PrivacyExperienceIdentityAuthorizationAttribute.cs">
+      <Link>Security\PrivacyExperienceIdentityAuthorizationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\PXS\Product\PXF\PrivacyExperienceService\Source\Security\VortexPrincipal.cs">
+      <Link>Security\VortexPrincipal.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\AzureInfraCommon\Source\AzureInfraCommon.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\Contracts\DSRContracts\DSR.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\Contracts\PrivacyOperationContracts\PrivacyOperation.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\PXF\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\PXF\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\PXF\Host\Source\PrivacyHost.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\PXF\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+      <Link>AadIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\PrivacyExperienceService\MsaIdentityService.ini">
+      <Link>MsaIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\PrivacyExperienceService\PrivacyExperienceService.ini">
+      <Link>PrivacyExperienceService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Adapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>GlobalConfiguration.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.OData" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.OData.Core" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Server" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

@@ -1,0 +1,55 @@
+// This query computes the number of agents that had export requests forcibly completed.
+// This report looks back up to 45 days from the current time. 
+//
+// Date Constants
+let reportdate = toscalar(ExportAuditLogRollupV3 | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+let startdate = datetime_add('day', -45, reportdate);
+let enddate = datetime_add('day', -30, reportdate);
+//
+// The set of data agents to intentionally exclude.
+let excludedAgents = datatable(AgentId:string)
+[
+];
+//
+// Info on production agents
+let AgentOwnerInfo = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+    | where AgentReadiness == "ProdReady" // Filters to only ProdReady agents. Remove this if you would like to analyze other agents.
+    | join kind=leftantisemi excludedAgents on AgentId
+); 
+// Agent Level information
+let AgentLevelData = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').ExportAuditLogSnapshotV3
+    | where CompleteType != "NotApplicable"
+    | where IngestedTime >= startdate and IngestedTime < enddate
+    | summarize arg_min(CompletedTime, *) by CommandId, AgentId, AssetGroupQualifier
+    | summarize 
+        IngestedTime=min(IngestedTime),
+        CompletedTime=min(CompletedTime),
+        ForceCompleted=countif(isnotnull(CompletedTime) and tolower(CompleteType) == 'auto')
+        by AgentId, CommandId
+    | where ForceCompleted > 0
+    | summarize CountForceCompleted=count() by AgentId 
+);
+// Report summary
+AgentLevelData
+| join kind=inner AgentOwnerInfo on AgentId 
+| project 
+    DivisionName, 
+    OrganizationName, 
+    ServiceGroupName, 
+    TeamGroupName, 
+    ServiceName, 
+    AgentName, 
+    AgentId, 
+    OwnerId, 
+    CountForceCompleted,
+    Protocol, 
+    AgentReadiness, 
+    GC, 
+    Email 
+| order by AgentId asc
+

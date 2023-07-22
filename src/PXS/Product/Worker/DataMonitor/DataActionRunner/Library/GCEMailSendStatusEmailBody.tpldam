@@ -1,0 +1,24 @@
+﻿Emails sent (one per row):
+<br>
+<p>
+  <table>
+    <thead>
+      <tr>
+        <td><b>GC</b></td>
+        <td><b>Agents</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      [[<foreach sel:$.Incidents foreach>]]
+        <tr>
+          <td>[[<var s:$.GCEmail var>]]</td>
+          <td>
+            [[<foreach sel:$.Agents foreach>]]
+              [[<var s:$.AgentName var>]] ([[<var s:$.AgentId var>]])
+            [[<foreachend>]]
+          </td>
+        </tr>
+      [[<foreachend>]]
+    </tbody>
+  </table>
+</p>

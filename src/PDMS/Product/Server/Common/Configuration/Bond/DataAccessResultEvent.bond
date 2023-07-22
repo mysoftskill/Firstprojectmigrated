@@ -1,0 +1,10 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successful outgoing data access call.")]
+struct DataAccessResultEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string accessKey;
+    20: required int32 totalHits;
+}

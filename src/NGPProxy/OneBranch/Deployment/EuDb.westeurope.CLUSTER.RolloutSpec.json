@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+  "ContentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "Eudb.westeurope.ServiceModel.json",
+    "Name": "NGPPROXY-EUDB-WESTEUROPE-CLUSTER",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "Parameters": {
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "Email": {
+        "To": "ngpcieng@microsoft.com"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "Deploy-PxsServiceFabric-Cluster-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "PxsServiceFabric-Cluster-Resources",
+      "Actions": [
+        "Deploy"
+      ]
+    },
+    {
+      "Name": "Deploy-GenevaMonitoringAgentApp-Resources",
+      "TargetType": "ServiceResource",
+      "TargetName": "GenevaMonitoringAgentApp-Resources",
+      "Actions": [
+        "Deploy"
+      ],
+      "DependsOn": [
+        "Deploy-PxsServiceFabric-Cluster-Resources"
+      ]
+    }
+  ]
+}

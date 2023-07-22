@@ -1,0 +1,45 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Copy and paste the resulting request IDs into the Customer Assistance Portal (CAP) in order to track
+            the requests created for the given CAP ID. Note that the returned request IDs indicate the request was
+            sent successfully, but not that the request was completed.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <p mee-paragraph i9n-cap-id>
+            <span class="view-label"
+                  data-use-cms>CAP ID:</span> {{$ctrl.capId}}
+        </p>
+
+        <p mee-paragraph>
+            <span class="view-label"
+                  data-use-cms>Request IDs:</span>
+        </p>
+        <p mee-paragraph
+           i9n-request-ids
+           ng-repeat="id in $ctrl.resultingRequestIds">
+            {{id}}
+        </p>
+
+        <h4 mee-heading="heading5" data-use-cms>Additional actions</h4>
+        <p mee-paragraph>
+            <a mee-hyperlink
+               i9n-check-status-link
+               ui-sref="manual-requests.status">Check the status of all submitted requests</a>
+        </p>
+        <p mee-paragraph>
+            <a mee-hyperlink
+               i9n-submit-another-request-link
+               ui-sref="manual-requests">Submit another request</a>
+        </p>
+    </pcd-content>
+
+</pcd-default-page-layout>
+

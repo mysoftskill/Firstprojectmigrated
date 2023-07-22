@@ -1,0 +1,347 @@
+<MonitoringManagement eventVersion="2" version="1.0" timestamp="2020-09-09T06:52:21.2840407Z" namespace="nonprodadgcs">
+  <Imports>
+    <!-- Imports documentation: https://jarvis.dc.ad.msft.net/?page=documents&section=9c95f4eb-8689-4c9f-81bf-82d688e860fd&id=15b0c8c4-c82f-4659-a4c8-52f153879a03   -->
+    <!-- You can import other files.  The AgentStandardEvents.xml emits metrics about the agent -->
+    <Import file="AgentStandardEvents.xml" />
+    <!-- <Import file="ServiceFabricEvents.xml" /> -->
+    <Import file="AzureSecurityPackMds.xml" />
+    <Import file="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker.xml" />
+  </Imports>
+  <Accounts>
+    <Account moniker="nonprodadgcsdiag" isDefault="true" />
+    <Account moniker="nonprodadgcssecurity" alias="AzSecurityStore" />
+    <Account moniker="nonprodadgcsaudit" alias="AuditStore" />
+  </Accounts>
+  <!-- Management documentation: https://jarvis.dc.ad.msft.net/?page=documents&section=9c95f4eb-8689-4c9f-81bf-82d688e860fd&id=8794f47e-d1b2-4538-8f31-839c41c1710a  -->
+  <Management eventVolume="Medium" defaultRetentionInDays="29" onDemandRequests="true">
+    <!--
+      The identity TenantRole means MONITORING_IDENTITY, MONITORING_ROLE, and MONITORING_ROLE_INSTANCE will
+      uniquely identify any of your instances
+    -->
+    <!--Identity type="TenantRole" /-->
+    <!--
+      Specifying this specific set of identity columns is important to ensuring
+	    consistency for translation of xpert resources via all migraiton tools.
+    -->
+    <Identity tenantNameAlias="Environment">
+      <IdentityComponent name="Environment">GetEnvironmentVariable("MONITORING_TENANT")</IdentityComponent>
+      <IdentityComponent name="Role">GetEnvironmentVariable("MONITORING_ROLE")</IdentityComponent>
+      <IdentityComponent name="RoleInstance">GetEnvironmentVariable("MONITORING_ROLE_INSTANCE")</IdentityComponent>
+      <IdentityComponent name="DataCenter">GetEnvironmentVariable("MONITORING_DATACENTER")</IdentityComponent>
+    </Identity>
+    <!--
+      The diskQuotaInMB is a required parameter.  For 10,000 MB there should be 15,000 MB available on the disk  The CPU, memory and network can also be limited in the
+      AgentResourceUsage element's attributes.
+    -->
+    <AgentResourceUsage diskQuotaInMB="10000" cpuPercentUsage="20" />
+    <AgentMetrics mdmMonitoringAccount="ADGCS_NonProdHotPath" />
+  </Management>
+  <Sources>
+    <Source name="RequestTelemetry" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <Source name="CommandSentToAgentEvents" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <Source name="CustomEvents" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <Source name="SQExtensionLogs" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SQEDiagnosticsIn" />
+  </Sources>
+  <!-- Events documentation: https://jarvis.dc.ad.msft.net/?page=documents&section=9c95f4eb-8689-4c9f-81bf-82d688e860fd&id=ac0084ad-5065-4b16-8f7d-0a5193143378   -->
+  <!--
+      Events can contain one or more Event elements.  The Event elements each describe a different kind of collector.
+      Events must be defined in the order of the mds2.xsd.
+    -->
+  <Events>
+    <EventDeclarations storeType="CentralBond">
+      <Declaration eventName="RequestTelemetry" storeType="CentralBond" />
+      <Declaration eventName="CommandSentToAgentEvents" storeType="CentralBond" />
+      <Declaration eventName="CustomEvents" storeType="CentralBond" />
+      <Declaration eventName="SQExtensionLogs" storeType="CentralBond" />
+    </EventDeclarations>
+    <CounterSets>
+      <CounterSet eventName="SysPerfCounters" sampleRateInSeconds="60" storeType="CentralBond" mdmMonitoringAccount="ADGCS_NonProdHotPath" mdmNamespace="PerformanceMetrics">
+        <MdmDimensions>
+          <MdmDimension name="RoleInstance"><![CDATA[GetEnvironmentVariable("MONITORING_ROLE_INSTANCE")]]></MdmDimension>
+          <MdmDimension name="Role"><![CDATA[GetEnvironmentVariable("MONITORING_ROLE")]]></MdmDimension>
+          <MdmDimension name="Environment"><![CDATA[GetEnvironmentVariable("MONITORING_TENANT")]]></MdmDimension>
+        </MdmDimensions>
+        <Counter>\Memory\% Committed Bytes In Use</Counter>
+        <Counter>\Processor(_Total)\% Processor Time</Counter>
+        <Counter>\Process(Pcf.Worker)\% Processor Time</Counter>
+        <Counter>\Process(StandingQueryExtension)\% Processor Time</Counter>
+        <Counter>\LogicalDisk(*)\Free Megabytes</Counter>
+      </CounterSet>
+    </CounterSets>
+    <CrashDumpMonitor>
+      <CrashDumpItem eventName="CrashDumpEvent" storeType="CentralBond" useAzureWatson="true">
+        <ProcessList>
+          <Process>[All]</Process>
+        </ProcessList>
+      </CrashDumpItem>
+    </CrashDumpMonitor>
+    <IfxEvents sessionName="AdgcsSesssion">
+      <Event id="Ifx.PartASchema/Ifx.BaseOperationSchema/Ifx.OperationSchema" eventName="IfxOperationEvent" storeType="Local" />
+      <Event id="Ifx.TracePartASchema/Ifx.TraceSchema" eventName="IfxTraceEvent" storeType="CentralBond" />
+      <Event id="Ifx.EtwAuditSchemaApplication" eventName="IfxAuditApplication" storeType="CentralBond" />
+      <Event id="Ifx.EtwAuditSchemaManagement" eventName="IfxAuditManagement" storeType="CentralBond" />
+    </IfxEvents>
+    <Extensions>
+      <Extension extensionName="MetricsExtension">
+        <CommandLine><![CDATA[MetricsExtension.Native.exe]]></CommandLine>
+      </Extension>
+      <!--
+      <Extension extensionName="StandingQueryExtension">
+        <CommandLine><![CDATA[StandingQueryExtension.exe]]></CommandLine>
+        <ResourceUsage cpuPercentUsage="5" cpuThrottling="true" memoryLimitInMB="96" memoryThrottling="true" recycleOnMemory="false" />
+      </Extension>
+      -->
+    </Extensions>
+  </Events>
+  <EventStreamingAnnotations>
+    <EventStreamingAnnotation name="^SLLLogInformationalGeneral$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogWarningGeneral$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogErrorGeneral$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogCriticalGeneral$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogVerboseGeneral$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogAlwaysGeneral$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogInformationalGeneralRealtime$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogWarningGeneralRealtime$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogErrorGeneralRealtime$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogCriticalGeneralRealtime$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogVerboseGeneralRealtime$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^SLLLogAlwaysGeneralRealtime$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^IfxOperationEvent$">
+      <DGrep>
+        <Content><![CDATA[]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^IfxTraceEvent$">
+      <DGrep>
+        <Content><![CDATA[]]></Content>
+      </DGrep>
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSysAuth$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSysChg$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSysCmd$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSysLogon$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSysAV$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSLALExe$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSLALScr$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSLALApps$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSLALAlerts$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^.*AsmSLCI$">
+      <DGrep>
+        <Content><![CDATA[<Config />]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^IfxAuditApplication$">
+      <DGrep>
+        <Content><![CDATA[]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^IfxAuditManagement$">
+      <DGrep>
+        <Content><![CDATA[]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^CustomEvents$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^CommandSentToAgentEvents$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^RequestTelemetry$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+  </EventStreamingAnnotations>
+  <EnvelopeSchema>
+    <Field name="AppVer">"My_AppVer"</Field>
+    <Field name="AppId">"My_AppId"</Field>
+    <Field name="IKey">"My_IKey"</Field>
+    <Extension name="Cloud">
+      <Field name="Name">GetEnvironmentVariable("MONITORING_TENANT")</Field>
+      <Field name="Role">GetEnvironmentVariable("MONITORING_ROLE")</Field>
+      <Field name="RoleVer">"Cloud_RoleVer"</Field>
+      <Field name="RoleInstance">GetEnvironmentVariable("MONITORING_ROLE_INSTANCE")</Field>
+      <Field name="Environment">GetEnvironmentVariable("MONITORING_GCS_ENVIRONMENT")</Field>
+      <Field name="Location">GetEnvironmentVariable("MONITORING_DATACENTER")</Field>
+      <Field name="DeploymentUnit">"Cloud_DeploymentUnit"</Field>
+    </Extension>
+  </EnvelopeSchema>
+  <TaggedData name="StandingQueryExtension">
+    <Data>
+      <Settings>
+        <LogSources>
+          <Source>
+            <!-- Events matching the given predicate are processed according to the rules below -->
+            <Predicate><![CDATA[
+                @"data.baseType" == "Ms.Qos.IncomingServiceRequest" || @"data.baseType" == "Ms.Qos.OutgoingServiceRequest"
+                ]]></Predicate>
+            <!-- Indicates which stream (pipe) to use to push data to the MA  -->
+            <StreamName>SLLTelemetryIn</StreamName>
+            <!-- Indicates the name to tag the event with when pushing it to the MA -->
+            <EventName>RequestTelemetry</EventName>
+            <!-- Indicates remapping of column names when emitting to MA event stream -->
+            <!-- Also sets the max serialization depth to 3 -->
+            <ColumnMappings maxDepth="3">
+              <ColumnMapping From="data_baseData_cC_" To="data_baseData_cC_" />
+              <ColumnMapping From="data_ResponseHeaders_" To="data_ResponseHeaders_" />
+              <ColumnMapping From="data_RequestHeaders_" To="data_RequestHeaders_" />
+              <!-- Fields to exclude -->
+              <!-- This field is redundant with PackedProperties -->
+              <ColumnMapping From="data_Properties_" />
+              <!-- AMC FLight info -->
+              <ColumnMapping From="data_Flights_" />
+            </ColumnMappings>
+          </Source>
+          <Source>
+            <!-- Send PCF CommandFilteredEvents to a separate EventName -->
+            <Predicate><![CDATA[
+                @"name" == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CommandFilteredEvent" && @"data.SentToAgent" == "True"
+                ]]></Predicate>
+            <StreamName>SLLTelemetryIn</StreamName>
+            <EventName>CommandSentToAgentEvents</EventName>
+            <!-- Also sets the max serialization depth to 3 -->
+            <ColumnMappings maxDepth="3">
+            </ColumnMappings>
+          </Source>
+          <Source>
+            <StreamName>SLLTelemetryIn</StreamName>
+            <EventName>CustomEvents</EventName>
+            <!-- Also sets the max serialization depth to 3 -->
+            <ColumnMappings maxDepth="3">
+            </ColumnMappings>
+          </Source>
+        </LogSources>
+      </Settings>
+      <Environment>
+        <Roles>
+          <Role name="PCF.Frontdoor" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+          <Role name="PCF.Worker" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+          <Role name="PXS.Frontdoor" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+          <Role name="PXS.Worker" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+          <Role name="PCD.Frontdoor" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+          <Role name="PDMS.Frontdoor" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+          <Role name="PDMS.Worker" autoPreaggCreationMode="includeIdentityDimensions">
+            <Templates>
+              <Include name="PCD.Frontdoor$PCF.Frontdoor$PCF.Worker$PDMS.Frontdoor$PDMS.Worker$PXS.Frontdoor$PXS.Worker" />
+            </Templates>
+          </Role>
+        </Roles>
+      </Environment>
+    </Data>
+  </TaggedData>
+</MonitoringManagement>

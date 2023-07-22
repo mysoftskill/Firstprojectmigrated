@@ -1,0 +1,49 @@
+<section>
+    <div ng-if="!$ctrl.assetGroups">
+        <a ui-sref="^.create({ ownerId: $ctrl.ownerId })" data-glyph="add" mee-action-trigger="align-margin" data-use-cms>Register data asset</a>
+    </div>
+
+    <div ng-if="$ctrl.assetGroups">
+        <pcd-asset-groups-list pcd-asset-groups="$ctrl.assetGroups"
+                               pcd-owner-id="$ctrl.ownerId"
+                               pcd-on-delete="$ctrl.onDeleteClicked(assetGroup)"
+                               pcd-display-options="$ctrl.assetGroupsListDisplayOptions"></pcd-asset-groups-list>
+        <button mee-button
+                i9n-link-data-agent
+                ng-disabled="!$ctrl.linkingEnabled()"
+                ng-click="$ctrl.linkDataAgent()"
+                data-use-cms>
+            Link to a data agent
+        </button>
+        <button mee-button
+                i9n-unlink-data-agent
+                ng-disabled="!$ctrl.anyChecked()"
+                ng-click="$ctrl.unlinkDataAgent()"
+                data-use-cms>
+            Unlink from a data agent
+        </button>
+        <button mee-button
+                i9n-link-variants
+                ng-if="$ctrl.allowVariantManagement"
+                ng-disabled="!$ctrl.anyChecked()"
+                ng-click="$ctrl.linkVariant()"
+                data-use-cms>
+            Link to variants
+        </button>
+        <button mee-button
+                i9n-move-data-assets
+                ng-disabled="!$ctrl.anyChecked()"
+                ng-click="$ctrl.transferAssetGroups()"
+                data-use-cms>
+            Transfer to another team
+        </button>
+
+        <ng-transclude ng-transclude-slot="additionalControls">
+        </ng-transclude>
+        <mee-alert ng-if="$ctrl.shouldShowLinkingNotAllowedBanner()" kind="use-glyph info">
+            <alert-content data-use-cms>
+                Linking data assets not owned by your team is not allowed.
+            </alert-content>
+        </mee-alert>
+    </div>
+</section>

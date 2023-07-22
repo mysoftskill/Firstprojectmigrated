@@ -1,0 +1,61 @@
+@startuml AADAccountClose Architecture
+
+
+
+folder "Azure Identity" {
+    node [AAD Notification Service]
+
+    folder "Azure EventHubs" {
+        database [AAD NS EventHubs]
+    }
+
+    node [AAD Request Verification Service]
+}
+
+folder "NGP Components" {
+    node "AAD Account Close Worker" {
+        node [EventHub Subscriber]
+        node [Queue Processor]
+    }
+    node [Privacy Command Feed]
+
+    folder "Azure Storage" {
+        database AzureQueues
+        database [Table Storage: Dead-letter]
+    }
+    
+    cloud "Cosmos" {
+        database RawSignalStream
+        database CookedSignalStream
+    }
+
+    folder "Agent Queues: CosmosDB" {
+        database AgentQueues
+    }
+}
+
+cloud "Agents" {
+    node DeleteAgents
+}
+
+cloud "Cosmos Agents" {
+    node CosmosDeleteAgents
+}
+
+[AAD Notification Service] --> [AAD NS EventHubs] : Publish AAD Account Close events
+[EventHub Subscriber] <--> [AAD NS EventHubs] : Subscribe and Checkpoint
+
+[EventHub Subscriber] --> AzureQueues : Enqueue
+[Queue Processor] --> [AAD Request Verification Service] : Exchange pre verifier for verifier
+[Queue Processor] <--> AzureQueues : Dequeue commands for processing
+[Queue Processor] --> [Table Storage: Dead-letter] : Write non-retriable failures to dead-letter storage
+[Queue Processor] --> [Privacy Command Feed] : Send DSRs to PCF
+
+[Privacy Command Feed] <--> AgentQueues : Enqueue, dequeue, update, and delete aad account close commands
+
+[Privacy Command Feed] --> DeleteAgents : Send commands to applicable non cosmos agents
+
+[Privacy Command Feed] --> RawSignalStream : Write account close signal stream
+CookedSignalStream --> CosmosDeleteAgents : Agents consume aad account close signals
+
+@enduml

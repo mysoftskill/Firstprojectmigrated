@@ -1,0 +1,102 @@
+// This query produces a rollup by Division,Organization of the NonCosmos agent operational health
+
+// Date Constants
+let reportdate = toscalar(NonCosmosAgentHealthFullRollupByDayHistory | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+let startdate = datetime_add('day', -45, reportdate);
+let enddate = datetime_add('day', -30, reportdate);
+//
+// Info on production agents
+let AgentOwnerInfo = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+    | where AgentReadiness == "ProdReady" // Filters to only ProdReady agents
+    | project AgentId, DivisionName, OrganizationName, DivisionOwner=tostring(split(DivisionOwners, ";")[0]), OrganizationOwner=tostring(split(OrganizationOwners, ";")[0]), GC, Email, Protocol, AliasDict=toscalar(cluster("Ngpreporting").database('NgpInfo').GetNameByAlias())
+    | project AgentId, DivisionName, OrganizationName, DivisionOwner, GC, Email, Protocol, DivLookup=AliasDict[DivisionOwner], OrganizationOwner, OrgLookup=AliasDict[OrganizationOwner]
+    | project AgentId, DivisionName=iif(DivisionName == "", "Unknown", DivisionName), OrganizationName=iif(OrganizationName == "", "Unknown", OrganizationName), GC, Email, Protocol, DivisionVP=iif(DivLookup != "", DivLookup, DivisionOwner),OrganizationLeader=iif(OrgLookup != "", OrgLookup, OrganizationOwner)
+); 
+// Agent Level information
+let AgentLevelData = materialize
+(
+    NonCosmosAgentHealthFullRollupByDayHistory
+    | where SQLizerStreamDateId == reportdate
+    | where startofday(DeleteRequestDate) between (startdate..enddate) 
+    | join kind=rightouter AgentOwnerInfo on AgentId
+    | where DivisionName != ""
+    | summarize 
+        StartDate=min(startofday(DeleteRequestDate)), 
+        EndDate=max(startofday(DeleteRequestDate)), 
+        Pending=sum(PendingDeleteWithinSLACount + PendingDeleteOutOfSLACount), 
+        Acknowledged=sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount) 
+        by AgentId, DivisionName, OrganizationName, Protocol, GC, Email, DivisionVP, OrganizationLeader
+);
+// Total rollup
+let Total = materialize
+(
+    AgentLevelData
+    | summarize 
+        Acknowledged=sum(Acknowledged), 
+        Total=sum(Acknowledged + Pending), 
+        AgentCount=countif(AgentId != "")
+    | project 
+        DisplayName = "Total", 
+        SortName = "z", 
+        AgentCount, 
+        Acknowledged, 
+        Total, 
+        PostSLACompletionStatus=iif(Total > 0, toreal(Acknowledged) / toreal(Total), toreal(0))
+);
+// Division rollup
+let ByDivision = materialize
+(
+    AgentLevelData
+    | summarize 
+        Acknowledged=sum(Acknowledged), 
+        Total=sum(Acknowledged + Pending), 
+        AgentCount=countif(AgentId != "") 
+        by DivisionName, DivisionVP
+    | project 
+        DisplayName = DivisionName, 
+        SortName = strcat(DivisionName, "."), 
+        AgentCount, 
+        Acknowledged, 
+        Total, 
+        PostSLACompletionStatus=iif(Total > 0, toreal(Acknowledged) / toreal(Total), toreal(0)), 
+        DivisionVP
+);
+// Org rollup
+let ByOrg = materialize
+(   
+    AgentLevelData
+    | summarize 
+        Acknowledged=sum(Acknowledged), 
+        Total=sum(Acknowledged + Pending), 
+        AgentCount=countif(AgentId != "") 
+        by DivisionName, OrganizationName, GC, Email, OrganizationLeader
+    | where Total > 0
+    | project 
+        DisplayName = strcat("    ", OrganizationName), 
+        SortName = strcat(DivisionName, ".", OrganizationName), 
+        AgentCount, 
+        Acknowledged, 
+        Total, 
+        PostSLACompletionStatus=iif(Total > 0, toreal(Acknowledged) / toreal(Total), toreal(0)), 
+        GC, 
+        Email, 
+        OrganizationLeader
+    | where PostSLACompletionStatus < 0.999
+);
+// Report summary
+Total
+| union ByDivision 
+| union ByOrg 
+| order by SortName asc
+| project 
+    DisplayName, 
+    AgentCount, 
+    Counts_millions=strcat(round(toreal(Acknowledged) / 1000000,1)," / ", round(toreal(Total) / 1000000,1)), 
+    PostSLACompletionStatus=strcat(round(PostSLACompletionStatus*100, 2), "%"), 
+    GC, 
+    GCEmail=Email, 
+    DivisionVP, 
+    OrganizationLeader

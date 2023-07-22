@@ -1,0 +1,7 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IDataAccessConfiguration 
+{
+    1   :   required    string          ActiveDirectoryCacheIdPrefix;
+    2   :   required    int32           ActiveDirectoryCacheExpirationInMilliseconds;
+};

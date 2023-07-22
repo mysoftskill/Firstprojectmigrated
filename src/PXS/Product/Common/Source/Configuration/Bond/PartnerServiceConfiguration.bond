@@ -1,0 +1,47 @@
+﻿import "CommonConfiguration.bond" 
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IPartnerServiceConfiguration
+{
+	[UniquenessRule("Invariant")]
+	1 : required string Endpoint;
+
+	[UniquenessRule("Invariant")]
+	2 : optional ICertificateConfiguration CertificateConfiguration;
+
+	[UniquenessRule("Invariant")]
+	3 : required IRetryStrategyConfiguration RetryStrategyConfiguration;
+
+	[UniquenessRule("Invariant")]
+	4 : required IServicePointConfiguration ServicePointConfiguration;
+
+	[UniquenessRule("Invariant")]
+	5 : optional bool SkipServerCertificateValidation = false;
+
+	[UniquenessRule("Invariant")]
+	6 : optional int32 TimeoutInMilliseconds = 10000;
+    
+    [UniquenessRule("Invariant")]
+    7 : optional bool EnableOutboundTraffic = true;
+};
+
+
+[Multiplicity("Singleton")]
+struct IMsaIdentityServiceConfiguration : IPartnerServiceConfiguration
+{
+	[UniquenessRule("Invariant")]
+	1 : required string ClientId;
+
+	[UniquenessRule("Invariant")]
+	2 : required string Policy;
+
+	[UniquenessRule("Invariant")]
+	3 : required bool CacheTokens;
+
+	[UniquenessRule("Invariant")]
+	4 : required double CacheTokenExpiryBufferTimeInSeconds;
+
+	[UniquenessRule("Invariant")]
+	5 : required double InitialTokenRequestTimeoutInSeconds;
+};

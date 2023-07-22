@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Microsoft.PrivacyServices.PXS.Command.Contracts</title>
+    <authors>ngpcieng@microsoft.com</authors>
+    <owners>ngpcieng@microsoft.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>PXS Command Contracts for the NGP PCF API.</description>
+    <releaseNotes>PXS Command Contracts for the NGP PCF API.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>NGP Privacy PXS Command Contracts MemberServices</tags>
+  </metadata>
+  <files>
+    <file src="*Microsoft.PrivacyServices.PXS.Command.Contracts.xml" target="lib\net452" />
+  </files>
+</package>

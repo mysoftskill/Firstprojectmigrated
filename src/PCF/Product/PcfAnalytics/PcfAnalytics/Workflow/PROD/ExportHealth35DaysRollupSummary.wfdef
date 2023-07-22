@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Workflows>
+  <Workflow Name="PCF.ExportHealthSummary35DaysRollup.HourlyProcessor.PROD" PrefixParentName="0" Start="2018-03-18T22:10:00.0000000" RecurrenceUnit="1" RecurrenceAmount="30" Email="wenyashu@microsoft.com" FolderName="PCF.Analytics" Author="wenyashu" Enabled="1" MaxParallelExecution="1" TimeOutInMinutes="0">
+    <ConfigBases>
+      <ConfigBase Name="PCF.ExportAgentHealth.HourlyProcessConfig" File="..\..\Cosmos\ExportAgentHealthReport.script" />
+    </ConfigBases>
+	<Parameters>
+      <Parameter Name="__vc" Value="https://cosmos15.osdinfra.net/cosmos/asimov.partner.ust" />
+      <Parameter Name="_dependencyCheckMissingAction" Value="CompleteNotWriteTracker" />
+      <Parameter Name="_dependencyStreams" Value="/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/prod/ExportAuditLogRollup/v2/%Y/%m/%d/ExportAuditLogRollup_%Y_%m_%d_%h.ss?datetime={_endDateTime}" />
+      <Parameter Name="_lookBehind" Value="240" />
+      <Parameter Name="_maxJobs" Value="3" />
+      <Parameter Name="_recurrence" Value="HourlyTracker" />
+      <Parameter Name="_scheduleOrder" Value="OldestFirst" />
+      <Parameter Name="_scopePath" Value="$(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR)" />
+      <Parameter Name="_startDate" Value="2018-03-19T00:00:00" />
+      <Parameter Name="_trackerFolder" Value="/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/Trackers/prod" />
+      <Parameter Name="_useLittleDelta" Value="false" />
+      <Parameter Name="pcfEnv" Value="PROD" />
+      <Parameter Name="version" Value="v2" />
+      <Parameter Name="_customProperties" Value="JobOwner=ust.membership.family.analytics" />
+    </Parameters>
+    <Activities>
+      <Activity Name="PCF.ExportAgentHealth.HourlyProcess.PROD" ConfigBase="PCF.ExportAgentHealth.HourlyProcessConfig" Class="Microsoft.Xflow.Activities.Scope.RecurrentScopeActivityV3" MaxRetries="3" CredentialName="ScopeJob.Asimov.Partner.Public" RetryWaitInterval="3">
+      </Activity>
+    </Activities>
+  </Workflow>
+</Workflows>

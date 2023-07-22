@@ -1,0 +1,14 @@
+﻿import "CommonConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+[Multiplicity("Singleton")]
+struct IPcfDataAgentConfiguration
+{
+    1: required string PxsFirstPartyPortalAadAppId;
+    2: required ICertificateConfiguration CertificateConfiguration;
+    3: optional bool Enabled = false;
+    4: required string AgentId;
+    5: required string PcfEndpoint = false;
+    6: optional bool EnableConsoleLogging = false;
+}

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflows xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="..\Schemas\WFDEFSchema.xsd">
+  <Workflow Name="MemMV.MemberView" Enabled="true"
+            Email="meems@microsoft.com"
+            RecurrenceUnit="2"
+            RecurrenceAmount="1"
+            Start="2014-11-07T15:00:00"
+            Schedule="false">
+    <ConfigBases>
+    </ConfigBases>
+    <Parameters>
+      <Parameter Name="__vc" Value="https://cosmos11.osdinfra.net/cosmos/asimov.partner.accountportal/"/>
+      <Parameter Name="_trackerFolder" Value="/shares/asimov.prod.data/Tracker/MemberViewService"/>
+      <Parameter Name="_recurrence" Value="HourlyTracker"/>
+      <Parameter Name="_startDate" Value="2014-11-11T02:00"/>
+      <Parameter Name="_useLittleDelta" Value="false"/>
+      <Parameter Name="_maxJobs" Value="10"/>
+      <Parameter Name="_priority" Value="1010"/>
+      <Parameter Name="_scopePath" Value="$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov;$(CLUSTER_ROOT)/users/sarubio/libraries"/>
+
+      <Parameter Name="MemberViewServiceStagingPath" Value="/shares/asimov.prod.data/PublicPartner/Staging/MemberViewService"/>
+      <Parameter Name="MemberViewServiceProcessedPath" Value="/shares/asimov.prod.data/PublicPartner/Processed/MemberViewService"/>
+      <Parameter Name="HourlyStreamPathPattern" Value="{0}/%Y/%m/%d/{0}_%Y_%m_%d_%h.ss"/>
+
+      <Parameter Name="MemberViewServiceLogsStreamName" Value="MemberViewServiceLogs"/>
+      <Parameter Name="MemberViewServiceQosStreamName" Value="MemberViewServiceQos"/>
+    </Parameters>
+    <Activities>
+      <Activity Name="Extract" Class="Microsoft.Xflow.Activities.Scope.RecurrentScopeActivityV2"
+                  Config="Scripts\Logs.script">
+      </Activity>
+      <Activity Name="Qos" Class="Microsoft.Xflow.Activities.Scope.RecurrentScopeActivityV2"
+                  Config="Scripts\Qos.script">
+        <Dependencies>
+          <Dependency Name="MemMV.MemberView.Extract"/>
+        </Dependencies>
+      </Activity>
+      <Activity Name="SQLizer" Class="Microsoft.Xbox.SQLizer.XFlow.SQLizerActivityV2" AllowedResources="DMQUALITY"
+                Config="SQLizer/MemberViewSQLizer.xml">
+        <Dependencies>
+          <Dependency Name="MemMV.MemberView.Qos"/>
+        </Dependencies>
+        <Parameters>
+          <Parameter Name="sqlizerStartDate" Value="2014-11-11"/>
+        </Parameters>
+      </Activity>
+    </Activities>
+  </Workflow>
+</Workflows>

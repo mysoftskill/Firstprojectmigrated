@@ -1,0 +1,47 @@
+parameters:
+# Assigns "-pre"" suffix if Non-PROD release
+- name: packageSuffix
+  displayName: Package Suffix
+  type: string
+  default: PRE
+  values:
+  - PRE
+  - PROD
+
+steps:
+- task: CmdLine@2
+  displayName: Package
+  inputs:
+    script: src\NGPProxy\OneBranch\Build\package.cmd Release
+
+- task: PowerShell@2
+  displayName: Create directories
+  inputs:
+    targetType: inline
+    script: |
+      New-Item -ItemType Directory -Force -Path $(NGPProxyOutputDirectory)\outputs\build\Ev2
+      New-Item -ItemType Directory -Force -Path $(NGPProxyOutputDirectory)\outputs\build\FCT
+      New-Item -ItemType Directory -Force -Path $(NGPProxyOutputDirectory)\outputs\build\Codesign
+
+- task: PowerShell@2
+  displayName: Copy to Codesign
+  inputs:
+    targetType: inline
+    script: |
+      Copy-Item -Path $(Build.SourcesDirectory)\src\NGPProxy\**\*.dll -Destination $(NGPProxyOutputDirectory)\outputs\build\Codesign -Force
+      Copy-Item -Path $(Build.SourcesDirectory)\src\NGPProxy\**\*.exe -Destination $(NGPProxyOutputDirectory)\outputs\build\Codesign -Force
+      Copy-Item -Path $(Build.SourcesDirectory)\src\NGPProxy\**\*.ps1 -Destination $(NGPProxyOutputDirectory)\outputs\build\Codesign -Force
+
+- task: PowerShell@2
+  displayName: Move FCTs to FCT Artifacts
+  inputs:
+    targetType: inline
+    script: |
+      Move-Item -Path $(Build.SourcesDirectory)\src\PXS\Bin\Release\x64\PrivacyFunctionalTests\** -Destination $(NGPProxyOutputDirectory)\outputs\build\FCT -Force
+
+- task: PowerShell@2
+  displayName: Move Build to Ev2 Artifacts
+  inputs:
+    targetType: inline
+    script: |
+      Move-Item -Path $(Build.SourcesDirectory)\src\NGPPROXY\OneBranch\Release\** -Destination $(NGPProxyOutputDirectory)\outputs\build\Ev2 -Force

@@ -1,0 +1,117 @@
+<section>
+    <div data-grid="col-12 pad-2x">
+        <div data-grid="col-6">
+            <h3 mee-heading="heading4" data-use-cms>Team details</h3>
+            <mee-text-field kind="flex" data-required-field="true" data-error-id="{{$ctrl.errorCategory}}.name">
+                <label data-use-cms>Team name</label>
+                <input ng-model="$ctrl.owner.name" mee-auto-focus>
+            </mee-text-field>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.name"></mee-inline-error>
+        </div>
+    </div>
+
+    <div data-grid="col-12 pad-2x">
+        <div data-grid="col-6">
+            <mee-text-area kind="flex" data-required-field="true" data-error-id="{{$ctrl.errorCategory}}.description">
+                <label data-use-cms>Description</label>
+                <textarea rows="10" ng-model="$ctrl.owner.description"></textarea>
+            </mee-text-area>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.description"></mee-inline-error>
+        </div>
+        <div data-grid="col-6">
+            <pcd-directory-resource-selector data-required-field="true"
+                                             data-error-id="{{$ctrl.errorCategory}}.alert-contacts"
+                                             pcd-resource-type="contact"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.alert-contacts"
+                                             pcd-selector-label="{{$ctrl.alertContactsLabel}}"
+                                             ng-model="$ctrl.alertContactsSelectorData"></pcd-directory-resource-selector>
+
+            <pcd-directory-resource-selector data-required-field="true"
+                                             data-error-id="{{$ctrl.errorCategory}}.announcement-contacts"
+                                             pcd-resource-type="contact"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.announcement-contacts"
+                                             pcd-selector-label="{{$ctrl.announcementContactsLabel}}"
+                                             ng-model="$ctrl.announcementContactsSelectorData"></pcd-directory-resource-selector>
+
+            <pcd-directory-resource-selector data-required-field=$ctrl.initializedWithSharingContacts
+                                             data-error-id="{{$ctrl.errorCategory}}.sharing-request-contacts"
+                                             pcd-resource-type="contact"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.sharing-request-contacts"
+                                             pcd-selector-label="{{$ctrl.sharingRequestContactsLabel}}"
+                                             ng-model="$ctrl.sharingRequestContactsSelectorData"></pcd-directory-resource-selector>
+        </div>
+    </div>
+
+    <div data-grid="col-12 pad-2x">
+        <div data-grid="col-6">
+            <h3 mee-heading="heading4" data-use-cms>IcM</h3>
+            <p mee-paragraph data-use-cms>
+                IcM Connector to route to your team regarding services associated with your team's agents or assets.
+                Can be overridden by new connector ID or agent connector ID.
+            </p>
+            <mee-text-field kind="flex" data-required-field="true" data-error-id="{{$ctrl.errorCategory}}.icm-connector">
+                <label data-use-cms>IcM connector ID</label>
+                <input ng-model="$ctrl.owner.icmConnectorId" placeholder="e.g., 97CC177C-4531-4D1E-BE76-0E6E058F1CFB">
+            </mee-text-field>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.icm-connector"></mee-inline-error>
+        </div>
+    </div>
+
+    <div data-grid="col-12 pad-2x">
+        <div data-grid="col-6">
+            <h3 mee-heading="heading4" data-use-cms>Permissions</h3>
+            <p mee-paragraph data-use-cms>
+                A security group is required to control who has access to this team's configuration. Members of this
+                group will be able to modify configuration data in PCD. You must be a member of at least one of the security groups.
+                It will not affect permissions in Service Tree.
+            </p>
+            <pcd-directory-resource-selector pcd-resource-type="security-group"
+                                             pcd-selector-label="{{$ctrl.writeGroupsLabel}}"
+                                             ng-model="$ctrl.securityGroupSelectorData"
+                                             data-required-field="true"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.write-security-groups"
+                                             data-error-id="{{$ctrl.errorCategory}}.write-security-groups"></pcd-directory-resource-selector>
+        </div>
+    </div>
+
+    <div data-grid="col-12 pad-2x">
+        <div data-grid="col-6">
+            <h3 mee-heading="heading4" data-use-cms>Tagging permissions</h3>
+            <p mee-paragraph data-use-cms>
+                Security groups used by DataGrid to authorize tagging. If this is empty, DataGrid
+                falls back to the write security groups.
+            </p>
+            <pcd-directory-resource-selector pcd-resource-type="security-group"
+                                             pcd-selector-label="{{$ctrl.tagGroupsLabel}}"
+                                             ng-model="$ctrl.tagGroupSelectorData"
+                                             data-required-field="false"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.tag-security-groups"
+                                             data-error-id="{{$ctrl.errorCategory}}.tag-security-groups"></pcd-directory-resource-selector>
+            <pcd-directory-resource-selector pcd-resource-type="application"
+                                             pcd-selector-label="{{$ctrl.tagApplicationsLabel}}"
+                                             ng-model="$ctrl.tagApplicationSelectorData"
+                                             data-required-field="false"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.tag-application-ids"
+                                             data-error-id="{{$ctrl.errorCategory}}.tag-application-ids"></pcd-directory-resource-selector>
+        </div>
+    </div>
+
+    <div data-grid="col-12 pad-2x">
+        <div data-grid="col-6">
+            <h3 mee-heading="heading4" data-use-cms>Delete team</h3>
+            <p mee-paragraph data-use-cms>
+                You can delete this team, if it was created by mistake or no longer needed.
+                <a mee-hyperlink mee-no-href ng-click="$ctrl.requestMoveTeamAssets()">Click here</a>, if you'd like to move all data assets
+                and agents from this team to another one (make sure to specify target team ID in the request).
+            </p>
+            <button mee-action-trigger ng-click="$ctrl.deleteTeamClicked()" data-use-cms>Delete</button>
+        </div>
+    </div>
+
+    <pcd-commit-request-button data-use-cms
+        pcd-button-label="Save"
+        pcd-error-id="{{$ctrl.errorCategory}}.save"
+        pcd-operation-name="ownerEditorSave"
+        pcd-button-on-click-operation="$ctrl.saveClicked()">
+    </pcd-commit-request-button>
+</section>

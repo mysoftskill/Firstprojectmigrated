@@ -1,0 +1,121 @@
+@inject Microsoft.Osgs.Web.Core.Configuration.IEnvironmentInfo environmentInfo
+
+<!DOCTYPE html>
+<html lang="en-us" class="js" dir="ltr">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/mwf/1.58.6/mwf-west-european-default.min.css">
+    <link rel="stylesheet" href="~/node_modules/@@mee/oneui.angular/dist/oneui/public/oneui.angular.min.css">
+
+    @* Enable HTML5 mode for Angular router. *@
+    <base href="/" />
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    @Html.Raw(ViewBag.UhfData.CssIncludes)
+</head>
+<body>
+    <pcd-auth-warning-banner></pcd-auth-warning-banner>
+
+    @if (ViewBag.AppBootstrapModel.EnvironmentType == "int" || ViewBag.AppBootstrapModel.EnvironmentType == "ppe")
+    {
+        <mee-alert id="test-environment-warning">
+            <alert-content data-use-cms>
+                This is a test environment. No data entered into this site will impact any of the production NGP systems in any way. Do not expect any data entered into this site to work E2E with any of the NGP systems in production.
+            </alert-content>
+            <alert-actions>
+                <a href="https://manage.privacy.microsoft.com" data-use-cms>Go to production PCD</a>
+            </alert-actions>
+        </mee-alert>
+    }
+
+    <header>
+        @Html.Raw(ViewBag.UhfData.HeaderHtml)
+    </header>
+    <div data-grid="container">
+        @RenderBody()
+    </div>
+    <hr mee-divider />
+    <footer data-grid="container">
+        <ul id="site-footer-links" mee-list="bare">
+            <li i9n-footer-app-version>@environmentInfo.AppVersion</li>
+            <li i9n-footer-cv>@ViewBag.CorrelationVectorContext.Current.Value</li>
+            <li>
+                <a class="privacy-footer-link"
+                   data-use-cms
+                   mee-hyperlink
+                   target="_blank" href="https://privacy.microsoft.com/privacystatement">Privacy statement</a>
+
+                <a class="privacy-footer-link"
+                   data-use-cms
+                   mee-hyperlink
+                   target="_blank" href="https://www.microsoft.com/servicesagreement/">Terms of service</a>
+
+                @* This footer link is needed per WDG Global Service Privacy requirement.
+                    See https://microsoft.visualstudio.com/OSGS/_workitems/edit/16295471 *@
+                <a class="privacy-footer-link"
+                   data-use-cms
+                   mee-hyperlink
+                   target="_blank"
+                   href="https://go.microsoft.com/fwlink/?LinkId=518021">Data protection notice</a>
+
+                @* Email is hardcoded as a fallback, in case application never initializes for the user. *@
+                <a id="feedback-footer-link"
+                   data-use-cms
+                   mee-hyperlink
+                   href="https://aka.ms/ngpdataagentsupport">Issues and feedback</a>
+
+                <pcd-feedback></pcd-feedback>
+            </li>
+        </ul>
+    </footer>
+
+    <mee-modal-dialog-host data-modal-id="modal-dialog"
+                           kind="flow close-button"
+                           mee-aria-close-button-label="Close" data-use-cms></mee-modal-dialog-host>
+
+    <environment names="Development">
+        <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js"
+                asp-fallback-src="~/node_modules/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+    </environment>
+
+    <script src="~/js/lib/telemetry.min.js"></script>
+
+    <script src="~/mwf/1.58.6/mwf-main.umd.min.js"></script>
+    @Html.Raw(ViewBag.UhfData.JavaScriptIncludes)
+    <script src="~/node_modules/core-js-bundle/minified.js"></script>
+    <script src="~/node_modules/systemjs/dist/system.js"></script>
+
+    <script>
+        //  SystemJS config needs app version.
+        var g_AppVersion = "@environmentInfo.AppVersion";
+    </script>
+    <script src="~/js/systemjs.config.js"></script>
+
+    <script>
+        System.import("app/main")
+            .then(function (mainModule) {
+                var main = new mainModule.Main();
+                main.bootstrapApp(@Json.Serialize(ViewBag.AppBootstrapModel));
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

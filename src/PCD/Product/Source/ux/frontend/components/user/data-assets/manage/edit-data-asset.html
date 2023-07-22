@@ -1,0 +1,49 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Registering an asset in PCD connects your team as the owner of the asset defined in DataGrid. If you are not familiar yet with DataGrid,
+            please follow the <a href="https://aka.ms/ngphome" target="_blank" mee-hyperlink>NGPX Onboarding Quick Start</a>.
+            If you are in C+E and using Geneva, your assets will be automatically synced with DataGrid.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeEditDataAssetComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner="$ctrl.owner"></pcd-default-page-context>
+
+                <h3 mee-heading="heading4" data-use-cms>AssetGroup qualifier</h3>
+                <pcd-asset-group-qualifier-view pcd-qualifier="$ctrl.assetGroup.qualifier"></pcd-asset-group-qualifier-view>
+
+                <h3 mee-heading="heading4"
+                    data-use-cms>Control asset group inheritance</h3>
+                <pcd-edit-asset-group-properties pcd-asset-group="$ctrl.assetGroup"></pcd-edit-asset-group-properties>
+
+                <pcd-commit-request-button data-use-cms
+                                           pcd-button-label="Save"
+                                           pcd-error-id="{{$ctrl.errorCategory}}.save"
+                                           pcd-operation-name="assetEditorSave"
+                                           pcd-button-on-click-operation="$ctrl.saveClicked()">
+                </pcd-commit-request-button>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

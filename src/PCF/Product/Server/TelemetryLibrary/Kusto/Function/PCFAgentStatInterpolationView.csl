@@ -1,0 +1,51 @@
+﻿.create-or-alter function with (folder = "", docstring = "PCF Agent Statistics aggregator", skipvalidation = "false") PCFAgentStatInterpolationView(agentId:string) {
+    /// 
+    /// Interpolates missing data (CommandCount and BaselineCommandCount) in PCFAgentStatisticV2 for last one day
+    ///
+    let SeriesStartDate = bin(now(-1d), 1m);
+    let SeriesEndDate = bin(now(-10m), 1m);
+    let Interpolation = PCFAgentStatisticV2
+        | where AgentId == agentId 
+        | where TimeStamp > SeriesStartDate
+        | make-series CommandCount=avg(CommandCount) default=long(null), BaselineCommandCount=avg(BaselineCommandCount) default=long(null) on TimeStamp in range(SeriesStartDate, SeriesEndDate, 1m) by AgentId, AssetGroupId, CommandType
+        | extend CommandCount=series_fill_forward(CommandCount)
+        | extend BaselineCommandCount=series_fill_forward(BaselineCommandCount)
+        | mvexpand TimeStamp, CommandCount, BaselineCommandCount limit 100000000
+        | project TimeStamp = todatetime(TimeStamp), CommandCount = tolong(CommandCount), AgentId, AssetGroupId, CommandType, BaselineCommandCount=tolong(BaselineCommandCount)
+        | where isnotnull(CommandCount);
+    let MissingData = (
+        PCFAgentStatisticV2 
+            | where TimeStamp > SeriesStartDate
+            | where AgentId == agentId 
+    ) 
+        | join kind=rightanti Interpolation on TimeStamp, AgentId, AssetGroupId, CommandType;
+    MissingData
+        | extend CompletedCheckpointCount = 0 
+        | extend SoftDeletedCheckpointCount = 0 
+        | extend CreatedCheckpointCount = 0
+        | extend SentToAgentCheckpointCount = 0
+        | extend PendingCheckpointCount = 0
+        | extend FailedCheckpointCount = 0
+        | extend UnexpectedCheckpointCount = 0
+        | extend VerificationFailureCheckpointCount = 0
+        | extend UnexpectedVerificationFailureCheckpointCount = 0
+	    | extend CompletedByPcfEventCount = 0 
+        | project 
+			TimeStamp, 
+			AgentId, 
+			AssetGroupId, 
+			CommandType, 
+			CommandCount, 
+			BaselineCommandCount, 
+			CompletedCheckpointCount, 
+			CreatedCheckpointCount, 
+			SoftDeletedCheckpointCount, 
+			SentToAgentCheckpointCount, 
+			PendingCheckpointCount, 
+			FailedCheckpointCount, 
+			UnexpectedCheckpointCount, 
+			VerificationFailureCheckpointCount, 
+			UnexpectedVerificationFailureCheckpointCount,
+			CompletedByPcfEventCount
+        | order by TimeStamp asc
+} 

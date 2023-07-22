@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+  <Words>
+    <!--
+      This is a list of case-insensitive words that do not exist in the dictionary
+      but you still want to be considered as recognized by 
+      IdentifiersShouldBeSpelledCorrectly. Do not add compound words (e.g. 'FileName') 
+      to this list as this will cause CompoundWordsShouldBeCasedCorrectly to fire on 
+      usages of the compound word stating that they should be changed to their discrete equivalent 
+      (for example 'FileName' -> 'Filename').
+    -->
+    <Recognized>
+      <word>Deauthorize</word>
+      <word>Deauthorized</word>
+      <Word>Api</Word>
+      <Word>Mee</Word>
+      <Word>Sll</Word>
+      <Word>OSGS</Word>
+      <Word>Dependency</Word>
+      <Word>mbi</Word>
+      <Word>hbi</Word>
+      <Word>Oem</Word>
+      <Word>Dds</Word>
+      <Word>Xss</Word>
+      <Word>Flighting</Word>
+      <Word>Flags</Word>
+      <Word>Acked</Word>
+      <Word>Cms</Word>
+      <Word>Svg</Word>
+      <Word>MUID</Word>
+      <Word>Cv</Word>
+      <Word>QoS</Word>
+      <Word>Wedcs</Word>
+      <Word>Bi</Word>
+      <Word>prs</Word>
+      <Word>Ip</Word>
+      <Word>cip</Word>
+      <Word>uid</Word>
+      <Word>QoS</Word>
+      <Word>Captcha</Word>
+      <Word>Dco</Word>
+      <Word>FMD</Word>
+      <Word>duid</Word>
+      <Word>jquery</Word>
+      <Word>webi</Word>
+      <Word>Holo</Word>
+      <Word>modernizr</Word>
+      <Word>ltr</Word>
+      <Word>rtl</Word>
+      <Word>Cortana</Word>
+      <Word>cortana</Word>
+      <Word>optimizely</Word>
+      <Word>Dvc</Word>
+      <Word>Cfg</Word>
+      <Word>Deauthorize</Word>
+      <Word>Deauth</Word>
+      <Word>Rqst</Word>
+      <Word>Disclm</Word>
+      <Word>Img</Word>
+      <Word>Cor</Word>
+      <Word>Rst</Word>
+      <Word>PLink</Word>
+      <Word>Mit</Word>
+      <Word>Vip</Word>
+      <Word>Vep</Word>
+      <Word>Ioss</Word>
+      <Word>Cxh</Word>
+      <Word>Metrix</Word>
+      <Word>Amx</Word>
+      <Word>Amc</Word>
+      <Word>Img</Word>
+      <Word>Sku</Word>
+      <Word>Js</Word>
+      <Word>Mwf</Word>
+    </Recognized>
+    <Deprecated>
+      <!-- 
+        This is a list of deprecated terms with their preferred alternates and is 
+        used by UsePreferredTerms. The deprecated terms are case-insensitive, 
+        however, make sure to Pascal-case the preferred alternates. If a word 
+        does not have a preferred alternate, simply leave it blank.
+      -->
+    </Deprecated>
+    <Compound>
+      <!-- 
+        This is a list of discrete terms with their compound alternates and is used by 
+        CompoundWordsShouldBeCasedCorrectly. These are words that exist in the 
+        dictionary as discrete terms, however, should actually be cased as compound words. 
+        For example, 'Filename' exists in the dictionary and hence the spelling rules will 
+        not see it as unrecognized but its actual preferred usage is 'FileName'; adding it
+        below causes CompoundWordsShouldBeCasedCorrectly to fire. The discrete terms are 
+        case-insensitive, however, be sure to Pascal-case the compound alternates.
+        Any discrete terms added below automatically get added to the list of discrete
+        exceptions to prevent CompoundWordsShouldBeCasedCorrectly from firing both on the
+        compound word (for example 'WhiteSpace') and its discrete alternate (for example 
+        'Whitespace').
+      -->
+      <Term CompoundAlternate="DropDown">dropdown</Term>
+	    <Term CompoundAlternate="PlayGroup">Playgroup</Term>
+    </Compound>
+    <DiscreteExceptions>
+      <!--
+        This is a list of case-insensitive exceptions to the CompoundWordsShouldBeCasedCorrectly 
+        discrete term check. As this check works solely on the basis of whether two consecutive
+        tokens exists in the dictionary, it can have a high false positive rate. For example, 
+        'onset' exists in the dictionary but the user probably intended it to be 'OnSet'. 
+        Adding this word below prevents this rule from firing telling the user to change 'OnSet' 
+        to 'Onset'.
+      -->
+      <Term>homepage</Term>
+      <Term>invalidate</Term>
+      <Term>MUID</Term>
+      <Term>Cv</Term>
+      <Term>QoS</Term>
+      <Term>Bi</Term>
+      <Term>Wedcs</Term>
+      <Term>QoS</Term>
+      <Term>Deauthorize</Term>
+      <Term>Img</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>FCT</Acronym>   <!-- Function Component Test -->
+      <Acronym>AMX</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

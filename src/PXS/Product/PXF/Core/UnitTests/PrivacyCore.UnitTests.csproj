@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(MemberServicesAssemblyRoot).PrivacyCore.UnitTests</RootNamespace>
+    <AssemblyName>$(MemberServicesAssemblyRoot).PrivacyCore.UnitTests</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <DefaultTestCategory>CheckIn</DefaultTestCategory>
+    <TestGroupAreaPath>$(MemberServiceAreaPath)</TestGroupAreaPath>
+    <TestGroupName>$(AssemblyName)</TestGroupName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.Entity" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Adapters\Source\Adapters.csproj" />
+    <ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\PrivacyOperationContracts\PrivacyOperation.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Test\Common\TestCommon.csproj" />
+    <ProjectReference Include="..\..\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\CosmosHelpers\CosmosHelpers\CosmosHelpers.csproj" />
+    <ProjectReference Include="..\..\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+    <ProjectReference Include="..\..\Test\Common\PrivacyTestCommon.csproj" />
+    <ProjectReference Include="..\Source\PrivacyCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Microsoft.SqlServer.Types" GeneratePathProperty="true" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The SqlServerTypes cannot be loaded by PackageReference, this is the workaround until a new package supports this in the new format.
+         https://developercommunity.visualstudio.com/content/problem/91318/reference-dlls-from-nuget-package.html
+    -->
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x64\msvcr100.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PkgMicrosoft_SqlServer_Types)\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

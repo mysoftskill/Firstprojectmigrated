@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RPSServer>
+    <Environment>
+        <Production>nexus.passport.com/public/partner/rpsnetwork4.xml</Production>
+        <PPE>nexus.passport-ppe.com/public/partner/rpsnetwork4.xml</PPE>
+        <INT>nexus.passport-int.com/public/partner/rpsnetwork4.xml</INT>
+    </Environment>
+    <CryptoParams>
+        <CryptoEncCertName/>
+        <CryptoSignCertName/>
+        <!-- SHA256 -->
+        <HashAlgId>32780</HashAlgId>
+        <!-- AES128 -->
+        <EncryptionAlgId>26126</EncryptionAlgId>
+    </CryptoParams>
+    <Diagnostics>
+        <Level>1</Level>
+    </Diagnostics>
+    <NetworkServices>
+        <Url>nexus.passport.com/public/partner/rpsnetwork4.xml</Url>
+        <Proxy></Proxy>
+        <PollingInterval>86400</PollingInterval>
+        <PartnerName>OtherPartner</PartnerName>
+        <ServiceAccount>Network Service</ServiceAccount>
+        <CurrentEnvironment>PROD</CurrentEnvironment>
+    </NetworkServices>
+    <Sites>
+        <Site SiteName="default">
+            <AuthCookie>RPSAuth</AuthCookie>
+            <AuthCookiePath>/</AuthCookiePath>
+            <AuthCookieDomain></AuthCookieDomain>
+            <AuthPolicy>MBI_SSL</AuthPolicy>
+            <BrandIDCookieDomain></BrandIDCookieDomain>
+            <CoBrandTemplate></CoBrandTemplate>
+            <DisableCookies>0</DisableCookies>
+            <EnableSharedState>0</EnableSharedState>
+            <LanguageId>1033</LanguageId>
+            <RootId/>
+            <SecAuthCookie>RPSSecAuth</SecAuthCookie>
+            <SecAuthCookiePath>/</SecAuthCookiePath>
+            <SecAuthCookieDomain></SecAuthCookieDomain>
+            <SharedStateCookie/>
+            <SharedStateCookieDomain/>
+            <SharedStateCookiePath/>
+            <WLCookieDomain/>
+            <WLCookiePath/>
+            <WriteCompactCookie>0</WriteCompactCookie>
+            <MaxTicketCheckCount>0</MaxTicketCheckCount>
+            <ReturnURL></ReturnURL>
+            <CookieCertName></CookieCertName>
+            <AutoSSO>32</AutoSSO>
+            <SaveSSO>34</SaveSSO>
+            <!--Optional Properties for processing MSACookie/-->
+            <EnableMultiStateAuth/>
+            <MSACookie/>
+            <MSACookieDomain/>
+            <MSACookiePath/>
+        </Site>
+        <Site SiteName="SiteAuth">
+            <SiteId>296170</SiteId>
+            <AuthCookie></AuthCookie>
+            <AuthCookiePath></AuthCookiePath>
+            <AuthCookieDomain></AuthCookieDomain>
+            <AuthPolicy>S2S_24HOURS_MUTUALSSL</AuthPolicy>
+            <BrandIDCookieDomain></BrandIDCookieDomain>
+            <CoBrandTemplate></CoBrandTemplate>
+            <DisableCookies></DisableCookies>
+            <EnableSharedState></EnableSharedState>
+            <LanguageId></LanguageId>
+            <RootId/>
+            <SecAuthCookie></SecAuthCookie>
+            <SecAuthCookiePath>/</SecAuthCookiePath>
+            <SecAuthCookieDomain></SecAuthCookieDomain>
+            <SharedStateCookie/>
+            <SharedStateCookieDomain/>
+            <SharedStateCookiePath/>
+            <!--WLCookiePath/-->
+            <WLCookieDomain/>
+            <WriteCompactCookie></WriteCompactCookie>
+            <MaxTicketCheckCount></MaxTicketCheckCount>
+            <ReturnURL></ReturnURL>
+            <DisableProxyValidation>1</DisableProxyValidation>
+        </Site>
+    </Sites>
+    <Delegation>
+    </Delegation>
+    <Throttling>
+        <Throttle AppID="default">
+            <Enabled>0</Enabled>
+            <MinTPS>100</MinTPS>
+            <MaxTPS>200</MaxTPS>
+            <Rate>50</Rate>
+            <Interval>900</Interval>
+        </Throttle>
+    </Throttling>
+</RPSServer>
+

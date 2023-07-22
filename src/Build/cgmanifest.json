@@ -1,0 +1,45 @@
+{
+  "Registrations": [
+    {
+      "Component": {
+        "Type": "nuget",
+        "Nuget": {
+          "Name": "System.Collections.Immutable",
+          "Version": "6.0.0"
+        }
+      },
+      "DevelopmentDependency": false
+    },
+    {
+      "Component": {
+        "Type": "nuget",
+        "Nuget": {
+          "Name": "System.ComponentModel.Annotations",
+          "Version": "5.0.0"
+        }
+      },
+      "DevelopmentDependency": false
+    },
+    {
+      "Component": {
+        "Type": "nuget",
+        "Nuget": {
+          "Name": "System.Security.Principal.Windows",
+          "Version": "5.0.0"
+        }
+      },
+      "DevelopmentDependency": false
+    },
+    {
+      "Component": {
+        "Type": "nuget",
+        "Nuget": {
+          "Name": "System.Threading.Tasks.Dataflow",
+          "Version": "6.0.0"
+        }
+      },
+      "DevelopmentDependency": false
+    }
+  ],
+  "$schema": "https://json.schemastore.org/component-detection-manifest.json"
+}

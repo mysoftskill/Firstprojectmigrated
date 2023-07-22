@@ -1,0 +1,113 @@
+#################################################################################
+#                        OneBranch Pipelines - Buddy                            #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: 
+- master
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: debug
+  displayName: Enable debug output
+  type: boolean
+  default: false
+
+variables:
+- template: variables.yml
+  
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates
+  parameters:
+    featureFlags:
+      ensureArtifactsDirExists: true
+    globalSdl:
+      sbom:
+        enabled: true
+      antimalwareScan:
+        enabled: true
+      binskim:
+        enabled: true
+        break: true
+      codeql:
+        cadence: 0
+        compiled: 
+          enabled: true
+        tsaEnabled: true # See 'Codeql.TSAEnabled' in the Addition Options section below
+      credscan:
+        enabled: true
+        suppressionsFile: $(Build.SourcesDirectory)\.config\CredScanSuppressions.json
+      policheck:
+        enabled: true
+      tsa:
+        enabled: true
+        configFile: $(Build.SourcesDirectory)/.config/tsaoptions.json
+
+    stages:
+    - stage: Setup
+      jobs:
+      - job: setup
+        pool:
+          type: windows
+        variables:
+          ob_outputDirectory: $(Build.SourcesDirectory)\src\PCF\OneBranch\Deployment\drop
+          ob_sdl_binskim_break: true
+        steps:
+        - template: .pipelines/onebranch.versioning.yml@self
+
+        - task: CmdLine@2
+          displayName: Update Version
+          inputs:
+            script: $(PCFBuildRootDirectory)\OneBranch\Build\versioning-onebranch.cmd $(Build.BuildNumber)
+
+    - template: HelperTemplates/pcfsdk.commandvalidator-processor.yml
+      parameters:
+        ReleaseType: PROD
+          
+    - template: HelperTemplates/pcfsdk.commandcustomactivity.yml
+      parameters:
+        BuildConfiguration: PROD
+        ReleaseType: PROD
+
+    - stage: OrganizeArtifacts
+      dependsOn:
+      - BuildAndPackageCommandCustomActivity
+      - BuildAndPackageCommandValidatorAndCommandProcessor
+      jobs:
+      - job: DownloadArtifacts
+        pool: 
+          type: windows
+        variables:
+          ob_outputDirectory: $(Build.SourcesDirectory)\src\PCF\OneBranch\Deployment\drop
+          ob_sdl_binskim_break: true
+          ob_artifactBaseName: drop_build_main
+          ob_sdl_codeSignValidation_excludes: -|**\Tests\**;-|**\Debug\**;-|**\nupkgs\**;-|**\*.nupkg\**
+        steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Download Artifacts
+          inputs:
+            buildType: current
+            targetPath: $(PCFBuildRootDirectory)\OneBranch\Deployment\artifacts
+
+        - task: PowerShell@2
+          displayName: Move Outputs
+          inputs:
+            targetType: inline
+            script: |
+              robocopy $(PCFBuildRootDirectory)\OneBranch\Deployment\artifacts\drop_custom_activity\ $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\bin *.dll *.exe *.ps1 /s
+              robocopy $(PCFBuildRootDirectory)\OneBranch\Deployment\artifacts\drop_custom_activity\ $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\nupkgs *.zip /s
+              robocopy $(PCFBuildRootDirectory)\OneBranch\Deployment\artifacts\drop_validator_processor\ $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\bin *.dll *.exe *.ps1 /s
+              robocopy $(PCFBuildRootDirectory)\OneBranch\Deployment\artifacts\drop_validator_processor\ $(PCFBuildRootDirectory)\OneBranch\Deployment\drop\outputs\build\nupkgs *.nupkg /s
+              # robocopy exit codes 1-8 are actually passing, but need to be converted to 0 so the OneBranch doesn't fail out.
+              if ($Lastexitcode -lt 9) {$global:LastExitcode=0}

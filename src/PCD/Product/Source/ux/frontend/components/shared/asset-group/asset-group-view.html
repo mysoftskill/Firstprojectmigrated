@@ -1,0 +1,40 @@
+<div ng-if="$ctrl.assetGroup" data-grid="col-12 pad-2x">
+    <pcd-asset-group-qualifier-view ng-hide="$ctrl.hideTitle" pcd-qualifier="$ctrl.assetGroup.qualifier"></pcd-asset-group-qualifier-view>
+
+    <div data-grid="col-6">
+        <div>
+            <label mee-label data-use-cms>ID</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>
+                <span>{{$ctrl.assetGroup.id}}</span>
+                <pcd-permalink pcd-url="{{$ctrl.getViewLink()}}"></pcd-permalink>
+            </p>
+        </div>
+    </div>
+
+    <div data-grid="col-6">
+        <div>
+            <label mee-label data-use-cms>Pending variant requests</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>{{$ctrl.getPendingVariantRequestDisplay()}}</p>
+        </div>
+        <div>
+            <label mee-label data-use-cms>Number of variants</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>
+                {{$ctrl.assetGroup.variants.length}}
+            </p>
+        </div>
+        <div>
+            <label mee-label data-use-cms>Optional features</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>
+                {{$ctrl.getOptionalFeatures()}}
+            </p>
+        </div>
+    </div>
+</div>

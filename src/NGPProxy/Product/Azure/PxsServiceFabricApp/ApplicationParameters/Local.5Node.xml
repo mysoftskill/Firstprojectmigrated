@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/PxsProxyApp" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="EnvironmentName" Value="onebox" />
+    <!-- 
+    'AzureServicesAuthConnectionString' is required to run App Local since Service Fabric Local cluster runs under Network Service account 
+    For more information on connection string support, refer to: https://docs.microsoft.com/en-us/azure/key-vault/service-to-service-authentication#connection-string-support 
+    -->
+    <Parameter Name="AzureServicesAuthConnectionString" Value="RunAs=App;AppId=705363a0-5817-47fb-ba32-59f47ce80bb7;TenantId=f8cdef31-a31e-4b4a-93e4-5f571e91255a;CertificateSubjectName=CN=aad-ame2.ppe.dpp.microsoft.com;CertificateStoreLocation=LocalMachine" />
+  </Parameters>
+</Application>

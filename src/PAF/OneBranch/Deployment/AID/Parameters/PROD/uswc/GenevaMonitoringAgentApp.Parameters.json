@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "subscriptionId": {
+        "value": "b4b176cf-fe78-4b59-bd1a-9b8c11536f4d"
+      },
+      "appServicePlanResourceGroup": {
+        "value": "AID-PROD-USWESTCENTRAL-CLUSTER-RG"
+      },
+      "location": {
+        "value": "WestCentralUS"
+      },
+      "appName": {
+        "value": "AnaheimIdProcessorProdUSWC"
+      },
+      "storageResourceGroup": {
+        "value": "PAF-PROD-RG"
+      },
+      "storageName": {
+        "value": "aidinfrauswcprod"
+      },
+      "storageAccountKind": {
+        "value": "StorageV2"
+      },
+      "genevaCertVaultId": {
+        "value": "/subscriptions/4e261d67-9395-4cec-a519-14053c4765e3/resourceGroups/ADG-CS-PROD-RG/providers/Microsoft.KeyVault/vaults/ADG-CS-PROD-KV"
+      },
+      "genevaCertSecretName": {
+        "value": "geneva"
+      },
+      "monitoringTenant": {
+        "value": "ADGCS-USWC"
+      },
+      "monitoringRole": {
+        "value": "PAF.AIdFunction"
+      },
+      "monitoringGcsEnvironment": {
+        "value": "Diagnostics Prod"
+      },
+      "monitoringGcsAccount": {
+        "value": "ADGComplianceServices"
+      },
+      "monitoringGcsNamespace": {
+        "value": "pafprodadgcs"
+      },
+      "monitoringGcsAuthId": {
+        "value": "adg-cs.geneva.keyvault.privacy.microsoft.com"
+      },
+      "monitoringConfigVersion": {
+        "value": "99.9"
+      },
+      "computeRegionOverride": {
+        "value": "" // Empty means we are using location of resourceGroup
+      }
+    }
+  }

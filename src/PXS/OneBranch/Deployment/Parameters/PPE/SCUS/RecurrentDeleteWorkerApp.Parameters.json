@@ -1,0 +1,31 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "paths": [
+      "appPackageUrl"
+    ],
+    "parameters": {
+      "clusterName": {
+        "value": "pxsppe"
+      },
+      "applicationTypeName": {
+        "value": "RecurrentDeleteWorkerAppType"
+      },
+      "applicationTypeVersion": {
+        "value": "__Version__"
+      },
+      "appPackageUrl": {
+        "value": "Bin\\RecurrentDeleteWorkerApp.sfpkg"
+      },
+      "applicationName": {
+        "value": "RecurrentDeleteWorkerApp"
+      },
+      "applicationParameters": {
+        "value": {
+          "EnvironmentName": "ppe",
+          "AzureServicesAuthConnectionString": "RunAs=App",
+          "Svc_PlacementConstraints": "(NodeTypeName==Worker)"
+        }
+      }
+    }
+  }

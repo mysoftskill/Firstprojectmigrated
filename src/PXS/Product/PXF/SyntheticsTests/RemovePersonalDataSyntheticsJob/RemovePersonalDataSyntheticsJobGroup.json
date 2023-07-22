@@ -1,0 +1,30 @@
+{
+  "SyntheticJobGroup": {
+    "Name": "RemovePersonalDataSyntheticsJobGroup",
+    "SyntheticJobs": [
+      {
+        "ExecutionIntervalSeconds": 3600,
+        "JobName": "RemovePersonalDataSyntheticsJob",
+        "AssemblyFilePath": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.RemovePersonalDataSyntheticsJob.dll",
+        "FullyQualifiedClassName": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.RemovePersonalDataSyntheticsJob.RemovePersonalDataSyntheticsJob",
+        "Regions": [ "USWest2" ],
+        "Parameters": {
+          "ApiUrlEndpoint": "https://graph.microsoft.com/beta",
+          "ApiPathTemplate": "directory/inboundSharedUserProfiles/{0}/removePersonalData",
+          "HomeTenantClientId": "90b23419-a7ce-4459-95e1-8f251ea7f606",
+          "ResourceTenantClientId": "f107c8c7-500f-406f-84b1-5b90576a8297",
+          "KeyVaultUrl": "https://pxs-test-ame.vault.azure.net/",
+          "User1PasswordSecretName": "user1-password",
+          "User1UpnSecretName": "user1-upn",
+          "User2PasswordSecretName": "user2-password",
+          "User2UpnSecretName": "user2-upn"
+        },
+        "SyntheticJobInstances": [
+          {
+            "InstanceNamePrefix": "TestUser1"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,136 @@
+﻿// Used for LTR / RTL support
+$ltr-selector: "[dir=ltr]";
+$rtl-selector: "[dir=rtl]";
+
+// Border
+@mixin border-right($border-style) {
+    border-right: $border-style;
+    #{$rtl-selector} & {
+        border-right: none;
+        border-left: $border-style;
+    }
+}
+
+// Padding
+@mixin padding-right($distance) {
+    padding-right: $distance;
+    #{$rtl-selector} & {
+        padding-right: 0;
+        padding-left: $distance;
+    }
+}
+
+@mixin padding-left($distance) {
+    padding-left: $distance;
+    #{$rtl-selector} & {
+        padding-left: 0;
+        padding-right: $distance;
+    }
+}
+
+@mixin padding($top, $right, $bottom, $left) {
+    @include rtl-shorthand-property(padding, $top, $right, $bottom, $left);
+}
+
+// Margin
+@mixin margin-right($distance) {
+    margin-right: $distance;
+    #{$rtl-selector} & {
+        margin-right: 0;
+        margin-left: $distance;
+    }
+}
+
+@mixin margin-left($distance) {
+    margin-left: $distance;
+    #{$rtl-selector} & {
+        margin-left: 0;
+        margin-right: $distance;
+    }
+}
+
+@mixin set-margin($marginTop, $marginRight, $marginBottom, $marginLeft, $important: "") {
+    margin-top: $marginTop;
+    margin-bottom: $marginBottom;
+    @include set-directional-property(margin-left, margin-right, $marginLeft, $marginLeft, $important);
+    @include set-directional-property(margin-right, margin-left, $marginRight, $marginRight, $important);
+}
+
+// Float
+@mixin float($direction) {
+    @if ($direction == left) {
+        float: left;
+        #{$rtl-selector} & {
+            float: right;
+        }
+
+    } @else {
+          float: right;
+          #{$rtl-selector} & {
+              float: left;
+          }
+    }
+}
+
+@mixin set-float-left($important: "") {
+    @include apply-directional-value(float, left, right, $important);
+}
+
+@mixin set-float-right($important: "") {
+    @include apply-directional-value(float, right, left, $important);
+}
+
+// Helper for properties that take top, right, bottom, left values
+@mixin rtl-shorthand-property($property, $top, $right, $bottom, $left) {
+    #{$property}: $top $right $bottom $left;
+    #{$rtl-selector} & {
+        #{$property}: $top $left $bottom $right;
+    }
+}
+
+// RTL / LTR property assignment
+@mixin set-directional-property($ltr-property, $rtl-property, $ltr-value, $rtl-value, $important) {
+    @if ($important == "important") {
+        #{$ltr-selector} & {
+            #{$ltr-property}: $ltr-value !important;
+        }
+
+        #{$rtl-selector} & {
+            #{$rtl-property}: $rtl-value !important;
+        }
+    }
+
+    @if ($important != "important") {
+        #{$ltr-selector} & {
+            #{$ltr-property}: $ltr-value;
+        }
+
+        #{$rtl-selector} & {
+            #{$rtl-property}: $rtl-value;
+        }
+    }
+}
+
+// For use when property doesn't change between LTR & RTL. eg. float: left / right
+@mixin apply-directional-value($property, $ltr-value, $rtl-value, $important) {
+   @include set-directional-property($property, $property, $ltr-value, $rtl-value, $important);
+}
+
+// For use when property does change between LTR & RTL. eg. margin-left / margin-right
+@mixin apply-directional-property($ltr-property, $rtl-property, $ltr-value, $rtl-value, $important) {
+    @include set-directional-property($ltr-property, $rtl-property, $ltr-value, $rtl-value, $important);
+}
+
+// Text Align
+@mixin set-text-align-left($important: "") {
+    @include apply-directional-value(text-align, left, right, $important);
+}
+
+// Positioning
+@mixin set-left($value, $important: "") {
+    @include apply-directional-property(left, right, $value, $value, $important);
+}
+
+@mixin set-right($value, $important: "") {
+    @include apply-directional-property(right, left, $value, $value, $important);
+}

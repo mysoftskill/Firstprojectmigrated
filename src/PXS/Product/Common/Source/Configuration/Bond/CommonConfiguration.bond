@@ -1,0 +1,196 @@
+﻿namespace Microsoft.Membership.MemberServices.Configuration
+
+enum CloudInstanceType
+{
+    // INT. It's a mixed mode environment to test integration in the DEV machine.
+    INT,
+
+    // Azure PPE. This is not the same as what NGP typically thinks of PPE as where it uses AAD PROD in a separate App. It's a different user/tenant cloud.
+    AzurePPE,
+    
+    // Azure 'TIP' in Public cloud
+    AzureTestInProd,
+
+    // Public cloud Prod
+    PublicProd,
+
+    // Azure cloud instance in Blackforest. Microsoft Cloud Germany
+    DEAzureBlackforest,
+    
+    // O365 cloud instance in Blackforest
+    DEO365Blackforest,
+    
+    // Azure cloud instance in Mooncake, operated by 21Vianet in China
+    CNAzureMooncake,
+    
+    // O365 cloud instance in Mooncake
+    CNO365Gallatin,
+    
+    // Azure cloud instance in Fairfax. Microsoft Cloud for US Government
+    USAzureFairfax
+};
+
+struct ICertificateConfiguration
+{
+    1 : optional string Subject;
+    2 : optional string Issuer;
+    3 : optional string Thumbprint;
+    4 : optional string ExpectedCertFileName;
+    5 : optional string ExpectedCertMachineFunction;
+    6 : optional bool CheckValidity = true;
+    7 : optional string RootCertSubject;
+};
+
+enum RetryMode
+{
+    None,
+    FixedInterval,
+    ExponentialBackOff,
+    IncrementInterval,
+};
+
+struct IIncrementIntervalRetryConfiguration
+{
+    1 : required uint32 RetryCount;
+    2 : required uint64 InitialIntervalInMilliseconds;
+    3 : required uint64 IntervalIncrementInMilliseconds;
+};
+
+struct IFixedIntervalRetryConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required uint32 RetryCount;
+
+    [UniquenessRule("Invariant")]
+    2 : required uint64 RetryIntervalInMilliseconds;
+};
+
+struct IExponentialBackOffRetryConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required uint32 RetryCount;
+
+    [UniquenessRule("Invariant")]
+    2 : required uint64 DeltaBackOffInMilliseconds;
+
+    [UniquenessRule("Invariant")]
+    3 : required uint64 MinBackOffInMilliseconds;
+
+    [UniquenessRule("Invariant")]
+    4 : required uint64 MaxBackOffInMilliseconds;
+};
+
+struct IRetryStrategyConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required RetryMode RetryMode;
+
+    [UniquenessRule("Invariant")]
+    2 : optional IFixedIntervalRetryConfiguration FixedIntervalRetryConfiguration;
+
+    [UniquenessRule("Invariant")]
+    3 : optional IExponentialBackOffRetryConfiguration ExponentialBackOffRetryConfiguration;
+
+    [UniquenessRule("Invariant")]
+    4 : optional IIncrementIntervalRetryConfiguration IncrementIntervalRetryConfiguration;
+};
+
+struct IServicePointConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : optional int32 ConnectionLeaseTimeout = 60000;
+
+    [UniquenessRule("Invariant")]
+    2 : optional int32 ConnectionLimit = 100;
+
+    [UniquenessRule("Invariant")]
+    3 : optional int32 MaxIdleTime = 60000;
+
+    4 : optional bool UseNagleAlgorithm = true;
+}
+
+struct ITaggedServicePointConfiguration : IServicePointConfiguration
+{
+    5 : required string Tag;
+}
+
+[PrimitiveValueTypeAlias("")] 
+[DotNetPrimitiveValueType("System.Uri, System")]
+struct MUri {}
+
+[PrimitiveValueTypeAlias("")] 
+[DotNetPrimitiveValueType("System.TimeSpan, mscorlib")]
+struct MTimeSpan {}
+
+struct IWorkerConfig
+{
+    1 : required bool EnableWorker;
+    2 : required int32 RunIntervalSeconds;
+    3 : required int32 WorkExpirationSeconds;
+    4 : required int32 WorkOffsetSeconds;
+};
+
+struct ICosmosVcConfig
+{
+    1 : optional bool UseDefaultCredentials = false;
+    2 : required string CosmosVcPath;
+    3 : optional string CosmosCertificateSubject;
+};
+
+enum RingType
+{
+    Unknown,
+    PreProd,
+    Prod,
+    Ring1,
+    Ring2,
+    Ring3
+};
+
+enum EnvironmentType
+{
+    // Default - Not configured
+    Unknown,
+
+    // Dev Box
+    OneBox,
+
+    // CI/Test Environment
+    ContinuousIntegration,
+
+    // INT Environment
+    Integration,
+
+    // PPE
+    PreProd,
+
+    // PROD Environment
+    Prod
+}
+
+// Information on how the current environment is configured.
+struct IEnvironmentConfiguration
+{
+    // The current running environment.
+    1 : optional EnvironmentType EnvironmentType = Unknown;
+}
+
+struct IAzureAppConfigurationSettings
+{
+    1 : required string Endpoint;
+}
+
+struct IAzureRedisCacheConfiguration
+{
+    1 : required string Endpoint;
+    2 : required string PasswordSecretName;
+    3 : required int32 Port;
+}
+
+struct IAdlsConfiguration
+{
+    10 : required string ClientAppId;
+    20 : required string ClientAppCertificateSubjectAdls;
+    30 : required string AdlsAccountSuffix;
+    40 : required string TenantId;
+}

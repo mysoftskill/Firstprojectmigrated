@@ -1,0 +1,70 @@
+// This query computes the official Post 30 day completion percentages for delete agents (both Cosmos and PCF). It uses the percent complete for all NGP requests that 
+// occurred in the -45 to -31 day range (or 5/25/2018 - whichever is later). The output includes ServiceTree org structure for grouping and joins with GC structure.
+// TODO: Add VP mapping to this as well
+// NOTE: When aggregating this information, DO NOT simply average the PostSLACompletionStatus for each agent. Instead, use SUM(Acknowledged)/SUM(Total).
+//
+// Date Constants
+let reportdate = toscalar(CosmosAgentHealthFullRollupByDayHistory | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+let startdate = datetime_add('day', -45, reportdate);
+let enddate = datetime_add('day', -30, reportdate);
+//
+// Info on production agents
+let AgentOwnerInfo = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+    | where AgentReadiness == "ProdReady" // Filters to only ProdReady agents. Remove this if you would like to analyze other agents.
+); 
+// Agent Level information
+let CosmosAgentLevelData = materialize
+(
+    CosmosAgentHealthFullRollupByDayHistory
+    | where SQLizerStreamDateId == reportdate
+    | where startofday(SignalDate) between (startdate..enddate) 
+    | summarize 
+        StartDate=min(startofday(SignalDate)), 
+        EndDate=max(startofday(SignalDate)), 
+        Pending=sum(PendingDeleteWithinSLACount) + sum(PendingDeleteOutOfSLACount) + sum(IntermediateEngineeringGT30DaysPendingCount),
+        // Acknowledged includes operations that apply to streams that have been deleted or that have been reported as empty
+        Acknowledged=sum(AcknowledgedDeleteWithinSLACount) + sum(AcknowledgedDeleteOutOfSLACount) + sum(DeletedStreamsRequestCount) + sum(EmptyStreamsRequestCount)
+        by AgentId    
+);
+let NonCosmosAgentLevelData = materialize
+(
+    NonCosmosAgentHealthFullRollupByDayHistory
+    | where SQLizerStreamDateId == datetime_add('day', -1, reportdate) // This stream is one day behind
+    | where startofday(DeleteRequestDate) between (startdate..enddate) 
+    | summarize 
+        StartDate=min(startofday(DeleteRequestDate)), 
+        EndDate=max(startofday(DeleteRequestDate)), 
+        Pending=sum(PendingDeleteWithinSLACount) + sum(PendingDeleteOutOfSLACount), 
+        Acknowledged=sum(AcknowledgedDeleteWithinSLACount) + sum(AcknowledgedDeleteOutOfSLACount) 
+        by AgentId    
+);
+// Report summary
+CosmosAgentLevelData 
+| union NonCosmosAgentLevelData
+| join kind=inner AgentOwnerInfo on AgentId 
+| project 
+    DivisionName, 
+    OrganizationName, 
+    ServiceGroupName, 
+    TeamGroupName, 
+    ServiceName, 
+    AgentName, 
+    AgentId, 
+    OwnerId, 
+    StartDate, 
+    EndDate, 
+    Pending, 
+    Acknowledged, 
+    Total=Pending+Acknowledged, 
+    PostSLACompletionStatus=toreal(Acknowledged) / toreal(Pending+Acknowledged), 
+    Protocol, 
+    AgentReadiness, 
+    GC, 
+    Email 
+| order by AgentId asc
+
+
+    

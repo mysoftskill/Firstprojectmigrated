@@ -1,0 +1,29 @@
+{
+  "SyntheticJobGroup": {
+    "Name": "ExportPersonalDataSyntheticsJobGroup",
+    "SyntheticJobs": [
+      {
+        "ExecutionIntervalSeconds": 3600,
+        "JobName": "ExportPersonalDataSyntheticsJob",
+        "AssemblyFilePath": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob.dll",
+        "FullyQualifiedClassName": "Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob.ExportPersonalDataSyntheticsJob",
+        "Regions": [ "USWest2" ],
+        "Parameters": {
+          "ApiUrlEndpoint": "https://graph.microsoft.com/v1.0",
+          "ApiPathTemplate": "users/{0}/exportPersonalData",
+          "ClientId": "90b23419-a7ce-4459-95e1-8f251ea7f606",
+          "KeyVaultUrl": "https://genevasynthetics-kv.vault.azure.net/",
+          "UserPasswordSecretName": "user1-password",
+          "UserUpnSecretName": "user1-upn",
+          "BlobStorageConnectionStringSecretName": "pxs-test-blob-storage-connection-string",
+          "Authority": "https://login.microsoftonline.com"
+        },
+        "SyntheticJobInstances": [
+          {
+            "InstanceNamePrefix": "Microsoft"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+steps:
+- task: CmdLine@2
+  displayName: Package
+  inputs:
+    script: $(PCFBuildRootDirectory)\OneBranch\Build\package.cmd Release
+    workingDirectory: $(PCFBuildRootDirectory)\OneBranch
+
+- task: PowerShell@2
+  displayName: 'Create Directories'
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -ItemType Directory -Force -Path $(PCFOutputDirectory)\outputs\build\Ev2
+      New-Item -ItemType Directory -Force -Path $(PCFOutputDirectory)\outputs\build\FCT
+      New-Item -ItemType Directory -Force -Path $(PCFOutputDirectory)\outputs\build\CodeSign
+
+- task: PowerShell@2
+  displayName: 'Move FCT to Output'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Move-Item -Path $(PCFBuildRootDirectory)\bin\Release\x64\FunctionalTests\** -Destination $(PCFOutputDirectory)\outputs\build\FCT -Force
+
+- task: PowerShell@2
+  displayName: 'Move Build to Ev2'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Move-Item -Path $(PCFBuildRootDirectory)\OneBranch\Release\** -Destination $(PCFOutputDirectory)\outputs\build\Ev2 -Force

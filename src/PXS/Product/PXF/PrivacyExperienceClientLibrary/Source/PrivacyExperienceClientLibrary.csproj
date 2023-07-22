@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <RootNamespace>Microsoft.Membership.MemberServices.PrivacyExperience.ClientLibrary</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.PrivacyExperience.ClientLibrary</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <Platform>x64</Platform>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\Build\InternalKey.snk</AssemblyOriginatorKeyFile>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</Version>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</Version>
+    <SourceRevisionId Condition=" '$(BUILD_SOURCEVERSION)' != '' ">$(BUILD_SOURCEVERSION)</SourceRevisionId>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="PrivacyExperienceClientLibrary.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="Microsoft.AspNet.WebApi.Core" VersionOverride="5.2.7"/>
+    <PackageReference Include="Microsoft.OSGS.HttpClientCommon" VersionOverride="9.0.14236.1"/>
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" VersionOverride="9.0.21262.1"/>
+    <PackageReference Include="Newtonsoft.Json" VersionOverride="13.0.1"/>
+    <PackageReference Include="System.Net.Http" VersionOverride="4.3.4"/>
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

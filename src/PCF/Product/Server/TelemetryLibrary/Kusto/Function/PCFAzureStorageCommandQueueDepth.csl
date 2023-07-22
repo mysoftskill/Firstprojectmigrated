@@ -1,0 +1,11 @@
+﻿.create-or-alter function with (folder = '', docstring = "PCF Azure Storage Command Queue Depth View", skipvalidation = "false") PCFAzureStorageCommandQueueDepth(startTime:datetime, endTime:datetime, resolution:timespan) {
+    PCFAgentAzureStorageQueueDepthV2
+    | where TimeStamp between (startTime .. endTime)
+    | summarize
+        QueueDepth=ceiling(avg(Count)), max(TimeStamp)
+    by AgentId, AssetGroupId, SubjectType, CommandType, QueueMoniker, bin(TimeStamp, resolution)
+    | summarize 
+        QueueDepth= sum(QueueDepth)
+    by TimeStamp, AgentId, AssetGroupId, CommandType, SubjectType
+    | order by TimeStamp
+}

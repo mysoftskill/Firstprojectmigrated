@@ -1,0 +1,37 @@
+﻿<div>
+    <label mee-label data-use-cms>{{$ctrl.displayLabel}}</label>
+    <button ng-if="$ctrl.canMailAllResources()"
+            ng-click="$ctrl.mailAllResources()"
+            data-glyph="mail"
+            mee-action-trigger="glyph-only"
+            title="{{$ctrl.emailAllLabel}}">{{$ctrl.emailAllLabel}}</button>
+</div>
+<mee-progress-view watch-operation="{{$ctrl.progressMonitoredOperationName}}" class="progress-local-small">
+    <inert-view></inert-view>
+    <inprogress-view>
+        <mee-progress-ants-mwf kind="local"></mee-progress-ants-mwf>
+    </inprogress-view>
+    <failed-view>
+        <p mee-paragraph data-use-cms>
+            Failed to get resources.
+        </p>
+    </failed-view>
+
+    <finished-view>
+        <div class="view-resources">
+            <ul class="c-group f-wrap-items">
+                <li ng-if="!$ctrl.isResourceEmpty()"
+                    class="resource-entity c-choice-summary"
+                    ng-repeat="resource in $ctrl.resources track by $index"
+                    ng-class="$ctrl.getResourceClass(resource)">
+                    <span ng-click="$ctrl.resourceClicked(resource)"
+                          title="{{$ctrl.getResourceTitle(resource)}}">{{resource.displayName}}</span>
+                </li>
+                <li ng-if="$ctrl.isResourceEmpty()">
+                    <span data-use-cms>None</span>
+                </li>
+            </ul>
+        </div>
+    </finished-view>
+
+</mee-progress-view>

@@ -1,0 +1,11 @@
+<!--   
+  Custom properterties for Titan  
+  Copyright (C) Microsoft Corporation. All rights reserved.  
+-->  
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+
+  <PropertyGroup>  
+    <UseTitanium>True</UseTitanium>
+  </PropertyGroup>  
+</Project>

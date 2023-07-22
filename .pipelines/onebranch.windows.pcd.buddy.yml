@@ -1,0 +1,277 @@
+#################################################################################
+#                        OneBranch Pipelines - Buddy                            #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: 
+  branches:
+    include:
+    - develop
+  paths:
+    include:
+    - src/PCD
+    - .pipelines
+    - .build
+    - src/Common
+    - src/Deployment
+    - src/PCF/Product/Client/Source
+    - src/PDMS/Product/ClientSdks
+    - src/PXS/Product/Clients/PrivacyOperationClient # https://aka.ms/obpipelines/triggers
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+
+variables:
+- template: variables.yml
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    cloudvault:
+      enabled: true
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      sbom:
+        enabled: true
+      binskim:
+        enabled: true
+      break: true # always break the build on binskim issues. You can disable it by setting to 'false'
+      policheck:
+        enabled: true
+        break: true # always break the build on policheck issues. You can disable it by setting to 'false'
+      tsa:
+        enabled: false
+        configFile: $(Build.SourcesDirectory)/.config/tsaoptions.json
+      credscan:
+        enabled: true
+        suppressionsFile: $(Build.SourcesDirectory)\.config\CredScanSuppressions.json
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows  # read more about custom job pool types at https://aka.ms/obpipelines/yaml/jobs
+        
+        variables: # More settings at https://aka.ms/obpipelines/yaml/jobs
+          ob_outputDirectory: '$(PCDOutputDirectory)' # this directory is uploaded to pipeline artifacts, reddog and cloudvault. More info at https://aka.ms/obpipelines/artifacts
+          ob_artifactBaseName: 'drop'
+          ob_sdl_binskim_break: false # https://aka.ms/obpipelines/sdl
+
+        steps:
+
+          - task: onebranch.pipeline.version@1 # generates automatic version. For other versioning options check https://aka.ms/obpipelines/versioning
+            displayName: 'Setup BuildNumber'
+            inputs:
+              system: 'RevisionCounter'
+              major: '2'
+              minor: '2'
+              exclude_commit: true
+
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)'
+              performMultiLevelLookup: true
+
+          - task: NodeTool@0 
+            inputs:
+              versionSpec: '12.20.1' # replace this value with the version that you need for your project
+
+          - task: CmdLine@2
+            displayName: 'Update Version'
+            inputs:
+              script: '$(PCDBuildRootDirectory)\OneBranch\Build\versioning.cmd'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              
+          - task: npmAuthenticate@0
+            displayName: 'Install npm module dependencies'
+            inputs:
+              workingFile: '$(PCDBuildRootDirectory)/Product/Source/ux/.npmrc'
+              
+          - task: Npm@1
+            inputs:
+              command: 'ci'
+              workingDir: '$(PCDBuildRootDirectory)/Product/Source/ux/'
+
+          - task: CmdLine@2
+            displayName: 'Restore ux'
+            inputs:
+              script: '$(PCDBuildRootDirectory)\OneBranch\Build\restore.cmd'
+              workingDirectory: '$(Build.SourcesDirectory)' 
+
+          - task: DotNetCoreCLI@2
+            displayName: 'DotNetCore restore'
+            inputs:
+              command: 'custom' # if you use `restore` command it invalidates credential, so we recommend to use custom + restore argument
+              projects: $(PCDSolution)
+              custom: 'restore'
+
+          # service fabric projects rely on projects.json and so must be restored with a "nuget restore"
+          - task: CmdLine@2
+            displayName: Restore Service Fabric Projects
+            inputs:
+              script: nuget restore $(PCDSolution)  
+          
+          - task: CopyFiles@2
+            displayName: 'Copy deps since GenevaMonitoringAgent uses nupkgs'
+            inputs:
+              SourceFolder: '$(PCDBuildRootDirectory)\packages'
+              Contents: '**/*'
+              TargetFolder: '$(Build.SourcesDirectory)\src\NugetPackages'
+
+          - task: CmdLine@2
+            displayName: 'Build PDMS ux'
+            inputs:
+              script: '$(PCDBuildRootDirectory)\OneBranch\Build\build.cmd Release'
+              workingDirectory: '$(Build.SourcesDirectory)'
+
+          - task: RoslynAnalyzers@3
+            displayName: 'DotNet build with RoslynAnalyzers'
+            inputs:
+              userProvideBuildInfo: 'msBuildInfo'
+              setupCommandlinePicker: 'vs2022' # Allows you to pick the visual studio version used during the execution of the Analyzers. 2022 is required for .net 6 on the latest images.
+              msBuildVersion: '17.0' # Allows you to specificy the msbuild version used for the msbuild command line such as dontnet.exe
+              msBuildArchitecture: x64
+              rulesetName: Custom
+              customRuleset: $(Build.SourcesDirectory)\src\Build\build.ruleset
+              msBuildCommandline: 'dotnet.exe build $(PCDSolution) --no-restore --configuration $(BuildConfiguration) -p:ForcePackageTarget=true -p:platform=$(BuildArchitecture) -p:Version=$(Build.BuildNumber)'
+
+          - task: CmdLine@2
+            displayName: 'Package the Build'
+            inputs:
+              script: '$(PCDBuildRootDirectory)\OneBranch\Build\package.cmd Release'
+              workingDirectory: '$(Build.SourcesDirectory)'
+
+          - task: CmdLine@2
+            displayName: 'UnitTests'
+            inputs:
+              script: '$(PCDBuildRootDirectory)\OneBranch\Build\test.cmd Release'
+              failOnStderr: true
+
+          - task: VSTest@2
+            inputs:
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\*test*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              searchFolder: $(PCDBuildRootDirectory)
+              runInParallel: true            
+              testFiltercriteria: '"TestCategory=Unit"'
+           
+          - task: PublishTestResults@2
+            displayName: 'Publish test results'
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: '$(PCDBuildRootDirectory)\Product\Source\ux.tests\TestResults\*.trx'
+              failTaskOnFailedTests: true
+
+          - task: PowerShell@2
+            displayName: 'Create Directories'
+            inputs:
+              targetType: 'inline'
+              script: |
+                New-Item -ItemType Directory -Force -Path $(PCDOutputDirectory)\outputs\build\CodeSign
+                New-Item -ItemType Directory -Force -Path $(PCDOutputDirectory)\outputs\build\EV2
+                New-Item -ItemType Directory -Force -Path $(PCDOutputDirectory)\outputs\build\intTest
+                New-Item -ItemType Directory -Force -Path $(PCDOutputDirectory)\outputs\build\functionalTest
+
+          - task: CopyFiles@2
+            displayName: 'Copy Build output'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)
+              contents: |
+                **/*.dll
+                **/*.exe
+                **/*.ps1
+                **/PcdUxSvcPkg/**/*.js
+                **/node_modules/**/*.js
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\CodeSign
+
+
+          - task: CopyFiles@2
+            displayName: 'Copy Onebranch output EV2'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\OneBranch\Release
+              contents: '**/*'
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\EV2 
+
+          - task: CopyFiles@2
+            displayName: 'Copy Product output to inttest'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\Product\Source\ux
+              contents: |
+                gulp-tasks/**/*
+                frontend/**/*
+                CloudTest/**/*
+                wwwroot/**/*
+                gulpfile.js
+                package.json
+                npm-shrinkwrap.json
+                appsettings.json
+                CloudTest/**/*
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\intTest 
+
+          - task: CopyFiles@2
+            displayName: 'Copy Ux output to inttest'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\Product\Source\ux\bin\Release
+              contents:    '**/*'
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\intTest
+
+          - task: CopyFiles@2
+            displayName: 'Copy Build output to inttest'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\Product\Build
+              contents: latest_chromedriver.ps1   
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\intTest 
+
+          - task: CopyFiles@2
+            displayName: 'Copy CloudTest output to inttest'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\Product\Source\ux\CloudTest
+              contents: .npmrc    
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\intTest  
+             
+          - task: CopyFiles@2
+            displayName: 'Copy Sources test output to functionalTest'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\Product\Source\functional.tests
+              contents:  |
+                 bin/Release/net472/**/*
+                 CloudTest/**/*
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\functionalTest
+                    
+          - task: CopyFiles@2
+            displayName: 'Copy Sources test output to functionalTest'
+            inputs:
+              SourceFolder: $(PCDBuildRootDirectory)\Product\Source\functional.tests\bin\Release\net472
+              contents: '**/*'
+              TargetFolder: $(PCDOutputDirectory)\outputs\build\functionalTest
+
+              
+             
+          - task: PublishSecurityAnalysisLogs@3
+            displayName: Publish Security Analysis Logs
+            inputs:
+              ArtifactName: 'CodeAnalysisLogs'
+              ArtifactType: 'Container'
+              AllTools: true
+              ToolLogsNotFoundAction: 'Standard' 
+

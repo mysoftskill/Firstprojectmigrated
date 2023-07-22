@@ -1,0 +1,40 @@
+﻿<h2 data-use-cms>Select a data agent to link</h2>
+<div class="select-agent-area">
+    <div ng-if="!$ctrl.dataAgentListPickerModel.items.length">
+        <div data-required-field="true">
+            <label class="c-label" data-required-field="true" data-use-cms>Select a data agent</label>
+        </div>
+        <div>
+            <mee-progress-ants-mwf mee-progress-visible="loadDataAgents"></mee-progress-ants-mwf>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.agent-id"></mee-inline-error>
+        </div>
+    </div>
+    <!-- TODO: Replace mee-select with Combo -->
+    <mee-select ng-if="$ctrl.dataAgentListPickerModel.items.length"
+                data-required-field="true"
+                ng-model="$ctrl.dataAgentListPickerModel.selectedId"
+                menu-style="flex border scroll">
+        <label data-use-cms>Select a data agent</label>
+        <select>
+            <option ng-repeat="item in $ctrl.dataAgentListPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+        </select>
+    </mee-select>
+</div>
+<mee-checkbox ng-model="$ctrl.selfAttestCheckbox" ng-if="$ctrl.isCheckBoxRequired()"
+                              data-use-cms>
+                              I certify that assets being linked to the above data agent are compliant as per the guidelines of public clouds/sovereign clouds/ data boundary commitments such as EU.
+                              <a mee-hyperlink target="_blank" href="https://aka.ms/NGPselfattest">Read More</a>
+                              <span style="color:red">*</span>
+                </mee-checkbox>
+<mee-inline-error error-id="{{$ctrl.errorCategory}}.checkbox"></mee-inline-error>
+<div class="c-group">
+    <button mee-button="primary"
+            ng-click="$ctrl.next()"
+            ng-disabled="!$ctrl.dataAgentListPickerModel.selectedId"
+            mee-progress-disabled="loadDataAgents"
+            data-use-cms>Next</button>
+    <button mee-button
+            ng-click="$ctrl.cancel()"
+            mee-progress-disabled="loadDataAgents"
+            data-use-cms>Cancel</button>
+</div>

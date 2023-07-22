@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Microsoft.PrivacyServices.PrivacyOperation.Client</title>
+    <authors>meems@microsoft.com</authors>
+    <owners>meems@microsoft.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A client for the NGPX Privacy Operation API.</description>
+    <releaseNotes>A client for the NGPX Privacy Operation API.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>NGP NGPX Privacy Operation Client MemberServices</tags>
+  </metadata>
+</package>

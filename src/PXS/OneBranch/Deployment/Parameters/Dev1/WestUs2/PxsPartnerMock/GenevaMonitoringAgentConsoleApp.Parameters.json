@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pxsdev1-testcluster"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\GenevaMonitoringAgentConsoleApp.sfpkg"
+    },
+    "applicationParameters": {
+      "value": {
+        "ClusterName": "pxsdev1-testcluster",
+        "MdmAccountName": "ADGCS_NonProdHotPath",
+        "MdmNamespace": "ServiceFabric",
+        "MdmDataCenterName": "WestUS2",
+        "EnabledTenantJsons": "Tenant_MonitoringAgent.Test.westus2.Settings.json"
+      }
+    }
+  }
+}

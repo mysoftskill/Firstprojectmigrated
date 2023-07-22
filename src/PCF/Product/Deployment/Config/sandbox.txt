@@ -1,0 +1,66 @@
+%DataFolderName%|Sandbox
+%AzureManagementResourceGroupName%|PCF-Sandbox-SN2
+%AzureBlobConnectionString%|sandbox-storage-cs
+%AllowSdkWithoutVerifier%|true
+
+%ServiceToServiceSiteId%|296170
+%AzureActiveDirectoryValidAudience%|https://pcf.privacy.microsoft-int.com
+
+%AzureStorageAccounts%|MULTI
+     <Item kvsecret="true">%AzureBlobConnectionString%</Item>
+.
+
+%CosmosDBList%|MULTI
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcf-sandbox-east</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcf-sandbox-east.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">sandbox-commandqueue-east-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+    <CosmosDB>
+        <Moniker cg:Type="System.String">pcf-sandbox-west</Moniker>
+        <DatabaseId>db</DatabaseId>
+        <Uri cg:Type="System.Uri">https://pcf-sandbox-west.documents.azure.com:443/</Uri>
+        <Key cg:Type="System.String" kvsecret="true">sandbox-commandqueue-westcentral-key</Key>
+        <Weight>1</Weight>
+    </CosmosDB>
+.
+
+%EventHubList%|MULTI
+      <Item cg:Interface="IConfiguredEventHub">
+        <ConnectionString kvsecret="true">sandbox-eventhub-cs</ConnectionString>
+        <Path>commandlifecycle</Path>
+        <LeaseContainerName>commandlifecyclea</LeaseContainerName>
+        <Moniker>pcf-sandbox-eventhub</Moniker>
+        <CheckpointAccountConnectionString kvsecret="true">%AzureBlobConnectionString%</CheckpointAccountConnectionString>
+      </Item>
+.
+
+%CommandHistoryCosmosDbUri%|https://pcf-sandbox-coldstorage.documents.azure.com:443/
+%CommandHistoryCosmosDbKey%|sandbox-commandhistory-key
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/sandbox/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/sandbox/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/sandbox/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/sandbox/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+
+%MaxWorkingSetMb%|5000
+%StopService%|true
+
+%CommandReplayDocDBUri%|https://pcf-sandbox-commandreplay.documents.azure.com:443/
+%CommandReplayDocDBKey%|sandbox-commandreplay-key
+
+%QueueDepthBaselineFrequencyMinutes%|10
+%TelemetryTimeToLiveDays%|7
+%TelemetryMaxItemCount%|100
+
+%DeviceIdExpirationMinutes%|1
+%EventHubCheckpointExpirationSeconds%|1
+%AgentAzureQueuesStorageAccounts%|MULTI
+    <AzureQueue>
+        <ConnectionString kvsecret="true">%AzureBlobConnectionString%</ConnectionString>
+        <Weight>1</Weight>
+    </AzureQueue>
+.

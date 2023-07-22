@@ -1,0 +1,2 @@
+- This commit takes place after the "rewind" operation as identified in bug: https://microsoft.visualstudio.com/OSGS/_workitems/edit/19350449
+Following this commit, the branch policies will be reapplied to require 2-person signoff. This commit introduces no code changes.

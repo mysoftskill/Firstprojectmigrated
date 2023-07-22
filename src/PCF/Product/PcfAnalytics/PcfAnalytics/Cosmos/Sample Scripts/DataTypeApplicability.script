@@ -1,0 +1,91 @@
+﻿//Script GUID:c04a727c-2830-413a-aef2-5ace326dcd2c
+//Used for tracking history//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+ 
+variant = SSTREAM  @"/shares/PXSCosmos15.Prod/PDMSPrivate/PROD/PrivacyDeleteAuditor/AssetGroupVariantInfo/2018/10/AssetGroupVariantInfo_2018_10_17.ss";
+assetgroup = SSTREAM  @"/shares/PXSCosmos15.Prod/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_Prod/V2/2018/10/PcfConfig_Prod_2018_10_17.ss";
+
+joinTable =
+    SELECT v.AssetGroupId,
+           v.VariantId,
+           a.AgentId,
+           v.Capabilities AS VCap,
+           v.SubjectTypes AS VSub,
+           v.DataTypes AS VTypes,
+           a.Capabilities AS ACap,
+           a.SubjectTypes AS ASub,
+           a.DataTypes AS ATypes,
+           a.AssetGroupQualifier AS AQ,
+           a.AgentReadiness
+    FROM variant AS v
+         INNER JOIN
+             assetgroup AS a
+         ON v.AssetGroupId == a.AssetGroupId
+    WHERE
+    v.DisableSignalFiltering == false
+    AND IsDeprecated == false
+    AND v.DataTypes != "[]"
+    AND a.DataTypes != "[]"
+    AND a.Capabilities != "[]"
+    AND (v.Capabilities != "[\"Delete\"]" AND a.Capabilities != "[\"Delete\"]");
+
+result =
+    SELECT *,
+           InlineCSHelper.IncludeAssetGroup(jt.VTypes, jt.ATypes) AS Applicability
+    FROM joinTable AS jt;
+
+// OUTPUT
+ 
+OUTPUT joinTable
+TO SSTREAM "/my/joint_1018_346.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "10";
+ 
+
+OUTPUT result
+TO SSTREAM "/my/All_1018_346.ss"
+    HASH CLUSTERED BY AssetGroupId
+    SORTED BY AssetGroupId
+WITH STREAMEXPIRY "10";
+ 
+#CS
+public static class InlineCSHelper
+{
+    public static string IncludeAssetGroup(string variantDataTypesString, string assetGroupDataTypesString)
+    {  
+        adat = assetGroupDataTypesString.Replace("[", string.Empty).Replace(" ", string.Empty).Replace("]", string.Empty);
+        var assetGroupDataTypes = adat.Split(',').ToList();
+        
+        bool intersect = false;
+        bool isPartialCover = false;
+    
+        // is it partially applicable? (arrays intersect and assetDataType has an element that is not in vdt)
+        foreach (string d in assetGroupDataTypes)
+        {
+            if (!variantDataTypesString.Contains(d))
+            {
+                isPartialCover = true;
+            }
+            else
+            {
+                intersect = true;
+            }
+        }
+    
+        if (!intersect)
+        {
+            return "NotApplicableVariantDataTypes";
+        }
+        else if (isPartialCover)
+        {
+            return "PartiallyApplicableVariantDataTypes";
+        }
+        else
+        {
+            return "FullyApplicableVariantDataTypes";
+        }
+    }  
+}
+#ENDCS
+ 

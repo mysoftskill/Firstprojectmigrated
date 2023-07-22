@@ -1,0 +1,11 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successful outgoing call to Icm.")]
+struct IcmResultEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string connectorId;
+    20: required string eventName;
+    30: required string incidentId;
+}

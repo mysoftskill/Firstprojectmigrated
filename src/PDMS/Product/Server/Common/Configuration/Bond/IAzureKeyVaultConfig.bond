@@ -1,0 +1,6 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IAzureKeyVaultConfig
+{
+    1 : required string VaultBaseUrl;
+};

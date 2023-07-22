@@ -1,0 +1,42 @@
+<Project>
+
+    <ItemGroup>
+        <Compile Include="$(BuildPath)Properties\AssemblyInfo.Common.cs">
+            <Link>AssemblyInfo.Common.cs</Link>
+        </Compile>
+    </ItemGroup>
+    
+    <PropertyGroup>
+    <IsTestProject Condition=" '$(IsTestProject)' == '' AND $(ProjectTypeGuids) == '{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">true</IsTestProject>
+    <DefineConstants Condition=" '$(InternalsVisisibleToUnitTests)' == 'true' ">INTERNALS_VISIBLE_TO_TESTS;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition=" '$(SignAssembly)' == 'true' ">STRONG_NAME_SIGNED;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <ExcludeFromCodeCoverage Condition=" '$(ExcludeFromCodeCoverage)' == ''">true</ExcludeFromCodeCoverage>
+    <ReleaseSubDir>UnitTests</ReleaseSubDir>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="$(BuildPath)Microsoft.Windows.Services.Devices.CustomDictionary.xml"/>
+  </ItemGroup>
+       
+  <PropertyGroup>
+    <CodeAnalysisRuleSet Condition=" '$(IsTestProject)' != 'true' ">$(BuildPath)Service.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition=" '$(IsTestProject)' == 'true' ">$(BuildPath)Test.ruleset</CodeAnalysisRuleSet>
+    <CopyFilesToReleasePathEnabled Condition=" '$(ReleaseSubDir)' != '' ">true</CopyFilesToReleasePathEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(BuildPath)StyleCop.json" />
+  </ItemGroup>
+
+  <Target Name="CopyConfig" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <Config Include="$(ServiceRoot)\Server\Deployment\Config\*.ini" />
+    </ItemGroup>
+
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(Config)" DestinationFolder="$(OutDir)" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(Config)" DestinationFolder="$(ReleasePath)" Condition="'$(CopyFilesToReleasePathEnabled)' != 'false'" />
+  </Target>
+</Project>

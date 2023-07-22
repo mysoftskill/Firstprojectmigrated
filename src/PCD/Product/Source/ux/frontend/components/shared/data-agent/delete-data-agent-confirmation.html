@@ -1,0 +1,12 @@
+<h2 mee-heading="subheading2" data-use-cms>Remove data agent</h2>
+
+<p mee-paragraph data-use-cms>You are about to remove data agent <span>{{$ctrl.dataAgent.name}}</span></p>
+<p mee-paragraph data-use-cms>Are you sure?</p>
+
+<mee-checkbox ng-if="$ctrl.checkIfErrorMessageShown()" ng-model="$ctrl.hasAcknowledgedDelete"
+              data-use-cms>
+    I understand that I am still responsible for deleting the data from my data assets for any pending commands.
+    <br />
+</mee-checkbox>
+
+<pcd-confirmation-modal-actions></pcd-confirmation-modal-actions>

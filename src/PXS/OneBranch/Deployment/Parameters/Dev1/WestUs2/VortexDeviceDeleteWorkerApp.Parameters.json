@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pxsdev1"
+    },
+    "applicationTypeName": {
+      "value": "VortexDeviceDeleteWorkerAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\VortexDeviceDeleteWorkerApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "VortexDeviceDeleteWorkerApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "EnvironmentName": "dev1",
+        "AzureServicesAuthConnectionString": "RunAs=App",
+        "Svc_PlacementConstraints": "(NodeTypeName==Worker)"
+      }
+    }
+  }
+}

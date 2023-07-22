@@ -1,0 +1,51 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successfull outgoing call to MSAL.")]
+struct MsalSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string accessTokenType;
+    20: required string expiresOn;
+    30: required bool isExtendedLifeTimeToken;
+    40: required string tenantId;
+    50: required string displayableId;
+    60: required string identityProvider;
+    70: required string uniqueId;
+    80: required string accessToken;
+    90: required string scopes;
+    100: required string correlationId;
+    110:  required string extendedExpiresOn;
+}
+
+[Description("Successfull outgoing call to Microsoft Graph.")]
+struct MicrosoftGraphSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: optional string nextPageRequestUrl;
+    20: required int32 count;
+}
+
+[Description("Successfull outgoing call to Microsoft Graph to retrieve a group by id.")]
+struct MicrosoftGraphGroupFoundEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string DisplayName;
+    20: required string SecurityEnabled;
+}
+
+struct Error
+{
+    10: required string code;
+    20: required string message;
+    30: optional nullable<Error> innerError = nothing;
+}
+
+[Description("Failed outgoing call to MSAL.")]
+struct MsalExceptionEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingExceptionEvent
+{
+}
+
+[Description("Failed outgoing call to Microsoft Graph.")]
+struct MicrosoftGraphExceptionEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingExceptionEvent
+{
+    20: required Error error;
+}

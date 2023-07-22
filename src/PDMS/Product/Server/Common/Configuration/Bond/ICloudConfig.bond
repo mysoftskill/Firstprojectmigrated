@@ -1,0 +1,20 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct ICloudStorageConfig
+{
+    1   :   required    string  AccountName;
+    4   :   required    string  BlobUriFormat;
+    5   :   required    string  QueueUriFormat;
+    6   :   required    string  TableUriFormat;
+    7   :   required    string  FileUriFormat;
+    9   :   required    string  ResourceId;
+}
+
+struct ICloudQueueConfig
+{
+    1   :   required    string          DataGridQueueName;
+    3   :   required    int64           ExpiryDurationInDays;
+    13  :   required    string          PafVariantRequestsQueueName;
+    14  :   required    int32           PafQueueItemExpiryDurationInDays;
+    15  :   required    bool            EnableWriteToPafVariantRequestsQueue;
+}

@@ -1,0 +1,30 @@
+﻿declare query_parameters (ExcludedAgentsJson:string, IncidentMinAge:timespan, IncidentMaxAge:timespan); 
+//
+datatable(
+    GCEmail:string,
+    AgentId:string,
+    AgentName:dynamic,
+    Incidents:dynamic,
+    ContactList:dynamic)
+[
+  // 
+  "dertest3@microsoft.com", 
+  "AId1",
+  "Name1",
+  dynamic([ 1, 2, 3 ]),
+  dynamic([ { "Email": "dertest1@microsoft.com", "Alias": "dertest1" }, { "Email": "dertest3@microsoft.com", "Alias": "dertest3" } ]),
+  //
+  "dertest1@microsoft.com", 
+  "AId2",
+  "Name2",
+  dynamic([ 4, 5, 6 ]),
+  dynamic([ { "Email": "dertest3@microsoft.com", "Alias": "dertest3" }, { "Email": "dertest1@microsoft.com", "Alias": "dertest1" } ]),
+];
+//
+datatable(
+  ToLine:dynamic,
+  CcLine:dynamic)
+[
+  dynamic([ "dertest3@microsoft.com" ]),
+  dynamic([ "dertest1@microsoft.com" ]),
+];

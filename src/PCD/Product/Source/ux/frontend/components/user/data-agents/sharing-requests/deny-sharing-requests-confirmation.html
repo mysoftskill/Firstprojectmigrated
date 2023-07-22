@@ -1,0 +1,11 @@
+﻿<h2 mee-heading="subheading2" data-use-cms>Deny Requests</h2>
+
+<p mee-paragraph data-use-cms>Are you sure you want to deny requests from these owners?</p>
+<div class="sharing-request-view-container">
+    <p mee-paragraph ng-repeat="requestContainer in $ctrl.requestContainers track by $index">
+        {{requestContainer.request.ownerName}}
+    </p>
+</div>
+
+
+<pcd-confirmation-modal-actions></pcd-confirmation-modal-actions>

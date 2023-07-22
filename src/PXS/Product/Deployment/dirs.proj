@@ -1,0 +1,10 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(EnvironmentConfig)" />
+  <Import Project="$(GlobalBuildOverridesDir)\Microsoft.WPS.settings" />
+
+  <ItemGroup> 
+      <ProjectFile Include="MemberServicesApBuild\build.proj" />
+  </ItemGroup>
+  
+  <Import Project="$(ExtendedTargetsPath)\Traversal.targets" />
+</Project> 

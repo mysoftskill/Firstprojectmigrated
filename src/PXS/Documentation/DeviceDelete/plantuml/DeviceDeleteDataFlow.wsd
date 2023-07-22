@@ -1,0 +1,31 @@
+@startuml DeviceDeleteDataFlowDiagram
+
+node Client
+node Vortex
+
+node PrivacyWorker {
+    [DeviceDeleteWorker]
+}
+
+node AzureStorage {
+    database DeviceDeleteQueue
+}
+
+node PrivacyView {
+    [DeviceDelete]
+}
+
+node PCF
+node DeleteFeed
+
+Client -> Vortex : Critical telemetry event
+Vortex --> DeviceDelete : Batch post of events
+
+DeviceDelete --> DeviceDeleteQueue : Filter out duplicate device requests
+
+DeviceDeleteQueue --> DeviceDeleteWorker : Read events from queue
+
+DeviceDeleteWorker -> PCF : Post delete requests
+DeviceDeleteWorker -> DeleteFeed : Write delete requests
+
+@enduml

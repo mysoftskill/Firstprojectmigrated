@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+  This document contains the list of stored procedures (sproc) for the service.
+  Whenever a stored procedure needs to change, the version of the sproc needs to increment.
+  This is important so that we do not break the service during deployment.
+  If the name did not change, then the service would fail if a request to N-1 tries to access the sproc while it is being modified.
+  By using a new name for every sproc change, we can avoid this issue.
+  
+  In order to deprecate old versions of a sproc, you must first ship the new version with the old version.
+  Then in a subsequent deployment, you can change the action for the old version to "Remove".
+  Once the removal has deployed, you can delete that version name from this file.
+-->
+<storedProcedures>
+  <!-- Example removal: -->
+  <!-- <sproc name="V1.BulkUpsert.1.js" action="Remove" /> -->
+  <sproc name="V1.BulkUpsert.2.js" action="Install" />
+</storedProcedures>

@@ -1,0 +1,42 @@
+﻿import "Microsoft.Telemetry.bond"
+import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successfull incoming call to a web api.")]
+struct IncomingApiSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseIncomingSucessEvent
+{
+}
+
+struct Detail
+{
+    10: required string code;
+    20: required string message;
+    30: optional string target = nothing;
+}
+
+[Description("Failed incoming call to a web api with generic service error.")]
+struct IncomingApiServiceErrorEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseIncomingErrorEvent
+{
+    20: optional string target = nothing;	
+    30: optional vector<Detail> details = nothing;
+    40: optional string innerError = nothing;
+}
+
+[Description("Failed incoming call to a web api with service fault.")]
+struct IncomingApiServiceFaultEvent : IncomingApiServiceErrorEvent
+{
+    10: optional nullable<InnerException> innerException = nothing;
+    20: required string stackTrace;
+}
+
+[Description("Logged when client cert is present.")]
+struct ClientCertInfoEvent : Microsoft.Telemetry.Base
+{
+    10: required string subject;
+    20: required string thumbprint;
+    30: required string issuer;
+    40: required string notBefore;
+    50: required string notAfter;
+    60: required bool isValid;
+}

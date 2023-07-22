@@ -1,0 +1,84 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            After submitting a request, a list of request IDs will be returned for copying/pasting into the Customer Assistance Portal
+            (CAP) in order to track the requests created for each CAP ID.  Note that the returned request IDs indicate the request was
+            sent successfully, but not that the request was completed.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">CAP ID</span> is required in order to tie the delete back to the original customer request.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Priority</span> indicates the importance of the request, but is only respected in specific cases. In general,
+            a normal priority is sufficient (and recommended).
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Country of residence</span> is based on the country-of-residence that was indicated by the data subject.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Identifier type</span>
+        </p>
+        <ul mee-list="lean">
+            <li data-use-cms>MSA: If request is tied to a Microsoft Account.</li>
+            <li data-use-cms>Microsoft employee: If Alternate Subject request is for Microsoft employee data.</li>
+            <li data-use-cms>Alternate subject: If Alternate Subject request is for a non-Microsoft employee.</li>
+        </ul>
+
+        <div>
+            <p mee-paragraph data-use-cms>
+                <span class="view-label">Data types on delete request</span>
+            </p>
+            <pcd-list-supported-data-types pcd-title="MSA"
+                                           pcd-data-types=$ctrl.dataTypesOnSubjectRequests.msaSelfAuthSubject></pcd-list-supported-data-types>
+            <pcd-list-supported-data-types pcd-title="Microsoft employee"
+                                           pcd-data-types=$ctrl.dataTypesOnSubjectRequests.microsoftEmployeeSubject></pcd-list-supported-data-types>
+            <pcd-list-supported-data-types pcd-title="Alternate subject"
+                                           pcd-data-types=$ctrl.dataTypesOnSubjectRequests.demographicSubject></pcd-list-supported-data-types>
+        </div>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <section>
+            <div data-grid="col-12 pad-2x">
+                <div data-grid="col-6">
+                    <mee-text-field kind="flex"
+                                    data-required-field="true"
+                                    data-error-id="{{$ctrl.errorCategory}}.cap-id"
+                                    i9n-cap-id-field
+                                    mee-auto-focus>
+                        <label data-use-cms>CAP ID</label>
+                        <input ng-model="$ctrl.capId" placeholder="e.g. 1401528509" data-use-cms>
+                    </mee-text-field>
+
+                    <mee-inline-error error-id="{{$ctrl.errorCategory}}.cap-id"></mee-inline-error>
+
+                    <pcd-privacy-subject-priority-selector pcd-priority="$ctrl.priority" i9n-subject-priority-selector></pcd-privacy-subject-priority-selector>
+
+                    <pcd-country-list-selector i9n-country-list></pcd-country-list-selector>
+                </div>
+
+                <div data-grid="col-12">
+                    <pcd-privacy-subject-selector pcd-error-category="{{$ctrl.errorCategory}}" i9n-subject-selector></pcd-privacy-subject-selector>
+                    <mee-checkbox ng-model="$ctrl.hasAcknowledgedUndoableAction"
+                                  i9n-verify-info-checkbox
+                                  data-use-cms>I have verified that the provided information is accurate and understand that I cannot undo this action.</mee-checkbox>
+
+                    <pcd-commit-request-button data-use-cms
+                        pcd-button-label="Delete"
+                        pcd-error-id="{{$ctrl.errorCategory}}.generic"
+                        pcd-operation-name="processDeleteRequest"
+                        pcd-button-disabled="!$ctrl.hasAcknowledgedUndoableAction"
+                        pcd-button-on-click-operation="$ctrl.deleteClicked()"
+                        i9n-delete-button>
+                    </pcd-commit-request-button>
+                </div>
+            </div>
+        </section>
+    </pcd-content>
+
+</pcd-default-page-layout>

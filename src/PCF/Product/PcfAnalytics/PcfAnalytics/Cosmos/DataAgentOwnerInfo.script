@@ -1,0 +1,108 @@
+﻿//Script GUID:7327b63c-fbbd-4559-8e1b-bdec2f560e8d
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      version             = @@version@@
+
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddDays(-2),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddDays(-2),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@");
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE outputRootFolderName string = "DataAgentOwnerInfo";
+
+#DECLARE outputPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/{{0}}.ss", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+
+//INPUTS
+#DECLARE exportAgentOwnerStreamFormat string = "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PDMSReports/ExportAgentOwnerAssetCounts/V1/{0:yyyy}/{0:MM}/ExportAgentOwnerAssetCounts_{0:yyyy}_{0:MM}_{0:dd}.ss";
+
+#DECLARE deleteAgentOwnerStreamFormat string = "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PDMSReports/DeleteAgentOwnerAssetCounts/V1/{0:yyyy}/{0:MM}/DeleteAgentOwnerAssetCounts_{0:yyyy}_{0:MM}_{0:dd}.ss";
+
+#DECLARE pcfAgentIdStreamFormat string = "/shares/PXSCosmos15.Prod/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_Prod/V2/{0:yyyy}/{0:MM}/PcfConfig_Prod_{0:yyyy}_{0:MM}_{0:dd}.ss";
+
+#DECLARE exportAgentOwnerStream string = string.Format(@exportAgentOwnerStreamFormat, @startDate);
+#DECLARE deleteAgentOwnerStream string = string.Format(@deleteAgentOwnerStreamFormat, @startDate);
+#DECLARE pcfAgentIdStream string = string.Format(@pcfAgentIdStreamFormat, @startDate);
+
+//OUTPUTS
+#DECLARE dataAgentOwnerInfo_outputPath string = string.Format(@outputPathFormat,"DataAgentOwnerInfo");
+#DECLARE assetGroupIdMapping_outputPath string = string.Format(@outputPathFormat,"AssetGroupIdMapping");
+
+//output for test
+#IF (@localRun)
+    #SET dataAgentOwnerInfo_outputPath = string.Concat("/my", @dataAgentOwnerInfo_outputPath);
+    #SET assetGroupIdMapping_outputPath = string.Concat("/my", @assetGroupIdMapping_outputPath);
+#ENDIF
+
+pcfAgentInfo = SSTREAM @pcfAgentIdStream;
+
+pcfAgentIds = 
+    SELECT DISTINCT AgentId
+    FROM pcfAgentInfo;
+
+AgentInfoStream = 
+    SELECT *
+    FROM (SSTREAM @deleteAgentOwnerStream)
+    WHERE AgentId != NULL
+  UNION
+    SELECT *
+    FROM (SSTREAM @exportAgentOwnerStream)
+    WHERE AgentId != NULL;
+
+pcfAgentOwnerInfo = 
+    SELECT DISTINCT
+           rs1.AgentId AS AgentId,
+           rs2.AgentName ?? string.Empty AS AgentName,
+           rs2.ServiceId ?? string.Empty AS ServiceId,
+           rs2.DivisionName ?? string.Empty AS DivisionName,
+           rs2.OrganizationName ?? string.Empty AS OrganizationName,
+           rs2.ServiceGroupName ?? string.Empty AS ServiceGroupName,
+           rs2.TeamGroupName ?? string.Empty AS TeamGroupName,
+           rs2.ServiceName ?? string.Empty AS ServiceName,
+           rs2.AnnouncementContacts ?? string.Empty AS AnnouncementContacts,
+           rs2.AlertContacts ?? string.Empty AS AlertContacts
+    FROM pcfAgentIds AS rs1
+        LEFT JOIN AgentInfoStream AS rs2
+        ON rs1.AgentId == rs2.AgentId;
+
+assetGroupIdMapping = 
+    SELECT DISTINCT 
+           AssetGroupId, 
+           AssetGroupQualifier
+    FROM pcfAgentInfo;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT pcfAgentOwnerInfo
+TO SSTREAM @dataAgentOwnerInfo_outputPath;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT assetGroupIdMapping
+TO SSTREAM @assetGroupIdMapping_outputPath;

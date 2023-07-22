@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <ReleasePath>$(EnlistmentRoot)\Bin\$(Configuration)\$(Platform)</ReleasePath>
+    <TargetFramework>net472</TargetFramework>
+    <NoWarn>2008</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PrivacyServices.CodeSign.Dependencies" />
+    <PackageReference Include="Microsoft.SqlServer.Types" GeneratePathProperty="true" />
+    <PackageReference Include="RPS.Official.amd64.MSA" GeneratePathProperty="true" />
+    <PackageReference Include="ServiceManager.Tools" GeneratePathProperty="true" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Tools\Setup\GACUtil\gacutil.exe">
+      <Link>Setup\GACUtil\gacutil.exe</Link>
+    </Content>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <None Include="..\..\Tools\Setup\GACUtil\gacutil.exe.config">
+      <Link>Setup\GACUtil\gacutil.exe.config</Link>
+    </None>
+    <Content Include="..\..\Tools\Setup\GACUtil\gacutlrc.dll">
+      <Link>Setup\GACUtil\gacutlrc.dll</Link>
+    </Content>
+    <None Include="..\..\Tools\Setup\ConfigureMachine.ps1">
+      <Link>Setup\ConfigureMachine.ps1</Link>
+    </None>
+  </ItemGroup>
+  <Target Name="CopyMachineConfig" AfterTargets="Build">
+    <Copy SourceFiles="..\Shared\PrivacyMachineConfig\setup.cmd" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig" />
+    <Copy SourceFiles="..\..\Tools\Setup\GACUtil\gacutil.exe" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig\GACUtil" />
+    <Copy SourceFiles="..\..\Tools\Setup\GACUtil\gacutil.exe.config" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig\GACUtil" />
+    <Copy SourceFiles="..\..\Tools\Setup\GACUtil\gacutlrc.dll" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig\GACUtil" />
+    <Copy SourceFiles="$(PkgRPS_Official_amd64_MSA)\msi\rps64.msi" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig\RPS\7.1.6819" />
+    <Copy SourceFiles="..\..\Tools\Setup\ConfigureMachine.ps1" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig" />
+    <Copy SourceFiles="..\..\Tools\Setup\vcredist_2013\vcredist_x64.exe" DestinationFolder="$(ReleasePath)\PrivacyMachineConfig\vcredist_2013" />
+  </Target>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see https://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+  </Target>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

@@ -1,0 +1,133 @@
+%UseKvSecrets%|true
+%UseKvSecretsForStorageConnectionString%|true
+%UseKvSecretsForRedisPassword%|true
+%DataFolderName%|INT
+%IsProductionEnvironment%|false
+%IsTestEnvironment%|true
+%IsPreProdEnvironment%|false
+%ServiceToServiceSiteId%|296170
+%AzureActiveDirectoryValidAudience%|https://pcf.privacy.microsoft-int.com
+%AzureActiveDirectoryValidAudienceAME%|https://MSAzureCloud.onmicrosoft.com/613e14a9-7c60-4f8b-863c-f719e68cd8db
+%AllowSdkWithoutVerifier%|true
+%FailedCommandReplayTimeSecs%|1
+%ApplyTestDataAgentMapDecorator%|true
+%CarbonFlightingEnvironmentName%|INT
+%ExportInitialVisibilityDelayMinutes%|0
+
+%AzureKeyVaultBaseUrl%|https://pcf-int-ame.vault.azure.net/
+
+%AzureManagementApplicationId%|061be1ab-f7cb-4d44-bc8e-c0dfb357b7fc
+%AzureManagementSubscriptionId%|b4b176cf-fe78-4b59-bd1a-9b8c11536f4d
+%AzureManagementUAMISubscriptionId%|b4b176cf-fe78-4b59-bd1a-9b8c11536f4d
+
+%SytheticCommandInsertionEnabled%|true
+
+%CertificateName%|cloudtest-privacy-int
+%ClientCertSubject%|CN=cloudtest.privacy.microsoft-int.ms
+
+<!-- Item ttl 1 day -->
+%CosmosDBQueueTimeToLiveDays%|1
+<!-- Min lease duration 10 secs -->
+%CosmosDbQueueMinLeaseDurationSecs%|10
+<!-- Max lease duration 1 day -->
+%CosmosDbQueueMaxLeaseDurationSecs%|86400
+%CosmosDbDefaultRuPerSecond%|400
+%EnablePdmsDataRefresh%|true
+
+%AssetGroupCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}.ss
+%AssetGroupHourlyCosmosStreamTemplate%|https://be.cosmos15.osdinfra.net/cosmos/PXSCosmos15.Prod/local/PDMSPrivate/PROD/PrivacyDeleteAuditor/PCFConfig_PPE/V2/{0:yyyy}/{0:MM}/PcfConfig_PPE_{0:yyyy}_{0:MM}_{0:dd}T{0:HH}_00_00.ss
+
+%PdmsDatabaseUri%|https://pcf-test-pdmscache.documents.azure.com:443/
+%PdmsDatabaseKey%|test-pdmscache-key
+
+# So tests can run fast
+%ColdStorageCompletionBackoffSeconds%|5
+%CommandHistoryEventHubCheckpointFrequencySeconds%|5
+%AzureQueueMaxBackoffMs%|1000
+%EventHubEnablePeriodicNoOpEvents%|true
+%AzureStorageAccounts%|
+
+%OldExportForceCompleteMinAgeDays%|0
+%OldExportForceCompleteMaxAgeDays%|1
+%MinCompletionAgeDaysAad%|0
+%MaxCompletionAgeDaysAad%|1
+%OldExportForceCompleteTaskEnabled%|false
+
+%IngestionRecoveryTaskEnabled%|false
+
+%GetFullCommandStatusCallerList%|MULTI
+  <!-- PCF INT (dev team debugging) -->
+  <Item>296170</Item>
+.
+%ExportStorageGetAccountsCallerList%|%GetFullCommandStatusCallerList%
+
+%ExportStorageConnectionStringA%|%AzureBlobConnectionString%
+%ExportStorageConnectionStringB%|%AzureBlobConnectionString%
+
+%PrivacyCommandStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/v1/{0:yyyy}/{0:MM}/{0:dd}/RawPrivacyCommand_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%PrivacyCommandCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/PrivacyCommand/WriteCompletionSignal/v1/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+%PrivacyCommandStreamExpirationDays%|30
+%PrivacyCommandMaxCheckpointQueueSizeBytes%|50000
+%PrivacyCommandMaxCheckpointIntervalSecs%|10
+
+%AuditLogStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.tsv
+%AuditLogCompletionSignalStreamFormat%|/local/PDMSPrivate/INT/CommandFeedProcessors/AuditLog/WriteCompletionSignal/v2/{0:yyyy}/{0:MM}/{0:dd}/WriteCompletionSignal_{0:yyyy}_{0:MM}_{0:dd}_{0:HH}.txt
+%AuditLogStreamExpirationDays%|30
+%AuditLogMaxCheckpointQueueSizeBytes%|50000
+%AuditLogMaxCheckpointIntervalSecs%|10
+%AccountCloseCommandMaxIngestionDelaySeconds%|2
+
+%ExportToCSVEnabled%|true
+
+%MaxWorkingSetMb%|5000
+%StopService%|true
+
+%ReplayProcessDelayEnabled%|false
+%MinReplayWorkerSleepSeconds%|0
+%MaxReplayWorkerSleepSeconds%|1
+
+%QueueDepthBaselineFrequencyMinutes%|60
+%TelemetryTimeToLiveDays%|7
+%TelemetryMaxItemCount%|100
+%BaselineFrequencyMinutes%|0
+
+%KustoDatabaseName%|PcfTest
+
+%CosmosDbAutoscalerEnabled%|false
+
+%AzureQueueCommandQueueDepthCheckerEnabled%|true
+
+%DeviceIdExpirationMinutes%|1
+%EventHubCheckpointExpirationSeconds%|1
+%AgentAzureQueuesStorageAccounts%|MULTI
+    <AzureQueue>
+        <ConnectionString kvsecret="true">%AzureBlobConnectionString%</ConnectionString>
+        <Weight>1</Weight>
+    </AzureQueue>
+.
+
+%IncomingApiSamplingRate%|0
+%OutgoingApiSamplingRate%|0
+
+%AzureAppConfigEndpoint%|https://adgcs-nonprod-config.azconfig.io
+%NonWindowsDeviceEventHubConfig%|MULTI
+    <Moniker>ci1-nonwindowsdevice-eventhub</Moniker>
+    <ConnectionString kvsecret="true">ci1-eventhub-cs</ConnectionString>
+    <EventHubName>altdevicedelete</EventHubName>
+    <ConsumerGroupName>$Default</ConsumerGroupName>
+    <BlobContainerName>altdevicedelete</BlobContainerName>
+    <StorageConnectionString kvsecret="true">%AzureBlobConnectionString%</StorageConnectionString>
+.
+
+%AdlsAccountName%|pxscosmos15-prod-c15
+%AdlsTenantId%|33e01921-4d64-4f8c-a055-5bdaffd5e33d
+%AdlsAccountSuffix%|azuredatalakestore.net
+%AdlsClientAppId%|975e1332-de26-4ac9-b120-fe35fa68adf1
+%AdlsClientAppCertificateName%|aad-auth-ppe
+
+%PCFv2CosmosDbExportExpectationsContainerName%|exportexpectations
+%PCFv2CosmosDbCompletedCommandsContainerName%|completedexports
+%PCFv2CosmosDbDatabaseName%|db01
+%PCFv2CosmosDbEndpointName%|https://pcfci2cosmosdbeus.documents.azure.com:443/
+
+%PCFV2AzureStorageAccountName%|nonexistent

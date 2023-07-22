@@ -1,0 +1,51 @@
+{
+  "name": "Test",
+  "type": "Custom",
+  "dependsOn": [
+  ],
+  "policy": {
+    "timeout": "7.00:00:00",
+    "retry": 0,
+    "retryIntervalInSeconds": 30,
+    "secureOutput": false,
+    "secureInput": false
+  },
+  "userProperties": [
+  ],
+  "typeProperties": {
+    "command": "PrivacyCommandCustomActivity.exe",
+    "resourceLinkedService": {
+      "type": "LinkedServiceReference",
+      "referenceName": "AzureBlobStorageForSampleAgent"
+    },
+    "folderPath": "sampleagent",
+    "extendedProperties": {
+      "customActivityType": "GetAllCommands",
+      "operation": "Delete",
+      "agentId": "2f691d08-2c31-483d-9cee-f90acd1609c9",
+      "assetGroupId": "33035051-ee22-46e7-8bde-04a5450ead82",
+      "startTime": "2023-03-28 08:00Z",
+      "endTime": "2023-03-28 09:00Z",
+      "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+      "clientCertName": "sampleagentclient2f69",
+      "clientAadAppId": "07eb9be5-7da8-45b3-81a2-8d17fca8934c",  //prod
+      //"clientAadAppId": "0cdd0134-99aa-43d3-9f56-0356d2a8984f",  //ppe
+      "endpoint": "prod",
+      "outputBlobUrl": "https://customactivityoutputs.blob.core.windows.net/",
+      "outputBlobContainerName": "output",
+      "exportStagingContainerUri": "https://dataassetsforsampleagent.blob.core.windows.net/exporteddataassets",
+      "exportStagingRootFolder": "18b06e10-2f6c-422d-b96e-4a9e69655f83/2022-07-22 23:00_2022-07-23 00:00",
+      "maxResult": 500
+    },
+    "referenceObjects": {
+      "linkedServices": [
+      ],
+      "datasets": [
+      ]
+    }
+  },
+  "linkedServiceName": {
+    "type": "LinkedServiceReference",
+    "referenceName": "AzureBatchForSampleAgent"
+  }
+}

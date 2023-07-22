@@ -1,0 +1,84 @@
+<div ng-if="$ctrl.owner" data-grid="col-12 pad-2x">
+    <h2 mee-heading="subheading2" ng-hide="$ctrl.hideTitle">{{$ctrl.owner.name}}</h2>
+
+    <div data-grid="col-6">
+        <div>
+            <label mee-label data-use-cms>ID</label>
+        </div>
+        <div i9n-owner-id class="resource-view-attributes">
+            <p mee-paragraph>
+                <span>{{$ctrl.owner.id}}</span>
+                <pcd-permalink pcd-url="{{$ctrl.getViewLink()}}"></pcd-permalink>
+            </p>
+        </div>
+
+        <div ng-if="$ctrl.owner.icmConnectorId">
+            <div>
+                <label mee-label data-use-cms>IcM connector ID</label>
+            </div>
+            <div i9n-owner-connector-id class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.owner.icmConnectorId}}</p>
+            </div>
+        </div>
+
+        <div>
+            <label mee-label data-use-cms>Description</label>
+        </div>
+        <div i9n-owner-description class="resource-view-attributes">
+            <p mee-paragraph ng-repeat="line in $ctrl.description track by $index">{{line}}</p>
+        </div>
+    </div>
+
+    <div data-grid="col-6">
+        <div ng-if="$ctrl.isServiceTreeDataOwner()">
+            <div>
+                <label mee-label data-use-cms>Service Tree ID</label>
+            </div>
+            <div i9n-owner-service-tree-id class="resource-view-attributes">
+                <p mee-paragraph>
+                    <span>{{$ctrl.owner.serviceTree.id}}</span>
+                    <pcd-permalink pcd-url="{{$ctrl.getServiceTreeLink()}}"></pcd-permalink>
+                </p>
+            </div>
+
+            <pcd-directory-resource-view data-use-cms
+                                         ng-model="$ctrl.owner.serviceTree.serviceAdmins"
+                                         type="named-resource"
+                                         actionable-kind="email"
+                                         resource-label="Admins"
+                                         i9n-owner-admins></pcd-directory-resource-view>
+        </div>
+
+        <div ng-if="!$ctrl.isServiceTreeDataOwner()">
+            <pcd-directory-resource-view data-use-cms
+                                         ng-model="$ctrl.owner.alertContacts"
+                                         type="email"
+                                         resource-label="Alert contacts"
+                                         i9n-owner-alert-contacts></pcd-directory-resource-view>
+
+            <pcd-directory-resource-view data-use-cms
+                                         ng-model="$ctrl.owner.announcementContacts"
+                                         type="email"
+                                         resource-label="Announcement contacts"
+                                         i9n-owner-announcement-contacts></pcd-directory-resource-view>
+        </div>
+
+        <pcd-directory-resource-view data-use-cms
+                                     ng-model="$ctrl.owner.sharingRequestContacts"
+                                     type="email"
+                                     resource-label="Sharing request contacts"
+                                     i9n-owner-sharing-request-contacts></pcd-directory-resource-view>
+
+        <pcd-directory-resource-view data-use-cms
+                                     ng-model="$ctrl.owner.tagSecurityGroups"
+                                     type="security-group"
+                                     resource-label="Tagging security groups"
+                                     i9n-owner-tagged-security-groups></pcd-directory-resource-view>
+
+        <pcd-directory-resource-view data-use-cms
+                                     ng-model="$ctrl.owner.writeSecurityGroups"
+                                     type="security-group"
+                                     resource-label="Write security groups"
+                                     i9n-owner-write-security-groups></pcd-directory-resource-view>
+    </div>
+</div>

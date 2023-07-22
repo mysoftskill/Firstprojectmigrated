@@ -1,0 +1,10 @@
+﻿namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IUhfClientConfig
+{
+	10: required string ServiceEndpoint;
+	20: required string PartnerId;
+	30: required string HeaderId;
+	40: required string FooterId;
+	50: required string UserAgent;
+}

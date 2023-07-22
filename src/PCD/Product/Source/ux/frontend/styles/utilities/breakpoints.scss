@@ -1,0 +1,37 @@
+@import "../config/breakpoints";
+
+@mixin breakpoint-vp1 {
+    @media screen and (max-width: $vp1-max) {
+        @content;
+    }
+}
+
+@mixin breakpoint-vp2 {
+    @media screen and (min-width: $vp2) {
+        @content;
+    }
+}
+
+@mixin breakpoint-vp3 {
+    @media screen and (min-width: $vp3) {
+        @content;
+    }
+}
+
+@mixin breakpoint-vp4 {
+    @media screen and (min-width: $vp4) {
+        @content;
+    }
+}
+
+@mixin breakpoint-vp5 {
+    @media screen and (min-width: $vp5) {
+        @content;
+    }
+}
+
+@mixin breakpoint-vp6 {
+    @media screen and (min-width: $vp6) {
+        @content;
+    }
+}

@@ -1,0 +1,164 @@
+﻿<pcd-default-page-layout>
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Agents are required to actively sign-off that their service of COSMOS jobs meet the operational criteria to ensure that
+            they are ready to participate in cross-group incidents and will withstand failures.
+        </p>
+        <p mee-paragraph data-use-cms>
+            Additionally, agents must actively sign-off
+            that they have reviewed and meet the NGP E2E Functional Validation Checklist defined by the horizontal.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <label class="view-label">Data agent incident checklist</label> can be found <a mee-hyperlink
+                                                                                            href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/SitePages/Data-Agent-Incident-Checklist.aspx"
+                                                                                            target="_blank">here.</a>
+        </p>
+        <p mee-paragraph data-use-cms>
+            Details about COSMOS data flow can be found <a mee-hyperlink
+                                                           href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/SitePages/Data-Agent-Incident-Checklist.aspx"
+                                                           target="_blank">here.</a>
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="fetchAgentOperationalReadiness">
+            <inert-view></inert-view>
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner="$ctrl.owner"></pcd-default-page-context>
+
+                <p mee-paragraph data-use-cms>
+                    Please sign-off that your agent meets the operational and functional readiness criteria below.
+                    Additional details are explained in more detail <a mee-hyperlink
+                                                                       href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/SitePages/Data-Agent-Incident-Checklist.aspx"
+                                                                       target="_blank">here.</a>
+                    You agent will not be considered complete until all criteria below have been signed off by the agent owner.
+                </p>
+
+                <div data-grid="col-12">
+                    <h3 mee-heading="heading4" data-use-cms>Logging, alerting, monitoring readiness</h3>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isLoggingEnabled"
+                                  data-use-cms>
+                        Service or job has logging that enables root-cause analysis (SLL, Geneva, or similar)
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isLoggingCompliant"
+                                  data-use-cms>
+                        Logging meets audit logging requirements (COSMOS or PCF is automated)
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isLoggingIncludesCommandId"
+                                  data-use-cms>
+                        Local logging includes command ID (audit logs have write-only access so local logging is required)
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isReliabilityAlertsTrigger"
+                                  data-use-cms>
+                        Alerts trigger when reliability SLA is not reached:
+                        <ul mee-list="lean">
+                            <li data-use-cms>for services this is 99.9% QoS alerts</li>
+                            <li data-use-cms>for COSMOS jobs this is alerts when not meeting team-defined job processing SLAs</li>
+                        </ul>
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isLatencyAlertsTrigger"
+                                  data-use-cms>
+                        Alerts trigger when latency SLA is not reached:
+                        <ul mee-list="lean">
+                            <li data-use-cms>for services this is below SLA for an hour or more</li>
+                            <li data-use-cms>for COSMOS jobs this is alerts when not meeting team-defined latency in job processing SLAs</li>
+                        </ul>
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isMonitoringSla"
+                                  data-use-cms>
+                        Team is monitoring for service and job SLAs (command rate, failures, latency)
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isInfraAlerts"
+                                  data-use-cms>
+                        Infrastructure resource utilization alerts are configured for CPU/memory/disk/network with appropriate severity or not applicable for my agent
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isScalableForCommandRate"
+                                  data-use-cms>
+                        Service or job will scale to command rate goals (refer <label class="view-label">data agent incident checklist</label>)
+                    </mee-checkbox>
+                </div>
+
+                <div data-grid="col-12">
+                    <h3 mee-heading="heading4" data-use-cms>Incident management readiness</h3>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isAlertsInIcm"
+                                  data-use-cms>
+                        Alerts are onboarded to IcM with correct severity
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isDriDocumentation"
+                                  data-use-cms>
+                        DRI process documentation in place (find out about DRI within <label class="view-label">data agent incident checklist</label>)
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isDriEscalation"
+                                  data-use-cms>
+                        Completed DRI escalation testing
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isIncidentSeverityDoc"
+                                  data-use-cms>
+                        Incident severity is documented based on service SLA
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isGuidesPublished"
+                                  data-use-cms>
+                        Standard operating procedures and troubleshooting guides published for local incident management team
+                    </mee-checkbox>
+                </div>
+
+                <div data-grid="col-12">
+                    <h3 mee-heading="heading4" data-use-cms>Functional readiness</h3>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isE2eValidation"
+                                  data-use-cms>
+                        NGP E2E validation checklist complete (refer <label class="view-label">data agent incident checklist</label>)
+                    </mee-checkbox>
+                </div>
+
+                <div data-grid="col-12">
+                    <h3 mee-heading="heading4" data-use-cms>Service Readiness</h3>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isCertExpiryAlerts"
+                                  data-use-cms>
+                        Certificate expiry alerts are configured for the certs used by my agent (MSA S2S Auth, AAD Application Auth, COSMOS, other) <b>or</b> not applicable for my agent
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isCertChangeDoc"
+                                  data-use-cms>
+                        Certificate change and/or service account password change deployment process documented for local team <b>or</b> not applicable for my agent
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isServiceRecoveryPlan"
+                                  data-use-cms>
+                        Service recovery plan clearly defines roles, responsibilities and tasks to restore or recover in the event of a significant disruption
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isServiceInProd"
+                                  data-use-cms>
+                        Service is in a production data center <b>or</b> hosted by a platform running in a production data center (not in a lab or individual device)
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isDisasterRecoveryPlan"
+                                  data-use-cms>
+                        Disaster recovery plan: services and/or components are deployed in multiple data centers and have ability to fail over to different data center within 15 minutes if needed
+                    </mee-checkbox>
+                    <mee-checkbox ng-model="$ctrl.operationalReadiness.isDisasterRecoveryTested"
+                                  data-use-cms>
+                        Disaster recovery plan has been tested
+                    </mee-checkbox>
+                </div>
+
+                <pcd-commit-request-button data-use-cms
+                    pcd-button-label="Save"
+                    pcd-error-id="{{$ctrl.errorCategory}}.generic"
+                    pcd-operation-name="saveAgent"
+                    pcd-button-on-click-operation="$ctrl.saveAgent()">
+                </pcd-commit-request-button>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

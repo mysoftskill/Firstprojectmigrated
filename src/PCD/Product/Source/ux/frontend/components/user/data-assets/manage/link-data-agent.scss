@@ -1,0 +1,11 @@
+@import "../../../../styles/utilities/mixins.scss";
+
+pcd-link-data-agent
+{
+    display:block;
+
+    .note
+    {
+        font-weight: bold;
+    }
+}

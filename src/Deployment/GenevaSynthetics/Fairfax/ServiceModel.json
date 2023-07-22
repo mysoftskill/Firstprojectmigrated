@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "serviceMetadata": {
+    "serviceGroup": "NGPProxySyntheticsService",
+    "environment": "Test"
+  },
+  "serviceResourceGroupDefinitions": [
+    {
+      "name": "NGPProxySyntheticsServiceGroup",
+      "serviceResourceDefinitions": [
+        {
+          "name": "NGPProxySyntheticsResource",
+          "composedOf": {
+            "extension": {
+              "rolloutParametersPath": "GenevaSynthetics\\Fairfax\\Parameters\\JobGroup.RolloutParameters.json",
+              "allowedTypes": [
+                { "Type": "Microsoft.Geneva.Synthetics/JobGroup" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "serviceResourceGroups": [
+    {
+      "azureResourceGroupName": "NGPPROXY-FF-RG",
+      "location": "USGovTexas", //This is rollout deployment location. This is not related to the Synthetics deployment region
+      "instanceOf": "NGPProxySyntheticsServiceGroup",
+      "azureSubscriptionId": "ebce915f-ff1f-4faf-be94-35fe15f0673b", //This subscription id is mandatory in Ev2 Rollout, and is not related to synthetics deployment
+      "serviceResources": [
+        {
+          "name": "NGPProxySyntheticsResourceInstance",
+          "instanceOf": "NGPProxySyntheticsResource"
+        }
+      ]
+    }
+  ]
+}

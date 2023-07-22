@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RunSettings>
+   <!-- Configurations that affect the Test Framework -->
+   <RunConfiguration>
+      <TargetPlatform>x64</TargetPlatform>
+   </RunConfiguration>
+   <DataCollectionRunSettings>
+      <DataCollectors>
+         <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <Configuration>
+               <CodeCoverage>
+                  <ModulePaths>
+                     <Include>
+                        <ModulePath>.*complianceservices.common.dll</ModulePath>
+                        <ModulePath>.*aadauthentication.dll</ModulePath>
+                        <ModulePath>.*memberservices.adapters.dll</ModulePath>
+                        <ModulePath>.*memberservices.common.dll</ModulePath>
+                        <ModulePath>.*contracts.exposed.dll</ModulePath>
+                        <ModulePath>.*cosmoshelpers.dll</ModulePath>
+                        <ModulePath>.*aadaccountcloseworker.exe</ModulePath>
+                        <ModulePath>.*aqsworker.exe</ModulePath>
+                        <ModulePath>.*core.aadauthentication.dll</ModulePath>
+                        <ModulePath>.*core.dll</ModulePath>
+                        <ModulePath>.*cosmosexport.exe</ModulePath>
+                        <ModulePath>.*datacontracts.dll</ModulePath>
+                        <ModulePath>.*experiencecontracts.dll</ModulePath>
+                        <ModulePath>.*privacyvsoworker.exe</ModulePath>
+                        <ModulePath>.*quickexportworker.exe</ModulePath>
+                        <ModulePath>.*recurrentdeleteworker.exe</ModulePath>
+                        <ModulePath>.*vortexdevicedeleteworker.exe</ModulePath>
+                        <ModulePath>.*privacyadapters.dll</ModulePath>
+                        <ModulePath>.*clientlibrary.dll</ModulePath>
+                        <ModulePath>.*service.exe</ModulePath>
+                        <ModulePath>.*privacyhost.dll</ModulePath>
+                        <ModulePath>.*scheduledbclient.dll</ModulePath>
+                        <ModulePath>.*kustohelpers.dll</ModulePath>
+                        <ModulePath>.*contextmodelcommon.dll</ModulePath>
+                        <ModulePath>.*common.cosmos.dll</ModulePath>
+                        <ModulePath>.*templatebuilder.dll</ModulePath>
+                        <ModulePath>.*dataaction.dll</ModulePath>
+                        <ModulePath>.*dataactionrunner.exe</ModulePath>
+                        <ModulePath>.*datasubjectright.contracts.dll</ModulePath>
+                        <ModulePath>.*privacyoperation.contracts.dll</ModulePath>
+                        <ModulePath>.*command.contracts.dll</ModulePath>
+                        <ModulePath>.*dataaction.dll</ModulePath>
+                     </Include>
+					 <Exclude>
+						<ModulePath>.*xunit.*</ModulePath>
+					 </Exclude>
+                  </ModulePaths>
+               </CodeCoverage>
+            </Configuration>
+         </DataCollector>
+      </DataCollectors>
+   </DataCollectionRunSettings>
+</RunSettings>

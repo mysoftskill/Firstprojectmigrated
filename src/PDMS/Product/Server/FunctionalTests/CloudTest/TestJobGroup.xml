@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestJobGroup>
+  <ResourceSpec>
+    <Resource SKU="Standard_DS4_V2" Image="VS2019EnterpriseWS2019"/>
+  </ResourceSpec>
+  <Setup>
+    <BuildFiles>
+      <Copy Src="[BuildRoot]\outputs\build\fct\*" Dest="[WorkingDirectory]\pdmsfct" IsRecursive="true" />
+      <Copy Src="[BuildRoot]\outputs\build\Codesign\bin\Release\x64\Pdms.PowerShell\*" Dest="[WorkingDirectory]\pdmsfct\PowerShellTests\pdms" IsRecursive="true" />
+      <Copy Src="[BuildRoot]\outputs\build\Codesign\bin\Release\x64\Pdms.PowerShell.TestHook\*" Dest="[WorkingDirectory]\pdmsfct\PowerShellTests\pdmstesthook" IsRecursive="true" />
+    </BuildFiles>
+    <Scripts/>
+  </Setup>
+  <TestJob Name="RunFct">
+    <Execution Type="MsTest" 
+               Path="[WorkingDirectory]\pdmsfct\Pdms.FunctionalTests.dll" 
+               Args="/InIsolation /Logger:trx /Platform:x64" />
+  </TestJob>
+  <TestJob Name="PowerShellTests">
+    <Execution Type="Exe" 
+               Parser="NUnitXml" 
+               Path="C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" 
+               Args="-NonInteractive -executionpolicy Unrestricted &quot;[WorkingDirectory]\pdmsfct\PowerShellTests\PesterTest.ps1 [LoggingDirectory]\testResult.xml&quot;" />
+  </TestJob>
+</TestJobGroup>

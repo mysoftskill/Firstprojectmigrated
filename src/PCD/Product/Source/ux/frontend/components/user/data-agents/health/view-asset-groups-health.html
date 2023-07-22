@@ -1,0 +1,13 @@
+<div>
+    <div ng-repeat="(ownerName, assetGroups) in $ctrl.assetGroupsByOwner">
+        <pcd-modal-link-trigger ng-if="$ctrl.shouldShowOwnerContact(assetGroups)"
+                                pcd-modal-data="{ ownerId: assetGroups[0].ownerId }"
+                                pcd-label="{{ownerName}}"
+                                pcd-modal-state-name=".owner-contact"></pcd-modal-link-trigger>
+        <p mee-paragraph ng-if="$ctrl.shouldShowNoOwner(assetGroups)"
+                         class="no-data-owner">{{ownerName}}</p>
+        <div ng-repeat="assetGroup in assetGroups">
+            <pcd-view-asset-group-health asset-group="assetGroup" display-by-status="{{$ctrl.displayByStatus}}" index-value="{{$index + 1}}"></pcd-view-asset-group-health>
+        </div>
+    </div>
+</div>

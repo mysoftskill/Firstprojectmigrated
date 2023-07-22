@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "ngpproxyeudb"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\GenevaMonitoringAgentConsoleApp.sfpkg"
+    },
+    "applicationParameters": {
+      "value": {
+        "ClusterName": "ngpproxyeudb",
+        "MdmAccountName": "NGPProxy-EUDBPROD",
+        "MdmNamespace": "NGPProxyEUDBPROD",
+        "MdmDataCenterName": "westeurope",
+        "EnabledTenantJsons": "Tenant_MonitoringAgent.EuDb.westeurope.Settings.json"
+      }
+    }
+  }
+}

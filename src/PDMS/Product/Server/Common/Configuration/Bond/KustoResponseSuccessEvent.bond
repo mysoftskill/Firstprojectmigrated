@@ -1,0 +1,11 @@
+﻿import "InstrumentationBaseEvents.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successful outgoing call to Kusto.")]
+struct KustoResponseSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string hasErrors;
+    20: required string version;
+    30: required string tableName;
+}

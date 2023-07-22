@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "chinanorth"
+    },
+    "keyVaultManagedIdentityName": {
+      "value": "ADGCS-MC-UAMI"
+    },
+    "uamiResourceGroup": {
+      "value": "NGPPROXY-MC-RG"
+    },
+    "clusterName": {
+      "value": "ngpproxymc"
+    },
+    "certificateCommonName": {
+      "value": "adg-cs.cluster.prod.ngpproxy.microsoftonline.cn"
+    },
+    "adminUserName": {
+      "value": "a803b4a25de1415fae6"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/2e4d253c-c008-4adb-b8fe-fcd6bbdd1f17/resourceGroups/NGPPROXY-MC-RG/providers/Microsoft.KeyVault/vaults/ADG-CS-CHINANORTH-KV"
+        },
+        "secretName": "AdminPassword"
+      }
+    },
+    "durabilityLevel": {
+      "value": "Silver"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
+    },
+    "vmImageSku": {
+      "value": "2019-datacenter-gs"
+    },
+    "maxBatchInstancePercent": {
+      "value": 20
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2"
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType1Size": {
+      "value": "Standard_D2"
+    },
+    "kvvmextPollingInterval": {
+      "value": "3600"
+    },
+    "kvvmextObservedCertificates": {
+      "value": [
+        "https://adg-cs-chinanorth-kv.vault.azure.cn/secrets/cluster",
+		"https://adg-cs-chinanorth-kv.vault.azure.cn/secrets/geneva"
+      ]
+    },
+    "monitoringTenant": {
+      "value": "ADGCS-MC"
+    },
+    "monitoringRoleForNodeType1": {
+      "value": "NGPProxy.Frontdoor"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <Platform>x64</Platform>
+    <RootNamespace>Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.DeviceDeleteSyntheticsJob</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.DeviceDeleteSyntheticsJob</AssemblyName>
+    <ReleaseSubDir>SyntheticsTests</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <ExecuteAs64Bit>true</ExecuteAs64Bit>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Geneva.Synthetics.Contracts" />
+    <PackageReference Include="Geneva.Synthetics.Logging.OneDS" />
+    <PackageReference Include="MessagePack" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

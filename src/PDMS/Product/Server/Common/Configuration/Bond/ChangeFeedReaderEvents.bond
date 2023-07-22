@@ -1,0 +1,27 @@
+﻿import "InstrumentationBaseEvents.bond"
+import "Microsoft.Telemetry.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Indicates that a full sync has been triggered.")]
+struct FullSyncTriggerEvent : Microsoft.Telemetry.Base
+{
+    10: optional string startTime;
+    20: optional string endTime;
+}
+
+[Description("Indicates that a message is about to be enqueued.")]
+struct EnqueuingMessageEvent : Microsoft.Telemetry.Base
+{
+    10: required string id;
+    20: required string lsn;
+    30: required string storageUri;
+}
+
+[Description("Indicates that a message was enqueued.")]
+struct EnqueuedMessageEvent : Microsoft.Telemetry.Base
+{
+    10: required string id;
+    20: required string lsn;
+    30: required string storageUri;
+}

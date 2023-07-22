@@ -1,0 +1,141 @@
+import "WorkerTaskConfiguration.bond"
+import "PartnerConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+enum CommandFeedStockEndpointType
+{
+    Invalid = 0,
+    Ppe,
+    Prod
+}
+
+enum PcfAuthMode
+{
+    Invalid = 0,
+    Aad,
+    Msa
+}
+
+enum StateTable
+{
+    ManifestFile = 0,
+    CommandFile,
+    Command,
+}
+
+struct ITaggedCosmosVcConfig : ICosmosVcConfig
+{
+    1 : required string CosmosTag;
+    2 : optional IServicePointConfiguration ServicePointConfiguration;
+    3 : optional bool ApplyRelativeBasePath = true;
+	4 : required string CosmosAdlsAccountName;
+    5 : optional string RootDir;
+}
+
+struct ICosmosRelativePathsAndExpiryTimes
+{
+    1 : required string BasePath;
+    2 : required string AgentOutput;
+    3 : required string PostProcessHolding;
+    4 : required string ActivityLog;
+    5 : required string DeadLetter;
+    6 : required int32 ActivityLogExpiryHours = 336;
+    7 : required int32 DeadLetterExpiryHours = 504;
+    8 : required int32 HoldingExpiryHours = 168;
+    9 : required string StatsLog = 672;
+    10 : required int32 StatsLogExpiryHours = 708;
+    11 : required int32 ManifestHoldingExpiryHours = 708;
+}
+
+struct ICosmosFileSizeThresholds
+{
+    1 : required int64 Large;
+    2 : required int64 Medium;
+    3 : required int64 Oversized;
+}
+
+struct ICosmosMonitorConfig : ITaskConfig
+{
+    1 : required list<ITaggedCosmosVcConfig> CosmosVcs;
+    2 : required int32 RepeatDelayMinutes;
+    3 : optional int32 MinimumManifestEnqueueIntervalMinutes = 120;
+    4 : optional int32 MaxEnqueueAgeHours = 720;
+    5 : optional int32 DeleteAgeHours = 1440;
+    6 : optional int32 MinBatchAgeMinutes = 10;
+}
+
+struct IDataManifestProcessorConfig : ITaskConfig
+{
+    1 : required int32 LeaseMinutes;
+    2 : required int32 MinimumRenewMinutes;
+    3 : required int32 MaxStateUpdateAttempts;
+    4 : optional int32 DelayIfCouldNotCompleteMinutes = 30;
+    5 : optional int32 MaxCommandWaitTimeMinutes = 720;
+    6 : optional int32 MaxDequeueCount = 15;
+    7 : optional int32 CommandReaderLeaseUpdateRowCount = 1000000;
+}
+
+struct IFileProcessorConfig : ITaskConfig
+{
+    1 : required int32 LeaseMinutes;
+    2 : required int32 MinimumRenewMinutes;
+    3 : optional int32 CommandPendingByteThreshold = 16384;
+    4 : optional int32 OverallPendingByteThreshold = 262144;
+    5 : optional int32 DelayIfCouldNotCompleteMinutes = 20;
+    6 : optional int32 MaxDequeueCount = 15;
+    7 : optional int32 ProgressUpdateSeconds = 150;
+    8 : required int32 LargeFileInstances;
+    9 : required int32 MediumFileInstances;
+    10 : required int32 EmptyFileInstances = 1;
+    11 : required int32 OversizedFileInstances = 1;
+    12 : optional string AssumeNonTransientThreshold = "3.00:00:00";
+}
+
+struct IFileCompleteProcessorConfig : ITaskConfig
+{
+    1 : required int32 LeaseMinutes;
+    2 : required int32 MinimumRenewMinutes;
+    3 : required int32 MaxStateUpdateAttempts;
+    4 : optional int32 CommandReaderLeaseUpdateRowCount = 1000000;
+}
+
+struct ICommandMonitorConfig : ITaskConfig
+{
+    1 : required list<string> LeaseExtensionMinuteSet;
+    2 : required string AgentId;
+    3 : required CommandFeedStockEndpointType StockEndpointType;
+    4 : optional PcfAuthMode AuthMode = Aad;
+    5 : optional int64 PcfMsaSiteId;
+    6 : optional ICertificateConfiguration PcfMsaCertificate;
+    7 : required list<string> SyntheticCommandAgents;
+    8 : optional bool SuppressIsTestCommandFailures = false;
+}
+
+struct ICleanerConfig : ITaskConfig
+{
+    10 : required StateTable Table;
+    20 : optional int32 LastModifiedThresholdDays = 60;
+    30 : optional int32 NonEmptyBatchDelaySeconds = 60;
+    40 : optional int32 EmptyBatchDelaySeconds = 21600;
+    50 : optional int32 DelayRandomLimit = 60;
+    60 : optional int32 MaxBatchSize = 100;
+}
+
+struct ICosmosExportAgentConfig : ITaskWorkerConfig
+{
+    1 : required IPrivacyPartnerAdapterConfiguration PcfEndpointConfig;
+    2 : required IAzureStorageConfiguration AzureStorageConfiguration;
+    3 : required list<ITaggedCosmosVcConfig> CosmosVcs;
+    4 : required string LockTableName;
+    5 : required string DeadLetterCosmosTag;
+    6 : required IRetryStrategyConfiguration CosmosRetryStrategy;
+    7 : required IRetryStrategyConfiguration CommandFeedRetryStrategy;
+    8 : required ICosmosRelativePathsAndExpiryTimes CosmosPathsAndExpiryTimes;
+    9 : required ICosmosFileSizeThresholds FileSizeThresholds;
+    10 : required string ActivityLogCosmosTag;
+    11 : optional int32 MaxActivityLogBufferSize = 10000000;
+    12 : required string StatsLogCosmosTag;
+	13 : required IAdlsConfiguration AdlsConfiguration;
+}

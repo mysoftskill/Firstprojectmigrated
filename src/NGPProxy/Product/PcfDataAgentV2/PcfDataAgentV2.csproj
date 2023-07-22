@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.PrivacyServices.NgpProxy.PcfDataAgentV2</RootNamespace>
+    <AssemblyName>Microsoft.PrivacyServices.NgpProxy.PcfDataAgentV2</AssemblyName>
+    <UseDefaultBinplacing>false</UseDefaultBinplacing>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>PcfDataAgentV2</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\PCF\Product\Client\Source\PrivacyCommandProcessor.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\..\PXS\Product\PXF\Host\Source\PrivacyHost.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>GlobalConfiguration.ini</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\PXS\Product\Deployment\Configurations\PcfDataAgent\PcfDataAgentV2.ini">
+      <Link>PcfDataAgentV2.ini</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

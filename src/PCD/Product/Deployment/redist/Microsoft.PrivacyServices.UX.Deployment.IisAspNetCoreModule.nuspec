@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Microsoft.PrivacyServices.UX.Deployment.IisAspNetCoreModule</id>
+    <version>2.1.11</version>
+    <authors>alexkole</authors>
+    <owners>MEEPCDEng</owners>
+    <projectUrl>https://www.microsoft.com/net/download/thank-you/dotnet-runtime-2.1.11-windows-hosting-bundle-installer</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Microsoft ASP.NET Core Module for IIS (x64).</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>PCD PDMS UX Deployment IIS ASP.NET Core</tags>
+  </metadata>
+  <files>
+    <file src="dotnet-hosting-2.1.11-win.exe" target="" />
+  </files>
+</package>

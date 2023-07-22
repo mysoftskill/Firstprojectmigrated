@@ -1,0 +1,140 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page displays data assets owned by your team with privacy actions that are linked to data agents.
+            Pending privacy actions means that the data agent owner has not responded to your linking request yet.
+        </p>
+        <p mee-paragraph data-use-cms><span class="view-label">Linking privacy actions to a data agent</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Link to a data agent</span>.</li>
+            <li data-use-cms>You will be presented with a list of data agents (shared or owned) to link to.</li>
+            <li data-use-cms>Select a data agent from the list and click <span class="view-label">Next</span>.</li>
+            <li data-use-cms>Select privacy actions you want to link with the selected data agent.</li>
+            <li data-use-cms>Then click <span class="view-label">Link</span> to perform linking.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            When linking to another team's shared data agent, linking request will be sent to owning team.
+            Until the request is approved, the corresponding privacy actions will appear as pending.
+        </p>
+        <p mee-paragraph data-use-cms>
+            Linking privacy actions to a data agent will cause those previously linked actions to be overwritten. In the case where a request is pending, that request will be cancelled.
+        </p>
+        <p mee-paragraph data-use-cms><span class="view-label">Unlinking privacy actions from data agents</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Unlink from a data agent</span>.</li>
+            <li data-use-cms>Select privacy actions to unlink.</li>
+            <li data-use-cms>Then click <span class="view-label">Unlink</span> to perform unlinking.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            Unlinking privacy actions will cause any previous linking pending requests to be cancelled for those privacy actions.
+        </p>
+        <p mee-paragraph data-use-cms><span class="view-label">Link variants to data assets</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Link to variants</span>.</li>
+            <li data-use-cms>Select variants to link</li>
+            <li data-use-cms>Then click <span class="view-label">Link</span> to perform linking.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            Linking variants requires an admin to review and approve your request before being applied to your data asset.
+            To view pending variant requests for a data asset use <span class="view-label">Pending variants</span> link.
+            To view linked variants for a data asset use <span class="view-label">Variants</span> link.
+        </p>
+        <p mee-paragraph data-use-cms><span class="view-label">Unlink variants from data assets</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Click on the <span class="view-label">Variants</span> link next to the asset group you want to unlink.</li>
+            <li data-use-cms>Then click <span class="view-label">Unlink</span> to unlink variant.</li>
+        </ul>
+        <p mee-paragraph data-use-cms><span class="view-label">Linking privacy actions to a data agent</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Link to a data agent</span>.</li>
+            <li data-use-cms>You will be presented with a list of data agents (shared or owned) to link to.</li>
+            <li data-use-cms>Select a data agent from the list and click <span class="view-label">Next</span>.</li>
+            <li data-use-cms>Select privacy actions you want to link with the selected data agent.</li>
+            <li data-use-cms>Then click <span class="view-label">Link</span> to perform linking.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            When linking to another team's shared data agent, linking request will be sent to owning team.
+            Until the request is approved, the corresponding privacy actions will appear as pending.
+        </p>
+        <p mee-paragraph data-use-cms>
+            Linking privacy actions to a data agent will cause those previously linked actions to be overwritten. In the case where a request is pending, that request will be cancelled.
+        </p>
+        <p mee-paragraph data-use-cms><span class="view-label">Transfering assets groups to a new team</span></p>
+        <ul mee-list="lean">
+            <li data-use-cms>Select data assets and click <span class="view-label">Transfer to another team</span>.</li>
+            <li data-use-cms>You will be presented with a list of teams to link to.</li>
+            <li data-use-cms>Select a team from the list and click <span class="view-label">Next</span>.</li>
+            <li data-use-cms>Verify the information is correct and click <span class="view-label">Transfer</span> to perform transfering.</li>
+        </ul>
+        <p mee-paragraph data-use-cms>
+            When the transfer has started the asset groups selected will be grayed out until it is either transfered or the other team has rejected it.
+            You will not be able to modify the request once it's started, if there are any errors in the request contact the team to resolve.
+        </p>
+        <p mee-paragraph data-use-cms>
+            Use <span class="view-label">Register data asset</span> link
+            to register a new Data Grid asset for your team.
+        </p>
+        <p mee-paragraph data-use-cms>Useful links:</p>
+        <ul mee-list="lean">
+            <li>
+                <a mee-hyperlink
+                   data-use-cms
+                   target="_blank"
+                   href="https://datagrid.microsoft.com/Tagging/MyTeams">Explore your team's assets on DataGrid</a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                   data-use-cms
+                   target="_blank"
+                   href="https://datagrid.microsoft.com/Tagging/NGPReport">Real-time tagging completeness report</a>
+            </li>
+        </ul>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="fetchManageDataAssetsForOwner">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed to get data assets.
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner-id="$ctrl.ownerId"></pcd-default-page-context>
+
+                <mee-alert ng-if="$ctrl.hasPendingTransferRequests()" kind="use-glyph info">
+                    <alert-content data-use-cms>
+                        Some of your data assets are in the process of being transfered to another team.
+                        If there are any errors please contact the other team.
+                    </alert-content>
+                </mee-alert>
+                <pcd-asset-groups-manage pcd-asset-groups="$ctrl.assetGroups"
+                                         pcd-refresh-list="$ctrl.getDataAssetsForOwner()"
+                                         pcd-allow-variant-management="true"
+                                         pcd-on-delete="$ctrl.showDeleteAssetConfirmationDialog(assetGroup)">
+                    <pcd-additional-controls>
+                        <a ui-sref="^.create({ ownerId: $ctrl.ownerId })"
+                           data-glyph="add"
+                           mee-action-trigger="align-margin"
+                           i9n-register-data-asset
+                           data-use-cms>
+                            Register data asset
+                        </a>
+                    </pcd-additional-controls>
+                </pcd-asset-groups-manage>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

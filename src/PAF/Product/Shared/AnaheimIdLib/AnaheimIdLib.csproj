@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <AssemblyName>Microsoft.ComplianceServices.AnaheimIdQueueLib</AssemblyName>
+    <RootNamespace>Microsoft.ComplianceServices.AnaheimIdQueueLib</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\..\Common\Build\InternalKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Microsoft.ComplianceServices.AnaheimIdQueueLib</PackageId>
+    <Title>Microsoft.ComplianceServices.AnaheimIdQueueLib</Title>
+    <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+    <Description>Microsoft Compliance Services Anaheim Id Shared Library.</Description>
+    <Copyright>Copyright 2021</Copyright>
+    <PackageTags>ngp ngpx privacy pxs</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\.version\PipelineAssemblyInfo.cs" Link="Properties\PipelineAssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+</Project>

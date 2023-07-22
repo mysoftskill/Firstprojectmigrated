@@ -1,0 +1,136 @@
+<section>
+    <mee-progress-view watch-operation="initializeStoragePickerComponent">
+        <inert-view></inert-view>
+
+        <inprogress-view>
+            <pcd-default-progress-spinner></pcd-default-progress-spinner>
+        </inprogress-view>
+
+        <failed-view>
+            <p mee-paragraph data-use-cms>
+                Failed
+            </p>
+        </failed-view>
+
+        <finished-view>
+            <div data-grid="col-12">
+                <mee-select ng-if="$ctrl.model.qualifier"
+                            ng-model="$ctrl.model.qualifier.props.AssetType"
+                            menu-style="border scroll"
+                            ng-change="$ctrl.onAssetTypeChange()"
+                            mee-auto-focus>
+                    <label data-use-cms>Asset type</label>
+                    <select>
+                        <option value="{{assetType.id}}" ng-repeat="assetType in $ctrl.model.assetTypes track by assetType.id">{{assetType.label}}</option>
+                    </select>
+                </mee-select>
+            </div>
+
+            <div data-grid="col-12">
+                <pcd-lede class="description">
+                    <p data-use-cms ng-repeat="line in $ctrl.model.hint.description track by $index">{{line}}</p>
+                </pcd-lede>
+            </div>
+
+            <form data-grid="col-12" ng-submit="$ctrl.previewClicked($event)">
+                <div data-grid="pad-2x">
+                    <div ng-repeat="prop in $ctrl.model.qualifierProperties track by prop.meta.id"
+                        data-grid="col-3">
+                        <mee-text-field kind="flex"
+                                        data-required-field="{{prop.meta.required}}"
+                                        data-error-id="{{$ctrl.getErrorIdForProperty(prop.meta.id)}}">
+                            <label>
+                                <span>{{prop.meta.label}}</span>
+                                <span class="x-screen-reader">{{prop.meta.description}}</span>
+                            </label>
+                            <input class="asset-group-qualifier-property"
+                                ng-attr-aria-required="{{prop.meta.required}}"
+                                placeholder="{{$ctrl.model.hint.placeholders[prop.meta.id]}}"
+                                ng-model="prop.value"
+                                ng-change="$ctrl.qualifierPropertyChanged(prop)">
+                        </mee-text-field>
+                        <mee-inline-error error-id="{{$ctrl.getErrorIdForProperty(prop.meta.id)}}"></mee-inline-error>
+                    </div>
+                </div>
+
+                <pcd-commit-request-button data-use-cms
+                    pcd-button-label="Preview"
+                    pcd-button-id="storage-picker-preview"
+                    pcd-error-id="{{$ctrl.errorCategory}}.preview"
+                    pcd-operation-name="previewAssetGroupQualifier"
+                    pcd-button-disabled="!$ctrl.enablePreviewButton()"
+                    pcd-button-on-click-operation="$ctrl.previewClicked()">
+                </pcd-commit-request-button>
+            </form>
+
+            <pcd-data-assets-view pcd-caption="{{$ctrl.dataAssetsPreviewCaption}}"
+                                  pcd-no-data-assets-label="{{$ctrl.noDataAssetsInPreviewLabel}}"
+                                  pcd-warning-style="{{$ctrl.previewWarning}}"
+                                  ng-model="$ctrl.model.previewDataAssets">
+
+                <pcd-simple-warning>
+                    <mee-alert kind="warning">
+                        <alert-content>
+                            <span class="alert-content">{{$ctrl.previewWarningText}}</span>
+                        </alert-content>
+                        <alert-actions>
+                            <a ng-href="{{$ctrl.previewWarningLink}}" target="_blank">{{$ctrl.previewWarningLinkText}}</a>
+                            <a href="javascript:pcdCollectFeedback()">{{$ctrl.contactSupportLinkText}}</a>
+                        </alert-actions>
+                    </mee-alert>
+                </pcd-simple-warning>
+
+                <pcd-custom-warning1>
+                    <div data-error-not-found class="mee-error-border">
+                        <!-- NOTE: the contents of this whole warning must be represented as "paragraph with styles" in CMS. -->
+                        <p data-use-cms>We could not find data assets matching this criteria in DataGrid</p>
+
+                        <p data-use-cms class="storage-picker-error-question">Adding your asset in PCD requires that you've already registered data assets in DataGrid.</p>
+                        <p data-use-cms>
+                            Please refer to <a mee-hyperlink href="https://aka.ms/ngphome" target="_blank">our documentation</a>
+                            to learn how to get your data assets registered and tagged in DataGrid.
+                        </p>
+
+                        <p data-use-cms class="storage-picker-error-question">Already registered and tagged data assets in DataGrid?</p>
+                        <p data-use-cms>
+                            Try <a mee-hyperlink ng-href="{{$ctrl.getDataGridLink()}}" target="_blank">this link</a> to search,
+                            or if you are in Bing or Office org, <a mee-hyperlink ng-href="{{$ctrl.dataGridSearch.searchNext}}" target="_blank">use this link</a>.
+                        </p>
+
+                        <p data-use-cms class="storage-picker-error-question">Can't access DataGrid?</p>
+                        <p data-use-cms>
+                            <a mee-hyperlink href="https://osgwiki.com/wiki/Asimov/Access" target="_blank">Learn more</a> about how to get access to DataGrid.
+                        </p>
+                    </div>
+                </pcd-custom-warning1>
+
+            </pcd-data-assets-view>
+
+            <div data-grid="col-12" ng-transclude="moreControls"></div>
+
+            <pcd-commit-request-button
+                pcd-error-id="{{$ctrl.errorCategory}}.save"
+                pcd-operation-name="saveAssetGroupQualifier">
+                <pcd-custom-request-button>
+                    <button id="storage-picker-save"
+                            mee-button="primary"
+                            ng-click="$ctrl.onSaveClick()"
+                            ng-disabled="!$ctrl.enableSaveButton()"
+                            mee-progress-disabled="saveAssetGroupQualifier">
+                        {{$ctrl.saveButtonLabel}}
+                    </button>
+
+                    <a id="storage-picker-alt-save"
+                       mee-no-href
+                       ng-show="$ctrl.showAltSaveButton()"
+                       ng-click="$ctrl.onAltSaveClick()"
+                       mee-progress-disabled="saveAssetGroupQualifier"
+                       ng-disabled="!$ctrl.enableSaveButton()"
+                       mee-action-trigger="align-margin">
+                        {{$ctrl.altSaveButtonLabel}}
+                    </a>
+                </pcd-custom-request-button>
+            </pcd-commit-request-button>
+        </finished-view>
+    </mee-progress-view>
+</section>

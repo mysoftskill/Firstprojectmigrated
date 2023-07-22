@@ -1,0 +1,229 @@
+﻿//Script GUID:ca9480b8-70af-4452-9eca-401723e35e06
+//Used for tracking history
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _scopePath          = @@_scopePath@@
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//
+// - PXS parameters:
+//      pxsEnv              = @@pxsEnv@@ (PROD | PPE | INT)
+//      version             = @@version@@
+
+// Asimov References:
+MODULE "Asimov.Batch.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;  
+
+// Variables
+#DECLARE startDate DateTime = IF("@@startDate@@".StartsWith("@@"), DateTime.UtcNow.AddHours(-2), DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"), DateTime.UtcNow.AddHours(-1), DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pxsEnv@@".StartsWith("@@"), "PROD", "@@pxsEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"), "v5", "@@version@@");
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE hourlyPathFormat string = String.Format(
+    @"/shares/asimov.prod.data/PublicPartner/Processed/PXS/{0}/SllProcessed/{1}/%Y/%m/%d/SllProcessed_%Y_%m_%d_%h.ss?date={{0:yyyy-MM-dd}}&hour={{0:HH}}",
+    @environment.ToLower(),
+    @version.ToLower());
+
+//OUTPUTS
+#DECLARE outputPath string = string.Format(@hourlyPathFormat, @startDate);
+#DECLARE streamExpiry string = "30";
+
+//output for test
+#IF (@localRun)
+    #SET outputPath = string.Concat("/my", @outputPath);
+    #SET streamExpiry = "7";
+#ENDIF
+
+SllQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+#IF (@environment == "PROD")
+        WHERE
+            cloud_name == "PXS-Prod-BN3P" OR
+            cloud_name == "PXS-Prod-BY3P" OR
+            cloud_name == "PXS-Prod-DB5P" OR
+            cloud_name == "PXS-Prod-HK2P";
+#ELSEIF (@environment == "PPE")
+        WHERE
+            cloud_name == "PXS-PPE-MW1P" OR
+            cloud_name == "PXS-PPE-SN3P";
+#ELSE
+        WHERE
+            cloud_name == "PXS-Sandbox-MW1P" OR
+            cloud_name == "PXS-Sandbox-SN3P" OR
+            cloud_name == "PXSCI1-Test-MW1P" OR
+            cloud_name == "PXSCI2-Test-MW1P";
+#ENDIF
+
+ExtFlattenedLogs =
+    PROCESS SllQuery
+    USING JsonObjectProcessor
+        (
+            "ext",
+
+            "cloud.name:c_name:string",
+            "cloud.role:c_role:string",
+            "cloud.roleInstance:c_roleInstance:string",
+            "cloud.location:c_location:string",
+            "cloud.environment:c_environment:string",
+
+            "user.id:u_id:string"
+        );
+
+DataFlattenedLogs = 
+    PROCESS ExtFlattenedLogs
+    USING JsonObjectProcessor
+        (
+            "data",
+
+            "baseType:baseType:string",
+
+            "baseData.operationName:operationName:string",
+            "baseData.targetUri:targetUri:string",
+            "baseData.latencyMs:latencyMs:int64",
+            "baseData.serviceErrorCode:serviceErrorCode:int64",
+            "baseData.succeeded:succeeded:bool",
+            "baseData.requestMethod:requestMethod:string",
+            "baseData.responseContentType:responseContentType:string",
+            "baseData.protocol:protocol:string",
+            "baseData.protocolStatusCode:protocolStatusCode:string",
+            "baseData.dependencyOperationName:dependencyOperationName:string",
+            "baseData.dependencyOperationVersion:dependencyOperationVersion:string",
+            "baseData.dependencyName:dependencyName:string",
+            "baseData.dependencyType:dependencyType:string",
+            "baseData.operationVersion:operationVersion:string",
+            "baseData.callerIpAddress:callerIpAddress:string",
+            "baseData.callerName:callerName:string",
+            "baseData.requestSizeBytes:requestSizeBytes:int64",
+            "baseData.requestStatus:requestStatus:int64",
+
+            "ServerActivityId:ServerActivityId:string",
+            "ClientActivityId:ClientActivityId:string",
+            "Authentication:Authentication:string",
+            "ErrorMessage:ErrorMessage:string",
+            "ErrorCode:ErrorCode:string",
+            "MemberViewClientVersion:MemberViewClientVersion:string",
+            "FlattenedErrorCode:FlattenedErrorCode:string",
+            "Flights:Flights:string",
+            "PartnerId:PartnerId:string",
+            "AttemptCount:AttemptCount:string",
+            "ProtocolStatusCodePhrase:ProtocolStatusCodePhrase:string",
+            "ResponseContent:ResponseContent:string",
+            "ExceptionTypeName:ExceptionTypeName:string",
+
+            "ExtraData.ExportId:x_ExportId:string",
+            "ExtraData.ExportTypes:x_ExportTypes:string",
+            "ExtraData.ExportStatus:x_ExportStatus:string",
+            "ExtraData.ExportSize:x_ExportSize:string",
+
+            "ExtraData.tid:x_tid:string",
+            "ExtraData.HasOrgIdPuid:x_HasOrgIdPuid:string",
+            "ExtraData.commandIds:x_commandIds:string",
+            "ExtraData.tenantId:x_tenantId:string",
+            "ExtraData.ErrorCode:x_ErrorCode:string",
+            "ExtraData.InternalErrorText:x_InternalErrorText:string",
+            "ExtraData.InternalErrorCode:x_InternalErrorCode:string",
+            "ExtraData.WDMessage:x_WDMessage:string",
+            "ExtraData.WDName:x_WDName:string",
+            "ExtraData.WDStatus:x_WDStatus:string",
+            "ExtraData.GroupsToTake:x_GroupsToTake:string",
+            "ExtraData.LeaseTimeout:x_LeaseTimeout:string",
+            "ExtraData.GroupsReceived:x_GroupsReceived:string",
+            "ExtraData.DequeueCount:x_DequeueCount:string",
+            "ExtraData.CommandId:x_CommandId:string",
+            "ExtraData.FiltersCount:x_FiltersCount:string"
+        );
+
+FlattenedLogs =
+    SELECT
+            name,
+            time AS timestamp,
+            seqNum,
+
+            c_name,
+            c_role,
+            c_roleInstance,
+            c_location,
+            c_environment,
+
+            u_id,
+
+            baseType,
+
+            operationName,
+            targetUri,
+            latencyMs,
+            serviceErrorCode,
+            succeeded,
+            requestMethod,
+            responseContentType,
+            protocol,
+            protocolStatusCode,
+            dependencyOperationName,
+            dependencyOperationVersion,
+            dependencyName,
+            dependencyType,
+            operationVersion,
+            callerIpAddress,
+            callerName,
+            requestSizeBytes,
+            requestStatus,
+
+            ServerActivityId,
+            ClientActivityId,
+            Authentication,
+            ErrorMessage,
+            ErrorCode,
+            MemberViewClientVersion,
+            FlattenedErrorCode,
+            Flights,
+            PartnerId,
+            AttemptCount,
+            ProtocolStatusCodePhrase,
+            ResponseContent,
+            ExceptionTypeName,
+
+            x_ExportId,
+            x_ExportTypes,
+            x_ExportStatus,
+            x_ExportSize,
+
+            x_tid,
+            x_HasOrgIdPuid,
+            x_commandIds,
+            x_tenantId,
+            x_ErrorCode,
+            x_InternalErrorText,
+            x_InternalErrorCode,
+            x_WDMessage,
+            x_WDName,
+            x_WDStatus,
+            x_GroupsToTake,
+            x_LeaseTimeout,
+            x_GroupsReceived,
+            x_DequeueCount,
+            x_CommandId,
+            x_FiltersCount
+    FROM DataFlattenedLogs;
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT FlattenedLogs
+TO SSTREAM @outputPath
+CLUSTERED BY name, operationName, dependencyOperationName, dependencyName, timestamp
+WITH STREAMEXPIRY @streamExpiry;

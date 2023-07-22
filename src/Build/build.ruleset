@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Rules for ComplianceServices" Description="Repository wide ruleset to classify Roslyn Analyzer errors in build pipelines." ToolsVersion="17.0">
+  <Rules AnalyzerId="Microsoft.Analyzers.NativeCodeAnalysis" RuleNamespace="Microsoft.Rules.Native" >
+    <!-- This rule in particular will fail the pipeline build if uncommented -->
+    <Rule Id="IA5352" Action="None" /> 
+    <Rule Id="IA5359" Action="None" /> 
+    <Rule Id="CA5359" Action="None" /> 
+    <Rule Id="CA5369" Action="None" /> 
+    <Rule Id="CA1304" Action="None" />
+    <Rule Id="CA1305" Action="None" />
+    <Rule Id="CA1307" Action="None" />
+    <Rule Id="CA3075" Action="None" />
+    <Rule Id="CA5351" Action="None" />
+    <Rule Id="CA5373" Action="None" />
+  </Rules>
+</RuleSet>

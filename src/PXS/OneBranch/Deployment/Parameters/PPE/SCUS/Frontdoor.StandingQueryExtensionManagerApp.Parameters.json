@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pxsppe"
+    },
+    "applicationTypeName": {
+      "value": "FrontdoorStandingQueryExtensionManagerAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "5.2.105"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\StandingQueryExtensionManagerApp\\FrontdoorStandingQueryExtensionManagerApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "FrontdoorStandingQueryExtensionManagerApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)",
+        "SQE_MAMetricsAccount": "ADGCS_NonProdHotPath",
+        "SQE_MAConfigNamespace": "nonprodadgcs",
+        "SQE_MonitoringTenant": "ADGCS-southcentralus",
+        "SQE_MonitoringRole": "PXS.Frontdoor",
+        "SQE_MonitoringListeningPort": "5010",
+        "SQE_ClusterName": "pxsppe",
+        "SQE_ClusterPath": "pxsppe.southcentralus.cloudapp.azure.com:19000",
+        "CertificateThumbprint": "",
+        "CertificateSubjectName": "adg-cs.cluster.nonprod.microsoft.com",
+        "RunDebug": "false"
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+    "Id": "ExportSev2",
+    "Tag": "Foo",
+    "IsSimulation": false,
+    "MaxRuntime": "1:00:00",
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 2,
+          "CommandAge": 10,
+          "LockGroupName": "Some lock group",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "ExportIncomplete",
+          "CommandType": "Export",
+          "IncidentKeywords": "NGPExport",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "10d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "ExportSev2Body",
+      "KustoQuery": "KustoQueryExport"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+    "Id": "ExportSev3",
+    "Tag": "Bar",
+    "IsSimulation": false,
+    "MaxRuntime": "1:00:00",
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 3,
+          "CommandAge": 14,
+          "LockGroupName": "Another lock group",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "ExportIncomplete",
+          "CommandType": "Export",
+          "IncidentKeywords": "Export",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "14d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "ExportSev3Body",
+      "KustoQuery": "KustoQueryExport"
+    }
+  }
+]

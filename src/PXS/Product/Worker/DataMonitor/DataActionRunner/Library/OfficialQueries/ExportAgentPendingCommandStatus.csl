@@ -1,0 +1,48 @@
+let reportdate = toscalar(ExportAuditLogRollupV3 | summarize max(SQLizerStreamDateId)); // Use latest snapshot
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+let BucketOneLimit = 5.0;
+let BucketTwoLimit = 8.0;
+let BucketThreeLimit = 10.0;
+let BucketOneLabel  = strcat(" <=  ", toint(BucketOneLimit));
+let BucketTwoLabel  = strcat(" <=  ", toint(BucketTwoLimit));
+let BucketThreeLabel = strcat(" <= ", toint(BucketThreeLimit));
+let BucketFourLabel  = strcat(" > ", toint(BucketThreeLimit));
+let ExportAuditLogExtended = materialize 
+(
+    ExportAuditLogRollupV3 
+    | where SQLizerStreamDateId == reportdate and isnull(CompletedTime)
+    | join kind=leftouter ExportSignalExtendedInfo on CommandId
+    | where TrafficType != ""
+);
+// Calculate #Days a command has been pending
+let AgentPendingCommands = materialize (
+    ExportAuditLogExtended 
+    | extend ReportDate=datetime_add('hour', 1, SQLizerStreamDateId), SignalTimestamp=iff(isnotnull(ExportRequestDate), ExportRequestDate, IngestedTime)
+    | extend PendingDays=(ReportDate - SignalTimestamp) / 1d
+);
+// Count the number of pending commands in each bucket
+let AgentCommandPendingCounts = materialize
+(
+    AgentPendingCommands
+        | summarize 
+        BucketOneCount=countif(PendingDays < BucketOneLimit),
+        BucketTwoCount=countif(PendingDays >= BucketOneLimit and PendingDays < BucketTwoLimit),
+        BucketThreeCount=countif(PendingDays >= BucketTwoLimit and PendingDays < BucketThreeLimit),
+        BucketFourCount=countif(PendingDays >= BucketThreeLimit) ,
+        MaxPendingDays=max(PendingDays),
+        ReportDate=max(ReportDate)
+        by AgentId, TrafficType
+);
+AgentCommandPendingCounts
+    | project
+        AgentId,
+        BucketOneCount,
+        BucketTwoCount,
+        BucketThreeCount,
+        BucketFourCount,
+        MaxPendingBucket=iff(MaxPendingDays < BucketOneLimit, BucketOneLabel, iff(MaxPendingDays < BucketTwoLimit, BucketTwoLabel, iff(MaxPendingDays < BucketThreeLimit, BucketThreeLabel, BucketFourLabel))),
+        MaxPendingDays=ceiling(MaxPendingDays),
+        ReportDate,
+        TrafficType
+        
+  

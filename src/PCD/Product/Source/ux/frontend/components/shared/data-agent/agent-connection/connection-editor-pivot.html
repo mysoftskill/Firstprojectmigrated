@@ -1,0 +1,64 @@
+<section>
+    <div data-grid="col-12">
+        <mee-alert ng-if="$ctrl.showProdImmutableMessage()" kind="use-glyph info">
+            <alert-content data-use-cms>
+                You can no longer modify connection details on Prod connection.
+            </alert-content>
+            <alert-actions>
+                <a mee-no-href ng-click="$ctrl.requestProdConnectionUpdate()">{{$ctrl.contactSupportLinkText}}</a>
+            </alert-actions>
+        </mee-alert>
+
+        <mee-alert ng-if="$ctrl.showProdImmutableWarning()" kind="use-glyph error">
+            <alert-content data-use-cms>
+                You will not be able to modify connection details on Prod connection after saving.
+            </alert-content>
+        </mee-alert>
+        <mee-alert ng-if="$ctrl.showNewProdConnectionNGPInfraWarning()" kind="use-glyph error">
+            <alert-content data-use-cms>
+                NGP Infrastructure is required to process Data Subject Requests.
+                Follow guidance to create a data processing plan.
+            </alert-content>
+            <alert-actions>
+                <a href="https://aka.ms/ngpAgentPost525"
+                   mee-hyperlink target="_blank"
+                   data-use-cms>
+                    Guidance
+                </a>
+            </alert-actions>
+        </mee-alert>
+
+        <mee-pivot ng-show="$ctrl.displayedReleaseStates">
+
+            <mee-tab ng-repeat="releaseState in $ctrl.displayedReleaseStates">
+                <mee-tab-title>
+                    <span id="tab-title-{{releaseState}}"
+                          ng-click="$ctrl.setActiveState(releaseState)">
+                        {{releaseState}}
+                    </span>
+                    <span ng-show="$ctrl.showRemoveButton(releaseState)"
+                          class="c-glyph glyph-cancel release-state-remove"
+                          ng-click="$ctrl.removeClicked(releaseState)"
+                          data-use-cms
+                          title="Click to remove this connection"></span>
+                </mee-tab-title>
+                <mee-tab-content>
+                    <pcd-agent-connection-editor connection-details="$ctrl.connectionDetailsGroup[releaseState]"
+                                                 protocol-picker-model="$ctrl.protocolPickerModel"
+                                                 release-state="{{releaseState}}"
+                                                 has-icm-connector-id="$ctrl.hasIcmConnectorId"></pcd-agent-connection-editor>
+                </mee-tab-content>
+            </mee-tab>
+
+            <mee-tab>
+                <mee-tab-title ng-show="$ctrl.showAddButton()" class="add-connection-tab">
+                    <button class="c-glyph glyph-add add-connection" ng-click="$ctrl.addClicked()"
+                            data-use-cms
+                            title="Click to add connection"></button>
+                </mee-tab-title>
+
+            </mee-tab>
+
+        </mee-pivot>
+    </div>
+</section>

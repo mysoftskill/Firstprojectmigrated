@@ -1,0 +1,128 @@
+parameters:
+- name: pathToRestore
+  displayName: The path to the .sln file to be restored. If no projectsToBuild are specified this will be built.
+  type: string
+
+- name: projectsToBuild
+  displayName: A list of .sln or csproj files to build.
+  type: object
+  default: ''
+
+- name: passedBuildParameters
+  displayName: Service specific build parameters.
+  type: string
+  default: ""
+
+- name: runUnitTests
+  displayName: Run unit tests
+  type: boolean
+  default: true
+
+- name: buildConfiguration
+  displayName: Build Configuration
+  type: string
+  default: Debug
+  values:
+  - Debug
+  - Release 
+
+- name: productName
+  displayName: Product Name
+  type: string
+  default: PCF
+  values:
+  - PCF
+  - PAF
+  - PXS
+  - PDMS
+  - PCD
+  - NGPProxy
+
+- name: versionTemplate
+  displayName: Version Template
+  type: string
+  default: onebranch.versioning.yml@self
+  
+steps:
+
+- template: ../${{parameters.versionTemplate}}
+
+- task: CmdLine@2
+  displayName: Update Version
+  inputs:
+    script: $(Build.SourcesDirectory)\src\${{parameters.productName}}\OneBranch\Build\versioning-onebranch.cmd $(Build.BuildNumber)
+
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    useGlobalJson: true
+    workingDirectory: $(Build.SourcesDirectory)
+    performMultiLevelLookup: true
+
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: "3.1.x"
+    workingDirectory: $(Build.SourcesDirectory)
+
+- task: DotNetCoreCLI@2
+  displayName: Restore Solution/Project
+  inputs:
+    # if you use `restore` command it invalidates credential, so we recommend to use custom + restore argument
+    command: custom 
+    projects: ${{parameters.pathToRestore}}
+    custom: restore
+
+# service fabric projects rely on projects.json and so must be restored with a "nuget restore"
+- task: CmdLine@2
+  displayName: Restore Service Fabric Projects
+  inputs:
+    script: nuget restore ${{parameters.pathToRestore}}
+
+# if no projectsToBuild are sepcified then build whatever was restored
+- ${{ if eq(parameters.projectsToBuild, '') }}:
+  - task: RoslynAnalyzers@3
+    displayName: Build
+    inputs:
+      userProvideBuildInfo: msBuildInfo
+      msBuildVersion: '16.7'
+      msBuildArchitecture: x86
+      rulesetName: Custom
+      customRuleset: $(Build.SourcesDirectory)\src\Build\build.ruleset
+      msBuildCommandline: dotnet.exe build ${{parameters.pathToRestore}} --no-restore -p:Configuration=${{parameters.buildConfiguration}} -p:ForcePackageTarget=true  -p:platform=x64 -p:Version=$(Build.BuildNumber) ${{parameters.passedBuildParameters}}
+  
+  - ${{ if parameters.runUnitTests }}:
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        command: 'test'
+        projects: ${{parameters.pathToRestore}}
+        arguments: '--filter "FullyQualifiedName!~FunctionalTests" --no-build --no-restore --configuration ${{parameters.buildConfiguration}} -p:platform=$(BuildArchitecture) --logger trx --results-directory $(Build.SourcesDirectory)\src\${{parameters.productName}}\OneBranch\Build\TestResults\ /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\src\${{parameters.productName}}\OneBranch\Build\TestResults\'
+        publishTestResults: false
+      
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      displayName: Publish test results
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: $(Build.SourcesDirectory)\src\${{parameters.productName}}\OneBranch\Build\TestResults\*.trx
+        failTaskOnFailedTests: true
+  
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish code coverage
+      condition: succeededOrFailed()
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Build.SourcesDirectory)\TestResults\**\coverage.cobertura.xml
+
+- ${{ else }}:
+  - ${{ each projectToBuild in parameters.projectsToBuild }}:
+    - task: RoslynAnalyzers@3
+      displayName: Build
+      inputs:
+        userProvideBuildInfo: msBuildInfo
+        msBuildVersion: '16.7'
+        msBuildArchitecture: x86
+        rulesetName: Custom
+        customRuleset: $(Build.SourcesDirectory)\src\Build\build.ruleset
+        msBuildCommandline: dotnet.exe build ${{projectToBuild}} --no-restore -p:Configuration=${{parameters.buildConfiguration}} -p:ForcePackageTarget=true  -p:platform=x64 -p:Version=$(Build.BuildNumber) ${{parameters.passedBuildParameters}}

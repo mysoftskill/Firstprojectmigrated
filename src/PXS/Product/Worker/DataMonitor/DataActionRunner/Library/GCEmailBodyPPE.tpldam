@@ -1,0 +1,52 @@
+﻿<div>
+  <p>
+    Thank you for your continued support of the NextGen Privacy initiative. You are receiving this email as there are agents within your organizations 
+    that have not yet completed the export and/or delete data subject requests (DSRs) and will soon to miss the 30 day SLA for delete and 21/29 day window for export. 
+    The table below lists the active Sev2 IcM incidents info for each of the identified agents.
+  </p>
+
+  <p>
+    To:
+    [[<foreach sel:$.To sep:', ' foreach>]]
+      [[<var s:$ var>]]
+    [[<foreachend>]]
+    <br/>
+    Cc:
+    [[<foreach sel:$.Cc sep:', ' foreach>]]
+      [[<var s:$ var>]]
+    [[<foreachend>]]
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <td><b>General Contractor</b></td>
+        <td><b>AgentName</b></td>
+        <td><b>AgentId</b></td>
+        <td><b>Incident IDs</b></td>
+        <td><b>Contacts</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      [[<foreach sel:$.EmailContents foreach>]]
+        <tr>
+          <td>[[<var s:$.GCEmail var>]]</td>
+          <td>[[<var s:$.AgentName var>]]</td>
+          <td>[[<var s:$.AgentId var>]]</td>
+          <td>
+            [[<foreach sel:$.Incidents foreach>]]
+              <a href="https://portal.microsofticm.com/imp/v3/incidents/details/[[<var s:$ var>]]">[[<var s:$ var>]]</a><br/>
+            [[<foreachend>]]
+          </td>
+          <td>
+            <a href="mailto: [[<foreach sel:$.ContactList sep:';' foreach>]][[<var s:$.Email var>]][[<foreachend>]]">
+              [[<foreach sel:$.ContactList foreach>]]
+                [[<var s:$.Alias var>]]<br/>
+              [[<foreachend>]]
+            </a>
+          </td>
+        </tr>
+      [[<foreachend>]]
+    </tbody>
+  </table>
+</div>

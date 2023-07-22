@@ -1,0 +1,85 @@
+@import "./rtl.scss";
+@import "../config/colors.scss";
+
+@mixin resource-view-attributes() {
+    .resource-view-attributes {
+        padding-bottom: 5px;
+        word-wrap: break-word;
+
+        p {
+            padding: 0px;
+            font-size: 13px;
+        }
+    }
+}
+
+@mixin clearfix() {
+    &:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+}
+
+@mixin select-modal-data() {
+    display: block;
+
+    .select-owner-area {
+        min-height: 250px;
+    }
+    // This override is to show inline ants while mee-select data is loading (without this ants show up at the top of modal)
+    .c-progress.f-indeterminate-regional {
+        position: static;
+    }
+}
+
+@mixin drs-resource($hide-close: false, $min-height-added-resource: 38px) {
+    padding-bottom: 5px;
+    min-height: $min-height-added-resource;
+
+    .resource-entity {
+        @include margin-right(5px);
+        margin-top: 5px;
+        border-radius: 2px;
+        min-width: initial;
+        color: $light-grey-color;
+        background-color: $standard-blue-color;
+
+        &.invalid {
+            background-color: $error-color;
+        }
+
+        span {
+            top: 3px;
+            font-size: 13px;
+            @include padding(3px, 0, 5px, 5px);
+        }
+
+        @if ($hide-close) {
+            @include padding-right(7px);
+        }
+        @else {
+            @include padding-right(20px);
+
+            .close-button {
+                padding-top: 0;
+                width: 20px;
+                border: none; // Override MWF and UHF styling
+            }
+
+            .close-button:before {
+                color: $light-grey-color;
+                font-size: x-small;
+                height: auto;
+                width: auto;
+                @include set-margin(0px, 5px, 0px, 5px);
+            }
+        }
+    }
+}
+
+%force-wrap-element-contents {
+    /* Forcibly wrap element contents to prevent scrolling issues. */
+    word-break: break-all;
+    word-break: break-word; //  Prefer this mode, not supported in Edge.
+}

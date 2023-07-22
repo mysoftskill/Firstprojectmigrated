@@ -1,0 +1,11 @@
+﻿
+import "BaseOutgoingServiceEvent.bond"
+
+namespace Microsoft.Osgs.Infra.Monitoring
+
+
+[Provider("Microsoft_Osgs_Infra_Monitoring")]
+
+struct WatchdogServiceEvent: BaseOutgoingServiceEvent
+{
+};

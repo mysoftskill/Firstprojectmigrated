@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<operations>
+  <!-- Metadata APIs -->
+  <operation name="V2.GetMetadata"
+             method="GET"
+             regex="^\/api\/v2\/\$metadata$" />  
+  
+  <!-- DataOwner APIs -->
+  <operation name="V2.DataOwners.Create"
+             method="POST"
+             regex="^\/api\/v2\/dataOwners$" />
+
+  <operation name="V2.DataOwners.Update"
+             method="PUT"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)$" />
+
+  <operation name="V2.DataOwners.ReplaceServiceId"
+             method="POST"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\/v2.replaceServiceId$" />
+
+  <operation name="V2.DataOwners.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)$" />
+
+  <operation name="V2.DataOwners.ReadWithTrackingDetailsDataAgentsAndAssetGroups"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?\$select=.*trackingDetails.*\$expand=dataAgents,assetGroups" />
+
+  <operation name="V2.DataOwners.ReadWithTrackingDetailsAndDataAgents"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?\$select=.*trackingDetails.*\$expand=dataAgents" />
+
+  <operation name="V2.DataOwners.ReadWithTrackingDetailsAndAssetGroups"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?\$select=.*trackingDetails.*\$expand=assetGroups" />
+
+  <operation name="V2.DataOwners.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.DataOwners.ReadWithDataAgentsAndAssetGroups"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?.*\$expand=dataAgents,assetGroups" />
+
+  <operation name="V2.DataOwners.ReadWithDataAgents"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?.*\$expand=dataAgents" />
+
+  <operation name="V2.DataOwners.ReadWithAssetGroups"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)\?.*\$expand=assetGroups" />
+
+  <operation name="V2.DataOwners.Read"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\('[\w-]{36}'\)" />
+
+  <operation name="V2.DataOwners.FindByAuthenticatedUser"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\/v2.findByAuthenticatedUser" />
+
+  <operation name="V2.DataOwners.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners\?.*\$filter=" />
+
+  <operation name="V2.DataOwners.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/dataOwners" />
+
+  <!-- AssetGroup APIs -->
+  <operation name="V2.AssetGroups.RemoveVariants"
+           method="POST"
+           regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\/v2\.removeVariants" />
+  
+  <operation name="V2.AssetGroups.ComplianceStateByAssetQualifier"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\/v2.findByAssetQualifier\(qualifier=@value\)\/complianceState\?@value=" />
+
+  <operation name="V2.AssetGroups.CalculateRegistrationStatus"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\/v2.calculateRegistrationStatus" />
+  
+  <operation name="V2.AssetGroups.Create"
+             method="POST"
+             regex="^\/api\/v2\/assetGroups$" />
+
+  <operation name="V2.AssetGroups.SetAgentRelationships"
+             method="POST"
+             regex="^\/api\/v2\/assetGroups\/v2.setAgentRelationships$" />
+
+  <operation name="V2.AssetGroups.Update"
+             method="PUT"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)$" />
+
+  <operation name="V2.AssetGroups.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)$" />
+
+  <operation name="V2.AssetGroups.ReadWithTrackingDetailsDeleteAgentAndDataAssets"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?\$select=.*trackingDetails.*\$expand=deleteAgent,dataAssets" />
+
+  <operation name="V2.AssetGroups.ReadWithTrackingDetailsAndDeleteAgent"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?\$select=.*trackingDetails.*\$expand=deleteAgent" />
+
+  <operation name="V2.AssetGroups.ReadWithTrackingDetailsAndDataAssets"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?\$select=.*trackingDetails.*\$expand=dataAssets" />
+
+  <operation name="V2.AssetGroups.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.AssetGroups.ReadWithDeleteAgentAndDataAssets"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?.*\$expand=deleteAgent,dataAssets" />
+
+  <operation name="V2.AssetGroups.ReadWithDeleteAgent"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?.*\$expand=deleteAgent" />
+
+  <operation name="V2.AssetGroups.ReadWithDataAssets"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)\?.*\$expand=dataAssets" />
+
+  <operation name="V2.AssetGroups.Read"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\('[\w-]{36}'\)" />
+
+  <operation name="V2.AssetGroups.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups\?.*\$filter=" />
+
+  <operation name="V2.AssetGroups.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/assetGroups" />
+
+  <!-- Inventory APIs -->
+  <operation name="V2.Inventories.Create"
+             method="POST"
+             regex="^\/api\/v2\/inventories" />
+
+  <operation name="V2.Inventories.Update"
+             method="PUT"
+             regex="^\/api\/v2\/inventories\('[\w-]{36}'\)$" />
+
+  <operation name="V2.Inventories.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/inventories\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.Inventories.Read"
+             method="GET"
+             regex="^\/api\/v2\/inventories\('[\w-]{36}'\)" />
+
+  <operation name="V2.Inventories.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/inventories\?.*\$filter=" />
+
+  <operation name="V2.Inventories.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/inventories" />
+
+  <!-- VariantDefinition APIs -->
+  <operation name="V2.VariantDefinitions.Create"
+             method="POST"
+             regex="^\/api\/v2\/variantDefinitions" />
+
+  <operation name="V2.VariantDefinitions.Update"
+             method="PUT"
+             regex="^\/api\/v2\/variantDefinitions\('[\w-]{36}'\)$" />
+
+  <operation name="V2.VariantDefinitions.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/variantDefinitions\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.VariantDefinitions.Read"
+             method="GET"
+             regex="^\/api\/v2\/variantDefinitions\('[\w-]{36}'\)" />
+
+  <operation name="V2.VariantDefinitions.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/variantDefinitions\?.*\$filter=" />
+
+  <operation name="V2.VariantDefinitions.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/variantDefinitions" />
+
+  <operation name="V2.VariantDefinitions.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/variantDefinitions" />
+
+  <operation name="V2.VariantDefinitions.ForceDelete"
+             method="DELETE"
+             regex="^\/api\/v2\/variantDefinitions\('[\w-]{36}'\)\/force" />
+  
+  <!-- DataAgent APIs -->
+  <operation name="V2.DataAgents.Create"
+             method="POST"
+             regex="^\/api\/v2\/dataAgents$" />
+
+  <operation name="V2.DataAgents.Update"
+             method="PUT"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)$" />
+
+  <operation name="V2.DataAgents.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)$" />
+
+  <operation name="V2.DataAgents.DeleteWithOverridePendingCommandsCheck"
+           method="DELETE"
+           regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)\/v2.override" />
+
+  <operation name="V2.DeleteAgents.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)\/v2\.DeleteAgent\?\$select=.*trackingDetails" />
+
+  <operation name="V2.DeleteAgents.CalculateRegistrationStatus"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)\/v2\.DeleteAgent\/v2.calculateRegistrationStatus" />
+  
+  <operation name="V2.DeleteAgents.Read"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)\/v2\.DeleteAgent" />
+
+  <operation name="V2.DataAgents.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.DataAgents.Read"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)" />
+
+  <operation name="V2.DeleteAgents.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\/v2.DeleteAgent\?.*\$filter=" />
+
+  <operation name="V2.DeleteAgents.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\/v2.DeleteAgent" />
+
+  <operation name="V2.DataAgents.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents\?.*\$filter=" />
+
+  <operation name="V2.DataAgents.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/dataAgents" />
+
+  <operation name="V2.DeleteAgents.CheckOwnership"
+			 method="GET"
+			 regex="^\/api\/v2\/dataAgents\('[\w-]{36}'\)\/v2\.DeleteAgent\/v2\.checkOwnership" />
+
+  <!-- User APIs -->
+  <operation name="V2.Users.Read"
+             method="GET"
+             regex="^\/api\/v2\/users\('me'\)\?\$select=id,securityGroups" />
+
+  <!-- HistoryItem APIs -->
+  <operation name="V2.HistoryItems.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/historyItems" />
+
+  <!-- DataAsset APIs -->
+  <operation name="V2.DataAssets.FindByQualifier"
+             method="GET"
+             regex="^\/api\/v2\/dataAssets\/v2.findByQualifier\(qualifier=@value\)\?@value=" />
+  
+  <!-- SharingRequest APIs -->
+  <operation name="V2.SharingRequests.Approve"
+             method="POST"
+             regex="^\/api\/v2\/sharingRequests\('[\w-]{36}'\)\/v2\.approve$" />
+
+  <operation name="V2.SharingRequests.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/sharingRequests\('[\w-]{36}'\)$" />
+
+  <operation name="V2.SharingRequests.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/sharingRequests\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.SharingRequests.Read"
+             method="GET"
+             regex="^\/api\/v2\/sharingRequests\('[\w-]{36}'\)" />
+
+  <operation name="V2.SharingRequests.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/sharingRequests\?.*\$filter=" />
+
+  <operation name="V2.SharingRequests.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/sharingRequests" />
+
+  <!-- VariantRequest APIs -->
+  <operation name="V2.VariantRequests.Create"
+             method="POST"
+             regex="^\/api\/v2\/variantRequests$" />
+
+  <operation name="V2.VariantRequests.Update"
+             method="PUT"
+             regex="^\/api\/v2\/variantRequests\('[\w-]{36}'\)$" />
+
+  <operation name="V2.VariantRequests.Approve"
+             method="POST"
+             regex="^\/api\/v2\/variantRequests\('[\w-]{36}'\)\/v2\.approve$" />
+
+  <operation name="V2.VariantRequests.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/variantRequests\('[\w-]{36}'\)$" />
+
+  <operation name="V2.VariantRequests.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/variantRequests\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.VariantRequests.Read"
+             method="GET"
+             regex="^\/api\/v2\/variantRequests\('[\w-]{36}'\)" />
+
+  <operation name="V2.VariantRequests.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/variantRequests\?.*\$filter=" />
+
+  <operation name="V2.VariantRequests.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/variantRequests" />
+
+  <!-- TransferRequest APIs -->
+  <operation name="V2.TransferRequests.Create"
+             method="POST"
+             regex="^\/api\/v2\/transferRequests$" />
+
+  <operation name="V2.TransferRequests.Approve"
+             method="POST"
+             regex="^\/api\/v2\/transferRequests\('[\w-]{36}'\)\/v2\.approve$" />
+
+  <operation name="V2.TransferRequests.Delete"
+             method="DELETE"
+             regex="^\/api\/v2\/transferRequests\('[\w-]{36}'\)$" />
+
+  <operation name="V2.TransferRequests.ReadWithTrackingDetails"
+             method="GET"
+             regex="^\/api\/v2\/transferRequests\('[\w-]{36}'\)\?\$select=.*trackingDetails" />
+
+  <operation name="V2.TransferRequests.Read"
+             method="GET"
+             regex="^\/api\/v2\/transferRequests\('[\w-]{36}'\)" />
+
+  <operation name="V2.TransferRequests.ReadWithFilters"
+             method="GET"
+             regex="^\/api\/v2\/transferRequests\?.*\$filter=" />
+
+  <operation name="V2.TransferRequests.ReadAll"
+             method="GET"
+             regex="^\/api\/v2\/transferRequests" />
+
+  <!-- Incident APIs -->
+  <operation name="V2.Incidents.Create"
+             method="POST"
+             regex="^\/api\/v2\/incidents" />
+
+  <!-- KeepAlive APIs -->
+  <operation name="KeepAlive"
+             method="GET"
+             regex="^\/keepalive" />
+</operations>

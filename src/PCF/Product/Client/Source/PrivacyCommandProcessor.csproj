@@ -1,0 +1,103 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Microsoft.PrivacyServices.CommandFeed.Client</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Client</RootNamespace>
+    <TargetFrameworks>net452;net472;netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <RuntimeFrameworkVersion>3.1</RuntimeFrameworkVersion>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <Platforms>AnyCPU;x64</Platforms>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.0</Version>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' != '' ">$(BUILD_BUILDNUMBER)</Version>
+    <SourceRevisionId Condition=" '$(BUILD_SOURCEVERSION)' != '' ">$(BUILD_SOURCEVERSION)</SourceRevisionId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Build\UnprotectedKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Server\Frontdoor\CommandFeed\SharedCommandFeedContracts\**\*.cs">
+      <Link>SharedCommandFeedContracts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\..\Server\BackgroundTasks\SharedCommandFeedContracts\**\*.cs">
+      <Link>SharedCommandFeedContracts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\..\Server\Common\SharedCommandFeedContracts\**\*.cs">
+      <Link>SharedCommandFeedContracts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Tools\**" copyToOutput="true">
+      <IncludeInPackage>true</IncludeInPackage>
+      <CopyToOutput>true</CopyToOutput>
+      <BuildAction>Content</BuildAction>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Identity.Client" VersionOverride="4.39.0" />
+    <PackageReference Include="Microsoft.Azure.Storage.Queue" VersionOverride="11.2.3" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" VersionOverride="11.2.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
+    <PackageReference Include="System.IO.Compression" VersionOverride="4.3.0" />
+    <PackageReference Include="System.Net.Http" VersionOverride="4.3.4" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" VersionOverride="5.2.7" />
+    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+    <Reference Include="System.Net.Http.WebRequest" />
+  </ItemGroup>
+  
+  <!-- [assembly: InternalsVisibleTo("PrivacyCommandProcessor.UnitTests, PublicKey=002400000480000094000000060200000024000052534131000400000100010073131da48c441580970097c650ce13a92917d460bb661b0718b617e9e4dd8cdaedf1e00d73b9658e8e8c938847a93a7294ffd0807ce451e85a72dce1ed0456e4572ec42bd37cc7abd9140845ea5dfa6515ea51eef0c94656dfc5ee22fd4acc53bf56528b34e85633c5ba4613baf02fb52d8c102cffc44c1bac22549e5329f4e6")] -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>PrivacyCommandProcessor.UnitTests, PublicKey=002400000480000094000000060200000024000052534131000400000100010073131da48c441580970097c650ce13a92917d460bb661b0718b617e9e4dd8cdaedf1e00d73b9658e8e8c938847a93a7294ffd0807ce451e85a72dce1ed0456e4572ec42bd37cc7abd9140845ea5dfa6515ea51eef0c94656dfc5ee22fd4acc53bf56528b34e85633c5ba4613baf02fb52d8c102cffc44c1bac22549e5329f4e6</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\.version\PipelineAssemblyInfo.cs" Link="Properties\PipelineAssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>Microsoft.PrivacyServices.CommandFeed.Client</PackageId>
+    <Title>Microsoft.PrivacyServices.CommandFeed.Client</Title>
+    <Authors>Azure Data Governance Compliance Services (ngpcieng@microsoft.com)</Authors>
+    <Description>NGPX Privacy Command Feed Client SDK.</Description>
+    <Copyright>Copyright 2020</Copyright>
+    <PackageTags>ngp ngpx privacy pcf</PackageTags>
+  </PropertyGroup>
+
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

@@ -1,0 +1,102 @@
+﻿//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      version             = @@version@@
+
+// Asimov References:
+MODULE "Asimov.Batch.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.AddHours(-10),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.AddHours(-5),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@"); // v1
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE outputRootFolderName string = "AgentRequestStatus";
+
+#DECLARE hourlyPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/%Y/%m/%d/{{0}}_%Y_%m_%d_%h.ss?date={{1:yyyy-MM-dd}}&hour={{1:HH}}", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+
+#DECLARE cloud_env string = "Production";
+#DECLARE cloud_name string = "PXS";
+
+//OUTPUTS
+#DECLARE hourlyAgentCommandProcessStatus_outputPath string = string.Format(@hourlyPathFormat,"AgentCommandProcessStatus",@startDate);
+#DECLARE hourlyCheckpointStatusSummary_outputPath string = string.Format(@hourlyPathFormat,"CheckpointStatusSummary",@startDate);
+#DECLARE hourlyUnexpectedCommandDetails_outputPath string = string.Format(@hourlyPathFormat,"UnexpectedCommandDetails",@startDate);
+#DECLARE streamExpiry string = "180";
+
+//output for test
+#IF (@localRun)
+    #SET hourlyAgentCommandProcessStatus_outputPath = string.Concat("/my", @hourlyAgentCommandProcessStatus_outputPath);
+    #SET hourlyCheckpointStatusSummary_outputPath = string.Concat("/my", @hourlyCheckpointStatusSummary_outputPath);
+    #SET hourlyUnexpectedCommandDetails_outputPath = string.Concat("/my", @hourlyUnexpectedCommandDetails_outputPath);
+    #SET streamExpiry = "7";
+#ENDIF
+
+SllBaseQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+    WHERE cloud_name == @cloud_name
+    AND cloud_environment == @cloud_env;
+
+// Define JsonObjectProcessor for different SLL events
+eventGridEvents = 
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "baseData.protocolStatusCode:ProtocolStatusCode:string",
+        "baseData.targetUri:TargetUri:string",
+        "baseData.operationName:OperationName:string",
+        "Properties.CommandId:CommandId:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+    HAVING OperationName == "WebHook.InsertCommand.2.0" && ProtocolStatusCode == "200";
+
+filterAndRouteEvents = 
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "baseData.protocolStatusCode:ProtocolStatusCode:string",
+        "baseData.operationName:OperationName:string",
+        "Properties.CommandId:CommandId:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.IncomingServiceRequest"
+    HAVING OperationName == "FilterAndRouteCommandWorkItemHandler.ProcessWorkItemAsync" && ProtocolStatusCode == "200";
+
+eventGridEvents = SELECT TargetUri, CommandId, MIN(time) AS MinTime, MAX(time) AS MaxTime, COUNT(*) AS EgressReplayCount FROM eventGridEvents GROUP BY TargetUri, CommandId;
+eventGridEvents = SELECT EgressReplayCount, AVG((MaxTime - MinTime).TotalSeconds) AS AverageTime, COUNT(*) AS Count FROM eventGridEvents GROUP BY EgressReplayCount;
+
+filterAndRouteEvents = SELECT CommandId, COUNT(*) AS IngressReplayCount FROM filterAndRouteEvents GROUP BY CommandId;
+filterAndRouteEvents = SELECT IngressReplayCount, COUNT(*) AS Count FROM filterAndRouteEvents GROUP BY IngressReplayCount;
+
+OUTPUT eventGridEvents TO SSTREAM "/my/egress.ss" WITH STREAMEXPIRY "7";
+OUTPUT filterAndRouteEvents TO SSTREAM "/my/ingress.ss" WITH STREAMEXPIRY "7";

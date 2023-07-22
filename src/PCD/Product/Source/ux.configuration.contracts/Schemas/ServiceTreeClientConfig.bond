@@ -1,0 +1,6 @@
+﻿namespace Microsoft.PrivacyServices.UX.Configuration
+
+struct IServiceTreeClientConfig
+{
+    10: required string ApiEndpoint;
+}

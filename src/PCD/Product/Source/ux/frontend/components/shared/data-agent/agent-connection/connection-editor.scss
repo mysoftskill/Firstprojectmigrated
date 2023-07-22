@@ -1,0 +1,14 @@
+﻿@import "../../../../styles/utilities.scss";
+
+pcd-agent-connection-editor {
+    display: block;
+
+    mee-radio-group {
+        span {
+            &.prod-upgrade-warning {
+                display: block;
+                margin-top: 6px;
+            }
+        }
+    }
+}

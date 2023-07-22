@@ -1,0 +1,145 @@
+﻿DEFINE MODULE PuidMappingView
+BEGIN
+
+VIEW AnidMap
+RETURN ROWSET(Anid:string, Puid:string)
+PARAMS(RootPath string DEFAULT = "shares/puidmapping/PROD", StartDate DateTime DEFAULT = DateTime.Parse("2018-01-12"), EndDate DateTime DEFAULT = DateTime.UtcNow.AddDays(-1), UseExisting bool DEFAULT = true);
+
+VIEW CidMap
+RETURN ROWSET(Cid:string, Puid:string)
+PARAMS(RootPath string DEFAULT = "shares/puidmapping/PROD", StartDate DateTime DEFAULT = DateTime.Parse("2018-01-12"), EndDate DateTime DEFAULT = DateTime.UtcNow.AddDays(-1), UseExisting bool DEFAULT = true);
+
+VIEW OpidMap
+RETURN ROWSET(Opid:string, Puid:string)
+PARAMS(RootPath string DEFAULT = "shares/puidmapping/PROD", StartDate DateTime DEFAULT = DateTime.Parse("2018-01-12"), EndDate DateTime DEFAULT = DateTime.UtcNow.AddDays(-1), UseExisting bool DEFAULT = true);
+
+END MODULE
+
+VIEW AnidMap
+RETURN ROWSET(Anid:string, Puid:string)
+PARAMS(RootPath string DEFAULT = "shares/puidmapping/PROD", StartDate DateTime DEFAULT = DateTime.Parse("2018-01-12"), EndDate DateTime DEFAULT = DateTime.UtcNow.AddDays(-1), UseExisting bool DEFAULT = true)
+BEGIN
+
+#DECLARE anidsToday string = String.Format(@"{0}/ANID/{1:yyyy/MM}/puidmap_{1:dd}.ss", @RootPath, @EndDate);
+#DECLARE existingAnid string = String.Format(@"{0}/ANID/anidmap.ss", @RootPath);
+#DECLARE anidRoll string = String.Format(@"{0}/ANID/anidrollup-{1:yyyy-MM-dd}.ss", @RootPath, @EndDate);
+#DECLARE anidPreRoll string = String.Format(@"{0}/ANID/anidrollup-{1:yyyy-MM-dd}.ss", @RootPath, @EndDate.AddDays(-1));
+
+#DECLARE sourceFolder string =  String.Format(@"{0}", @RootPath);
+#DECLARE anidPattern string = String.Format(@"/ANID/%Y/%m/puidmap_%d.ss", @EndDate);
+
+#DECLARE startString string = @StartDate.ToString("yyyy-MM-dd");
+#DECLARE endString string = @EndDate.ToString("yyyy-MM-dd");
+
+#IF (EXISTS(@anidRoll) AND @UseExisting)
+    // Have already rolled up previously today
+    data = SSTREAM @anidRoll;
+#ELSEIF (EXISTS(@anidsToday) AND EXISTS(@anidPreRoll))
+    // Need to roll in today's data
+    todays = SSTREAM @anidsToday;
+    yesterdays = SSTREAM @anidPreRoll;
+    data =
+        SELECT Anid, Puid FROM todays
+        UNION ALL
+        SELECT Anid, Puid FROM yesterdays;
+#ELSEIF (EXISTS(@anidPreRoll))
+    // Data from today hasn't finished yet
+    data = SSTREAM @anidPreRoll;
+#ELSE
+    // First time roll up
+    existingData = SSTREAM @existingAnid;
+    dailyData = SSTREAM STREAMSET @sourceFolder PATTERN @anidPattern RANGE __date = [@startString, @endString];
+    data =
+        SELECT Anid, Puid FROM dailyData
+        UNION ALL
+        SELECT Anid, Puid FROM existingData;
+#ENDIF
+
+    SELECT Anid, Puid FROM data;
+END VIEW
+
+VIEW CidMap
+RETURN ROWSET(Cid:string, Puid:string)
+PARAMS(RootPath string DEFAULT = "shares/puidmapping/PROD", StartDate DateTime DEFAULT = DateTime.Parse("2018-01-12"), EndDate DateTime DEFAULT = DateTime.UtcNow.AddDays(-1), UseExisting bool DEFAULT = true)
+BEGIN
+
+#DECLARE cidsToday string = String.Format(@"{0}/CID/{1:yyyy/MM}/puidmap_{1:dd}.ss", @RootPath, @EndDate);
+#DECLARE existingCid string = String.Format(@"{0}/CID/cidmap.ss", @RootPath);
+#DECLARE cidRoll string = String.Format(@"{0}/CID/cidrollup-{1:yyyy-MM-dd}.ss", @RootPath, @EndDate);
+#DECLARE cidPreRoll string = String.Format(@"{0}/CID/cidrollup-{1:yyyy-MM-dd}.ss", @RootPath, @EndDate.AddDays(-1));
+
+#DECLARE sourceFolder string =  String.Format(@"{0}", @RootPath);
+#DECLARE cidPattern string = String.Format(@"/CID/%Y/%m/puidmap_%d.ss", @EndDate);
+
+#DECLARE startString string = @StartDate.ToString("yyyy-MM-dd");
+#DECLARE endString string = @EndDate.ToString("yyyy-MM-dd");
+
+#IF (EXISTS(@cidRoll) AND @UseExisting)
+    // Have already rolled up previously today
+    data = SSTREAM @cidRoll;
+#ELSEIF (EXISTS(@cidsToday) AND EXISTS(@cidPreRoll))
+    // Need to roll in today's data
+    todays = SSTREAM @cidsToday;
+    yesterdays = SSTREAM @cidPreRoll;
+    data =
+        SELECT Cid, Puid FROM todays WHERE !String.Equals("0000000000000000", Cid)
+        UNION ALL
+        SELECT Cid, Puid FROM yesterdays;
+#ELSEIF (EXISTS(@cidPreRoll))
+    // Data from today hasn't finished yet
+    data = SSTREAM @cidPreRoll;
+#ELSE
+    // First time roll up
+    existingData = SSTREAM @existingCid;
+    dailyData = SSTREAM STREAMSET @sourceFolder PATTERN @cidPattern RANGE __date = [@startString, @endString];
+    data =
+        SELECT Cid, Puid FROM dailyData WHERE !String.Equals("0000000000000000", Cid)
+        UNION ALL
+        SELECT Cid, Puid FROM existingData;
+#ENDIF
+
+    SELECT Cid, Puid FROM data;
+END VIEW
+
+VIEW OpidMap
+RETURN ROWSET(Opid:string, Puid:string)
+PARAMS(RootPath string DEFAULT = "shares/puidmapping/PROD", StartDate DateTime DEFAULT = DateTime.Parse("2018-01-12"), EndDate DateTime DEFAULT = DateTime.UtcNow.AddDays(-1), UseExisting bool DEFAULT = true)
+BEGIN
+
+#DECLARE opidsToday string = String.Format(@"{0}/OPID/{1:yyyy/MM}/puidmap_{1:dd}.ss", @RootPath, @EndDate);
+#DECLARE existingOpid string = String.Format(@"{0}/OPID/opidmap.ss", @RootPath);
+#DECLARE opidRoll string = String.Format(@"{0}/OPID/opidrollup-{1:yyyy-MM-dd}.ss", @RootPath, @EndDate);
+#DECLARE opidPreRoll string = String.Format(@"{0}/OPID/opidrollup-{1:yyyy-MM-dd}.ss", @RootPath, @EndDate.AddDays(-1));
+
+#DECLARE sourceFolder string = String.Format(@"{0}", @RootPath);
+#DECLARE opidPattern string = String.Format(@"/OPID/%Y/%m/puidmap_%d.ss", @EndDate);
+
+#DECLARE startString string = @StartDate.ToString("yyyy-MM-dd");
+#DECLARE endString string = @EndDate.ToString("yyyy-MM-dd");
+
+#IF (EXISTS(@opidRoll) AND @UseExisting)
+    // Have already rolled up previously today
+    data = SSTREAM @opidRoll;
+#ELSEIF (EXISTS(@opidsToday) AND EXISTS(@opidPreRoll))
+    // Need to roll in today's data
+    todays = SSTREAM @opidsToday;
+    yesterdays = SSTREAM @opidPreRoll;
+    data =
+        SELECT Opid, Puid FROM todays
+        UNION ALL
+        SELECT Opid, Puid FROM yesterdays;
+#ELSEIF (EXISTS(@opidPreRoll))
+    // Data from today hasn't finished yet
+    data = SSTREAM @opidPreRoll;
+#ELSE
+    // First time roll up
+    existingData = SSTREAM @existingOpid;
+    dailyData = SSTREAM STREAMSET @sourceFolder PATTERN @opidPattern RANGE __date = [@startString, @endString];
+    data =
+        SELECT Opid, Puid FROM dailyData
+        UNION ALL
+        SELECT Opid, Puid FROM existingData;
+#ENDIF
+
+    SELECT Opid, Puid FROM data;
+END VIEW

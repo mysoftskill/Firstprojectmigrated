@@ -1,0 +1,193 @@
+<div>
+    <section ng-if="$ctrl.agent">
+        <pcd-lockdown-warning pcd-related-entity-id="$ctrl.agent.id"></pcd-lockdown-warning>
+
+        <div data-grid="col-12">
+            <div data-grid="col-6">
+                <h3 mee-heading="heading4" data-use-cms>Agent details</h3>
+
+                <mee-text-field kind="flex"
+                                ng-if="$ctrl.agent.id">
+                    <label data-use-cms>ID</label>
+                    <input ng-model="$ctrl.agent.id" readonly>
+                </mee-text-field>
+
+                <mee-text-field kind="flex"
+                                data-required-field="true"
+                                data-error-id="{{$ctrl.errorCategory}}.name"
+                                mee-auto-focus>
+                    <label data-use-cms>Name</label>
+                    <input ng-model="$ctrl.agent.name">
+                </mee-text-field>
+                <mee-inline-error error-id="{{$ctrl.errorCategory}}.name"></mee-inline-error>
+
+                <mee-text-area kind="flex"
+                               data-required-field="true"
+                               data-error-id="{{$ctrl.errorCategory}}.description">
+                    <label data-use-cms>Description</label>
+                    <textarea rows="5" ng-model="$ctrl.agent.description"></textarea>
+                </mee-text-area>
+                <mee-inline-error error-id="{{$ctrl.errorCategory}}.description"></mee-inline-error>
+
+                <mee-checkbox ng-model="$ctrl.agent.sharingEnabled"
+                              ng-change="$ctrl.verifySharingRequestContacts()"
+                              data-use-cms>
+                    This agent is shared by multiple teams
+                </mee-checkbox>
+                <mee-checkbox ng-model="$ctrl.agent.isThirdPartyAgent"
+                              data-use-cms>
+                    This is a third party agent
+                </mee-checkbox>
+            </div>
+        </div>
+
+        <div data-grid="col-12">
+            <div data-grid="col-6">
+                <h3 mee-heading="heading4" data-use-cms>IcM</h3>
+
+                <div ng-switch="$ctrl.getIcmConfiguration()">
+                    <div ng-switch-when="none">
+                        <p mee-paragraph data-use-cms>
+                            IcM Connector to route to your team regarding services associated with your team's agent.
+                        </p>
+                        <p mee-paragraph data-use-cms>
+                            Setting a connector ID on the agent overrides the value set on your team.
+                            Please <a ui-sref="data-owners.edit({ ownerId: $ctrl.owner.id })" mee-hyperlink>set a connector ID on your team</a>
+                            to enable this feature.
+                        </p>
+                    </div>
+
+                    <div ng-switch-when="team-inherited">
+                        <p mee-paragraph data-use-cms>
+                            By default, an IcM Connector to route to your team was created for the team associated with this agent.
+                            Entering a connector ID for the agent will override the team connector ID.
+                        </p>
+                        <p mee-paragraph data-use-cms>
+                            The default team connector ID is <span class="view-label">{{$ctrl.owner.icmConnectorId}}</span>.
+                        </p>
+                    </div>
+
+                    <div ng-switch-default>
+                        <p mee-paragraph data-use-cms>
+                            IcM Connector to route to your team regarding services associated with your team's agent.
+                        </p>
+                    </div>
+                </div>
+
+                <mee-text-field kind="flex" data-error-id="{{$ctrl.errorCategory}}.icm-connector">
+                    <label data-use-cms>Agent-specific IcM connector ID</label>
+                    <input ng-model="$ctrl.agent.icmConnectorId"
+                           placeholder="{{$ctrl.getIcmConnectorIdPlaceholder()}}"
+                           data-required-field="$ctrl.isIcmMandatory()"
+                           ng-disabled="$ctrl.disallowConfigureIcmConnectorId()">
+                </mee-text-field>
+                <mee-inline-error error-id="{{$ctrl.errorCategory}}.icm-connector"></mee-inline-error>
+            </div>
+        </div>
+
+        <div data-grid="col-12">
+            <div data-grid="col-6" ng-if="$ctrl.agent.id">
+                <h3 mee-heading="heading4" data-use-cms>Health</h3>
+                <p mee-paragraph data-use-cms>
+                    You can check health of this agent. If agent is modified, please save to ensure the changes are reflected on health page.
+                </p>
+                <p mee-paragraph>
+                    <a mee-hyperlink target="_blank" ui-sref="data-agents.manage.health({agentId: $ctrl.agent.id})" data-use-cms>Check health</a>
+                </p>
+            </div>
+        </div>
+
+        <div data-grid="col-12" ng-if="$ctrl.agent.connectionDetails">
+            <h3 mee-heading="heading4" data-use-cms>Connection details</h3>
+            <pcd-agent-connection-editor-pivot agent-id="$ctrl.agent.id"
+                                               connection-details-group="$ctrl.agent.connectionDetails"
+                                               agent-kind="{{$ctrl.agent.kind}}"
+                                               has-icm-connector-id="$ctrl.hasIcmConnectorIdOnTeamOrAgent()"></pcd-agent-connection-editor-pivot>
+        </div>
+
+        <div data-grid="col-12">
+            <div data-grid="col-6">
+                <h3 mee-heading="heading4" data-use-cms>Cloud Instances</h3>
+
+                <mee-alert ng-if="$ctrl.isCosmosAgent()" kind="use-glyph info">
+                    <alert-content data-use-cms>
+                        Agents with a connection detail's protocol set to Cosmos cannot modify the required cloud instances.
+                        To customize an agent's cloud instances please modify the connection detail to use a non-Cosmos protocol.
+                    </alert-content>
+                </mee-alert>
+
+                <mee-select ng-if="$ctrl.isCosmosAgent()"
+                            ng-disabled="true"
+                            data-required-field="true"
+                            ng-model="$ctrl.cosmosDeploymentLocationPickerModel.selectedId"
+                            menu-style="border">
+                    <label data-use-cms>Deployment location</label>
+                    <select>
+                        <option value="Public">Public</option>
+                    </select>
+                </mee-select>
+                
+                <h6 mee-heading="heading6" ng-if="!$ctrl.isCosmosAgent()" data-use-cms>Deployment Location<span style="color:red">*</span></h6>
+
+                <div data-grid="col-12">
+                    <mee-select ng-if="!$ctrl.isCosmosAgent()"
+                                data-required-field="true"
+                                data-grid="col-6"
+                                ng-change="$ctrl.onRegionChange()"
+                                ng-model="$ctrl.nonCosmosDeploymentLocationPickerModel.selectedId"
+                                ng-disabled="$ctrl.prodReadyEnabledForProdState()"
+                                menu-style="border">
+                        <label data-use-cms>Region</label>
+                        <select>
+                            <option ng-repeat="item in $ctrl.nonCosmosDeploymentLocationPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+                        </select>
+                    </mee-select>
+
+                    <mee-select ng-if="$ctrl.isResidencyRequired()"
+                                data-required-field="true"
+                                data-grid="col-6"
+                                ng-model="$ctrl.BoundaryLocationPickerModel.selectedId"
+                                ng-disabled="$ctrl.prodReadyEnabledForProdState()"
+                                data-error-id="{{$ctrl.errorCategory}}.data-boundary"
+                                menu-style="border">
+                        <label data-use-cms>Data Residency</label>
+                        <select>
+                            <option ng-repeat="item in $ctrl.BoundaryLocationPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+                        </select>
+                    </mee-select>
+                    <mee-inline-error error-id="{{$ctrl.errorCategory}}.data-boundary"></mee-inline-error>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <h6 mee-heading="heading6"  data-use-cms>Supported Clouds<span style="color:red">*</span></h6>
+                    <pcd-directory-resource-selector ng-if="!$ctrl.hideSupportedCloudsInput()"
+                                                    data-required-field="false"
+                                                    data-grid="col-12"
+                                                    data-error-id="{{$ctrl.errorCategory}}.supportedClouds"
+                                                    pcd-error-id="{{$ctrl.errorCategory}}.supportedClouds"
+                                                    pcd-added-resource-padding="true"
+                                                    pcd-resource-type="named-resource"
+                                                    pcd-selector-label="" data-use-cms
+                                                    pcd-placeholder="{{$ctrl.supportedCloudsPlaceHolder}}"
+                                                    ng-model="$ctrl.supportedCloudsModel"></pcd-directory-resource-selector>
+                    <mee-inline-error error-id="{{$ctrl.errorCategory}}.supported-clouds"></mee-inline-error>
+                </div>
+                <div ng-if="$ctrl.hideSupportedCloudsInput()">
+                    <h6 class="heading-6" mee-label data-use-cms>Supported clouds</h6>
+                    <div>
+                        <span class="view-label">
+                            {{ $ctrl.getSupportedCloudsAsLabel() }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <pcd-commit-request-button data-use-cms
+            pcd-button-label="Save"
+            pcd-error-id="{{$ctrl.errorCategory}}.save"
+            pcd-operation-name="agentEditorSave"
+            pcd-button-on-click-operation="$ctrl.saveClicked()">
+        </pcd-commit-request-button>
+    </section>
+</div>

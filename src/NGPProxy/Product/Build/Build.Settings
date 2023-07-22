@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" 
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ServiceName>MemberServices</ServiceName>
+    <MemberServicesAssemblyRoot>Microsoft.Membership.MemberServices</MemberServicesAssemblyRoot>
+    <MemberServiceAreaPath>MEE\MemberServices</MemberServiceAreaPath>
+    <MemberServicesRoot>$(EnlistmentRoot)\Product</MemberServicesRoot>
+
+    <!-- Force x64! -->
+    <Prefer32Bit>false</Prefer32Bit>
+    <Platform>x64</Platform>
+    <PlatformTarget>x64</PlatformTarget>
+
+    <AssemblyClsCompliant>false</AssemblyClsCompliant>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MemberServicesRoot)\Build\InternalKey.snk</AssemblyOriginatorKeyFile>
+    <EnforceNuGetPackageVersionConsistency>true</EnforceNuGetPackageVersionConsistency>
+    <OutputPath>$(EnlistmentRoot)\Bin\$(Configuration)\$(Platform)\$(MSBuildProjectName)\</OutputPath>
+    <OutputPath Condition="'$(ComponentOutputSubPath)' != ''">$(EnlistmentRoot)\Bin\$(Configuration)\$(Platform)\$(ComponentOutputSubPath)\$(MSBuildProjectName)\</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <StyleCopEnabled>false</StyleCopEnabled>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+</Project>

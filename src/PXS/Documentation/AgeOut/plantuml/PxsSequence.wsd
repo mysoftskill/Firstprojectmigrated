@@ -1,0 +1,41 @@
+@startuml PxsSequence
+
+participant AQS
+participant PXS #SeaGreen
+participant Xbox
+participant MSA
+participant PCF #SeaGreen
+
+AQS -> PXS : Get Account Close Events
+
+PXS -> Xbox : Request Xuids using Batch API
+Xbox --> PXS : Return collection of Xuids
+
+loop for each event
+    PXS -> PXS : Parse event for Cid, Pre-Verifier, Close Reason
+    PXS -> PXS : Calculate Anid and Opid
+
+    alt Close Reason == Age Out
+        PXS -> PXS : Parse Last Login and Suspended bit
+        PXS -> PXS : Filter out suspended accounts
+    end
+
+    PXS -> MSA : Get Verifier using Pre-Verifier
+    MSA --> PXS : Return Verifier
+end
+
+PXS -> PCF : Post Commands to PCF
+PCF --> PXS : Ack Commands Posted
+
+loop for each event
+    PXS --> AQS : Complete Event
+end
+
+legend
+|= |= Type |
+|<back:SeaGreen>   </back>| Update Required |
+|<back:SkyBlue>   </back>| New |
+|<back:LightYellow>   </back>| No Change |
+endlegend
+
+@enduml

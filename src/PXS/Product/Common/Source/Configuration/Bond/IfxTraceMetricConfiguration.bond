@@ -1,0 +1,14 @@
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IIfxEnvironment
+{
+    1 : required string MonitoringAgentSessionName;
+    2 : required CloudInstanceType CloudInstance;
+    3 : required string MonitoringAccount;
+    4 : required string ServiceName;
+    5 : optional string Cloud;
+    6 : required string Datacenter;
+    7 : required string Role;
+    8 : required string RoleInstance;
+    9 : optional string LocalTraceLogDirectory;
+}

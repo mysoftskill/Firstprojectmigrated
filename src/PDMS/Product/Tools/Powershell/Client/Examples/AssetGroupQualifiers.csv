@@ -1,0 +1,3 @@
+AssetGroupQualifier
+AssetType=Kusto;ClusterName=bar;DatabaseName=foo
+AssetType=Kusto;ClusterName=bar1;DatabaseName=foo1

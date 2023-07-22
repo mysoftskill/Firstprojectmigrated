@@ -1,0 +1,18 @@
+// Non-Cosmos Contribution Factor Query by AssetGroup
+let reportdate = toscalar(DataOwnersV2 | summarize max(SQLizerStreamDateId)); // Use latest snapshot of meta-data
+let signalStartDate = todatetime("2019-12-12"); // Replace these with updated dates
+let signalEndDate = todatetime("2019-12-12");
+let operationSummary = NonCosmosOperationCountSummaryByAssetGroup_SD
+    | where SQLizerStreamDateId >= signalStartDate and SQLizerStreamDateId <= signalEndDate
+    | summarize ExpectedRequestOperationCount=sum(ExpectedRequestOperationCount), CompletedRequestOperationCount=sum(CompletedRequestOperationCount) by DataOwnerAssetGroupId
+    | join kind=leftouter  (AssetGroupsExtractedV2 | where SQLizerStreamDateId == reportdate) on $left.DataOwnerAssetGroupId == $right.AssetGroupId
+    | project DataOwnerAssetGroupId, ExpectedRequestOperationCount, CompletedRequestOperationCount, OwnerId, DeleteAgentId, HasDeleteAgent=DeleteAgentId != "", HasOwner=0
+    | join kind=leftouter (DataOwnersV2 | where SQLizerStreamDateId == reportdate) on $left.OwnerId == $right.DataOwnerId
+    | join kind=leftouter (AgentOwnerV2 | where SQLizerStreamDateId == reportdate) on $left.DeleteAgentId == $right.AgentId
+    | project DataOwnerAssetGroupId, ExpectedRequestOperationCount, CompletedRequestOperationCount, OwnerId, OwnerName, ServiceGroupId, DivisionName, OrganizationName , ServiceGroupName , TeamGroupName , ServiceTreeLevel, ServiceName, DeleteAgentId, DeleteAgentName=AgentName, HasDeleteAgent=DeleteAgentId != "", HasOwner=0;
+let totalExpectedOperationCount = toscalar(operationSummary | summarize sum(ExpectedRequestOperationCount));
+operationSummary
+| extend PendingCount = ExpectedRequestOperationCount - CompletedRequestOperationCount, TotalExpectedCompanyOperations=totalExpectedOperationCount
+| extend PercentagePendingOfCompanyWideOperations = todouble((PendingCount * 1000000000) / TotalExpectedCompanyOperations) / 10000000
+| project-away TotalExpectedCompanyOperations
+| order by PercentagePendingOfCompanyWideOperations desc

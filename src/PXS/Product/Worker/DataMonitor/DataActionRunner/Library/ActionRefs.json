@@ -1,0 +1,975 @@
+﻿[
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsExportSev3",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 3,
+          "CommandAge": 10,
+          "LockGroupName": "ExportIncidentSev3",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "ExportIncomplete",
+          "CommandType": "Export",
+          "IncidentKeywords": "NGPExport;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "10d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "05d315e9-5514-4b42-bae8-ee7f299209bd",
+                "Expires": null
+              },
+              {
+                "AgentId": "06013e5b-9295-4afd-968b-f74415d4dfb7",
+                "Expires": null
+              },
+              {
+                "AgentId": "0974a0e7-e479-42a5-87f8-b7cf64543045",
+                "Expires": null
+              },
+              {
+                "AgentId": "13406d06-96bf-47b0-9d70-4f1b7eaf84ed",
+                "Expires": null
+              },
+              {
+                "AgentId": "20b75cfc-0875-4ebe-98e4-71e814f396ca",
+                "Expires": null
+              },
+              {
+                "AgentId": "23728d96-e32b-4401-8c12-93b5a3a975c7",
+                "Expires": null
+              },
+              {
+                "AgentId": "2ca4f8cc-6a57-4122-ba8d-15626bc12dea",
+                "Expires": null
+              },
+              {
+                "AgentId": "3e57b3e8-7592-4b46-912c-7a1fe5d9dd55",
+                "Expires": null
+              },
+              {
+                "AgentId": "54a7a20c-3218-45fc-83eb-01d36a0f1d1c",
+                "Expires": null
+              },
+              {
+                "AgentId": "71606698-e519-499d-96e8-f0ba4fd723bf",
+                "Expires": null
+              },
+              {
+                "AgentId": "82ff94e7-d5f6-45d9-8271-d5f4123822f0",
+                "Expires": null
+              },
+              {
+                "AgentId": "dc4a1d58-7cfb-4246-8b2f-47d85eb1a039",
+                "Expires": null
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              },
+              {
+                "AgentId": "fe5c5513-764d-42d8-9605-88cec1d0adbd",
+                "Expires": null
+              },
+              {
+                "AgentId": "d9873979-56d9-4639-84f9-c2e35c2101b8",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "745fcdad-b6e4-426a-a1c4-fe49baeb02d6",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+                "Expires": null
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "ExportIncidentSev3Body",
+      "KustoQuery": "KustoQueryExport"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsExportSev2",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 2,
+          "CommandAge": 14,
+          "LockGroupName": "ExportIncidentSev2",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "ExportIncomplete",
+          "CommandType": "Export",
+          "IncidentKeywords": "NGPExport;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "14d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "05d315e9-5514-4b42-bae8-ee7f299209bd",
+                "Expires": null
+              },
+              {
+                "AgentId": "06013e5b-9295-4afd-968b-f74415d4dfb7",
+                "Expires": null
+              },
+              {
+                "AgentId": "0974a0e7-e479-42a5-87f8-b7cf64543045",
+                "Expires": null
+              },
+              {
+                "AgentId": "13406d06-96bf-47b0-9d70-4f1b7eaf84ed",
+                "Expires": null
+              },
+              {
+                "AgentId": "20b75cfc-0875-4ebe-98e4-71e814f396ca",
+                "Expires": null
+              },
+              {
+                "AgentId": "23728d96-e32b-4401-8c12-93b5a3a975c7",
+                "Expires": null
+              },
+              {
+                "AgentId": "2ca4f8cc-6a57-4122-ba8d-15626bc12dea",
+                "Expires": null
+              },
+              {
+                "AgentId": "3e57b3e8-7592-4b46-912c-7a1fe5d9dd55",
+                "Expires": null
+              },
+              {
+                "AgentId": "54a7a20c-3218-45fc-83eb-01d36a0f1d1c",
+                "Expires": null
+              },
+              {
+                "AgentId": "71606698-e519-499d-96e8-f0ba4fd723bf",
+                "Expires": null
+              },
+              {
+                "AgentId": "82ff94e7-d5f6-45d9-8271-d5f4123822f0",
+                "Expires": null
+              },
+              {
+                "AgentId": "dc4a1d58-7cfb-4246-8b2f-47d85eb1a039",
+                "Expires": null
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              },
+              {
+                "AgentId": "fe5c5513-764d-42d8-9605-88cec1d0adbd",
+                "Expires": null
+              },
+              {
+                "AgentId": "d9873979-56d9-4639-84f9-c2e35c2101b8",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "745fcdad-b6e4-426a-a1c4-fe49baeb02d6",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+                "Expires": null
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "ExportIncidentSev2Body",
+      "KustoQuery": "KustoQueryExport"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsPCFDeleteSev4",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 4,
+          "CommandAge": 1,
+          "LockGroupName": "PCFDeleteIncidentSev4",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "DeleteIncomplete",
+          "CommandType": "Delete",
+          "IncidentKeywords": "NGPDelete;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "1d",
+            "ThresholdRateComplete": 0.90,
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "2cabbb18-acdd-4438-882d-58f23f8e5a40",
+                "Expires": null
+              },
+              {
+                "AgentId": "5b14db11-3097-46e0-b283-b6d1c857a5c9",
+                "Expires": null
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              },
+              {
+                "AgentId": "1957b372-a107-4e50-88e4-f5252f9fa409",
+                "Expires": null
+              },
+              {
+                "AgentId": "d9873979-56d9-4639-84f9-c2e35c2101b8",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "745fcdad-b6e4-426a-a1c4-fe49baeb02d6",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "3c57d3c8-105f-4135-af46-18ff92cba044",
+                "Expires": "2019-12-31"
+              },
+              {
+                "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "7fbd5963-93e9-454a-8feb-e44ad75b2ce7",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "c4bd3e7c-9f2e-438f-a910-ae60e0be1c4e",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              },
+              {
+                "AgentId": "3424d8de-72e3-407f-b422-bd51129f32ed",
+                "Expires": "2021-04-17"
+              },
+              {
+                "AgentId": "d46b2015-0e2b-4786-bbdf-e05cff695bd4",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "bca15a2c-c40b-409f-92ea-8e6e8c25bb1a",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "a956151d-6f9c-4978-8b7a-bc1edac74fcd",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "95377e21-079a-4fe1-ae70-b2c33aba49c3",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "90bd1e98-9571-40c7-9479-fd262c9555f4",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "55a4dd15-5b3d-4dd9-ae2c-70685f48d0f7",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "1df6a13c-9274-46c0-bf25-49228c28145f",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "09c10b96-3dd1-47e6-bc1f-dbe541e3d30b",
+                "Expires": "2022-03-31"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "PCFDeleteIncidentBody",
+      "KustoQuery": "KustoQueryPCFDelete"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsPCFDeleteSev3",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 3,
+          "CommandAge": 9,
+          "LockGroupName": "PCFDeleteIncidentSev3",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "DeleteIncomplete",
+          "CommandType": "Delete",
+          "IncidentKeywords": "NGPDelete;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "9d",
+            "ThresholdRateComplete": 0.95,
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              },
+              {
+                "AgentId": "d9873979-56d9-4639-84f9-c2e35c2101b8",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "745fcdad-b6e4-426a-a1c4-fe49baeb02d6",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "3c57d3c8-105f-4135-af46-18ff92cba044",
+                "Expires": "2019-12-31"
+              },
+              {
+                "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "7fbd5963-93e9-454a-8feb-e44ad75b2ce7",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "c4bd3e7c-9f2e-438f-a910-ae60e0be1c4e",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              },
+              {
+                "AgentId": "3424d8de-72e3-407f-b422-bd51129f32ed",
+                "Expires": "2021-04-17"
+              },
+              {
+                "AgentId": "d46b2015-0e2b-4786-bbdf-e05cff695bd4",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "bca15a2c-c40b-409f-92ea-8e6e8c25bb1a",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "a956151d-6f9c-4978-8b7a-bc1edac74fcd",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "95377e21-079a-4fe1-ae70-b2c33aba49c3",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "90bd1e98-9571-40c7-9479-fd262c9555f4",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "55a4dd15-5b3d-4dd9-ae2c-70685f48d0f7",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "1df6a13c-9274-46c0-bf25-49228c28145f",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "09c10b96-3dd1-47e6-bc1f-dbe541e3d30b",
+                "Expires": "2022-03-31"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "PCFDeleteIncidentBody",
+      "KustoQuery": "KustoQueryPCFDelete"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsPCFDeleteSev2",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 2,
+          "CommandAge": 14,
+          "LockGroupName": "PCFDeleteIncidentSev2",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "DeleteIncomplete",
+          "CommandType": "Delete",
+          "IncidentKeywords": "NGPDelete;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "14d",
+            "ThresholdRateComplete": 0.95,
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              },
+              {
+                "AgentId": "d9873979-56d9-4639-84f9-c2e35c2101b8",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "745fcdad-b6e4-426a-a1c4-fe49baeb02d6",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "3c57d3c8-105f-4135-af46-18ff92cba044",
+                "Expires": "2019-12-31"
+              },
+              {
+                "AgentId": "7fbd5963-93e9-454a-8feb-e44ad75b2ce7",
+                "Expires": "9999-12-31"
+              },
+              {
+                "AgentId": "70ecb042-97b2-4af2-b5ad-f594ed4f4e53",
+                "Expires": null
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              },
+              {
+                "AgentId": "3424d8de-72e3-407f-b422-bd51129f32ed",
+                "Expires": "2021-04-17"
+              },
+              {
+                "AgentId": "d46b2015-0e2b-4786-bbdf-e05cff695bd4",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "bca15a2c-c40b-409f-92ea-8e6e8c25bb1a",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "a956151d-6f9c-4978-8b7a-bc1edac74fcd",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "95377e21-079a-4fe1-ae70-b2c33aba49c3",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "90bd1e98-9571-40c7-9479-fd262c9555f4",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "55a4dd15-5b3d-4dd9-ae2c-70685f48d0f7",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "1df6a13c-9274-46c0-bf25-49228c28145f",
+                "Expires": "2022-03-31"
+              },
+              {
+                "AgentId": "09c10b96-3dd1-47e6-bc1f-dbe541e3d30b",
+                "Expires": "2022-03-31"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "PCFDeleteIncidentBody",
+      "KustoQuery": "KustoQueryPCFDelete"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsCosmosDeleteSev2",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 2,
+          "CommandAge": 30,
+          "LockGroupName": "CosmosDeleteIncidentSev2",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "CosmosDeleteIncomplete",
+          "CommandType": "Cosmos Delete",
+          "IncidentKeywords": "NGPDelete;NGPLiveSite;Cosmos",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "30d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "b79dbeb3-b5e7-4967-87f7-1dd678c4feb0",
+                "Expires": "2019-05-18"
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              },
+              {
+                "AgentId": "d9873979-56d9-4639-84f9-c2e35c2101b8",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "745fcdad-b6e4-426a-a1c4-fe49baeb02d6",
+                "Expires": "2019-08-14"
+              },
+              {
+                "AgentId": "c814ff83-c132-4f80-9ff3-d7fa05a821f7",
+                "Expires": null
+              },
+              {
+                "AgentId": "3424d8de-72e3-407f-b422-bd51129f32ed",
+                "Expires": "2021-04-17"
+              },
+              {
+                "AgentId": "3ff5fd5f-8d79-47de-a7f9-7d34296de6cd",
+                "Expires": "2020-12-15"
+              },
+              {
+                "AgentId": "df22b769-b5da-493a-8b05-27d307fc722b",
+                "Expires": "2022-03-07"
+              },
+              {
+                "AgentId": "36ee4db5-6d84-403e-a906-36c0e77041c6",
+                "Expires": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "CosmosDeleteIncidentBody",
+      "KustoQuery": "KustoQueryCosmosDelete"
+    }
+  },
+  {
+    "FilterTags": [ "PPE" ],
+
+    "Id": "QueryKustoAndFileIncidentsPPE",
+    "Tag": "QueryKustoAndFileIncidentsPPE",
+
+    "IsSimulation": true,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 4,
+          "CommandAge": 1,
+          "LockGroupName": "PPETestIncident",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "PPETestIncident",
+          "CommandType": "PPETest",
+          "IncidentKeywords": "PPETestIncident",
+          "TitlePrefix": "PPETEST: ",
+
+          "KustoParameters": {
+            "Age": "1d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              },
+              {
+                "AgentId": "efde18ca-7535-4e00-8cf4-fa343e3e7b31",
+                "Expires": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "IncidentBodyPPE",
+      "KustoQuery": "KustoQueryIncidentsPPE"
+    }
+  },
+  {
+    "FilterTags": [ "LOCAL", "PROD-DISABLE" ],
+
+    "Id": "QueryKustoAndSendGCEmail",
+    "Tag": "QueryKustoAndSendGCEmail",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "LockGroupName": "QueryKustoAndSendGCEmail",
+          "RunFrequency": "6.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "IncidentMinAge": "1d",
+            "IncidentMaxAge": "35d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "GCEmailBody",
+      "KustoQuery": "KustoQueryGCEmail"
+    }
+  },
+  {
+    "FilterTags": [ "PPE" ],
+
+    "Id": "QueryKustoAndSendGCEmailPPE",
+    "Tag": "QueryKustoAndSendGCEmailPPE",
+
+    "IsSimulation": true,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "LockGroupName": "QueryKustoAndSendGCEmailPPE",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "TitlePrefix": "PPETEST: ",
+          "KustoParameters": {
+            "IncidentMinAge": "1d",
+            "IncidentMaxAge": "35d",
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "EmailBody": "GCEmailBodyPPE",
+      "KustoQuery": "KustoQueryGCEmailPPE"
+    }
+  },
+  {
+    "FilterTags": [ "PROD" ],
+
+    "Id": "ProdMalwareFoundInMSAExports",
+    "Tag": "ProdQueryKustoAndFileIncidentsForAgentsExportingMalware",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 3,
+          "LockGroupName": "PRODMalwareFoundInMSAExports",
+          "LockName": "PRODMalwareFoundInMSAExports",
+          "RunFrequency": "0.1:00:00",
+          "LoopMaxRuntime": "01:00:00",
+          "TitlePrefix": "PROD: ",
+          "KustoParameters": {
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "IncidentSev3Body_MalwareFoundInExports",
+      "EmailBody": "IncidentSev3Body_MalwareFoundInExports"
+    }
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Id": "PpeMalwareFoundInMSAExports",
+    "Tag": "PpeQueryKustoAndFileIncidentsForAgentsExportingMalware",
+
+    "IsSimulation": true,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 3,
+          "LockGroupName": "PPEMalwareFoundInMSAExports",
+          "LockName": "PPEMalwareFoundInMSAExports",
+          "RunFrequency": "0.1:00:00",
+          "LoopMaxRuntime": "01:00:00",
+          "TitlePrefix": "PPETEST: ",
+          "KustoParameters": {
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "IncidentSev3Body_MalwareFoundInExports",
+      "EmailBody": "IncidentSev3Body_MalwareFoundInExports"
+    }
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Id": "KustoQueryAuditPipelineAlert",
+    "Tag": "RunKustoQueryAuditPipelineAlert",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 4,
+          "LockGroupName": "KustoQueryAuditPipelineAlert",
+          "LockName": "KustoQueryAuditPipelineAlert",
+          "RunFrequency": "1.00:00:00", // daily
+          "LoopMaxRuntime": "01:00:00",
+          "TitlePrefix": "PPETEST: ",
+          "ThresholdPercent": "50", // 100 * ThresholdValue
+          "KustoParameters": {
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ],
+            "ThresholdValue": "0.50"
+          }
+        }
+      }
+    },
+    "Templates": {
+      "KustoQuery": "KustoQueryAuditPipelineAlert",
+      "IncidentBody": "IncidentAuditPipelineAlertBody",
+      "EmailBody": "IncidentAuditPipelineAlertBody"
+    }
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE" ],
+
+    "Id": "RunKustoQueriesAndSendStatus",
+    "Tag": "RunKustoQueriesAndSendStatusEmail",
+
+    "IsSimulation": true,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 3,
+          "LockGroupName": "RunKustoQueriesAndSendStatusEmail",
+          "RunFrequency": "1.00:00:00", // daily
+          "LoopMaxRuntime": "01:00:00",
+          "TitlePrefix": "PPETEST: ",
+          "KustoParameters": {
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "EmailBody": "AllOfficialKustoQueryResultsBody",
+      "KustoQuery": "AllOfficialKustoQueryResults"
+    }
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsPCFV2BatchDeleteSev2",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 2,
+          "CommandAge": 30,
+          "LockGroupName": "PCFV2BatchDeleteIncidentSev2",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "PCFV2DeleteBatchIncomplete",
+          "CommandType": "PCFV2 Delete",
+          "IncidentKeywords": "NGPDelete;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "30d",
+            "ThresholdRateComplete": 0.95,
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "null"
+              },
+              {
+                "AgentId": "5a001046-0c59-4304-9f0a-df54007f942c",
+                "Expires": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "PCFV2BatchDeleteIncidentBody",
+      "KustoQuery": "KustoQueryPCFV2BatchDelete"
+    }
+  },
+  {
+    "FilterTags": [ "LOCALTEST", "PPE", "PROD" ],
+
+    "Id": "QueryKustoAndFileIncidentsPCFV2ContinuousDeleteSev2",
+    "Tag": "QueryKustoAndFileIncidents",
+
+    "IsSimulation": false,
+
+    "MaxRuntime": "1:00:00",
+
+    "ArgTransform": {
+      "RefConsts": {
+        "Const": {
+          "Severity": 2,
+          "CommandAge": 30,
+          "LockGroupName": "PCFV2ContinuousDeleteIncidentSev2",
+          "RunFrequency": "0.23:00:00",
+          "LoopMaxRuntime": "00:30:00",
+          "EventName": "PCFV2ContinuousBatchIncomplete",
+          "CommandType": "PCFV2 Continuous",
+          "IncidentKeywords": "NGPDelete;NGPLiveSite",
+          "TitlePrefix": "",
+          "KustoParameters": {
+            "Age": "30d",
+            "ThresholdRateComplete": 0.95,
+            "ExcludedAgentsJson": [
+              {
+                "AgentId": "00000000-0000-0000-0000-000000000000",
+                "Expires": "2000-01-01"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Templates": {
+      "IncidentBody": "PCFV2ContinuousDeleteIncidentBody",
+      "KustoQuery": "KustoQueryPCFV2ContinuousDelete"
+    }
+  }
+]

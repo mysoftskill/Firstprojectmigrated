@@ -1,0 +1,9 @@
+{
+  "providerType": "ServiceTree",
+  "identifier": "eda3dc03-5654-43a9-a6fa-468706c89c97",
+  "description": "ADG Compliance Services",
+  "ownerGroupObjectId": "c5918485-4f3a-405e-9a8b-e569525d1a89",
+  "ownerGroupContactEmail": "ngpcieng@microsoft.com",
+  "policyCheckEnabled": "true",
+  "contentVersion": "1.0.0.0"
+}

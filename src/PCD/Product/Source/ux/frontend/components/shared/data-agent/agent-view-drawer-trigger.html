@@ -1,0 +1,9 @@
+<pcd-page-context-drawer ng-if="$ctrl.agent">
+    <pcd-drawer-trigger>
+        <span class="view-label">{{$ctrl.drawerTriggerLabel}}</span>
+        <span>{{$ctrl.agent.name}}</span>
+    </pcd-drawer-trigger>
+    <pcd-drawer-content>
+        <pcd-agent-view pcd-agent="$ctrl.agent" pcd-hide-title="true"></pcd-agent-view>
+    </pcd-drawer-content>
+</pcd-page-context-drawer>

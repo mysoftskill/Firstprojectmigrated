@@ -1,0 +1,293 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentEnvironment": {
+      "type": "string",
+      "allowedValues": [
+        "ONEBOX",
+        "CI1",
+        "CI2",
+        "PPE",
+        "INT",
+        "PROD"
+      ],
+      "metadata": {
+        "description": "Deployment environment"
+      }
+    },
+    "azureRegion": {
+      "type": "string",
+      "allowedValues": [
+        "EastUS",
+        "EastUS2",
+        "SouthCentralUS",
+        "WestUS2",
+        "WestUS",
+        "WestCentralUS"
+      ],
+      "metadata": {
+        "description": "Azure region"
+      }
+    },
+    "appName": {
+      "type": "string",
+      "defaultValue": "[concat('fnapp', uniqueString(resourceGroup().id))]",
+      "metadata": {
+        "description": "The name of the function app."
+      }
+    },
+    "msdeployPackageUrl": {
+      "type": "securestring"
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of storage account for the function app"
+      }
+    },
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS"
+      ],
+      "metadata": {
+        "description": "Storage Account type"
+      }
+    },
+    "storageAccountKind": {
+      "type": "string",
+      "defaultValue": "StorageV2",
+      "allowedValues": [
+        "Storage",
+        "StorageV2"
+      ],
+      "metadata": {
+        "description": "Storage Account kind"
+      }
+    },
+    "runtime": {
+      "type": "string",
+      "defaultValue": "dotnet",
+      "allowedValues": [
+        "node",
+        "dotnet",
+        "java"
+      ],
+      "metadata": {
+        "description": "The language worker runtime to load in the function app."
+      }
+    },
+    "virtualNetwork_name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the virtual network"
+      }
+    },
+    "pafConfigEndPoint": {
+      "type": "string",
+      "metadata": {
+        "description": "App config endpoint."
+      }
+    },
+    "genevaMonitoringTenant": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_TENANT environment variable "
+      },
+      "allowedValues": [
+        "ADGCS-CI1-WESTUS2",
+        "ADGCS-CI2-WESTUS2",
+        "ADGCS-INT-WESTUS2",
+        "ADGCS-PPE-WESTUS2",
+        "ADGCS-PPE-SCUS",
+        "ADGCS-USWC",
+        "ADGCS-SCUS"
+      ]
+    },
+    "genevaMonitoringRole": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_ROLE environment variable"
+      }
+    },
+    "genevaMetricPrefixName": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the METRIC_PREFIX_NAME environment variable"
+      }
+    },
+    "genevaMetricAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the METRIC_ACCOUNT environment variable "
+      },
+      "allowedValues": [
+        "ADGCS_NonProdHotPath",
+        "adgcsprod"
+      ]
+    }
+  },
+    "variables": {
+        "functionAppName": "[parameters('appName')]",
+        "functionAppResourceGroup": "[resourceGroup().name]",
+        "functionAppLocation": "[resourceGroup().location]",
+        "hostingPlanName": "[parameters('appName')]",
+        "functionWorkerRuntime": "[parameters('runtime')]",
+        "networkSecurityGroupName": "[concat(parameters('virtualNetwork_name'), '-nsg')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('networkSecurityGroupName')]",
+            "location": "[variables('functionAppLocation')]",
+            "tags": {
+                "SkipNRMSSAW": "Hypernet",
+                "SkipNRMSDatabricks": "Hypernet",
+                "SkipNRMSCorp": "Hypernet",
+                "NRMSProd102": "Hypernet",
+                "SkipNRMSVNet": "Hypernet"
+            },
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('virtualNetwork_name')]",
+            "location": "[variables('functionAppLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "delegations": [
+                                {
+                                    "name": "delegation",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Web/serverfarms"
+                                    }
+                                }
+                            ],
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+                            },
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('hostingPlanName')]",
+            "location": "[variables('functionAppLocation')]",
+            "sku": {
+                "name": "EP1",
+                "tier": "ElasticPremium"
+            },
+            "properties": {
+                "name": "[variables('hostingPlanName')]",
+                "computeMode": "Dynamic"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[variables('functionAppLocation')]",
+            "properties": {"allowBlobPublicAccess": false},
+            "sku": {
+                "name": "[parameters('storageAccountType')]"
+            },
+            "kind": "[parameters('storageAccountKind')]"
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('functionAppName')]",
+            "location": "[variables('functionAppLocation')]",
+            "kind": "functionapp",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "siteConfig": {
+                    "use32BitWorkerProcess": false
+                }
+            },
+            "resources": [
+                {
+                    "name": "appsettings",
+                    "type": "config",
+                    "apiVersion": "2020-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]",
+                        "[concat('Microsoft.Web/Sites/', variables('functionAppName'), '/Extensions/ZipDeploy')]"
+                    ],
+                  "properties": {
+                    "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value)]",
+                    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value)]",
+                    "WEBSITE_CONTENTSHARE": "[toLower(variables('functionAppName'))]",
+                    "FUNCTIONS_EXTENSION_VERSION": "~3",
+                    "WEBSITE_NODE_DEFAULT_VERSION": "~10",
+                    "FUNCTIONS_WORKER_RUNTIME": "[variables('functionWorkerRuntime')]",
+                    "WEBSITE_ENABLE_SYNC_UPDATE_SITE": "true",
+                    "App_Name": "[variables('functionAppName')]",
+                    "AzureRegion": "[parameters('azureRegion')]",
+                    "DeploymentEnvironment": "[parameters('deploymentEnvironment')]",
+                    "MONITORING_TENANT": "[parameters('genevaMonitoringTenant')]",
+                    "MONITORING_ROLE": "[parameters('genevaMonitoringRole')]",
+                    "METRIC_PREFIX_NAME": "[parameters('genevaMetricPrefixName')]",
+                    "METRIC_ACCOUNT": "[parameters('genevaMetricAccount')]",
+                    "PAF_APP_CONFIG_ENDPOINT": "[parameters('pafConfigEndPoint')]"
+                  }
+                },
+                {
+                    "name": "virtualNetwork",
+                    "type": "config",
+                    "apiVersion": "2018-02-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork_name'))]"
+                    ],
+                    "location": "[variables('functionAppLocation')]",
+                    "properties": {
+                        "subnetResourceid": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork_name'), 'default')]",
+                        "swiftSupported": true
+                    }
+                },
+                {
+                    "name": "ZipDeploy",
+                    "type": "extensions",
+                    "apiVersion": "2020-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+                    ],
+                    "properties": {
+                        "packageUri": "[parameters('msdeployPackageUrl')]",
+                        "SCM_DO_BUILD_DURING_DEPLOYMENT": "true"
+                    }
+                }
+            ]
+        }
+    ]
+}

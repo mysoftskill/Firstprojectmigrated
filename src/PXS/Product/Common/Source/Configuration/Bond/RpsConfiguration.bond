@@ -1,0 +1,28 @@
+﻿import "CommonConfiguration.bond" 
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+enum RpsEnvironment
+{
+	Int,
+	Prod
+};
+
+[Multiplicity("Singleton")]
+struct IRpsConfiguration
+{
+	[UniquenessRule("Invariant")]
+	1 : required RpsEnvironment Environment;
+
+	[UniquenessRule("Invariant")]
+	2 : required string SiteId;
+
+	[UniquenessRule("Invariant")]
+	3 : required string SiteName;
+
+	[UniquenessRule("Invariant")]
+	4 : required MUri SiteUri;
+
+	[UniquenessRule("Invariant")]
+	5 : required string AuthPolicy;
+};

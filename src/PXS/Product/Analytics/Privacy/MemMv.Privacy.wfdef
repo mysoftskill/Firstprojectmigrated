@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflows xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="..\Schemas\WFDEFSchema.xsd">
+  <Workflow Name="MemMV.Privacy" Enabled="true"
+            Email="meems@microsoft.com"
+            RecurrenceUnit="2"
+            RecurrenceAmount="1"
+            Start="2016-04-19T10:00:00"
+            Schedule="false">
+    <ConfigBases>
+    </ConfigBases>
+    <Parameters>
+      <Parameter Name="__vc" Value="https://cosmos11.osdinfra.net/cosmos/asimov.partner.accountportal/"/>
+      <Parameter Name="_trackerFolder" Value="/shares/asimov.prod.data/Tracker/MemberViewService"/>
+      <Parameter Name="_recurrence" Value="HourlyTracker"/>
+      <Parameter Name="_startDate" Value="2016-04-19T10:00"/>
+      <Parameter Name="_useLittleDelta" Value="true"/>
+      <Parameter Name="_maxJobs" Value="3"/>
+      <Parameter Name="_priority" Value="1010"/>
+      <Parameter Name="_scopePath" Value="$(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov"/>
+      <Parameter Name="MemberViewServiceStagingPath" Value="/shares/asimov.prod.data/PublicPartner/Staging/MemberViewService"/>
+      <Parameter Name="MemberViewServiceProcessedPath" Value="/shares/asimov.prod.data/PublicPartner/Processed/MemberViewService"/>
+      <Parameter Name="OutputStreamExpiry" Value="30.00:00"/>
+    </Parameters>
+    <Activities>
+      <Activity Name="PrivacyJob"
+                Class="Microsoft.Xflow.Activities.Scope.RecurrentScopeActivityV3"
+                Config="Scripts\PrivacyDeleteRequests.script"
+                CredentialName="ScopeJob.Asimov.Partner.Public">
+      </Activity>
+    </Activities>
+  </Workflow>
+</Workflows>

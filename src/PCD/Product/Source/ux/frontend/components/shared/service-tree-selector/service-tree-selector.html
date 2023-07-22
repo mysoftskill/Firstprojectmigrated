@@ -1,0 +1,51 @@
+<div class="search-area service-tree-selector-div" i9n-service-tree-selector>
+    <mee-text-action mee-text-action-kind="search"
+                     mee-display-type="flex"
+                     mee-auto-suggest="true"
+                     mee-auto-suggest-scrollable="true"
+                     mee-auto-suggest-act-on-select="true"
+                     mee-perform-action="$ctrl.getTeam($ctrl.textBoxContent)"
+                     mee-debounce-timeout="$ctrl.debounceTimeoutMsec"
+                     mee-get-suggestions="$ctrl.getSuggestion($ctrl.textBoxContent)"
+                     mee-no-suggestion-label="{{$ctrl.searchNoSuggestionLabel}}"
+                     mee-auto-focus>
+        <label>{{$ctrl.searchDisplayLabel}}</label>
+        <input mee-progress-disabled="ownerSave"
+               placeholder="{{$ctrl.searchPlaceholderLabel}}"
+               ng-model="$ctrl.textBoxContent">
+        <button disabled="disabled" aria-label="$ctrl.searchAriaLabel"></button>
+    </mee-text-action>
+    <mee-progress-ants-mwf class="search-progress"
+                           mee-progress-visible="ownerSearch"
+                           mee-progress-hide="getTeam"
+                           kind="local"></mee-progress-ants-mwf>
+</div>
+
+<mee-progress-view watch-operation="getTeam">
+    <inert-view></inert-view>
+
+    <inprogress-view>
+        <pcd-default-progress-spinner></pcd-default-progress-spinner>
+    </inprogress-view>
+
+    <failed-view>
+        <p mee-paragraph data-use-cms>
+            Failed
+        </p>
+    </failed-view>
+
+    <finished-view>
+        <div ng-if="!$ctrl.service">
+            <p mee-paragraph data-use-cms>
+                Service Tree entity not found.
+            </p>
+            <p mee-paragraph data-use-cms>
+                Please ensure your selection reflects a valid Service Tree entity and that changes have
+                not been made within the last 24 hours (to ensure propagation to PCD).
+            </p>
+        </div>
+        <div ng-if="$ctrl.service">
+            <pcd-service-tree-summary pcd-service="$ctrl.service"></pcd-service-tree-summary>
+        </div>
+    </finished-view>
+</mee-progress-view>

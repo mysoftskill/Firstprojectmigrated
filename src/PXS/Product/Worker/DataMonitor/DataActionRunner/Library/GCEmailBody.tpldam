@@ -1,0 +1,58 @@
+﻿<div>
+  <p>
+    Thank you for your continued support of the NextGen Privacy initiative. You are receiving this email as there are agents within your organizations 
+    that have not yet completed the export and/or delete data subject requests (DSRs) and will soon to miss the 30 day SLA for delete and 21/29 day window for export. 
+    The table below lists the active Sev2 IcM incidents info for each of the identified agents.
+  </p>
+
+  <p>
+    <b>Action items:</b>
+    <ul>
+      <li>Engage right owners within your organization for each of these incidents who will need to:</li>
+      <li>
+        <ul>
+          <li>Follow the guidance here to route IcM Tickets:  <a href="https://aka.ms/ngpagenticm">https://aka.ms/ngpagenticm</a></li>
+          <li>
+            Acknowledge the IcM Ticket and follow the debugging instructions – Teams can reach out to 
+            <a href="mailto:ngpswat@microsoft.com">NGP Common Infra SWAT</a> 
+            if additional assistance is required.
+          </li>
+        </ul>
+        <li>Additional details can be obtained via NGP Data Agent Incident report at <a href="https://aka.ms/ngpincidents">https://aka.ms/ngpincidents</a>.</li>
+      </li>
+    </ul>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <td><b>General Contractor</b></td>
+        <td><b>AgentName</b></td>
+        <td><b>AgentId</b></td>
+        <td><b>Incident IDs</b></td>
+        <td><b>Contacts</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      [[<foreach sel:$.EmailContents foreach>]]
+        <tr>
+          <td>[[<var s:$.GCEmail var>]]</td>
+          <td>[[<var s:$.AgentName var>]]</td>
+          <td>[[<var s:$.AgentId var>]]</td>
+          <td>
+            [[<foreach sel:$.Incidents foreach>]]
+              <a href="https://portal.microsofticm.com/imp/v3/incidents/details/[[<var s:$ var>]]">[[<var s:$ var>]]</a><br/>
+            [[<foreachend>]]
+          </td>
+          <td>
+            <a href="mailto: [[<foreach sel:$.ContactList sep:';' foreach>]][[<var s:$.Email var>]][[<foreachend>]]">
+              [[<foreach sel:$.ContactList foreach>]]
+                [[<var s:$.Alias var>]]<br/>
+              [[<foreachend>]]
+            </a>
+          </td>
+        </tr>
+      [[<foreachend>]]
+    </tbody>
+  </table>
+</div>

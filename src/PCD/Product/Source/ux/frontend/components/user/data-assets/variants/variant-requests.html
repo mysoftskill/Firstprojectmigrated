@@ -1,0 +1,74 @@
+<pcd-default-page-layout>
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page provides a list of pending variant requests. Each request includes a list of the variants included within
+            the single request. If you wish to view more details on an individual request, click the <span class="view-label">Details</span>
+            link.
+        </p>
+        <p mee-paragraph data-use-cms>
+            You can <span class="view-label">Remove</span> these variant requests, if they were created by mistake or no longer needed.
+            Please know removing the request will affect <span class="view-label">ALL</span> data assets in the request.
+            We recommend looking at the request details before removing.
+        </p>
+        <p mee-paragraph data-use-cms>
+            For more information regarding the variant approval process and to find other variants that have already been approved, see the following:
+        </p>
+        <p mee-paragraph>
+            <a href="https://aka.ms/NGPVariant" mee-hyperlink target="_blank" data-use-cms>
+                Variant Process &amp; Status
+            </a>
+        </p>
+    </pcd-sidebar>
+    <pcd-content>
+            <mee-progress-view watch-operation="loadVariantRequests">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-asset-group-id="$ctrl.assetGroupId"></pcd-default-page-context>
+
+                <div class="c-table f-divided" data-grid="col-12">
+                    <table data-f-sort="false">
+                        <thead>
+                            <tr>
+                                <th data-use-cms>Variant request ID</th>
+                                <th data-use-cms>Variants requested</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="request in $ctrl.requests track by $index">
+                                <td>
+                                    {{request.id}}
+                                </td>
+                                <td class="variant-list">
+                                    <span ng-repeat="variant in request.requestedVariants track by $index">
+                                        {{variant.variantName}}
+                                    </span>
+                                </td>
+                                <td class="action-list">
+                                    <a ui-sref="data-assets.manage.variant-requests.details({ variantRequestId: request.id })"
+                                       data-glyph="info"
+                                       mee-action-trigger="align-margin"
+                                       data-use-cms>Details</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+</pcd-default-page-layout>

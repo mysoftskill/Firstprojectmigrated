@@ -1,0 +1,84 @@
+﻿import "Ms.bond"
+import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+
+namespace Microsoft.Membership.MemberServices.Common.Logging
+
+struct IncomingApiEvent : Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+    10: string ServerActivityId;
+
+    20: string ClientActivityId;
+
+    30: string Authentication;
+
+    60: string ErrorMessage;
+
+    70: string ErrorCode;
+
+    80: string MemberViewClientVersion;
+
+    90: string FlattenedErrorCode;
+
+    100: string Flights;
+
+    110: optional map<string, string> ExtraData;
+};
+
+struct OutgoingApiEvent : Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest>
+{
+    10: string ServerActivityId;
+
+    20: string ClientActivityId;
+
+    40: string PartnerId;
+
+    50: string ErrorMessage;
+
+    60: uint32 AttemptCount;
+
+    70: optional map<string, string> RequestHeaders;
+
+    80: optional string ProtocolStatusCodePhrase;
+
+    90: optional map<string, string> ResponseHeaders;
+
+    100: optional string ResponseContent;
+
+    110: optional map<string, string> ExtraData;
+
+    120: optional string ExceptionTypeName;
+};
+
+[Description("Error maps to Azure Cosmos DB Error contract")]
+struct CosmosDbError
+{
+    1: optional string Code;
+
+    2: optional string Message;
+};
+
+struct CosmosDbCollectionInfo
+{
+    1: optional string CollectionUsagePercentage;
+
+    2 : optional int64 CollectionSizeQuota;
+
+    3 : optional int64 CollectionSizeUsage;
+}
+
+struct OutgoingCosmosDbEvent : OutgoingApiEvent
+{
+    [Description("Requst Charge (RU) is the cost unit for requests to Cosmos DB.")]
+    1 : optional double RequestCharge;
+
+    2 : optional string ActivityId;
+
+    3 : optional int32 QueryResultCount;
+
+    4 : optional CosmosDbCollectionInfo CollectionInfo;
+
+    5 : optional CosmosDbError CosmosDbError;
+};

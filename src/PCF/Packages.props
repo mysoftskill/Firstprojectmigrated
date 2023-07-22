@@ -1,0 +1,27 @@
+<Project>
+  <!--
+    Set all package versions here. 
+    Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+    Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+    Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+  <Import Project="..\Build\Directory.Build.props" />
+  <ItemGroup>
+    <PackageReference Update="Azure.Monitor.Query" Version="[1.1.0]" />
+    <PackageReference Update="Azure.Security.KeyVault.Certificates" Version="[4.2.0]" />
+    <PackageReference Update="BouncyCastle" Version="[1.8.9]" />
+    <PackageReference Update="Brotli.NET" Version="[1.0.19]" />
+    <PackageReference Update="Genconfig" Version="[1.0.2860]" />
+    <PackageReference Update="Microsoft.Azure.Management.DataLake.InternalAnalytics.Export" Version="[1.5.3-preview]" />
+    <PackageReference Update="Microsoft.Cosmos.ScopeSDK" Version="[1.202108301.1]" />
+    <PackageReference Update="Microsoft.SourceLink.AzureRepos.Git" Version="[1.1.1]"/>
+    <PackageReference Update="Ms.Security.Audit" Version="[4.0.18117.5]" />
+    <PackageReference Update="MSNRuntime" Version="[1.9.4821]" />
+    <PackageReference Update="UniversalStore.Security.Cryptography" Version="[1.7.2]" />
+    <PackageReference Update="CsvHelper" Version="[27.2.1]" />
+	<PackageReference Update="CacheManager.Core" Version="1.2.0"/>
+	<PackageReference Update="CacheManager.Microsoft.Extensions.Caching.Memory" Version="1.2.0"/>
+  </ItemGroup>
+</Project>

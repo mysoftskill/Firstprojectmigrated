@@ -1,0 +1,62 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>a86bae51-0b9c-4e1a-b988-5f3b42120080</ProjectGuid>
+    <OutputType>File</OutputType>
+    <AssemblyName>Algebra.xml</AssemblyName>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <Name>PuidMappingScopeScript</Name>
+    <RootNamespace>PuidMappingScopeScript</RootNamespace>
+    <VCSelectionInProjectProperty>&lt;Use Current VC in VC Selector&gt;</VCSelectionInProjectProperty>
+    <CosmosRuntimeVersion>Default</CosmosRuntimeVersion>
+    <ScopePath>%24(SCRIPT_DIR);%24(CLUSTER_ROOT);%24(SCOPE_DIR);%24(PROJECT_DIR)</ScopePath>
+    <InputStreamSearchPath>%24(PROJECT_DIR);%24(SCRIPT_DIR);%24(CLUSTER_ROOT)</InputStreamSearchPath>
+    <VertexDebugSolution>false</VertexDebugSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Script Include="DailyRollup.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>ENVNAME=(\"PROD\"),ENDDATE=(\"2018-06-23\")</ScopeOldParameters>
+      <ScopeClusterParameters>ENVNAME=(\"PROD\"),ENDDATE=(\"2018-06-24\")</ScopeClusterParameters>
+    </Script>
+    <Script Include="ExistingScope.script">
+      <RemoveUselessParameters>False</RemoveUselessParameters>
+      <ScopeOldParameters>ENVNAME=(\"PROD\")</ScopeOldParameters>
+      <ScopeClusterParameters>ENVNAME=(\"PROD\")</ScopeClusterParameters>
+    </Script>
+    <Script Include="Scope.script">
+      <RemoveUselessParameters>True</RemoveUselessParameters>
+      <ScopeOldParameters>TARGETDATE=(\"2018/06/23T00:00:00\"),WRITERCOUNT=(12),ENVNAME=(\"PROD\")</ScopeOldParameters>
+      <ScopeClusterParameters>TARGETDATE=(\"2018/09/14T00:00:00\"),WRITERCOUNT=(12),ENVNAME=(\"TEST\")</ScopeClusterParameters>
+    </Script>
+    <ScriptCode Include="DailyRollup.script.cs">
+      <DependentUpon>DailyRollup.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="ExistingScope.script.cs">
+      <DependentUpon>ExistingScope.script</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Scope.script.cs">
+      <DependentUpon>Scope.script</DependentUpon>
+    </ScriptCode>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PuidMappingView.module">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="PuidMappingViewV2.module">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(AppData)\Microsoft\ScopeStudio\MsBuild\1.0\Scope.targets" />
+</Project>

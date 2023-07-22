@@ -1,0 +1,98 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+       <p mee-paragraph data-use-cms>Troubleshooting:</p>
+       <ul mee-list="lean">
+           <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://stackoverflow.microsoft.com/questions/90326/what-does-it-mean-when-the-agent-health-check-returns-incomplete">
+                    What does it mean when the health check fails?
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://stackoverflow.microsoft.com/questions/91411/how-can-i-see-the-pcf-config-for-my-agent">
+                    How can I see the PCF config for my agent?
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://stackoverflow.microsoft.com/questions/83698/agentid-not-found">
+                    Why is my agent ID not found by PCF?
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://stackoverflow.microsoft.com/questions/91924/when-does-pcf-pickup-registration-changes">
+                    When does PCF pickup registration changes?
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/Official%20Documents/NGPX%20Technical%20Specifications/Cosmos%20Export%20Troubleshooting.docx?web=1">
+                    Cosmos export troubleshooting
+                </a>
+            </li>
+       </ul>
+       <p mee-paragraph data-use-cms>More reports:</p>
+       <ul mee-list="lean">
+           <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://datagrid.microsoft.com/Tagging/NGPReport">
+                    Real-time tagging completeness report
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://aka.ms/agentdrilldown">
+                    Agent health dashboard
+                </a>
+            </li>
+       </ul>
+       <p mee-paragraph data-use-cms>More information:</p>
+       <ul mee-list="lean">
+           <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://aka.ms/ngpdataagents">
+                    NGP data agent prerequisites
+                </a>
+            </li>
+            <li>
+                <a mee-hyperlink
+                    target="_blank"
+                    data-use-cms
+                    href="https://aka.ms/ngpdataagents/testing">
+                    NGP data agent testing
+                </a>
+            </li>
+       </ul>
+
+    </pcd-sidebar>
+
+    <pcd-content>
+        <pcd-default-page-context pcd-agent-id="$ctrl.agentId"></pcd-default-page-context>
+
+        <pcd-view-agents-health pcd-agent-id="$ctrl.agentId"></pcd-view-agents-health>
+    </pcd-content>
+
+</pcd-default-page-layout>

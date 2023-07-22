@@ -1,0 +1,178 @@
+﻿//Script GUID:4ad37454-95b9-43b0-bd60-3bea45c19b03
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      version             = @@version@@
+
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@");
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+
+#DECLARE outputRootFolderName string = "ExportAuditLogRollup";
+
+#DECLARE hourlyPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/%Y/%m/%d/{{0}}_%Y_%m_%d_%h.ss?date={{1:yyyy-MM-dd}}&hour={{1:HH}}", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+
+//INPUTS
+#DECLARE cookedPcfHourlyAuditLogStreamFormat string = "/shares/PXSCosmos15.Prod/PDMSPrivate/PROD/CommandFeedProcessors/AuditLog/Cooked/v2/{0:yyyy}/{0:MM}/{0:dd}/CommandFeedAuditLog_{0:yyyy}_{0:MM}_{0:dd}T{0:HH}_00_00.ss";
+
+#DECLARE cookedPcfHourlyAuditLogStream string = string.Format(@cookedPcfHourlyAuditLogStreamFormat, @startDate);
+
+#DECLARE past35DaysLogRollupStream string = string.Format(@hourlyPathFormat,"ExportAuditLogRollup", @startDate.AddHours(-1));
+
+//OUTPUTS
+#DECLARE hourlyExportLogAggregate_outputPath string = string.Format(@hourlyPathFormat,"hourlyExportLogAggregate",@startDate);
+#DECLARE exportAuditLogRollup_outputPath string = string.Format(@hourlyPathFormat,"ExportAuditLogRollup",@startDate);
+#DECLARE streamExpiry string = "180";
+
+//output for test
+#IF (@localRun)
+    #SET hourlyExportLogAggregate_outputPath = string.Concat("/my", @hourlyExportLogAggregate_outputPath);
+    #SET exportAuditLogRollup_outputPath = string.Concat("/my", @ExportAuditLogRollup_outputPath);
+    #SET streamExpiry = "7";
+#ENDIF
+
+latestExportRecords = 
+    SELECT *
+    FROM (SSTREAM @cookedPcfHourlyAuditLogStream)
+    WHERE CommandType == "Export";
+
+latestExportRecordsDedup =
+    SELECT
+       *,
+       ROW_NUMBER() OVER (PARTITION BY AgentId, AssetGroupId, CommandId, Action ORDER BY TimeStamp ASC) AS RowNumber
+    FROM
+       latestExportRecords
+    HAVING RowNumber == 1;
+
+latestExportTransform = 
+    SELECT
+        AgentId,
+        AssetGroupId,
+        CommandId,
+        AssetGroupQualifier,
+        (Action == "ExportStart" ? TimeStamp : DateTime.MinValue) AS IngestedTime,
+        (Action == "ExportComplete" ? TimeStamp : DateTime.MinValue) AS CompletedTime,
+        (Action == "IgnoredByVariant" ? TimeStamp : DateTime.MinValue) AS IgnoredTime,
+        RowCount,
+        Exceptions,
+        VariantsApplied
+    FROM latestExportRecordsDedup;
+
+latestExportRollup =
+    SELECT
+        AgentId,
+        AssetGroupId,
+        CommandId,
+        ANY_VALUE(AssetGroupQualifier) AS AssetGroupQualifier,
+        (MAX(IngestedTime) != DateTime.MinValue ? MAX(IngestedTime) : (DateTime?)NULL) AS IngestedTime,
+        (MAX(CompletedTime) != DateTime.MinValue ? MAX(CompletedTime) : (DateTime?)NULL) AS CompletedTime,
+        (MAX(IgnoredTime) != DateTime.MinValue ? MAX(IgnoredTime) : (DateTime?)NULL) AS IgnoredTime,
+        ARGMAX (CompletedTime, RowCount) AS RowCount,
+        ARGMAX (CompletedTime, Exceptions) AS Exceptions,
+        ARGMAX (IgnoredTime, VariantsApplied) AS VariantsApplied
+    FROM latestExportTransform
+    GROUP BY AgentId, AssetGroupId, CommandId;
+
+previousRollup = 
+    SELECT *
+    FROM (SSTREAM @past35DaysLogRollupStream);
+
+identifiers = 
+    SELECT AgentId,
+           AssetGroupId,
+           CommandId,
+           AssetGroupQualifier
+    FROM previousRollup
+  UNION
+    SELECT AgentId,
+           AssetGroupId,
+           CommandId,
+           AssetGroupQualifier
+    FROM latestExportRollup;
+
+combinedRollup = 
+    SELECT rs1.AgentId,
+           rs1.AssetGroupId,
+           rs1.CommandId,
+           rs1.AssetGroupQualifier,
+           InlineCSHelper.PickPreviousRollup(rs2.IngestedTime, rs3.IngestedTime) ? rs2.IngestedTime : rs3.IngestedTime AS IngestedTime,
+           InlineCSHelper.PickPreviousRollup(rs2.CompletedTime, rs3.CompletedTime) ? rs2.CompletedTime : rs3.CompletedTime AS CompletedTime,
+           InlineCSHelper.PickPreviousRollup(rs2.IgnoredTime, rs3.IgnoredTime) ? rs2.IgnoredTime : rs3.IgnoredTime AS IgnoredTime,
+           (InlineCSHelper.PickPreviousRollup(rs2.CompletedTime, rs3.CompletedTime) ? rs2.RowCount : rs3.RowCount) ?? 0 AS RowCount,
+           InlineCSHelper.PickPreviousRollup(rs2.CompletedTime, rs3.CompletedTime) ? rs2.Exceptions : rs3.Exceptions AS Exceptions,
+           (InlineCSHelper.PickPreviousRollup(rs2.IgnoredTime, rs3.IgnoredTime) ? rs2.VariantsApplied : rs3.VariantsApplied) ?? "[]" AS VariantsApplied
+    FROM identifiers AS rs1
+        LEFT JOIN previousRollup AS rs2
+        ON rs1.AgentId == rs2.AgentId AND rs1.AssetGroupId == rs2.AssetGroupId AND rs1.CommandId == rs2.CommandId
+        LEFT JOIN latestExportRollup AS rs3
+        ON rs1.AgentId == rs3.AgentId AND rs1.AssetGroupId == rs3.AssetGroupId AND rs1.CommandId == rs3.CommandId
+    HAVING ((IngestedTime != NULL) && (IngestedTime < @startDate.AddDays(35)));
+
+[Privacy.Asset.NonPersonal]
+OUTPUT latestExportRollup
+TO SSTREAM @hourlyExportLogAggregate_outputPath
+    HASH CLUSTERED BY AgentId, AssetGroupId
+    SORTED BY AgentId, AssetGroupId
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT combinedRollup
+TO SSTREAM @exportAuditLogRollup_outputPath
+    HASH CLUSTERED BY AgentId, AssetGroupId
+    SORTED BY AgentId, AssetGroupId
+WITH STREAMEXPIRY @streamExpiry;
+
+#CS
+public static class InlineCSHelper
+{
+    public static bool PickPreviousRollup(
+            DateTime? previousRollupTime, 
+            DateTime? currentTime)
+    {   
+        if (previousRollupTime == null)
+        {
+            return false;
+        }
+        else
+        {
+            if (currentTime == null)
+            {
+                return true;
+            }
+            else
+            {
+                return previousRollupTime < currentTime;
+            }
+        }
+    }
+}
+#ENDCS

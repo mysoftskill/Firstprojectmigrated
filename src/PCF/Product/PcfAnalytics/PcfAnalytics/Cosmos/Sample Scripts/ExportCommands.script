@@ -1,0 +1,23 @@
+﻿//Script GUID:1648ae25-f99f-427e-9f38-cc3ead0b2e9f
+//Used for tracking history
+
+// This script gets the exports for a specific period from the DeleteSignal. 
+
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+exportCommands = SSTREAM 
+                STREAMSET @"/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/ExportSignal/CookedStream/v3/"
+                PATTERN @"%Year/%Month/%Day/ExportSignals_%Year_%Month_%DayT%Hour_%Minute_%Second.ss"
+                RANGE __datetime=["2018-10-11T00:00:00","2018-10-18T23:00:00"]("01:00:00");
+
+result = 
+    SELECT Timestamp, CommandId, Subject
+    FROM exportCommands
+    WHERE !Subject.Contains("aadUser");
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT result
+TO SSTREAM "/my/exportCommand_10191358.ss"
+WITH STREAMEXPIRY "10";

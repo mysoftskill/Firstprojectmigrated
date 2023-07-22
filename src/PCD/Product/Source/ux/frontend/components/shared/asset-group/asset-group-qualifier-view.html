@@ -1,0 +1,13 @@
+<span class="asset-group-qualifier-line">
+    <!-- Keep this construct in one line to avoid whitespace between spans. -->
+    <span ng-repeat="(k, v) in $ctrl.qualifier.props" class="asset-group-qualifier"><span class="asset-group-qualifier-key">{{k}}</span>=<span class="view-label asset-group-qualifier-value">{{v}}</span><span class="asset-group-qualifier-separator">;</span></span>
+</span>
+
+<pcd-permalink pcd-url="{{$ctrl.getDataGridLink()}}"
+               pcd-title="Find in DataGrid"
+               pcd-glyph="mee-icon-SearchAndApps"
+               data-use-cms
+               ng-hide="$ctrl.shouldHideDataGridLink()"></pcd-permalink>
+
+<pcd-permalink pcd-url="{{$ctrl.getViewLink()}}"
+               ng-hide="$ctrl.shouldHideViewLink()"></pcd-permalink>

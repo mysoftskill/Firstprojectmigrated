@@ -1,0 +1,28 @@
+﻿<h2>Summary</h2>
+<p>
+This has test data 
+</p>
+<p>This incident has been filed for:</p>
+<p>
+  <table>
+    <tr><th style="text-align:right;padding:1px 5px">Team Name</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.TeamName var>]]</td></tr>
+    <tr><th style="text-align:right;padding:1px 5px">Agent Name</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentName var>]]</td></tr>
+    <tr><th style="text-align:right;padding:1px 5px">Agent Id</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentId var>]]</td></tr>
+    <tr><th style="text-align:right;padding:1px 5px">Agent Type</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentType var>]]</td></tr>
+  </table>
+</p>
+<h2>This has some array data</h2>
+<p>
+  <table>
+    <tr>
+      <td>Request Date</td>
+      <td>Command Id</td>
+    </tr>
+    [[<foreach sel:$.AgentInfo.Missing foreach>]]
+      <tr>
+        <td>[[<var s:$.c var>]]</td>
+        <td>[[<var s:$.t f:'yyyy-mm-dd HH:mm:ss' var>]]</td>
+      </tr>
+    [[<foreachend>]]
+  </table>
+</p>

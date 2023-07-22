@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Microsoft.PrivacyServices.DataSubjectRight.Contracts</title>
+    <authors>meepxsengineering@microsoft.com</authors>
+    <owners>meepxsengineering@microsoft.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DataSubjectRight Contracts for the NGPX DSR API.</description>
+    <releaseNotes>DataSubjectRight Contracts for the NGPX DSR API.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>NGP NGPX Privacy DataSubjectRightContracts DataSubjectRight MemberServices</tags>
+  </metadata>
+  <files>
+    <file src="*Microsoft.PrivacyServices.DataSubjectRight.Contracts.xml" target="lib\net452" />
+  </files>
+</package>

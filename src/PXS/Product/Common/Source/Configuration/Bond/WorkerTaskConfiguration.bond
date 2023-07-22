@@ -1,0 +1,21 @@
+import "CommonConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct ITaskConfig
+{
+    1 : required string Tag;
+    2 : required string TaskType;
+    3 : required int32 InstanceCount;
+    4 : optional int32 DelayOnExceptionMinutes = 0;
+};
+
+struct IMonitorTaskConfig : ITaskConfig
+{
+    1 : required int32 UpdateFrequencySeconds;
+}
+
+struct ITaskWorkerConfig
+{
+    1 : required map<string, ITaskConfig> Tasks;
+};

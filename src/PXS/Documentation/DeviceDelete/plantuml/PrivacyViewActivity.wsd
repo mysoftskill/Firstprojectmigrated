@@ -1,0 +1,22 @@
+@startuml PrivacyViewAcitivityFlow
+
+start
+
+repeat
+    :Parse Event;
+    if (has global device id?) then (true)
+        :Determine if the event should be sent
+         - First time seen in 24 Hours
+         - Doesn't have a delayed request already in queue;
+        if (should send?) then (true)
+            :Enqueue Event
+             - Possibly with delay;
+        else (false)
+        endif
+    else (false)
+    endif
+repeat while (has more events?)
+
+end
+
+@enduml

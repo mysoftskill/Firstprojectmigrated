@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<operations>
+  <operation name="OpenApi"
+             method="GET"
+             regex="^/openapi$"
+             excludeFromTelemetry="true" />
+</operations>

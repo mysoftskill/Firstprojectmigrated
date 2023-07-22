@@ -1,0 +1,42 @@
+﻿{
+  "Values": {
+    "AidQueuesStorageAccounts": [
+      {
+        "StorageAccountName": "pxsppe",
+        "QueueName": "anaheimid"
+      },
+      {
+        "StorageAccountName": "pxsppeeastus",
+        "QueueName": "anaheimid"
+      }
+    ],
+    "AidMonitoringQueuesStorageAccounts": [
+      {
+        "StorageAccountName": "pxsppe",
+        "QueueName": "devicedeleterequest"
+      },
+      {
+        "StorageAccountName": "pxsppeeastus",
+        "QueueName": "devicedeleterequest"
+      },
+      {
+        "StorageAccountName": "pxsppe",
+        "QueueName": "anaheimid"
+      },
+      {
+        "StorageAccountName": "pxsppeeastus",
+        "QueueName": "anaheimid"
+      }
+    ],
+    "DeploymentEnvironment": "PPE",
+    "AzureRegion": "westus2",
+    "PcfBaseUrl": "https://pcf.privacy.microsoft-ppe.com/",
+    // using multi tenant ngp-anaheimid-nonprod AppId as a resource to get auth token from pcf-ppe
+    "AadPcfTargetResource": "https://MSAzureCloud.onmicrosoft.com/613e14a9-7c60-4f8b-863c-f719e68cd8db",
+    "ClientAppId": "975e1332-de26-4ac9-b120-fe35fa68adf1",
+    "AidUamiId": "9396613a-ec0d-4102-83a2-b079b69566f9",
+    "EventHubNamespace": "aid-eventhub-ppe",
+    "EventHubName": "anaheimid",
+    "StorageAccountName": "aidstorageppe"
+  }
+}

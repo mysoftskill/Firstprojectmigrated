@@ -1,0 +1,7 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IOwinConfiguration
+{
+    1   :   required    list<string> ValidRequestUrls;
+    2   :   required    int64        MaximumCancelationThresholdMilliseconds;
+};

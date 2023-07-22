@@ -1,0 +1,26 @@
+<div>
+    <div class="status-line" ng-if="$ctrl.shouldDisplayStatus()">
+        <mee-drawer class="x-clearfix" ng-if="$ctrl.showDrawer" state="{{$ctrl.drawerState}}">
+            <drawer-trigger>
+                <pcd-data-agent-health-icon health-icon="$ctrl.getStatusIcon()" category="{{$ctrl.category}}"></pcd-data-agent-health-icon>
+                <span>{{$ctrl.stateLabel}}</span>
+                <span ng-transclude="inline"></span>
+                <span ng-if="$ctrl.isNotValid()" mee-badge="small highlight" ng-if="$ctrl.state">{{$ctrl.state}}</span>
+                <br/><span ng-transclude="description"></span>
+            </drawer-trigger>
+            <drawer-content>
+                <div>
+                    <div class="status-metadata" ng-transclude="body"></div>
+                </div>
+            </drawer-content>
+        </mee-drawer>
+        <div ng-if="!$ctrl.showDrawer">
+            <pcd-data-agent-health-icon health-icon="$ctrl.getStatusIcon()" category="{{$ctrl.category}}"></pcd-data-agent-health-icon>
+            <span>{{$ctrl.stateLabel}}</span>
+            <span ng-transclude="inline"></span>
+            <span ng-if="$ctrl.isNotValid()" mee-badge="small highlight">{{$ctrl.state}}</span>
+            <br/><span ng-transclude="description"></span>
+            <div class="status-metadata" ng-transclude="body"></div>
+        </div>
+    </div>
+</div>

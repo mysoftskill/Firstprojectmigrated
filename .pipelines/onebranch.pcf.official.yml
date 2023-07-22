@@ -1,0 +1,109 @@
+#################################################################################
+#                      OneBranch Pipelines - PR Build                           #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: 
+- master
+
+parameters:
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+
+variables:
+- template: variables.yml
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates
+  parameters:
+    featureFlags:
+      ensureArtifactsDirExists: true
+    cloudvault:
+      enabled: true
+    globalSdl:
+      sbom:
+        enabled: true
+      antimalwareScan:
+        enabled: true
+      binskim:
+        enabled: true
+        break: true
+        analyzeTargetGlob: 
+          '+:file|**\Microsoft.PrivacyServices*.exe;+:file|**\Microsoft.PrivacyServices*.dll;+:file|**\Pcf*.exe;+:file|**\Pcf*.dll;+:file|**\Microsoft.Azure.ComplianceServices*.exe;+:file|**\Microsoft.Azure.ComplianceServices*.dll;+:file|**\PrivacyCommand*.exe;+:file|**\PrivacyCommand*.dll;+:file|**\CertInstaller*.exe;+:file|**\CertInstaller*.dll'
+      codeql:
+        cadence: 0
+        compiled: 
+          enabled: true
+        tsaEnabled: true # See 'Codeql.TSAEnabled' in the Addition Options section below
+      credscan:
+        enabled: true
+        suppressionsFile: $(CREDSCAN_SUPPRESSIONFILE)
+      policheck:
+        enabled: true
+      tsa:
+        enabled: true
+        configFile: $(TSA_CONFIGFILE)
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows
+        variables: 
+          ob_outputDirectory: $(PCFOutputDirectory)
+          ob_sdl_binskim_break: true 
+          ob_sdl_codeSignValidation_excludes: -|**\*\Newtonsoft.Json.dll;-|**\*\ServiceFabric.Common.dll;-|**\Test*\**;-|**\*.sfpkg\**\*;-|**\FCT*\**;-|**\*.ps1;-|**\*.psm1;
+          ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+            ob_symbolsPublishing_enabled: true 
+
+        steps:
+          - template: .pipelines/HelperTemplates/version.restore.build.test.yml@self
+            parameters:
+              buildConfiguration: Release
+              productName: PCF
+              pathToRestore: $(PCFSolution)
+            
+          - task: onebranch.pipeline.signing@1
+            displayName: Sign binaries
+            inputs:
+              command: sign
+              signing_environment: azure-ado
+              signing_profile: internal_azure_service
+              files_to_sign: '**\*.exe;**\*.dll;**\*.ps1;**\*.psm1'
+              search_root: $(PCFBuildRootDirectory)
+
+          - task: CmdLine@2
+            displayName: Restore packages for OpenApi generator
+            inputs:
+              script: $(Build.SourcesDirectory)\.build\restoreopenapi.cmd
+
+          - task: CmdLine@2
+            displayName: BuildOpenApiDoc
+            inputs:
+              script: '$(Build.SourcesDirectory)\.build\buildopenapi.cmd Release'
+            env: 
+              CDP_BUILD_TAG: PCF
+
+          - template: .pipelines/HelperTemplates/pcf.package.yml@self
+
+          - task: PowerShell@2
+            displayName: Move OpenApi to CodeSign
+            inputs:
+              targetType: inline
+              script: |
+                Move-Item -Path $(PCFBuildRootDirectory)\bin\**\OpenApiDocument.* -Destination $(Build.SourcesDirectory)\src\PCF\OneBranch\Deployment\drop\outputs\build\Codesign -Force

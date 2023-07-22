@@ -1,0 +1,43 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            A team is how we identify who is responsible for managing the compliance of data assets and data agents.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Team name</span> can be any text you choose but must be unique within the system.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Alert contacts</span> receive notifications of compliance issues and must respond within
+            24 hours. This should be a DL to ensure proper coverage.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Announcement contacts</span> receive mail regarding relevant updates and changes.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Sharing</span> is for allowing other teams to use your agent to link their assets to.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Write security group</span> is how we prevent changes to your team info and prevent
+            registration from unauthorized users. Only members of the security group that you provide will be able to modify
+            your data in PCD.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-alert kind="use-glyph error">
+            <alert-content data-use-cms>
+                You can now link your team to Service Tree. You must be an admin of the team listed in Service Tree to do this.
+            </alert-content>
+        </mee-alert>
+        <a mee-call-to-action class="service-tree-cta" mee-no-href ng-click="$ctrl.showLinkToServiceTreeModalDialog()">Link to service tree</a>
+
+        <!-- TODO: need to drop ng-if, let owner-editor figure out model changes. -->
+        <pcd-owner-editor ng-if="$ctrl.owner" owner="$ctrl.owner" create-new="false" on-saved="$ctrl.saveClicked(updatedOwner)"></pcd-owner-editor>
+    </pcd-content>
+
+</pcd-default-page-layout>

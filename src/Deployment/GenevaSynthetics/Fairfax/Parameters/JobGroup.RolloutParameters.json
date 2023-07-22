@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutParameters.json",
+  "contentVersion": "1.0.0.0",
+  "extensions": [
+    {
+      "name": "Deploy",
+      "type": "Microsoft.Geneva.Synthetics/JobGroup",
+      "version": "2020-10-01",
+      "connectionProperties": {
+        "maxExecutionTime": "PT24H",
+        "authentication": {
+          "type": "CertificateAuthentication",
+          "reference": {
+            "provider": "AzureKeyVault",
+            "parameters": {
+              "secretId": "https://ngpproxy-prod-ame.vault.usgovcloudapi.net/secrets/SyntheticsEv2ExtensionAuthCert"
+            }
+          }
+        }
+      },
+      "payloadProperties": {
+        "Account": {
+          "value": "NGPProxy-FFPROD"
+        },
+        "JobGroupName": {
+          "value": "SyntheticsJobGroup-FF"
+        },
+        "ConfigPath": {
+          "reference": {
+            "path": "GenevaSynthetics\\Fairfax\\SyntheticsJobGroup-FF.json",
+            "enableScopeTagBindings": "false"
+          }
+        },
+        "PackagePath": {
+          "reference": {
+            "path": "Bin\\SyntheticsTests.zip"
+          }
+        },
+        "Deleted": {
+          "value": false
+        }
+      }
+    }
+  ]
+}

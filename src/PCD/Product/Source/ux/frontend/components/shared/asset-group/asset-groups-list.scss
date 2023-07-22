@@ -1,0 +1,11 @@
+@import "../../../styles/utilities.scss";
+
+pcd-asset-groups-list {
+    display: block;
+
+    @include clearfix;
+
+    tr.pending-transfer {
+        background-color: $light-grey-color;
+    }
+}

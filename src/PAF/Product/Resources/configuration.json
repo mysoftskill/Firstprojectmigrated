@@ -1,0 +1,16 @@
+{
+    "sourceAccountUrl": "https://dev.azure.com/nextgenpriv/",
+    "sourceAccountToken": "Insert Token here",
+    "targetAccountUrl": "https://dev.azure.com/nextgenpriv/",
+    "targetAccountToken": "Insert Token here",
+    "sourceProcessName": "NGP Agile - Asset-Variant Linking NonProd",
+    "targetProcessName": "NGP Agile - Asset-Variant Linking Production",
+    "options": {
+        "processFilename": "variant-assetlinking",
+        "logLevel":"verbose",
+        "logFilename":"output/process.log",
+        "overwritePicklist": true,
+        "continueOnRuleImportFailure": true,
+        "skipImportFormContributions": false,
+    }
+}

@@ -1,0 +1,12 @@
+﻿import "CommonConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IAzureKeyVaultConfiguration
+{
+    1 : required string AadAppId;
+    2 : required string VaultBaseUrl;
+    3 : required bool UseManagedIdentity;
+    4 : required string VaultResourceId;
+    5 : optional string CosmosDbEmulatorPrimaryKey;
+}

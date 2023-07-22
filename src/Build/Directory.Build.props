@@ -1,0 +1,168 @@
+<Project>
+  <!--
+  Global package version for all solution files
+
+    Set all package versions here.
+	Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+	Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+	Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+  <ItemGroup>
+    <PackageReference Update="AutoFixture" Version="[3.51.0]" />
+    <PackageReference Update="AutoFixture.AutoMoq" Version="[3.51.0]" />
+    <PackageReference Update="AutoFixture.Xunit2" Version="[3.51.0]" />
+    <PackageReference Update="AutoMapper" Version="[9.0.0]" />
+    <PackageReference Update="Azure.Identity" Version="[1.5.0]" />
+    <PackageReference Update="Azure.Messaging.EventHubs" Version="[5.6.2]" />
+    <PackageReference Update="Azure.Messaging.EventHubs.Processor" Version="[5.6.2]" />
+    <PackageReference Update="Azure.Storage.Blobs" Version="[12.13.0]"/>
+    <PackageReference Update="Azure.Storage.Queues" Version="[12.11.0]"/>
+    <PackageReference Update="Bond.CSharp" Version="[11.0.0]" />
+    <PackageReference Update="Bond.Core.CSharp" Version="[11.0.0]" />
+    <PackageReference Update="Bond.Runtime.CSharp" Version="[11.0.0]" />
+    <PackageReference Update="Castle.Core" Version="[4.4.1]" />
+    <PackageReference Update="CommandLineParser" Version="[2.8.0]" />
+    <PackageReference Update="coverlet.collector" Version="[3.1.0]" />
+    <PackageReference Update="CsvHelper" Version="[27.2.1]" />
+    <PackageReference Update="Geneva.Synthetics.Contracts" Version="[1.0.1703.2]" />
+    <PackageReference Update="Geneva.Synthetics.Logging.OneDS" Version="[1.0.1691.2]" />
+    <PackageReference Update="GenevaMonitoringAgent" Version="[77.13.54]" />
+    <PackageReference Update="GenevaMonitoringAgentLibs" Version="[77.13.54]" />
+    <PackageReference Update="MessagePack" Version="[1.9.11]" />
+    <PackageReference Update="Microsoft.ApplicationInsights" Version="[2.19.0]" />
+    <PackageReference Update="Microsoft.AspNet.OData" Version="[7.5.12]" />
+    <PackageReference Update="Microsoft.AspNet.WebApi.Client" Version="[5.2.7]" />
+    <PackageReference Update="Microsoft.AspNet.WebApi.Core" Version="[5.2.7]" />
+    <PackageReference Update="Microsoft.AspNet.WebApi.Owin" Version="[5.2.7]" />
+    <PackageReference Update="Microsoft.AspNet.WebApi.OwinSelfHost" Version="[5.2.7]" />
+    <PackageReference Update="Microsoft.AspNet.WebApi.WebHost" Version="[5.2.7]" />
+    <PackageReference Update="Microsoft.Azure.Cosmos" Version="[3.23.0]" />
+    <PackageReference Update="Microsoft.Azure.DocumentDB" Version="[2.16.2]" />
+    <PackageReference Update="Microsoft.Azure.EventHubs" Version="[4.3.2]" />
+    <PackageReference Update="Microsoft.Azure.EventHubs.Processor" Version="[4.3.2]" />
+    <PackageReference Update="Microsoft.Azure.KeyVault" Version="[3.0.5]" />
+    <PackageReference Update="Microsoft.Azure.Kusto.Data" Version="[10.0.2]" />
+    <PackageReference Update="Microsoft.Azure.Kusto.Ingest" Version="[10.0.2]" />
+    <PackageReference Update="Microsoft.Azure.Services.AppAuthentication" Version="[1.6.2]" />
+    <PackageReference Update="Microsoft.Azure.Storage.Blob" Version="[11.2.3]" />
+    <PackageReference Update="Microsoft.Azure.Storage.Queue" Version="[11.2.3]" />
+    <PackageReference Update="Microsoft.AzureAd.Icm.Types.amd64" Version="[2.1.10.50]" />
+    <PackageReference Update="Microsoft.AzureAd.Icm.WebService.Client.amd64" Version="[2.1.10.50]" />
+    <PackageReference Update="Microsoft.Carbon.Flighting.Runtime" Version="[14.0.19282.1]" />
+    <PackageReference Update="Microsoft.Cloud.InstrumentationFramework" Version="[3.4.1.1]" />
+    <PackageReference Update="Microsoft.Cloud.InstrumentationFramework.Metrics.Extensions" Version="[2.2021.415.1131]" />
+    <PackageReference Update="Microsoft.CommonSchema.Bond" Version="[4.0.21012.1]" />
+    <PackageReference Update="Microsoft.CommonSchema.Services" Version="[5.2.114]" />
+    <PackageReference Update="Microsoft.CommonSchema.Services.Owin" Version="[5.2.1]" />
+    <PackageReference Update="Microsoft.CommonSchema.Services.ServiceFabricContainer" Version="[5.2.110]" />
+    <PackageReference Update="Microsoft.Data.OData" Version="[5.8.5]" />
+    <PackageReference Update="Microsoft.Data.Edm" Version="[5.8.5]" />
+    <PackageReference Update="Microsoft.Data.Services.Client" Version="[5.8.5]" />
+    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="[4.5.1]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.CommandLine" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.Binder" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.FileExtensions" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.Json" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.UserSecrets" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Logging" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Configuration" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Console" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Debug" Version="[3.1.21]" />
+    <PackageReference Update="Microsoft.Extensions.Logging.EventSource" Version="[3.1.21]"  />
+    <PackageReference Update="Microsoft.FeatureManagement" Version="[2.4.0]" />
+    <PackageReference Update="Microsoft.ServiceFabric.Geneva" Version="[8.0.1565.4]" />
+    <PackageReference Update="Microsoft.ServiceFabric.Services" Version="[5.0.521]" />
+    <PackageReference Update="Microsoft.Identity.Client" Version="[4.49.1]" />
+    <PackageReference Update="Microsoft.Identity.Client.Extensions.Msal" Version="[2.25.3]" />
+    <PackageReference Update="Microsoft.Identity.ServiceEssentials.Authentication" Version="[1.16.1]" />
+    <PackageReference Update="Microsoft.Identity.ServiceEssentials.Caching" Version="[1.16.1]" />
+    <PackageReference Update="Microsoft.Identity.ServiceEssentials.Core" Version="[1.16.1]" />
+    <PackageReference Update="Microsoft.IdentityModel.Abstractions" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.JsonWebTokens" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.Logging" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.Protocols" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.Protocols.SignedHttpRequest" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.S2S" Version="[3.45.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.S2S.Configuration" Version="[3.45.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.Tokens" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.IdentityModel.Validators" Version="[6.30.0]" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="[16.11.0]" />
+    <PackageReference Update="Microsoft.OData.Client" Version="[7.9.4]" />
+    <PackageReference Update="Microsoft.OData.Core" Version="[7.9.4]" />
+    <PackageReference Update="Microsoft.OSGS.HttpClientCommon" Version="[9.0.14236.1]"/>
+    <PackageReference Update="Microsoft.Owin" Version="[4.2.2]" />
+    <PackageReference Update="Microsoft.Owin.Host.HttpListener" Version="[4.2.0]" />
+    <PackageReference Update="Microsoft.Owin.Hosting" Version="[4.2.0]" />
+    <PackageReference Update="Microsoft.Owin.Security.ActiveDirectory" Version="[4.2.0]" />
+    <PackageReference Update="Microsoft.Owin.Testing" Version="[4.2.0]" />
+    <PackageReference Update="Microsoft.PassPort.Rps" Version="[7.1.0.1]" />
+    <PackageReference Update="Microsoft.PrivacyServices.CodeSign" Version="[9.0.17262.15]" />
+    <PackageReference Update="Microsoft.PrivacyServices.CodeSign.Dependencies" Version="[1.0.0.0]" />
+    <PackageReference Update="Microsoft.PrivacyServices.CommandFeed.Contracts" Version="[11.0.2350.25]" />
+    <PackageReference Update="Microsoft.PrivacyServices.DataManagement.Models" Version="[11.0.2350.25]" />
+    <PackageReference Update="Microsoft.PrivacyServices.DocumentDB.Models" Version="[11.0.2350.25]" />
+    <PackageReference Update="Microsoft.PrivacyServices.Identity" Version="[11.0.2350.25]" />
+    <PackageReference Update="Microsoft.PrivacyServices.Policy" Version="[11.0.2350.25]" />
+    <PackageReference Update="Microsoft.PrivacyServices.SignalApplicability" Version="[11.0.2350.25]" />
+    <PackageReference Update="Microsoft.VisualStudio.Services.InteractiveClient" Version="[16.170.0]" />
+    <PackageReference Update="Microsoft.Windows.Services.AuthN.Client" Version="[9.0.21262.1]" />
+    <PackageReference Update="Microsoft.Windows.Services.AuthN.Server" Version="[9.0.18339.3]" />
+    <PackageReference Update="Microsoft.Windows.Services.CompassService.Client" Version="[9.0.19190.7]" />
+    <PackageReference Update="Microsoft.Windows.Services.ConfigGen" Version="[9.0.16068.1]" />
+    <PackageReference Update="Microsoft.Windows.Services.Devices.Client" Version="[9.0.20149.1]" />
+    <PackageReference Update="Moq" Version="[4.15.2]" />
+    <PackageReference Update="MSTest.TestAdapter" Version="[2.2.8]" />
+    <PackageReference Update="MSTest.TestFramework" Version="[2.2.8]" />
+    <PackageReference Update="Ms.Qos" Version="[4.0.21012.1]" />
+    <PackageReference Update="Ms.Qos.IncomingServiceRequest" Version="[4.0.21012.1]" />
+    <PackageReference Update="Ms.Qos.OutgoingServiceRequest" Version="[4.0.21012.1]" />
+    <PackageReference Update="Newtonsoft.Json" Version="[13.0.1]" />
+    <PackageReference Update="Parallax" Version="[2019.10.28.6]" />
+    <PackageReference Update="RPS.Official.amd64.MSA" Version="[7.1.6819]" />
+    <PackageReference Update="SemanticComparison" Version="[4.1.0]" />
+    <PackageReference Update="ServiceManager.Tools" Version="[1.0.0.9]" />
+    <PackageReference Update="StackExchange.Redis" Version="[2.2.88]" />
+    <PackageReference Update="StandingQueryExtensionManagerInstall" Version="[5.2.105]" />
+    <PackageReference Update="StyleCop.Analyzers" Version="[1.1.118]" />
+    <PackageReference Update="System.Collections.Immutable" Version="[6.0.0]" />
+    <PackageReference Update="System.ComponentModel.Annotations" Version="[5.0.0]" />
+    <PackageReference Update="System.Data.SqlClient" Version="[4.8.5]" />
+    <PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="[6.30.0]" />
+    <PackageReference Update="System.IO.Compression" Version="[4.3.0]" />
+    <PackageReference Update="System.Management.Automation.dll" Version="[10.0.10586]" />
+    <PackageReference Update="System.Memory" Version="[4.5.4]" />
+    <PackageReference Update="System.Net.Http" Version="[4.3.4]" />
+    <PackageReference Update="System.Net.Http.Formatting.Extension" Version="[5.2.3]" />
+    <PackageReference Update="System.Net.Http.Formatting" Version="5.2.2" />
+    <PackageReference Update="System.Runtime.Caching" Version="[6.0.0]" />
+    <PackageReference Update="System.Security.Cryptography.Pkcs" Version="[6.0.3]" />
+    <PackageReference Update="System.Security.Cryptography.X509Certificates" Version="[4.3.2]" />
+    <PackageReference Update="System.Security.Cryptography.Xml" Version="[6.0.1]" />
+    <PackageReference Update="System.Security.Principal.Windows" Version="[5.0.0]" />
+    <PackageReference Update="System.ServiceModel.Http" Version="[4.9.0]" />
+    <PackageReference Update="System.ServiceModel.Primitives" Version="[4.9.0]" />
+    <PackageReference Update="System.Spatial" Version="[5.8.5]" />
+    <PackageReference Update="System.Text.Encodings.Web" Version="[5.0.1]" />
+    <PackageReference Update="System.Threading.Tasks.Dataflow" Version="[6.0.0]" />
+    <PackageReference Update="System.ValueTuple" Version="[4.5.0]" />
+    <PackageReference Update="Unity" Version="4.0.1" />
+    <PackageReference Update="xunit" Version="[2.4.1]" />
+    <PackageReference Update="xunit.abstractions" Version="[2.0.3]" />
+    <PackageReference Update="xunit.analyzers" Version="[0.10.0]" />
+    <PackageReference Update="xunit.assert" Version="[2.4.1]" />
+    <PackageReference Update="xunit.core" Version="[2.4.1]" />
+    <PackageReference Update="xunit.extensibility.core" Version="[2.4.1]" />
+    <PackageReference Update="xunit.extensibility.execution" Version="[2.4.1]" />
+    <PackageReference Update="xunit.runner.visualstudio" Version="[2.4.3]" />
+    <PackageReference Update="Xunit.SkippableFact" Version="[1.4.13]" />
+    <PackageReference Update="System.Drawing.Common" Version="[6.0.0]" />
+  </ItemGroup>
+</Project>

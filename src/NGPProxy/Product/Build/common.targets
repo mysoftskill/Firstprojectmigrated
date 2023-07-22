@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IsTestProject Condition=" '$(IsTestProject)' == '' AND $(ProjectTypeGuids) == '{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">true</IsTestProject>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+	<CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+	<CodeAnalysisSearchGlobalAssemblyCache>false</CodeAnalysisSearchGlobalAssemblyCache>
+	<CodeAnalysisIgnoreMissingIndirectReferences>true</CodeAnalysisIgnoreMissingIndirectReferences>
+	<!-- <CodeAnalysisRuleSetDirectories>E:\MembershipProvision_Main_04\packages\BuildSettings.Library\msbuild\RuleSets</CodeAnalysisRuleSetDirectories> -->
+	<!-- <CodeAnalysisRule>E:\MembershipProvision_Main_04\packages\VSStaticAnalysis.Tools\FxCop\Rules</CodeAnalysisRule> -->
+	<!-- <CodeAnalysisRuleDirectories>E:\MembershipProvision_Main_04\packages\VSStaticAnalysis.Tools\FxCop\Rules</CodeAnalysisRuleDirectories> -->
+	<CodeAnalysisRuleSet Condition="'$(IsTestProject)' == 'true'">$(MemberServicesRoot)\Build\Test.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(IsTestProject)' != 'true'">$(MemberServicesRoot)\Build\Service.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MemberServicesRoot)\Build\BuildSuppressions.cs" />
+	<CodeAnalysisDictionary Include="$(MemberServicesRoot)\Build\CustomDictionary_Carbon.xml" />
+	<CodeAnalysisDictionary Include="$(MemberServicesRoot)\Build\CustomDictionary.xml" />
+  </ItemGroup>
+  
+  <Import Project="$(MemberServicesRoot)\Build\CopyFilesToReleasePath.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

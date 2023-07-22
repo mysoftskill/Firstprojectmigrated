@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Microsoft.Membership.MemberServices.Privacy.PrivacyVsoWorker</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.Privacy.PrivacyVsoWorker</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <ReleaseSubDir>PrivacyVsoWorker</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <FileAlignment>512</FileAlignment>
+    <FlattenIniOneboxUnderVisualStudio>true</FlattenIniOneboxUnderVisualStudio>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\Common\Source\Common.csproj" />
+    <ProjectReference Include="..\..\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\Core\AadAuthManager\Source\AadAuthentication.csproj" />
+    <ProjectReference Include="..\..\PXF\Contracts\Framework\Source\PrivacyDataContracts.csproj" />
+    <ProjectReference Include="..\..\PXF\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+    <ProjectReference Include="..\..\PXF\Core\Source\PrivacyCore.csproj" />
+    <ProjectReference Include="..\..\PXF\Host\Source\PrivacyHost.csproj" />
+    <ProjectReference Include="..\..\PXF\KustoHelpers\KustoHelpers\KustoHelpers.csproj" />
+    <ProjectReference Include="..\..\PXF\PrivacyAdapters\Source\PrivacyAdapters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="Unity" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\AadIdentityService.ini">
+      <Link>AadIdentityService.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyExperienceService\Adapters.ini">
+      <Link>Adapters.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\GlobalConfiguration.ini">
+      <Link>GlobalConfiguration.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deployment\Configurations\PrivacyVsoWorker\PrivacyVsoWorker.ini">
+      <Link>PrivacyVsoWorker.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Library\AgentsWithNoConnectorsItemDesc.template" />
+    <None Include="Library\AgentsWithNoConnectorsItemDesc.template">
+      <Link>Library\AgentsWithNoConnectorsItemDesc.template</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+  <Import Project="$(MemberServicesRoot)\Build\flattenini_onebox.targets" />
+</Project>

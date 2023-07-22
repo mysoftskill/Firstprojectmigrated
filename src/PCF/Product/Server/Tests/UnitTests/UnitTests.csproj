@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <RootNamespace>PCF.UnitTests</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Pcf.UnitTests</AssemblyName>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Platforms>x64</Platforms>
+    <SignAssembly>false</SignAssembly>
+    <NoWarn>$(NoWarn);IDE0009</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\app.config" Link="app.config" />
+    <None Include="..\Data\pdmsdata.json">
+      <Link>pdmsdata.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="..\FunctionalTests\ApplicabilityTests\TestCommands.json">
+      <Link>Applicability\TestCommands.json</Link>
+    </EmbeddedResource>
+    <None Include="Test.runsettings">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture.Xunit2" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="SemanticComparison" />
+    <PackageReference Include="System.IO.Compression" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.analyzers" />
+    <PackageReference Include="xunit.core" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Xunit.SkippableFact" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\CosmosDbAutoscaler\PcfAutoscaler.csproj" />
+    <ProjectReference Include="..\..\Frontdoor\Frontdoor.csproj" />
+    <ProjectReference Include="..\..\NonWindowsDeviceDeleteWorker\NonWindowsDeviceDeleteWorker.csproj" />
+    <ProjectReference Include="..\..\PdmsCache\PdmsCache.csproj" />
+    <ProjectReference Include="..\Common\TestCommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="local.settings.test.json">
+      <Link>local.settings.test.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

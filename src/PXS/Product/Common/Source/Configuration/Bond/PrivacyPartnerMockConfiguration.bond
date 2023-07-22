@@ -1,0 +1,39 @@
+﻿import "CommonConfiguration.bond" 
+import "AzureStorageConfiguration.bond"
+import "PartnerConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IAIdE2EConfiguration
+{
+    1 : required string BaseUrl;
+    2 : required string AadPcfTargetResource;
+    3 : required string CertSubject;
+    4 : required string AadAuthority;
+    5 : required string ClientId;
+}
+
+struct IRecurringDeleteE2EConfiguration
+{
+    1 : required string StorageAccountName;
+    2 : required string ContainerName;
+    3 : required string AuthKeyEncryptedFilePath;
+}
+
+[Multiplicity("Singleton")]
+struct IPrivacyPartnerMockConfiguration
+{
+    1 : required string FamilyJwksUri;
+    2 : required IAzureStorageConfiguration PrivacyCommandAzureStorageConfiguration;
+
+    // Flag indicating we should required HTTPS for xbox
+    3 : optional bool IsXboxCertRequired = true;
+
+    4 : required IAzureStorageConfiguration DeadLetterAzureStorageConfiguration;
+
+    5 : required IAIdE2EConfiguration AnaheimIdE2EConfiguration;
+
+    6 : required IRecurringDeleteE2EConfiguration RecurringDeleteE2EConfiguration;
+
+    7 : required IAzureStorageConfiguration AnaheimIdQueueWorkerStorageConfiguration;
+};

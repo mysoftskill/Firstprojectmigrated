@@ -1,0 +1,119 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph class="view-label" data-use-cms>
+            PCD now supports linking to teams in Service Tree!
+        </p>
+        <p mee-paragraph data-use-cms>
+            A team provides the ownership info for specific data assets and data agents.
+        </p>
+        <p mee-paragraph data-use-cms>
+            If your team is already registered in Service Tree, you may simply link to it here.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-lede>
+        <p mee-paragraph data-use-cms>
+            Registering a team from Service Tree means that PCD will use the contact information you already have defined for the service as the basis for the team in PCD.
+            The information stored in Service Tree will not be modified or deleted. Changes made in Service Tree will automatically be updated in PCD within 24 hours.
+        </p>
+    </pcd-lede>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="createServiceTreeTeamComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-service-tree-selector></pcd-service-tree-selector>
+                <div ng-if="$ctrl.service">
+                    <div data-grid="col-12" ng-if="$ctrl.isUpdateAllowed()">
+                        <div data-grid="col-12" ng-if="$ctrl.getExistingPdmsOwnerId()">
+                            <mee-alert kind="use-glyph error" class="team-exists-alert" i9n-team-exists-alert>
+                                <alert-content data-use-cms>
+                                    Your team already exists.
+                                </alert-content>
+                                <alert-actions>
+                                    <a ui-sref="data-owners.edit({ ownerId: $ctrl.getExistingPdmsOwnerId() })" data-use-cms>Click here to edit</a>
+                                </alert-actions>
+                            </mee-alert>
+                        </div>
+
+                        <div data-grid="col-12" ng-if="!$ctrl.getExistingPdmsOwnerId()">
+                            <h3 mee-heading="heading4" data-use-cms>Permissions</h3>
+                            <p mee-paragraph data-use-cms>
+                                A security group is required to control who has access to this team's configuration. Members of this
+                                group will be able to modify configuration data in PCD. You must be a member of at least one of the security groups.
+                                It will not affect permissions in Service Tree.
+                            </p>
+                            <pcd-directory-resource-selector data-grid="col-6"
+                                                             pcd-resource-type="security-group"
+                                                             pcd-selector-label="{{$ctrl.writeGroupsLabel}}"
+                                                             ng-model="$ctrl.securityGroupSelectorData"
+                                                             data-required-field="true"
+                                                             pcd-error-id="{{$ctrl.errorCategory}}.write-security-groups"
+                                                             data-error-id="{{$ctrl.errorCategory}}.write-security-groups"></pcd-directory-resource-selector>
+                        </div>
+
+                        <div data-grid="col-12" ng-if="!$ctrl.getExistingPdmsOwnerId()">
+                            <h3 mee-heading="heading4" data-use-cms>Tagging permissions</h3>
+                            <p mee-paragraph data-use-cms>
+                                Security groups used by DataGrid to authorize tagging. If this is empty, DataGrid
+                                falls back to the write security groups.
+                            </p>
+                            <div data-grid="col-12">
+                                <pcd-directory-resource-selector data-grid="col-6"
+                                                                 pcd-resource-type="security-group"
+                                                                 pcd-selector-label="{{$ctrl.tagGroupsLabel}}"
+                                                                 ng-model="$ctrl.tagGroupSelectorData"
+                                                                 data-required-field="false"
+                                                                 pcd-error-id="{{$ctrl.errorCategory}}.tag-security-groups"
+                                                                 data-error-id="{{$ctrl.errorCategory}}.tag-security-groups"></pcd-directory-resource-selector>
+                            </div>
+
+                            <div data-grid="col-12">
+                                <pcd-directory-resource-selector data-grid="col-6"
+                                                                 pcd-resource-type="application"
+                                                                 pcd-selector-label="{{$ctrl.tagApplicationsLabel}}"
+                                                                 ng-model="$ctrl.tagApplicationSelectorData"
+                                                                 data-required-field="false"
+                                                                 pcd-error-id="{{$ctrl.errorCategory}}.tag-application-ids"
+                                                                 data-error-id="{{$ctrl.errorCategory}}.tag-application-ids"></pcd-directory-resource-selector>
+                            </div>
+                        </div>
+                    </div>
+
+                    <pcd-commit-request-button data-use-cms
+                        pcd-button-label="Save"
+                        pcd-error-id="{{$ctrl.errorCategory}}.save"
+                        pcd-operation-name="serviceTreeOwnerCreate"
+                        pcd-button-on-click-operation="$ctrl.saveClicked()"
+                        pcd-button-disabled="$ctrl.getExistingPdmsOwnerId()">
+                    </pcd-commit-request-button>
+
+                    <div ng-if="!$ctrl.isUpdateAllowed()">
+                        <mee-alert kind="use-glyph error">
+                            <alert-content data-use-cms>
+                                Contact one of the administrators above. Only they have permission to create a team for this service.
+                            </alert-content>
+                        </mee-alert>
+                    </div>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PAF-PROD-SouthCentralUS",
+    "Environment": "Prod"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "AnaheimIdProcessor-Definition",
+          "ArmTemplatePath": "Templates\\AId.Template.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Definition",
+          "ArmTemplatePath": "Templates\\AId.GenevaMonitoringAgentApp.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "AID-PROD-SOUTHCENTRALUS-CLUSTER-RG",
+      "Location": "southcentralus",
+      "InstanceOf": "ADGCS-Cluster-ResourceGroupDefinitions",
+      "AzureSubscriptionId": "4e261d67-9395-4cec-a519-14053c4765e3",
+      "ServiceResources": [
+        {
+          "Name": "AnaheimIdProcessor-Resources",
+          "InstanceOf": "AnaheimIdProcessor-Definition",
+          "ArmParametersPath": "Parameters\\PROD\\SCUS\\AnaheimIdProcessor.Parameters.json"
+        },
+        {
+          "Name": "GenevaMonitoringAgentApp-Resources",
+          "InstanceOf": "GenevaMonitoringAgentApp-Definition",
+          "ArmParametersPath": "Parameters\\PROD\\SCUS\\GenevaMonitoringAgentApp.Parameters.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,308 @@
+import "CommonConfiguration.bond"
+import "PrivacyPartnerAdapterConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+enum PxfLocationCategory
+{
+    Unknown,
+    Test,
+    Device,
+    Search,
+    Favorite,
+    Inferred,
+    ProcessedLog,
+    Fitness
+}
+
+enum FacetDomain
+{
+    Unknown,
+    Blis,
+    CortanaLocations,
+    BlisLkg,
+    SearchHistory,
+    BrowseHistory,
+    Pwilo,
+    VoiceHistory,
+    Browse, // TODO: Temporary additional facets to delete from during transition
+    Location // TODO: Temporary additional facets to delete from during transition
+}
+
+enum AdapterVersion
+{
+    Unknown
+    PxfV1,
+    CortanaNotebookV1,
+    PdApiV2,
+    BeaconV1
+}
+
+enum AuthenticationType
+{
+    Unknown,
+    MsaSelfBasedAuth,
+    AadPopToken,
+}
+
+// Specifies a resource type
+enum ResourceType
+{
+    Unknown = 0,
+    Browse = 1,
+    Location = 2,
+    Search = 3,
+    CortanaNotebookServiceList = 4,
+    MicrosoftHealthLocation = 6,
+    Voice = 7,
+    VoiceAudio = 8,
+    AppUsage = 9,
+    ContentConsumption = 10,
+    LocationTransit = 11
+}
+
+enum TargetMsaKeyDiscoveryEnvironment
+{
+    None,
+    MsaProd,
+    MsaInt
+}
+
+enum S2SAuthType
+{
+    Msa,
+    Aad
+}
+
+struct IVerificationValidationServiceConfig
+{
+    1 : optional bool EnableVerificationCheckAad = true;
+    2 : optional bool EnableVerificationCheckMsa = true;
+    3 : required TargetMsaKeyDiscoveryEnvironment TargetMsaKeyDiscoveryEnvironment;
+}
+
+struct IPcfPrivacyPartnerAdapterConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    // The timeout for the slower PCF apis
+    [UniquenessRule("Invariant")]
+    1: required int32 SlowTimeoutInMilliseconds = 60000;
+
+    // The timeout for little slower PCF apis
+    [UniquenessRule("Invariant")]
+    2: required int32 LittleSlowTimeoutInMilliseconds = 30000;
+
+    // Value is the AAD PCF target audience associated with their AAD App ID. Ex: https://MSAzureCloud.onmicrosoft.com/469dcb1e-f765-4199-b091-1907c74d8a22
+    3 : required string AadPcfTargetResource;
+}
+
+struct IPxfPartnerConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    // Value corresponds to DataManagementGroup
+    [UniquenessRule("Invariant")]
+    2: required list<string> SupportedResources;
+
+    [UniquenessRule("Invariant")]
+    3: required AdapterVersion PxfAdapterVersion;
+
+    // Value that indicates if the partner supports real-time-delete through a PXF Adapter
+    [UniquenessRule("Invariant")]
+    4: optional bool RealTimeDelete = true;
+
+    // Value indicates the category the location belongs to. Not used for other resource types other than location.
+    [UniquenessRule("Invariant")]
+    7 : optional PxfLocationCategory LocationCategory = Unknown;
+
+    [UniquenessRule("Invariant")]
+    8 : optional FacetDomain FacetDomain;
+
+    [UniquenessRule("Invariant")]
+    11: optional map<string, string> CustomHeaders;
+
+    [UniquenessRule("Invariant")]
+    12: optional bool RealTimeView = true;
+
+    [UniquenessRule("Invariant")]
+    14 : required string AgentFriendlyName;
+
+    // Value must be unique id of the partner
+    [UniquenessRule("Invariant")]
+    15 : required string Id;
+
+    [UniquenessRule("Invariant")]
+    16 : optional AuthenticationType AuthenticationType;
+
+    18 : optional string AadTokenScope;
+
+    // Additional parameters that are being passed to the partner adapter
+    19 : optional map<string, string> AdditionalParameters;
+};
+
+struct IXboxAccountsAdapterConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required string XassServiceEndpoint;
+
+    [UniquenessRule("Invariant")]
+    2 : required string XasuServiceEndpoint;
+
+    [UniquenessRule("Invariant")]
+    3 : required string XstsServiceEndpoint;
+
+    [UniquenessRule("Invariant")]
+    4 : required string XtokenMsaS2STargetSite;
+
+    // TODO: Bug 15886417: Xbox calls temporarily disabled in PPE while we wait on access
+    5 : optional bool EnableAdapter = true;
+
+    6 : required int32 RefreshXassTokenBeforeExpiryMinutes;
+
+    7 : required int32 MaxXassTokenCacheAgeMinutes;
+
+    [UniquenessRule("Invariant")]
+    8 : required ICertificateConfiguration S2SCertificateConfiguration;
+};
+
+struct IMsaIdentityServiceAdapterConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    // Allow error handling to be bypassed (ignore errors) in environments where MSA does not give us access (ie PPE)
+    1: required bool IgnoreErrors;
+
+    2: required bool EnableAdapter;
+};
+
+struct IAadRequestVerificationServiceAdapterConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    1: required bool EnableAdapter;
+
+    2: required string AadAppId;
+}
+
+struct IRingPartnerConfigOverride
+{
+    [UniquenessRule("Invariant")]
+    1 : required RingType Ring;
+
+    [UniquenessRule("Invariant")]
+    2 : required list<string> AllowedDataAgents
+
+    [UniquenessRule("Invariant")]
+    3 : required list<string> AllowedResourceTypes
+
+    [UniquenessRule("Invariant")]
+    4 : required AuthenticationType AuthenticationTypeOverride;
+
+    [UniquenessRule("Invariant")]
+    5 : required string AadTokenResourceIdOverride;
+
+    [UniquenessRule("Invariant")]
+    6 : required string AadTokenScopeOverride;
+
+    [UniquenessRule("Invariant")]
+    7 : required string BaseUrlOverride;
+}
+
+struct IEventLoggingFilter
+{
+    1 : required list<string> IdsForExtendedLogging;
+}
+
+struct IFlightConfiguration
+{
+    1 : required string FlightName;
+    2 : required RingType Ring;
+};
+
+struct IGraphAdapterConfiguration : IPrivacyPartnerAdapterConfiguration
+{
+    [UniquenessRule("Invariant")]
+    1 : required string AadGraphResource;
+
+	[UniquenessRule("Invariant")]
+    2 : required string ApiVersion;
+};
+
+struct IAIdEventHubConfiguration
+{
+    1 : required string EventHubName1;
+    2 : optional string EventHubName2;
+    3 : required string EventHubNamespace;
+    4 : required string BlobAccountName;
+    5 : required string BlobContainerName; 
+}
+
+struct IAIdAuthConfiguration
+{
+    1 : required string TenantId;
+    2 : required string ClientId;
+    3 : required string CertSubjectName;
+}
+
+struct IAnaheimIdAdapterConfiguration
+{
+    1 : required IAIdEventHubConfiguration EventHubConfiguration;
+    2 : optional IAIdAuthConfiguration AIdAuthConfiguration;
+};
+
+struct IAdaptersConfiguration
+{
+    1 : optional list<IFlightConfiguration> PrivacyFlightConfigurations;
+
+    // Value determines the distance to group locations by
+    [UniquenessRule("Invariant")]
+    2 : required int32 GroupLocationDistanceMeters;
+
+    // Value determines the max allowed accuracy radius in meters for a location
+    [UniquenessRule("Invariant")]
+    3 : required int32 MaxAccuracyRadiusMeters;
+
+    [UniquenessRule("Invariant")]
+    4 : required IPrivacyPartnerAdapterConfiguration CustomerMasterAdapterConfiguration;
+
+    [UniquenessRule("Invariant")]
+    5 : required IPrivacyPartnerAdapterConfiguration DataManagementAdapterConfiguration;
+
+    [UniquenessRule("Invariant")]
+    7 : required map<string, IRetryStrategyConfiguration> RetryStrategyConfigurations;
+
+    [UniquenessRule("Invariant")]
+    8 : optional int32 TimeoutInMilliseconds = 10000;
+
+    [UniquenessRule("Invariant")]
+    10 : required IXboxAccountsAdapterConfiguration XboxAccountsAdapterConfiguration;
+
+    11 : required RingType DefaultTargetRing;
+
+    // Value represents required resource types that must exist
+    12 : required list<ResourceType> RequiredResourceTypes;
+
+    13 : required map<string, IRingPartnerConfigOverride> RingPartnerConfigOverrides;
+
+    14 : required IMsaIdentityServiceAdapterConfiguration MsaIdentityServiceAdapterConfiguration;
+
+    15 : required IEventLoggingFilter HttpRequestLoggingFilter;
+
+    16 : required IAadRequestVerificationServiceAdapterConfiguration AadRequestVerificationServiceAdapterConfiguration;
+
+    17 : required IPcfPrivacyPartnerAdapterConfiguration PcfAdapterConfiguration;
+
+    18 : required IVerificationValidationServiceConfig VerificationValidationServiceConfiguration;
+
+    19 : required IGraphAdapterConfiguration GraphAdapterConfiguration;
+
+    20 : required IAnaheimIdAdapterConfiguration AnaheimIdAdapterConfiguration;
+}
+
+struct IRingPartnerConfigMapping
+{
+    1 : required RingType Ring;
+
+    // Mapping of upper case PartnerId -> IPxfPartnerConfiguration
+    [UniquenessRule("Invariant")]
+    2 : required map<string, IPxfPartnerConfiguration> PartnerConfigMapping;
+}
+
+struct IDataManagementConfig
+{
+    // Mapping of Ring -> PartnerConfigMapping
+    1 : required map<string, IRingPartnerConfigMapping> RingPartnerConfigMapping;
+}

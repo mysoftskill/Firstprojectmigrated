@@ -1,0 +1,72 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            On this page, you will be able to view all pending requests from teams wanting to link their data assets to existing variants.
+        </p>
+        <p mee-paragraph data-use-cms>
+            You can approve or deny requests individually after clicking <span class="view-label">View Details</span> on a request. This will
+            take you to a more detailed view of the variants and the data assets being requested for that particular team.
+        </p>
+        <p mee-paragraph data-use-cms>
+            If you have pending requests, you will be able to select a team from the drop down to see their pending requests. Otherwise,
+            if there are no current requests that need your attention, there is no action to take on this page.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-progress-view watch-operation="initializeManageVariantRequestsComponent">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <div ng-if="!$ctrl.dataOwnerPickerModel.items.length">
+                    <p mee-paragraph data-use-cms>You have no pending variants that need your attention.</p>
+                </div>
+                <div ng-if="$ctrl.dataOwnerPickerModel.items.length">
+                    <mee-select ng-model="$ctrl.dataOwnerPickerModel.selectedId" menu-style="border scroll" mee-auto-focus>
+                        <label data-use-cms>Team</label>
+                        <select>
+                            <option ng-repeat="item in $ctrl.dataOwnerPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+                        </select>
+                    </mee-select>
+
+                    <div class="c-table f-divided" data-grid="col-12">
+                        <table data-f-sort="false">
+                            <thead>
+                                <tr>
+                                    <th data-use-cms>Variant request</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="request in $ctrl.getSelectedTeamRequests($ctrl.dataOwnerPickerModel.selectedId) track by $index">
+                                    <td>
+                                        {{$ctrl.getVariantRequestTitle(request)}}
+                                    </td>
+                                    <td>
+                                        <a ui-sref="variant-admin.request-details({ request: request, variantRequestId: request.id })" mee-action-trigger="align-margin" data-use-cms>View details</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+
+</pcd-default-page-layout>

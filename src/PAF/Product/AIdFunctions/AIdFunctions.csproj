@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <AssemblyName>Microsoft.PrivacyServices.AIdFunctions</AssemblyName>
+    <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput> <!--Workaround to avoid dependency exception when connecting to Redis. -->
+    <RootNamespace>Microsoft.PrivacyServices.AIdFunctions</RootNamespace>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);NU1702</NoWarn>
+    <PackageId>Microsoft.PrivacyServices.AIdFunctions</PackageId>
+    <Authors>Microsoft.PrivacyServices.AIdFunctions</Authors>
+    <Product>Microsoft.PrivacyServices.AIdFunctions</Product>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DocumentationFile>bin\$(Configuration)\AIdFunctions.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\AnaheimIdLib\AnaheimIdLib.csproj" />
+    <ProjectReference Include="..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\AnaheimId\AnaheimId.csproj" />
+    <ProjectReference Include="..\Common\Privacy.AzureFunctions.Common\Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="local.settings.json" Condition="Exists('local.settings.json')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" />
+    <PackageReference Include="AzureFunctions.Extensions.DependencyInjection" />
+    <PackageReference Include="Bond.CSharp" />
+    <PackageReference Include="Bond.Core.CSharp" />
+    <PackageReference Include="Bond.Runtime.CSharp" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventHubs" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage.Blobs" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Script.ExtensionsMetadataGenerator" />
+    <PackageReference Include="Microsoft.Cloud.InstrumentationFramework" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" />
+    <PackageReference Include="System.ServiceModel.Http" />
+  </ItemGroup>
+</Project>

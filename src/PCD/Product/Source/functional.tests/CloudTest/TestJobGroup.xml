@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestJobGroup>
+<!--The TestMap is in Product/Source/ux/CloudTest-->
+    <ResourceSpec>
+        <Resource SKU="Standard_DS4_V2" Image="VS2019EnterpriseWS2019"/>
+    </ResourceSpec>
+    <Setup>
+        <BuildFiles>
+            <Copy Src="[BuildRoot]\outputs\build\functionalTest\*" Dest="[WorkingDirectory]\functionalTest" IsRecursive="true" />
+        </BuildFiles>
+    </Setup>
+    <TestJob Name="RunIntegrationTests"  TimeoutMins="20">
+        <Execution Type="MsTest"
+                   Path="[WorkingDirectory]\functionalTest\functional.tests.dll"/>
+    </TestJob>
+</TestJobGroup>

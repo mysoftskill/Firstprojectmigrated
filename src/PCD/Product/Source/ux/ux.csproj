@@ -1,0 +1,150 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <DebugType>full</DebugType>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>ux</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>ux</PackageId>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateUserSecretsAttribute>false</GenerateUserSecretsAttribute>
+    <RootNamespace>Microsoft.PrivacyServices.UX</RootNamespace>
+    <NoWarn>$(NoWarn);CS0618</NoWarn> 
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- https://stackoverflow.com/questions/40667665/how-to-prevent-visual-studio-2017-from-build-javascript -->
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\**\*;appsettings.json;appconfig\**\*;node_modules\jquery\dist\**\*;node_modules\@azure\msal-browser\**\*;node_modules\core-js-bundle\*;node_modules\moment\**\*;node_modules\systemjs\dist\**\*;node_modules\angular\**\*;node_modules\angular-cookies\**\*;node_modules\angular-sanitize\**\*;node_modules\@uirouter\angularjs\release\**\*;node_modules\systemjs-plugin-text\**\*;node_modules\underscore\**\*;node_modules\@mee\oneui.angular\dist\oneui\public\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="wwwroot\js\**\*.spec.*;wwwroot\js\shared-tests\**\*;node_modules\**\node_modules\**\*;node_modules\**\*.md;node_modules\**\*.txt;node_modules\**\package.json;node_modules\**\bower.json;node_modules\@mee\oneui.angular\dist\oneui\public\docs\*">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\..\..\PCF\Product\Client\Source\PrivacyCommandProcessor.csproj" />
+    <ProjectReference Include="..\..\..\..\PDMS\Product\ClientSdks\Client\Pdms.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\PDMS\Product\ClientSdks\Pdms.Client.Aad\Pdms.Client.Aad.csproj" />
+    <ProjectReference Include="..\..\..\..\PDMS\Product\ClientSdks\ServiceTree\ServiceTree.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\PXS\Product\Clients\PrivacyOperationClient\Source\PrivacyOperationClient.csproj" />
+    <ProjectReference Include="..\ux.configuration.contracts\ux.configuration.contracts.csproj" />
+    <ProjectReference Include="..\ux.configuration.parallax\ux.configuration.parallax.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="ini-parser" />
+    <PackageReference Include="Microsoft.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" />
+    <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+    <PackageReference Include="Microsoft.AspNetCore.Rewrite" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IIS" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" />
+    <PackageReference Include="Microsoft.Carbon.Flighting.Runtime" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventSource" />
+    <PackageReference Include="Microsoft.MarketReadiness" />
+    <PackageReference Include="Microsoft.Osgs.Infra.Monitoring.AspNetCore" />
+    <PackageReference Include="Microsoft.Osgs.Web.Core" />
+    <PackageReference Include="Microsoft.PrivacyServices.Identity" />
+    <PackageReference Include="Microsoft.PrivacyServices.Policy" />
+    <PackageReference Include="Microsoft.TypeScript.Compiler" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" />
+    <PackageReference Include="Microsoft.Windows.Services.CompassService.Client" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Parallax" />
+    <PackageReference Include="System.Text.Encodings.Web" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+    <Reference Include="System" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Core\Monitoring\generate.proj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 
+        Work around issue with VS adding new TypeScript files when File -> Add New Item is used.
+        https://developercommunity.visualstudio.com/content/problem/288648/vs-modifies-csproj-file-with-typescriptcompile-ite.html?childToView=293075#comment-293075
+    -->
+    <Compile Remove="Data\AutopilotTemp\**" />
+    <EmbeddedResource Remove="Data\AutopilotTemp\**" />
+    <None Remove="**/*.ts" />
+    <None Remove="Data\AutopilotTemp\**" />
+    <Content Remove="**/*.ts" />
+    <Content Remove="Data\AutopilotTemp\**" />
+    <TypeScriptCompile Include="**/*.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Remove="Data\AutopilotTemp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Common\ComplianceServicesCommon\Certificates\CertHelper.cs" Link="Core\Security\CertHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="config-certsubjectname.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Core\Security\test.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

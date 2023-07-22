@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest ApplicationTypeName="WorkerStandingQueryExtensionManagerAppType" ApplicationTypeVersion="5.2.105" xmlns="http://schemas.microsoft.com/2011/01/fabric" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ManifestId="ac65756e-a5bf-4f90-b723-89f2b9047890">
+  <Parameters>
+    <Parameter Name="StandingQueryExtensionManagerSvc_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="SQE_MAMetricsAccount" DefaultValue="" />
+    <Parameter Name="SQE_MAConfigNamespace" DefaultValue="" />
+    <Parameter Name="SQE_MonitoringTenant" DefaultValue="" />
+    <Parameter Name="SQE_MonitoringRole" DefaultValue="" />
+    <Parameter Name="SQE_MonitoringListeningPort" DefaultValue="5010" />
+    <Parameter Name="SQE_ClusterName" DefaultValue="" />
+    <Parameter Name="SQE_ClusterPath" DefaultValue="" />
+    <Parameter Name="CertificateThumbprint" DefaultValue="" />
+    <Parameter Name="CertificateSubjectName" DefaultValue="" />
+    <Parameter Name="RunDebug" DefaultValue="false" />
+    <Parameter Name="Svc_PlacementConstraints" DefaultValue="(NodeTypeName==NodeType0)" />
+  </Parameters>
+  <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
+       should match the Name and Version attributes of the ServiceManifest element defined in the 
+       ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="StandingQueryExtensionManagerSvcPkg" ServiceManifestVersion="5.2.105" />
+    <EnvironmentOverrides CodePackageRef="Code">
+      <EnvironmentVariable Name="MAMetricsAccount" Value="[SQE_MAMetricsAccount]" />
+      <EnvironmentVariable Name="MAConfigNamespace" Value="[SQE_MAConfigNamespace]" />
+      <EnvironmentVariable Name="MonitoringTenant" Value="[SQE_MonitoringTenant]" />
+      <EnvironmentVariable Name="MonitoringRole" Value="[SQE_MonitoringRole]" />
+      <EnvironmentVariable Name="MonitoringListeningPort" Value="[SQE_MonitoringListeningPort]" />
+      <EnvironmentVariable Name="ClusterName" Value="[SQE_ClusterName]" />
+      <EnvironmentVariable Name="ClusterPath" Value="[SQE_ClusterPath]" />
+      <EnvironmentVariable Name="CertificateThumbprint" Value="[CertificateThumbprint]" />
+      <EnvironmentVariable Name="CertificateSubjectName" Value="[CertificateSubjectName]" />
+      <EnvironmentVariable Name="RunDebug" Value="[RunDebug]" />
+    </EnvironmentOverrides>
+    <Policies>
+      <RunAsPolicy CodePackageRef="Code" UserRef="SetupLocalSystem" EntryPointType="Main" />
+    </Policies>
+  </ServiceManifestImport>
+  <DefaultServices>
+    <!-- The section below creates instances of service types, when an instance of this 
+         application type is created. You can also create one or more instances of service type using the 
+         ServiceFabric PowerShell module.
+         
+         The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="StandingQueryExtensionManagerSvc" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="StandingQueryExtensionManagerSvcType" InstanceCount="[StandingQueryExtensionManagerSvc_InstanceCount]">
+        <SingletonPartition />
+        <PlacementConstraints>[Svc_PlacementConstraints]</PlacementConstraints>
+      </StatelessService>
+    </Service>
+  </DefaultServices>
+  <Principals>
+    <Users>
+      <User Name="SetupLocalSystem" AccountType="LocalSystem" />
+    </Users>
+  </Principals>
+</ApplicationManifest>

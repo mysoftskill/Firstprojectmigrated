@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <AssemblyName>AzureKeyVaultCertificateInstaller</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.DataManagement.AzureKeyVaultCertificateInstaller</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Exe</OutputType>
+    <OutputPath>$(OutputPath)\..\ServiceFabricRelease\$(MSBuildProjectName)</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\$(Platform)\AzureKeyVaultCertificateInstaller.xml</DocumentationFile>
+    <SignAssembly>false</SignAssembly>
+    <LangVersion>7.2</LangVersion>
+    <FlattenIniOneboxUnderVisualStudio>True</FlattenIniOneboxUnderVisualStudio>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="ServiceManager.Tools" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Server\Common\Common.csproj" />
+  </ItemGroup>
+
+  <Import Project="$(ServiceRoot)\Build\core.common.targets" />
+  <Import Project="$(ServiceRoot)\Build\flattenini_onebox.targets" />
+</Project>

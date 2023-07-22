@@ -1,0 +1,38 @@
+﻿// <copyright company="Microsoft Corporation">
+//   Copyright (c) Microsoft Corporation.  All rights reserved.  
+// </copyright>
+
+namespace Microsoft.Membership.MemberServices.Common.Utilities
+{
+    using System.Threading;
+
+    /// <summary>
+    ///     thread safe random number generator
+    /// </summary>
+    public class ThreadSafeRandom : IRandom
+    {
+        private readonly ThreadLocal<SimpleRandom> rng = new ThreadLocal<SimpleRandom>(() => new SimpleRandom(), false);
+
+        /// <summary>
+        ///     gets the next random value
+        /// </summary>
+        /// <returns>resulting value</returns>
+        public int Next()
+        {
+            return this.rng.Value.Next();
+        }
+
+        /// <summary>
+        ///     gets the next random value scaled to the provided range
+        /// </summary>
+        /// <param name="min">minimum value</param>
+        /// <param name="max">maximum value</param>
+        /// <returns>resulting value</returns>
+        public int Next(
+            int min,
+            int max)
+        {
+            return this.rng.Value.Next(min, max);
+        }
+    }
+}

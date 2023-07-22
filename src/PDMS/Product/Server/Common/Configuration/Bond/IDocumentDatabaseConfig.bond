@@ -1,0 +1,9 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IDocumentDatabaseConfig 
+{
+    1   :   required    string          DatabaseName;
+    2   :   required    string          EntityCollectionName;
+    3   :   required    string          EndpointUri;
+    4   :   required    string          KeyVaultPrimaryKeyName;
+};

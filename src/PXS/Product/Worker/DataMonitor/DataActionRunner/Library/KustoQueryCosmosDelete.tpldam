@@ -1,0 +1,38 @@
+﻿declare query_parameters (ExcludedAgentsJson:string, Age:timespan); 
+//
+let expectedRate = 95.0; // Identifies the threshold for failing completion.
+let signalAge = 30; // Identifies the minimum age of the signals. PostSLA fields only consider signals between 30-45 days old.
+let reportdate = toscalar(cluster("Ngpreporting").database('NgpInfo').CosmosAgentHealthFullRollupByDayHistory | summarize max(SQLizerStreamDateId));
+//let reportdate = datetime(2018-07-09); // Use this to use a different snapshot date
+//
+//
+let ExcludedAgentsRaw = datatable(junk:int) [ 1 ] 
+| extend ListColumn = todynamic(ExcludedAgentsJson) 
+| project ListColumn 
+| mvexpand ListColumn 
+| evaluate bag_unpack(ListColumn) 
+| project AgentId=tostring(AgentId), Expires=todatetime(Expires)
+| where AgentId != "00000000-0000-0000-0000-000000000000"; 
+//
+let ExcludedAgents = ExcludedAgentsRaw 
+| where isnull(Expires) or Expires > now() 
+| project AgentId;
+//
+let AgentOwnerInfo = cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo();
+//
+let postSlaStartDate = startofday(reportdate) - 45d;
+let postSLAEndDate = startofday(reportdate) - 31d;
+//
+cluster("Ngpreporting").database('NgpInfo').CosmosAgentHealthFullRollupByDayHistory 
+| where SQLizerStreamDateId == reportdate
+| where startofday(SignalDate) >= postSlaStartDate
+| where AgentId !in (ExcludedAgents)
+| extend CompletedDeleteCount=AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount + DeletedStreamsRequestCount + EmptyStreamsRequestCount
+| where startofday(SignalDate) >= postSlaStartDate and startofday(SignalDate) <= postSLAEndDate
+| summarize CompletedCount=sum(CompletedDeleteCount), ExpectedCount=sum(TotalRequestCount) by AgentId
+| project AgentId, CompletionRate=round(todouble(CompletedCount) / ExpectedCount * 100, 2)
+| join kind=inner AgentOwnerInfo on AgentId
+| project AgentId, AgentName, CompletionRate, ExpectedRate=expectedRate, SignalAge=signalAge, AgentType, AgentReadiness, TeamName=ServiceName
+| where CompletionRate < expectedRate and AgentReadiness == "ProdReady"
+| order by CompletionRate desc
+| project AgentId, AgentName, CompletionRate, ExpectedRate, SignalAge, AgentType, TeamName

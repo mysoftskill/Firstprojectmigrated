@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ApAutoIIS" Version="10.8.5000.1632" />
+    <PackageReference Include="Microsoft.MeePortal.Deployment.ApSecretStore.Library" Version="2018.12.19" />
+    <PackageReference Include="Microsoft.PrivacyServices.CodeSign" Version="9.0.17282.2" />
+    <PackageReference Include="Microsoft.PrivacyServices.CodeSign.Dependencies" Version="1.0.0.0" />
+    <PackageReference Include="Microsoft.PrivacyServices.UX.Deployment.IisRewrite" Version="1.0.1" />
+    <PackageReference Include="Microsoft.PrivacyServices.UX.Deployment.IisAspNetCoreModule" Version="2.1.11" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+root = true
+
+# All files
+[*]
+indent_style = space
+
+# Xml files
+[*.xml]
+indent_size = 2
+
+[*.cs]
+
+# SA1591 XML comments are not required in test projects
+dotnet_diagnostic.CS1591.severity = none
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = none
+
+# SA1600 Elements don't need to be documented in test classes
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1629: Documentation text should end with a period
+dotnet_diagnostic.SA1629.severity = none
+
+# SA1623: Property summary documentation should match accessors (requires "gets or sets" in documentation)
+dotnet_diagnostic.SA1623.severity = none
+
+# SA1633: The file header is missing or not located at the top of the file.
+dotnet_diagnostic.SA1633.severity = none

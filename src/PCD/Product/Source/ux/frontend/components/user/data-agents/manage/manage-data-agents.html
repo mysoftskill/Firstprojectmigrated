@@ -1,0 +1,112 @@
+<pcd-default-page-layout>
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            This page displays data agents owned by your team with privacy actions that are linked to data agents.
+        </p>
+
+        <p mee-paragraph data-use-cms>
+            <span class="view-label">Register data agent</span>
+            to register a new data agent for your team.
+        </p>
+
+        <p mee-paragraph data-use-cms>Useful links:</p>
+        <ul mee-list="lean">
+            <li>
+                <a mee-hyperlink href="https://aka.ms/agentdrilldown" target="_blank" data-use-cms>Agent health dashboard</a>
+            </li>
+        </ul>
+    </pcd-sidebar>
+    <pcd-content>
+        <mee-progress-view watch-operation="fetchDataAgentsForOwner">
+            <inert-view></inert-view>
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed to get data agents.
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-owner-id="$ctrl.ownerId"></pcd-default-page-context>
+
+                <div>
+                    <mee-alert ng-if="$ctrl.agentWithSharingRequestsExist()" kind="use-glyph info">
+                        <alert-content data-use-cms>
+                            You have sharing requests on some of your data agents. Please select the Requests link below to resolve.
+                        </alert-content>
+                    </mee-alert>
+                    <div class="c-table f-divided" data-grid="col-12" i9n-data-agent-list>
+                        <table data-f-sort="false">
+                            <thead>
+                                <tr>
+                                    <th data-use-cms>Name</th>
+                                    <th data-use-cms>ID</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="dataAgent in $ctrl.dataAgents track by dataAgent.id" id="{{dataAgent.id}}">
+                                    <td>
+                                        <span>{{dataAgent.name}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{dataAgent.id}}</span>
+                                    </td>
+                                    <td class="action-list" i9n-action-list>
+                                        <a ui-sref=".edit({ownerId: $ctrl.ownerId, agentId: dataAgent.id})"
+                                           data-glyph="edit"
+                                           mee-action-trigger="align-margin"
+                                           i9n-edit-agent
+                                           data-use-cms>Edit</a>
+                                        <a ui-sref=".manage-data-assets({ownerId: $ctrl.ownerId, agentId: dataAgent.id})"
+                                           data-glyph="info"
+                                           mee-action-trigger="align-margin"
+                                           i9n-linked-data-assets
+                                           data-use-cms>Linked data assets</a>
+                                        <a ng-if="dataAgent.hasSharingRequests"
+                                           ui-sref=".pending-sharing-requests({agentId: dataAgent.id, ownerId: $ctrl.ownerId})"
+                                           data-glyph="share"
+                                           mee-action-trigger="align-margin"
+                                           i9n-requests
+                                           data-use-cms>Requests</a>
+                                        <a ui-sref=".health({agentId: dataAgent.id})"
+                                           data-glyph="heart-fill"
+                                           mee-action-trigger="align-margin"
+                                           i9n-check-health
+                                           data-use-cms>Check health</a>
+                                        <a mee-no-href
+                                           data-glyph="cancel"
+                                           mee-action-trigger="align-margin"
+                                           ng-click="$ctrl.showDeleteAgentConfirmationDialog(dataAgent)"
+                                           i9n-remove-agent
+                                           data-use-cms>Remove</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </finished-view>
+
+        </mee-progress-view>
+
+        <a ui-sref="data-agents.create({ownerId: $ctrl.ownerId})"
+           data-glyph="add"
+           mee-action-trigger="align-margin"
+           i9n-register-data-agent
+           data-use-cms>Register data agent</a>
+
+        <a mee-no-href
+           ng-click="$ctrl.requestMoveTeamAgents()"
+           data-glyph="go"
+           mee-action-trigger="align-margin"
+           i9n-move-data-agents
+           data-use-cms>Move data agents to another team</a>
+    </pcd-content>
+</pcd-default-page-layout>

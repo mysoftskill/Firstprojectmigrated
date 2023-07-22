@@ -1,0 +1,10 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct ITokenProviderConfig 
+{
+    1   :   required    string          Scheme;
+    2   :   required    string          Authority;
+    3   :   required    string          AssertionType;
+    4   :   required    string          ClientId;
+    5   :   required    string          KeyVaultCertificateName;
+};

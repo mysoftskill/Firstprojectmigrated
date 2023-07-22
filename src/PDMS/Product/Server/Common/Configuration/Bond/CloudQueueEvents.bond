@@ -1,0 +1,25 @@
+﻿import "InstrumentationBaseEvents.bond"
+import "Microsoft.Telemetry.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Successful outgoing call to Azure Queue.")]
+struct CloudQueueSuccessEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingSucessEvent
+{
+    10: required string queueName;
+    20: optional string primaryUri;
+    30: optional string secondaryUri;
+    40: optional string messageCount;
+    50: optional string message;
+}
+
+
+[Description("Failed outgoing call to Azure Queue.")]
+struct CloudQueueExceptionEvent : Microsoft.PrivacyServices.DataManagement.Common.Configuration.BaseOutgoingExceptionEvent
+{
+    10: required string queueName;
+    20: optional string primaryUri;
+    30: optional string secondaryUri;
+    40: optional string messageCount;
+    50: optional string message;
+}

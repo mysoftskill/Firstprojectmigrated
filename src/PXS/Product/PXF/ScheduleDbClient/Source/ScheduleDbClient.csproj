@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Microsoft.Membership.MemberServices.ScheduleDbClient</RootNamespace>
+		<AssemblyName>Microsoft.Membership.MemberServices.ScheduleDbClient</AssemblyName>
+		<TargetFramework>net472</TargetFramework>
+		<ApplicationIcon />
+		<StartupObject />
+		<Platforms>x64</Platforms>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\..\Deployment\Configurations\RecurrentDeleteWorker\RecurrentDeleteWorker.ini">
+			<Link>RecurrentDeleteWorker.ini</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\Source\Common.csproj" />
+		<ProjectReference Include="..\..\Contracts\PrivacyExperience\Source\PrivacyExperienceContracts.csproj" />
+	</ItemGroup>
+</Project>

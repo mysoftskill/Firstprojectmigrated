@@ -1,0 +1,86 @@
+trigger: none
+
+variables:
+  # common variables
+  - template: common-variables.yml
+  - name: BuildTemplate
+    value: buddy
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates
+  parameters:
+    globalSdl:
+      binskim:
+        enabled: true
+    # Nuget publishing is disabled by default. To enable it you need to set ob_nugetPublishing_enabled variable 
+    # on job and set nugetPublishing object as job parameter.
+    nugetPublishing:
+      feeds:
+      - name: ADG_Compliance_Services/ADG.CS
+        files_to_publish: '*.nupkg;!*.symbols.nupkg'
+        continueOnConflict: true
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows
+        
+        variables:
+          ob_outputDirectory: '$(Build.SourcesDirectory)\out'
+          BuildSolution: $(Build.SourcesDirectory)\src\Common\AnaheimIdLib\AnaheimIdLib.csproj
+          ob_nugetPublishing_enabled: true
+          
+        steps:
+        
+        # generates automatic version. For other versioning options check https://aka.ms/obpipelines/versioning
+        - task: onebranch.pipeline.version@1 
+          displayName: 'Setup BuildNumber'
+          inputs:
+            system: 'RevisionCounter'
+            major: '0'
+            minor: '0'
+            exclude_commit: true
+
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            useGlobalJson: true
+            workingDirectory: '$(Build.SourcesDirectory)'
+            performMultiLevelLookup: true
+
+        - task: DotNetCoreCLI@2
+          displayName: 'DotNetCore restore'
+          inputs:
+            command: 'custom' # if you use `restore` command it invalidates credential, so we recommend to use custom + restore argument
+            projects: $(BuildSolution)
+            custom: 'restore'
+            verbosityRestore: diagnostic
+
+        - task: RoslynAnalyzers@3
+          displayName: 'dotnet build with RoslynAnalyzers'
+          inputs:
+            userProvideBuildInfo: 'msBuildInfo'
+            msBuildVersion: '16.0'
+            msBuildArchitecture: x64
+            msBuildCommandline: 'dotnet.exe build $(BuildSolution) --no-restore --configuration $(BuildConfiguration) -p:GeneratePackageOnBuild=false -p:platform=$(BuildArchitecture) -p:Version=$(Build.BuildNumber) -p:SourceRevisionId=$(Build.SourceVersion)'
+
+        - task: DotNetCoreCLI@2
+          displayName: 'DotNetCoreCLI pack'
+          inputs:
+            command: 'custom'
+            custom: pack 
+            arguments: $(BuildSolution) --no-build --configuration $(BuildConfiguration) -p:platform=$(BuildArchitecture) -p:PackageVersion=$(Build.BuildNumber) --output $(ob_outputDirectory)\packages
+
+        - task: ComponentGovernanceComponentDetection@0
+          inputs:
+            sourceScanPath: '$(Build.SourcesDirectory)\src\Common\AnaheimIdLib'
+            ignoreDirectories: '..\bin\Debug.x64,..\bin\Release.x64'

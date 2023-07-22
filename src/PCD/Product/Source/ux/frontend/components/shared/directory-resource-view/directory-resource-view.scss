@@ -1,0 +1,14 @@
+﻿@import "../../../styles/utilities.scss";
+
+pcd-directory-resource-view {
+    .view-resources {
+        @include drs-resource(true /** hide-close */);
+
+        .interaction-disabled {
+            background-color: gray;
+        }
+        .interaction-enabled {
+            cursor: pointer;
+        }
+    }
+}

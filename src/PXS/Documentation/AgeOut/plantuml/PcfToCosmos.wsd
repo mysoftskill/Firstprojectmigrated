@@ -1,0 +1,31 @@
+@startuml PcfCosmos
+
+participant PcfPxsController
+participant LifeCycleEventHub
+participant CommandRawDataReceiver #SeaGreen
+participant CosmosAgeOutStream #SkyBlue
+participant CosmosCommandStream
+
+PcfPxsController -> LifeCycleEventHub : Publish command start
+LifeCycleEventHub --> PcfPxsController : Ack
+
+LifeCycleEventHub -> CommandRawDataReceiver : Listen for life cycle events
+
+alt is age out command
+    CommandRawDataReceiver -> CosmosAgeOutStream : Write age outs to raw
+    CosmosAgeOutStream --> CommandRawDataReceiver : Ack
+else is not age out command
+    CommandRawDataReceiver -> CosmosCommandStream : Write non age out commands
+    CosmosCommandStream --> CommandRawDataReceiver : Ack
+end
+
+CommandRawDataReceiver --> LifeCycleEventHub : Mark completed
+
+legend
+    |= |= Type |
+    |<back:SeaGreen>   </back>| Update Required |
+    |<back:SkyBlue>   </back>| New |
+    |<back:LightYellow>   </back>| No Change |
+endlegend
+
+@enduml

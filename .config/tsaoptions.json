@@ -1,0 +1,13 @@
+{
+  "instanceUrl": "https://msdata.visualstudio.com",
+  "projectName": "ADG_Compliance_Services",
+  "areaPath": "ADG_Compliance_Services\\MS DSR\\Compliance\\TSA\\V1",
+  "DefaultBranches" : "master",
+  "iterationPath":"ADG_Compliance_Services",
+  "template" : "MSDATA_RevolutionR",
+  "notificationAliases": [
+    "ngpcieng@microsoft.com"
+  ],  
+  "uniqueCodeBaseName" : "ComplianceServices_Scanning",
+  "codeBaseName" : "MSDATA_RevolutionR_ComplianceServices"
+}

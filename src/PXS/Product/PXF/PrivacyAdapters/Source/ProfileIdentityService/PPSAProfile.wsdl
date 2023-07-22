@@ -1,0 +1,987 @@
+<?xml version="1.0"?>
+<definitions 
+	xmlns:s="http://www.w3.org/2001/XMLSchema" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:s0="http://schemas.microsoft.com/Passport/SoapServices/ProfileServiceAPI/V1" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:atls="http://tempuri.org/vc/atl/server/"
+	targetNamespace="http://schemas.microsoft.com/Passport/SoapServices/ProfileServiceAPI/V1" 
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+>
+	<types>
+		<s:schema targetNamespace="http://schemas.microsoft.com/Passport/SoapServices/ProfileServiceAPI/V1" attributeFormDefault="qualified" elementFormDefault="qualified">
+			<s:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+			<s:simpleType name="PPSoapHeader_wrapper">
+				<s:restriction base="s:string"/>
+			</s:simpleType>
+			<s:element name="CreateProfile">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrProfileXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="CreateProfileResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="CreatePassports">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrAccountXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="etFlags" type="s0:eTRANSACTION"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="CreatePassportsResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ppbstrCreatedAccountsArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrErrorBlob" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdatePassports">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrNetIDArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrAccountXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrAdditionalXML" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="bstrOptions" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdatePassportsResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ppbstrUpdatedAccountsArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrErrorBlob" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetProfileByAttributes">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrNetIDArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="bstrAttribList" type="s:string"/>
+						<s:element name="ulFlags" type="s:unsignedInt"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetProfileByAttributesResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ppbstrProfileXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrErrorBlob" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetProfileByXPath">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrNetIDArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrXPathArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetProfileByXPathResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ppbstrProfileXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrErrorBlob" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateProfile">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrProfileXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateProfileResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateProfileEx">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrNetIDArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="bstrProfileXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateProfileExResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="DeleteProfileW">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ppbstrNetIDArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="bstrPropertyCollectionList" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="DeleteProfileWResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="DeletePassports">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrNetIDArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="DeletePassportsResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetIdentityInfo">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PassIDIn" type="s0:tagPASSID"/>
+						<s:element name="bstrCredAttribList" type="s:string"/>
+						<s:element name="bstrProfileAttribList" type="s:string"/>
+						<s:element name="bstrOptionalParams" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetIdentityInfoResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateUserAppConsent">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="passID" type="s0:tagPASSID"/>
+						<s:element name="bstrAppPermissionXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateUserAppConsentResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrResultXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="EnumerateAppPermissions">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="passID" type="s0:tagPASSID"/>
+						<s:element name="bstrFilterXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="EnumerateAppPermissionsResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrAppPermissionXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetDelegationToken">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="passID" type="s0:tagPASSID"/>
+						<s:element name="bstrFilterXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetDelegationTokenResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrAppPermissionXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ReservePassports">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrAccountXMLArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="etFlags" type="s0:eTRANSACTION"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ReservePassportsResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ppbstrReservedAccountsArray" nillable="true">
+							<s:complexType>
+								<s:sequence>
+									<s:element name="string" type="s:string" minOccurs="0" maxOccurs="unbounded"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+						<s:element name="pbstrErrorBlob" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GenerateOneTimeToken">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PassID" type="s0:tagPASSID"/>
+						<s:element name="bstrGenerateOneTimeTokenXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GenerateOneTimeTokenResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrOneTimeToken" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="SendOneTimeToken">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PassID" type="s0:tagPASSID"/>
+						<s:element name="bstrSendOneTimeTokenXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="SendOneTimeTokenResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrSendOneTimeTokenResultXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ConsumeOneTimeToken">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PassID" type="s0:tagPASSID"/>
+						<s:element name="bstrOneTimeToken" type="s:string"/>
+						<s:element name="bstrConsumeOneTimeTokenXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ConsumeOneTimeTokenResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="BatchSendOneTimeToken">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PassID" type="s0:tagPASSID"/>
+						<s:element name="bstrSendBatchOneTimeTokenXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="BatchSendOneTimeTokenResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrSendBatchOneTimeTokenResultXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="SetPreferredDogfoodState">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrNetID" type="s:string"/>
+						<s:element name="fOptInForDogfood" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="SetPreferredDogfoodStateResponse">
+				<s:complexType>
+					<s:sequence>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="AddToFamily">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrAddToFamilyXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="AddToFamilyResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrAddToFamilyResultXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="RemoveFromFamily">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrRemoveFromFamilyXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="RemoveFromFamilyResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrRemoveFromFamilyResultXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateMembership">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="bstrUpdateMembershipXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="UpdateMembershipResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="pbstrUpdateMembershipResultXML" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:simpleType name="EnumSHVersion">
+				<s:restriction base="s:string">
+					<s:enumeration value="eshHeader30"/>
+					<s:enumeration value="eshHeader25"/>
+					<s:enumeration value="eshNone"/>
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="PASSIDTYPE">
+				<s:restriction base="s:string">
+					<s:enumeration value="PASSID_AUID"/>
+					<s:enumeration value="PASSID_ALIASNAME"/>
+					<s:enumeration value="PASSID_PUID_SIGNINNAME"/>
+					<s:enumeration value="PASSID_ROLEID"/>
+					<s:enumeration value="PASSID_PPSACREDENTIALID"/>
+					<s:enumeration value="PASSID_NULL"/>
+					<s:enumeration value="PASSID_PUID"/>
+					<s:enumeration value="PASSID_SIGNINNAME"/>
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="eTRANSACTION">
+				<s:restriction base="s:string">
+					<s:enumeration value="TX_MAX"/>
+					<s:enumeration value="TX_ROLLBACK_NONE"/>
+					<s:enumeration value="TX_ROLLBACK_ACCOUNT"/>
+					<s:enumeration value="TX_ROLLBACK_ALL"/>
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="tagPASSID">
+				<s:sequence>
+					<s:element name="pit" type="s0:PASSIDTYPE"/>
+					<s:element name="bstrID" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="tagWSSECURITYHEADER">
+				<s:sequence>
+					<s:element name="version" type="s0:EnumSHVersion"/>
+					<s:element name="wssecurity" type="s:string"/>
+					<s:element name="authorization" type="s:string"/>
+					<s:element name="sitetoken" type="s:string"/>
+					<s:element name="ppSoapHeader25" type="s:string"/>
+					<s:element name="auditInfo" type="s:string"/>
+					<s:element name="delegate" type="s:string"/>
+					<s:element name="originator" type="s:string"/>
+					<s:element name="clientip" type="s:string"/>
+					<s:element name="clientOS" type="s:string"/>
+					<s:element name="clientUserAgent" type="s:string"/>
+					<s:element name="uiFlavor" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PPSoapHeader" type="s0:PPSoapHeader_wrapper"/>
+			<s:element name="WSSecurityHeader" type="s0:tagWSSECURITYHEADER"/>
+		</s:schema>
+	</types>
+	<message name="CreateProfileIn">
+		<part name="parameters" element="s0:CreateProfile"/>
+	</message>
+	<message name="CreateProfileOut">
+		<part name="parameters" element="s0:CreateProfileResponse"/>
+	</message>
+	<message name="CreatePassportsIn">
+		<part name="parameters" element="s0:CreatePassports"/>
+	</message>
+	<message name="CreatePassportsOut">
+		<part name="parameters" element="s0:CreatePassportsResponse"/>
+	</message>
+	<message name="UpdatePassportsIn">
+		<part name="parameters" element="s0:UpdatePassports"/>
+	</message>
+	<message name="UpdatePassportsOut">
+		<part name="parameters" element="s0:UpdatePassportsResponse"/>
+	</message>
+	<message name="GetProfileByAttributesIn">
+		<part name="parameters" element="s0:GetProfileByAttributes"/>
+	</message>
+	<message name="GetProfileByAttributesOut">
+		<part name="parameters" element="s0:GetProfileByAttributesResponse"/>
+	</message>
+	<message name="GetProfileByXPathIn">
+		<part name="parameters" element="s0:GetProfileByXPath"/>
+	</message>
+	<message name="GetProfileByXPathOut">
+		<part name="parameters" element="s0:GetProfileByXPathResponse"/>
+	</message>
+	<message name="UpdateProfileIn">
+		<part name="parameters" element="s0:UpdateProfile"/>
+	</message>
+	<message name="UpdateProfileOut">
+		<part name="parameters" element="s0:UpdateProfileResponse"/>
+	</message>
+	<message name="UpdateProfileExIn">
+		<part name="parameters" element="s0:UpdateProfileEx"/>
+	</message>
+	<message name="UpdateProfileExOut">
+		<part name="parameters" element="s0:UpdateProfileExResponse"/>
+	</message>
+	<message name="DeleteProfileWIn">
+		<part name="parameters" element="s0:DeleteProfileW"/>
+	</message>
+	<message name="DeleteProfileWOut">
+		<part name="parameters" element="s0:DeleteProfileWResponse"/>
+	</message>
+	<message name="DeletePassportsIn">
+		<part name="parameters" element="s0:DeletePassports"/>
+	</message>
+	<message name="DeletePassportsOut">
+		<part name="parameters" element="s0:DeletePassportsResponse"/>
+	</message>
+	<message name="GetIdentityInfoIn">
+		<part name="parameters" element="s0:GetIdentityInfo"/>
+	</message>
+	<message name="GetIdentityInfoOut">
+		<part name="parameters" element="s0:GetIdentityInfoResponse"/>
+	</message>
+	<message name="UpdateUserAppConsentIn">
+		<part name="parameters" element="s0:UpdateUserAppConsent"/>
+	</message>
+	<message name="UpdateUserAppConsentOut">
+		<part name="parameters" element="s0:UpdateUserAppConsentResponse"/>
+	</message>
+	<message name="EnumerateAppPermissionsIn">
+		<part name="parameters" element="s0:EnumerateAppPermissions"/>
+	</message>
+	<message name="EnumerateAppPermissionsOut">
+		<part name="parameters" element="s0:EnumerateAppPermissionsResponse"/>
+	</message>
+	<message name="GetDelegationTokenIn">
+		<part name="parameters" element="s0:GetDelegationToken"/>
+	</message>
+	<message name="GetDelegationTokenOut">
+		<part name="parameters" element="s0:GetDelegationTokenResponse"/>
+	</message>
+	<message name="ReservePassportsIn">
+		<part name="parameters" element="s0:ReservePassports"/>
+	</message>
+	<message name="ReservePassportsOut">
+		<part name="parameters" element="s0:ReservePassportsResponse"/>
+	</message>
+	<message name="GenerateOneTimeTokenIn">
+		<part name="parameters" element="s0:GenerateOneTimeToken"/>
+	</message>
+	<message name="GenerateOneTimeTokenOut">
+		<part name="parameters" element="s0:GenerateOneTimeTokenResponse"/>
+	</message>
+	<message name="SendOneTimeTokenIn">
+		<part name="parameters" element="s0:SendOneTimeToken"/>
+	</message>
+	<message name="SendOneTimeTokenOut">
+		<part name="parameters" element="s0:SendOneTimeTokenResponse"/>
+	</message>
+	<message name="ConsumeOneTimeTokenIn">
+		<part name="parameters" element="s0:ConsumeOneTimeToken"/>
+	</message>
+	<message name="ConsumeOneTimeTokenOut">
+		<part name="parameters" element="s0:ConsumeOneTimeTokenResponse"/>
+	</message>
+	<message name="BatchSendOneTimeTokenIn">
+		<part name="parameters" element="s0:BatchSendOneTimeToken"/>
+	</message>
+	<message name="BatchSendOneTimeTokenOut">
+		<part name="parameters" element="s0:BatchSendOneTimeTokenResponse"/>
+	</message>
+	<message name="SetPreferredDogfoodStateIn">
+		<part name="parameters" element="s0:SetPreferredDogfoodState"/>
+	</message>
+	<message name="SetPreferredDogfoodStateOut">
+		<part name="parameters" element="s0:SetPreferredDogfoodStateResponse"/>
+	</message>
+	<message name="AddToFamilyIn">
+		<part name="parameters" element="s0:AddToFamily"/>
+	</message>
+	<message name="AddToFamilyOut">
+		<part name="parameters" element="s0:AddToFamilyResponse"/>
+	</message>
+	<message name="RemoveFromFamilyIn">
+		<part name="parameters" element="s0:RemoveFromFamily"/>
+	</message>
+	<message name="RemoveFromFamilyOut">
+		<part name="parameters" element="s0:RemoveFromFamilyResponse"/>
+	</message>
+	<message name="UpdateMembershipIn">
+		<part name="parameters" element="s0:UpdateMembership"/>
+	</message>
+	<message name="UpdateMembershipOut">
+		<part name="parameters" element="s0:UpdateMembershipResponse"/>
+	</message>
+	<message name="PPSoapHeader">
+		<part name="PPSoapHeader" element="s0:PPSoapHeader"/>
+	</message>
+	<message name="WSSecurityHeader">
+		<part name="WSSecurityHeader" element="s0:WSSecurityHeader"/>
+	</message>
+	<portType name="ProfileServiceAPISoapServerSoap">
+		<operation name="CreateProfile">
+			<input message="s0:CreateProfileIn"/>
+			<output message="s0:CreateProfileOut"/>
+		</operation>
+		<operation name="CreatePassports">
+			<input message="s0:CreatePassportsIn"/>
+			<output message="s0:CreatePassportsOut"/>
+		</operation>
+		<operation name="UpdatePassports">
+			<input message="s0:UpdatePassportsIn"/>
+			<output message="s0:UpdatePassportsOut"/>
+		</operation>
+		<operation name="GetProfileByAttributes">
+			<input message="s0:GetProfileByAttributesIn"/>
+			<output message="s0:GetProfileByAttributesOut"/>
+		</operation>
+		<operation name="GetProfileByXPath">
+			<input message="s0:GetProfileByXPathIn"/>
+			<output message="s0:GetProfileByXPathOut"/>
+		</operation>
+		<operation name="UpdateProfile">
+			<input message="s0:UpdateProfileIn"/>
+			<output message="s0:UpdateProfileOut"/>
+		</operation>
+		<operation name="UpdateProfileEx">
+			<input message="s0:UpdateProfileExIn"/>
+			<output message="s0:UpdateProfileExOut"/>
+		</operation>
+		<operation name="DeleteProfileW">
+			<input message="s0:DeleteProfileWIn"/>
+			<output message="s0:DeleteProfileWOut"/>
+		</operation>
+		<operation name="DeletePassports">
+			<input message="s0:DeletePassportsIn"/>
+			<output message="s0:DeletePassportsOut"/>
+		</operation>
+		<operation name="GetIdentityInfo">
+			<input message="s0:GetIdentityInfoIn"/>
+			<output message="s0:GetIdentityInfoOut"/>
+		</operation>
+		<operation name="UpdateUserAppConsent">
+			<input message="s0:UpdateUserAppConsentIn"/>
+			<output message="s0:UpdateUserAppConsentOut"/>
+		</operation>
+		<operation name="EnumerateAppPermissions">
+			<input message="s0:EnumerateAppPermissionsIn"/>
+			<output message="s0:EnumerateAppPermissionsOut"/>
+		</operation>
+		<operation name="GetDelegationToken">
+			<input message="s0:GetDelegationTokenIn"/>
+			<output message="s0:GetDelegationTokenOut"/>
+		</operation>
+		<operation name="ReservePassports">
+			<input message="s0:ReservePassportsIn"/>
+			<output message="s0:ReservePassportsOut"/>
+		</operation>
+		<operation name="GenerateOneTimeToken">
+			<input message="s0:GenerateOneTimeTokenIn"/>
+			<output message="s0:GenerateOneTimeTokenOut"/>
+		</operation>
+		<operation name="SendOneTimeToken">
+			<input message="s0:SendOneTimeTokenIn"/>
+			<output message="s0:SendOneTimeTokenOut"/>
+		</operation>
+		<operation name="ConsumeOneTimeToken">
+			<input message="s0:ConsumeOneTimeTokenIn"/>
+			<output message="s0:ConsumeOneTimeTokenOut"/>
+		</operation>
+		<operation name="BatchSendOneTimeToken">
+			<input message="s0:BatchSendOneTimeTokenIn"/>
+			<output message="s0:BatchSendOneTimeTokenOut"/>
+		</operation>
+		<operation name="SetPreferredDogfoodState">
+			<input message="s0:SetPreferredDogfoodStateIn"/>
+			<output message="s0:SetPreferredDogfoodStateOut"/>
+		</operation>
+		<operation name="AddToFamily">
+			<input message="s0:AddToFamilyIn"/>
+			<output message="s0:AddToFamilyOut"/>
+		</operation>
+		<operation name="RemoveFromFamily">
+			<input message="s0:RemoveFromFamilyIn"/>
+			<output message="s0:RemoveFromFamilyOut"/>
+		</operation>
+		<operation name="UpdateMembership">
+			<input message="s0:UpdateMembershipIn"/>
+			<output message="s0:UpdateMembershipOut"/>
+		</operation>
+	</portType>
+	<binding name="ProfileServiceAPISoapServerSoap" type="s0:ProfileServiceAPISoapServerSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<operation name="CreateProfile">
+			<soap:operation soapAction="#CreateProfile" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="CreatePassports">
+			<soap:operation soapAction="#CreatePassports" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpdatePassports">
+			<soap:operation soapAction="#UpdatePassports" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetProfileByAttributes">
+			<soap:operation soapAction="#GetProfileByAttributes" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetProfileByXPath">
+			<soap:operation soapAction="#GetProfileByXPath" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpdateProfile">
+			<soap:operation soapAction="#UpdateProfile" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpdateProfileEx">
+			<soap:operation soapAction="#UpdateProfileEx" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="DeleteProfileW">
+			<soap:operation soapAction="#DeleteProfileW" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="DeletePassports">
+			<soap:operation soapAction="#DeletePassports" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetIdentityInfo">
+			<soap:operation soapAction="#GetIdentityInfo" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpdateUserAppConsent">
+			<soap:operation soapAction="#UpdateUserAppConsent" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="EnumerateAppPermissions">
+			<soap:operation soapAction="#EnumerateAppPermissions" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetDelegationToken">
+			<soap:operation soapAction="#GetDelegationToken" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ReservePassports">
+			<soap:operation soapAction="#ReservePassports" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="GenerateOneTimeToken">
+			<soap:operation soapAction="#GenerateOneTimeToken" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SendOneTimeToken">
+			<soap:operation soapAction="#SendOneTimeToken" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ConsumeOneTimeToken">
+			<soap:operation soapAction="#ConsumeOneTimeToken" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="BatchSendOneTimeToken">
+			<soap:operation soapAction="#BatchSendOneTimeToken" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SetPreferredDogfoodState">
+			<soap:operation soapAction="#SetPreferredDogfoodState" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="AddToFamily">
+			<soap:operation soapAction="#AddToFamily" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="RemoveFromFamily">
+			<soap:operation soapAction="#RemoveFromFamily" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpdateMembership">
+			<soap:operation soapAction="#UpdateMembership" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+				<soap:header message="s0:PPSoapHeader" part="PPSoapHeader" use="literal"/>
+				<soap:header message="s0:WSSecurityHeader" part="WSSecurityHeader" use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="ProfileServiceAPISoapServer">
+		<port name="ProfileServiceAPISoapServerSoap" binding="s0:ProfileServiceAPISoapServerSoap">
+			<soap:address location="https://api.login.live-int.com/PPSAProfile.srf"/>
+		</port>
+	</service>
+</definitions>

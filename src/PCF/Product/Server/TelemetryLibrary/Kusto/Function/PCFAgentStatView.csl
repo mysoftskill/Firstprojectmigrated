@@ -1,0 +1,35 @@
+﻿.create-or-alter function with (folder = '', docstring = "PCF Agent Statistics for renderring", skipvalidation = "false") PCFAgentStatView(startTime:datetime, endTime:datetime, resolution:timespan) {
+    PCFAgentStatisticV2
+    | where TimeStamp between (startTime .. endTime)
+    | where CommandCount != 0 or CompletedCheckpointCount !=0 or CreatedCheckpointCount != 0 or SentToAgentCheckpointCount != 0
+    | order by TimeStamp desc 
+    | summarize 
+        Completed = sum(CompletedCheckpointCount), 
+        SoftDeletedCheckpoint = sum(SoftDeletedCheckpointCount),
+        Incoming = sum(CreatedCheckpointCount),
+        Retrieved = sum(SentToAgentCheckpointCount),
+        PendingCheckpoint = sum(PendingCheckpointCount),
+        FailedCheckpoint = sum(FailedCheckpointCount),
+        UnexpectedCheckpoint = sum(UnexpectedCheckpointCount),
+        VerificationFailureCheckpoint = sum(VerificationFailureCheckpointCount),
+        UnexpectedVerificationFailureCheckpoint = sum(UnexpectedVerificationFailureCheckpointCount),
+        Pending = max(CommandCount),
+	    CompletedByPcf = sum(CompletedByPcfEventCount)
+    by AgentId, AssetGroupId, CommandType, bin(TimeStamp, resolution)
+    | project 
+        TimeStamp, 
+        AgentId, 
+        AssetGroupId, 
+        CommandType = substring(CommandType, 0,1), 
+        Pending, 
+        Completed, 
+        Incoming, 
+        SoftDeletedCheckpoint, 
+        Retrieved, 
+        PendingCheckpoint, 
+        FailedCheckpoint, 
+        UnexpectedCheckpoint, 
+        VerificationFailureCheckpoint, 
+        UnexpectedVerificationFailureCheckpoint,
+	    CompletedByPcf
+} 

@@ -1,0 +1,20 @@
+import "Microsoft.Telemetry.bond"
+import "MultiInstanceTaskEvents.bond"
+
+namespace Microsoft.PrivacyServices.Common.DataActionRunner.Telemetry
+
+struct BaseActionEvent : Microsoft.PrivacyServices.Common.Telemetry.TaskTelemetryEvent
+{
+    10 : required string EventType;
+    20 : required string ActionType;
+    30 : required string ActionName;
+    40 : required map<string, string> Data;
+}
+
+struct ActionEvent : BaseActionEvent
+{
+}
+
+struct ActionError : BaseActionEvent
+{
+}

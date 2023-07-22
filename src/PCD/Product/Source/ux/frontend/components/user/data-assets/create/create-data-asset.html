@@ -1,0 +1,57 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            Registering an asset in PCD connects your team as the owner of the asset defined in DataGrid. If you are not familiar yet with DataGrid,
+            please follow the <a href="https://aka.ms/ngphome" target="_blank" mee-hyperlink>NGPX Onboarding Quick Start</a>.
+            If you are in C+E and using Geneva, your assets will be automatically synced with DataGrid.
+        </p>
+        <p mee-paragraph data-use-cms>
+            Start by choosing the <span class="view-label">Asset type</span> which should match with the entry in DataGrid. Depending on your selection,
+            you’ll be presented with different fields to help identify the asset in DataGrid. Then click the <span class="view-label">Preview</span> button.
+        </p>
+        <p mee-paragraph data-use-cms>
+            If the results are correct, click the <span class="view-label">Add</span> button to have the asset registered with your team.
+            They should now appear in your list of <span class="view-label">Newly registered data assets</span>.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-lede>
+        <p mee-paragraph data-use-cms>
+            When you register your data in PCD, you are creating a top-level inventory of all the data your team manages.
+            Data should be registered at the largest granularity possible - for example if your team manages the entire VC and your
+            delete processor operates at that level, register your VC, and avoid the extra effort of registering any sub paths.
+        </p>
+        <p mee-paragraph data-use-cms>
+            This top-level collection is referred to by PCD as a "data asset." Data assets can be (but are not limited to) SQL Databases,
+            Cosmos VC/Folders, or Azure DocumentDB instances, for example.
+        </p>
+    </pcd-lede>
+
+    <pcd-content>
+        <div>
+            <pcd-default-page-context pcd-owner-id="$ctrl.ownerId"></pcd-default-page-context>
+
+            <h3 mee-heading="heading4" data-use-cms>AssetGroup qualifier</h3>
+            <pcd-storage-picker pcd-on-save="$ctrl.saveAssetGroupQualifier(qualifier)" action-type="add">
+                <pcd-more-controls>
+                    <h3 mee-heading="heading4"
+                        data-use-cms>Control asset group inheritance</h3>
+                    <pcd-edit-asset-group-properties pcd-asset-group="$ctrl.currentAssetGroup"></pcd-edit-asset-group-properties>
+                </pcd-more-controls>
+            </pcd-storage-picker>
+
+            <h3 mee-heading="heading4">{{$ctrl.newAssetsListHeader}}</h3>
+            <pcd-asset-groups-list pcd-asset-groups="$ctrl.newAssets"></pcd-asset-groups-list>
+        </div>
+
+        <div>
+            <a ui-sref="^.manage({ ownerId: $ctrl.ownerId })" data-glyph="edit" mee-action-trigger="align-margin" data-use-cms>Manage all data assets</a>
+        </div>
+    </pcd-content>
+
+</pcd-default-page-layout>

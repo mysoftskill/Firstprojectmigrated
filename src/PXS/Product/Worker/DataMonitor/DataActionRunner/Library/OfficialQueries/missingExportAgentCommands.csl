@@ -1,0 +1,79 @@
+let maxDate = ago(14d); // change to adjust the age of commands you want to look for
+let maxSampleCommands = 20;
+//
+let minDate = max_of(datetime(2018-05-24 21:00:00), ago(30d));
+//
+let excludedAgents = datatable(AgentId:string)
+[
+    // insert the ids of any excluded agents here
+];
+//
+let IncompleteCommands = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').ExportAuditLogSnapshotV3
+    | where isnull(CompletedTime) 
+    | where IngestedTime >= minDate and IngestedTime < maxDate
+    | join kind=leftantisemi excludedAgents on AgentId
+    | join kind=inner 
+        (
+            cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+            | where AgentReadiness == "ProdReady"
+            | summarize by AgentId, AgentName, AgentType
+        ) on AgentId
+    | summarize 
+        IngestedTime=min(IngestedTime) 
+        by AgentId, CommandId, AgentName, AgentType
+    | join kind=inner
+        (
+            cluster("Ngpreporting").database('NgpInfo').ExportSignalExtendedInfo
+            | summarize by CommandId, SubjectType, tostring(PrivacyDataTypes)
+        )
+        on CommandId
+);
+//
+let MinAadDates = materialize
+(
+    IncompleteCommands
+    | where SubjectType == "AADUser"
+    | summarize EarliestMissingAad = min(IngestedTime) by AgentId
+);
+//
+let MinNonAadDates = materialize
+(
+    IncompleteCommands
+    | where SubjectType != "AADUser"
+    | summarize EarliestMissingNonAad = min(IngestedTime) by AgentId
+);
+//
+let Incomplete = materialize
+(
+    IncompleteCommands
+    | summarize 
+        EarliestMissing = min(IngestedTime),
+        CountMissing = count(CommandId), 
+        CountMissingAad = countif(SubjectType == "AADUser"),
+        Missing = makelist(pack("c", CommandId, "t", IngestedTime, "st", SubjectType, "dt", PrivacyDataTypes), maxSampleCommands)
+        by AgentId, AgentName, AgentType
+    | join kind=leftouter MinAadDates on AgentId 
+    | join kind=leftouter MinNonAadDates on AgentId 
+    | extend 
+        CountMissingNonAad = CountMissing - CountMissingAad
+);
+//
+let Total = materialize
+(
+    cluster("Ngpreporting").database('NgpInfo').ExportAuditLogSnapshotV3
+    | where IngestedTime >= minDate and IngestedTime < maxDate
+    | join kind=inner (Incomplete | distinct AgentId) on AgentId
+    | summarize by AgentId, CommandId
+    | summarize CountTotal=count(CommandId) by AgentId
+);
+//
+Incomplete
+| join kind=leftouter Total on AgentId
+| project 
+    AgentId, AgentName, AgentType, 
+    EarliestMissing, EarliestMissingAad, EarliestMissingNonAad, 
+    CountMissing, CountMissingAad, CountMissingNonAad, CountTotal, 
+    Missing
+| order by AgentId asc, AgentName, AgentType;

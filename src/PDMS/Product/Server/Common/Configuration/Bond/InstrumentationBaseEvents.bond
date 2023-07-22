@@ -1,0 +1,82 @@
+﻿import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+
+namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+[Description("Base event used to log an outgoing service request")]
+struct BaseOutgoingSucessEvent : Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest>
+{
+}
+
+[Description("Base event used to log an outgoing service error")]
+struct BaseOutgoingErrorEvent : BaseOutgoingSucessEvent
+{
+    10: string message;
+}
+
+[Description("Base event used to log an incoming service request")]
+struct BaseIncomingSucessEvent : Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+    10: string component;
+    20: string scenarioId;
+}
+
+[Description("Base event used to log an incoming service error")]
+struct BaseIncomingErrorEvent : BaseIncomingSucessEvent
+{
+    10: string message;
+}
+
+[Description("Event logged whenever a specific event logger is expected but cannot be found")]
+struct WriterTypeNotRegisteredEvent : Microsoft.Telemetry.Base
+{
+    10: string writerType;
+    20: string message;
+}
+
+[Description("Event logged for generic trace messages.")]
+struct TraceEvent : Microsoft.Telemetry.Base
+{
+    10: string message;
+}
+
+struct InnerException
+{
+    10: required string code;
+    20: required string message;
+    30: optional nullable<InnerException> innerException = nothing;
+}
+
+[Description("Failed incoming call with exception details.")]
+struct BaseIncomingExceptionEvent : BaseIncomingErrorEvent
+{
+    10: optional nullable<InnerException> innerException = nothing;
+    20: required string stackTrace;
+}
+
+[Description("Failed outgoing call with exception details.")]
+struct BaseOutgoingExceptionEvent : BaseOutgoingErrorEvent
+{
+    10: optional nullable<InnerException> innerException = nothing;
+    20: required string stackTrace;
+}
+
+[Description("Event logged for suppressed exceptions.")]
+struct SuppressedExceptionEvent : Microsoft.Telemetry.Base
+{
+    10: required string action;
+    20: required string code;
+    30: required string message;
+    40: required string stackTrace;
+    50: optional nullable<InnerException> innerException = nothing;
+}
+
+[Description("Logged when the business logic detects a data inconsistency.")]
+struct InconsistentStateEvent : Microsoft.Telemetry.Base
+{
+    10: required string instanceType;
+    20: required string message;
+    30: required string data;
+}

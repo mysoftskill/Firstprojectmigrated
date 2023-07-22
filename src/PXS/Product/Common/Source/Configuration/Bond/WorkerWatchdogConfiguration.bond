@@ -1,0 +1,22 @@
+import "CommonConfiguration.bond"
+import "PartnerConfiguration.bond"
+import "AzureEventHubConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IProcessMonitorConfiguration {
+    // Names of the processes to check if they are running
+    1 : required list<string> ProcessNames;
+
+    // The minimum amount of time processes are expected to be running in seconds
+    2 : required int32 MinimalUptimeSeconds;
+
+    // Optional string containing a name pattern
+    3 : optional string ProcessNamePrefix;
+}
+
+struct IWorkerWatchdogConfiguration {
+    // Settings for process monitoring
+    1 : optional IProcessMonitorConfiguration ProcessMonitorConfiguration;
+}

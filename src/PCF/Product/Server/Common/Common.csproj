@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.Common</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.Common</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PreBuildEvent>Powershell.exe -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)..\..\Deployment\GenerateConfig.ps1 "'$(NuGetPackageFolders)'"</PreBuildEvent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Deployment\Generated\CommonConfig.cs">
+      <Link>Configuration\Generated\CommonConfig.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Deployment\Config\autopilot.dat">
+      <Link>Configuration\Overrides\HostingEnvironment\autopilot.dat</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\Common.tpl">
+      <Link>Configuration\Templates\Common.tpl</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\int.txt">
+      <Link>Configuration\Overrides\int\int.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\onebox.txt">
+      <Link>Configuration\Overrides\int\onebox.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\ppe.txt">
+      <Link>Configuration\Overrides\ppe\ppe.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\prod.txt">
+      <Link>Configuration\Overrides\prod\prod.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\PXS-Stress-MW1P.txt">
+      <Link>Configuration\Overrides\int\PXS-Stress-MW1P.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\PXSCI1-Test-MW1P.txt">
+      <Link>Configuration\Overrides\int\PXSCI1-Test-MW1P.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\PXSCI2-Test-MW1P.txt">
+      <Link>Configuration\Overrides\int\PXSCI2-Test-MW1P.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\Config\sandbox.txt">
+      <Link>Configuration\Overrides\sandbox\sandbox.txt</Link>
+    </None>
+    <None Include="..\..\Deployment\GenerateConfig.ps1">
+      <Link>Configuration\Overrides\GenerateConfig.ps1</Link>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bond.CSharp" />
+    <PackageReference Include="Brotli.NET" />
+    <PackageReference Include="Genconfig" />
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" />
+    <PackageReference Include="Microsoft.Azure.Kusto.Data" />
+    <PackageReference Include="Microsoft.Azure.Kusto.Ingest" />
+    <PackageReference Include="Microsoft.Azure.Management.DataLake.InternalAnalytics.Export" />
+    <PackageReference Include="Microsoft.Azure.Storage.Queue" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" />
+    <PackageReference Include="Microsoft.Carbon.Flighting.Runtime" />
+    <PackageReference Include="Microsoft.Cosmos.ScopeSDK" />
+    <PackageReference Include="Microsoft.PrivacyServices.Identity" />
+    <PackageReference Include="Microsoft.PrivacyServices.SignalApplicability" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Server" />
+    <PackageReference Include="Microsoft.Windows.Services.ConfigGen" />
+    <PackageReference Include="MSNRuntime" />
+    <PackageReference Include="System.Memory" />
+    <PackageReference Include="System.Runtime.Caching" />
+    <PackageReference Include="System.Security.Principal.Windows" />
+    <PackageReference Include="UniversalStore.Security.Cryptography" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Azure\Common.Azure.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\ComplianceServicesCommon\ComplianceServicesCommon.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\Cosmos\Common.Cosmos.csproj" />
+    <ProjectReference Include="..\..\..\..\PXS\Product\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\..\Libraries\PrivacyCommandValidator\PrivacyCommandValidator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContentWithTargetPath Include="HostingEnvironment\Autopilot\PCFAPConfig.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>PCFAPConfig.ini</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

@@ -1,0 +1,17 @@
+@startuml PrivacyViewCallFlow
+
+Vortex -> PrivacyView : Post Event Batch
+
+loop for each event
+    PrivacyView -> PrivacyView : Check if duplicate requeust or should be delay enqueued
+    alt not filtered
+        PrivacyView -> AzureQueue : Enqueue Request (with delay)
+        AzureQueue --> PrivacyView : Enqueue Request Success
+    end
+    note right: filtered out events are dropped since they're already in the queue
+end
+
+PrivacyView --> Vortex : Success
+note right: any failure to queue causes us to fail the request from vortex
+
+@enduml

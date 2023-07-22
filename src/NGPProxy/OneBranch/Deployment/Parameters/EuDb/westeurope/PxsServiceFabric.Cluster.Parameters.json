@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "westeurope"
+    },
+    "keyVaultManagedIdentityName": {
+      "value": "ADGCS-EUDB-UAMI"
+    },
+    "uamiResourceGroup": {
+      "value": "NGPPROXY-EUDB-RG"
+    },
+    "clusterName": {
+      "value": "ngpproxyeudb"
+    },
+    "certificateCommonName": {
+      "value": "cluster.ngpproxyeudb.compliance-services.microsoft.com"
+    },
+    "adminUserName": {
+      "value": "a803b4a25de1415fae6"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/4e261d67-9395-4cec-a519-14053c4765e3/resourceGroups/NGPPROXY-EUDB-RG/providers/Microsoft.KeyVault/vaults/NGPPROXY-EUDB-KV"
+        },
+        "secretName": "AdminPassword"
+      }
+    },
+    "durabilityLevel": {
+      "value": "Silver"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
+    },
+    "vmImageSku": {
+      "value": "2022-datacenter"
+    },
+    "maxBatchInstancePercent": {
+      "value": 20
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2_V3"
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType1Size": {
+      "value": "Standard_D2_v3"
+    },
+    "kvvmextPollingInterval": {
+      "value": "3600"
+    },
+    "kvvmextObservedCertificates": {
+      "value": [
+        "https://ngpproxy-eudb-kv.vault.azure.net/secrets/cluster",
+        "https://ngpproxy-eudb-kv.vault.azure.net/secrets/geneva"
+      ]
+    },
+    "monitoringTenant": {
+      "value": "ADGCS"
+    },
+    "monitoringRoleForNodeType1": {
+      "value": "NGPProxy.Frontdoor"
+    }
+  }
+}

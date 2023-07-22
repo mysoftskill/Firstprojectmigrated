@@ -1,0 +1,40 @@
+import "CommonConfiguration.bond"
+import "AzureEventHubConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IEventHubProcessorConfiguration
+{
+    1 : required bool EnableProcessing;
+    2 : required IAzureEventHubConfiguration EventHubConfig;
+    3 : required IAzureStorageConfiguration LeaseStorageConfig;
+    4 : required int32 MaxBatchSize;
+
+    // A list of tenants to filter out and not process
+    5 : optional list<string> TenantFilter;
+};
+
+struct IAadAccountCloseQueueProccessorConfiguration
+{
+    4 : required int32 MaxDequeueCountToDeadLetter;
+    5 : required int32 MaxDequeueCountBeforeRequeue;
+    6 : required int32 MaxDequeueCountForConflicts;
+    7 : required int32 MaxDequeueCountForForbidden;
+    8 : required int32 WaitOnQueueEmptyMilliseconds;
+    9 : required int32 ProcessorCount;
+    10 : list<IAzureStorageConfiguration> AzureQueueStorageConfigurations;
+    11 : required int32 GetMessagesDequeueCount;
+    12 : required IServicePointConfiguration ServicePointConfiguration;
+    13 : required list<string> LeaseExtensionMinuteSet;
+    14 : required list<string> LeaseExtensionHourSet;
+    15 : required int32 QueueSizeLengthCounterRefreshSeconds;
+};
+
+struct IAadAccountCloseWorkerConfiguration
+{
+    1 : optional bool EnableConsoleLogging = false;
+    2 : required IEventHubProcessorConfiguration EventHubProcessorConfig;
+    3 : required IAadAccountCloseQueueProccessorConfiguration QueueProccessorConfig;
+    4 : optional bool IsRunningLocally = false;
+};

@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+      "value": "sample-agent-batch"
+    },
+    "SecretNameForAgentBlobStorageConnectionString": {
+      "value": "AzureBlobStorageForAgentAccessKey"
+    },
+    "SecretNameForBatchAccountAccessKey": {
+      "value": "AzureBatchForSampleAgentAccessKey"
+    },
+    "SampleAgentAzureBatchUri": {
+      "value": "https://batchforagent.eastus.batch.azure.com"
+    },
+    "SampleAgentAzureBatchPoolName": {
+      "value": "poolforsampleagent"
+    },
+    "SampleAgentAzureBatchAccountName": {
+      "value": "batchforagent"
+    },
+    "SecretNameForDataAssetsBlobConnectionString": {
+      "value": "AzureBlobStorageAccessToDataAssets"
+    },
+    "AgentKeyVaultBaseUrl": {
+      "value": "https://sampleagentKV.vault.azure.net/"
+    }
+  }
+}

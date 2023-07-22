@@ -1,0 +1,79 @@
+<pcd-default-page-layout>
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="Asset transfer requests"></pcd-breadcrumb-heading>
+    </pcd-heading>
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            On this page, you will be able to accept or deny asset transfer requests for your team.
+            These requests represents other teams who have data assets they want to transfer to your team.
+        </p>
+        <p mee-paragraph data-use-cms>
+            By accepting the transfer request, you will be responsible for the data assets.
+            Denying the request will indicate you do not want to receive their data asset.
+            Once you accept a request, you'll be able to see the data assets under
+            <span class="view-label">Manage data assets</span>.
+        </p>
+    </pcd-sidebar>
+    <pcd-content>
+        <mee-progress-view watch-operation="loadingAssetTransferRequests">
+            <inert-view></inert-view>
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+            <finished-view>
+                <pcd-default-page-context pcd-owner-id="$ctrl.ownerId"></pcd-default-page-context>
+                <div class="c-table f-divided" data-grid="col-12">
+                    <table data-f-sort="false">
+                        <thead>
+                            <tr>
+                                <th data-use-cms></th>
+                                <th data-use-cms>Requests</th>
+                                <th data-use-cms></th>
+                            </tr>
+                        </thead>
+                        <tbody ng-if="$ctrl.hasTransferRequests()"
+                               ng-repeat="requestContainer in $ctrl.requestContainers | orderBy:'request.sourceOwnerName' track by $index">
+                            <tr>
+                                <td>
+                                    <mee-checkbox ng-model="requestContainer.isChecked"></mee-checkbox>
+                                </td>
+                                <td>
+                                    <label mee-label
+                                           class="x-hidden-focus">{{requestContainer.request.sourceOwnerName}}</label>
+                                </td>
+                                <td>
+                                    <a mee-no-href
+                                       ng-click="$ctrl.toggleExpandCollapse(requestContainer)"
+                                       ng-class="['c-glyph', { 'glyph-chevron-down' : requestContainer.isCollapsed, 'glyph-chevron-up': !requestContainer.isCollapsed }]"
+                                       mee-action-trigger="align-margin">{{ $ctrl.getToggleLabel(requestContainer.isCollapsed) }}</a>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="assetGroup in requestContainer.request.assetGroups track by $index"
+                                ng-hide="requestContainer.isCollapsed">
+                                <td></td>
+                                <td class="force-wrapped">
+                                    <pcd-asset-group-qualifier-view pcd-qualifier="assetGroup.qualifier"></pcd-asset-group-qualifier-view>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-if="!$ctrl.hasTransferRequests()">
+                            <tr>
+                                <td colspan="3" class="f-sub-categorical" data-use-cms>You currently don't have any asset transfer requests.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="c-group">
+                        <button data-use-cms mee-button ng-disabled="!$ctrl.hasCheckedRequest()" ng-click="$ctrl.approveAssetTransferRequests()">Approve</button>
+                        <button data-use-cms mee-button ng-disabled="!$ctrl.hasCheckedRequest()" ng-click="$ctrl.denyAssetTransferRequests()">Deny</button>
+                    </div>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+</pcd-default-page-layout>

@@ -1,0 +1,46 @@
+﻿declare query_parameters (ExcludedAgentsJson:string, Age:timespan, ThresholdRateComplete:double); 
+//
+let minDate = startofday(ago(30d));
+let maxDate = startofday(ago(Age));
+let minPercentComplete = ThresholdRateComplete;
+let minPendingCommands = 10;
+//
+let ExcludedAgentsRaw = datatable(junk:int) [ 1 ] 
+| extend ListColumn = todynamic(ExcludedAgentsJson) 
+| mvexpand ListColumn 
+| evaluate bag_unpack(ListColumn) 
+| project AgentId=tostring(AgentId), Expires=todatetime(Expires)
+| where AgentId != "00000000-0000-0000-0000-000000000000"; 
+//
+let ExcludedAgents = ExcludedAgentsRaw
+| where isnull(Expires) or Expires > now() 
+| project AgentId;
+//
+let OutOfSlaAgents = materialize
+(
+    cluster("Ngpreporting").database('NGPReporting').NonCosmosAgentHealthFullRollupByDay
+    | where DeleteRequestDate >= minDate and DeleteRequestDate < maxDate
+    | where AgentId !in (ExcludedAgents)
+    | join kind=inner
+        (
+            AgentOwnerV3
+            | where SQLizerStreamDateId >= minDate
+            | where AgentReadiness == "ProdReady" and Protocol == "CommandFeedV2"
+            | join kind=inner GetForSQLizerStreamDateId(DataOwnersV3) on OwnerId
+            | project AgentId, AgentName, AgentType, OwnerId, Protocol, AgentReadiness, ServiceName, SQLizerStreamDateId
+            | join kind=leftsemi GetForSQLizerStreamDateId(AgentOwnerV3) on AgentId
+        )
+        on AgentId, $left.DeleteRequestDate == $right.SQLizerStreamDateId
+    | summarize          
+        CountTotal = sum(TotalRequestCount), 
+        CountCompleted = sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount), 
+        CompletionPct = todouble(sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount)) / todouble(sum(TotalRequestCount))
+        by AgentId, AgentName, AgentType, TeamName=ServiceName
+    | where CompletionPct < minPercentComplete and CountTotal > 10
+    | extend CountMissing = CountTotal - CountCompleted
+    | where CountMissing > minPendingCommands
+    | project AgentId, AgentName, AgentType, CountTotal, CountCompleted, CountMissing, CompletionPct, TeamName
+);
+OutOfSlaAgents
+| project AgentId, AgentName, AgentType, CountTotal, CountCompleted, CountMissing, CompletionPct=round(CompletionPct * 100, 1), TeamName
+| order by AgentId asc

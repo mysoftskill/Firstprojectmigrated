@@ -1,0 +1,12 @@
+<div>
+    <h2 mee-heading="subheading2" data-use-cms>Add link to Service Tree</h2>
+    <pcd-service-tree-selector></pcd-service-tree-selector>
+    <mee-alert ng-if="$ctrl.showAdminInfoBanner()" kind="use-glyph info">
+        <alert-content data-use-cms>
+            Contact one of the administrators above. Only they have permission to create a team for this service.
+        </alert-content>
+    </mee-alert>
+</div>
+
+<mee-inline-error error-id="{{$ctrl.errorCategory}}.save"></mee-inline-error>
+<button mee-button="primary" ng-disabled="!$ctrl.canLinkService()" ng-click="$ctrl.linkServiceToTeam()">Link to my team</button>

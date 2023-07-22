@@ -1,0 +1,136 @@
+<div data-grid="col-6">
+    <div>
+        <mee-text-field ng-hide="$ctrl.showProtocolPicker()"
+                        kind="flex">
+            <label data-use-cms>Protocol</label>
+            <input value="{{$ctrl.getSelectedProtocolLabel()}}" disabled>
+        </mee-text-field>
+        <mee-select ng-show="$ctrl.showProtocolPicker()"
+                    ng-model="$ctrl.protocolPickerModel.selectedId"
+                    ng-change="$ctrl.protocolChanged()"
+                    menu-style="border">
+            <label data-use-cms>Protocol</label>
+            <select>
+                <option ng-repeat="item in $ctrl.protocolPickerModel.items" value="{{item.id}}">{{item.label}}</option>
+            </select>
+        </mee-select>
+    </div>
+    <div>
+        <mee-text-field ng-show="$ctrl.isAuthTypeVisible()"
+                        kind="flex">
+            <label data-use-cms>Authentication type</label>
+            <input value="{{$ctrl.getAuthenticationTypeLabel()}}" disabled>
+        </mee-text-field>
+        <div ng-if="$ctrl.isAuthTypePickerVisible()">
+            <mee-text-field ng-show="$ctrl.areConnectionDetailsReadOnly()"
+                            kind="flex">
+                <label data-use-cms>Authentication type</label>
+                <input value="{{$ctrl.getAuthenticationTypeLabel()}}" disabled>
+            </mee-text-field>
+            <mee-select ng-hide="$ctrl.areConnectionDetailsReadOnly()"
+                        ng-model="$ctrl.authTypePickerModel.selectedId"
+                        menu-style="border"
+                        data-required-field="true"
+                        ng-change="$ctrl.authTypeChanged()">
+                <label data-use-cms>Authentication type</label>
+                <select>
+                    <option ng-repeat="item in $ctrl.authTypePickerModel.items" value="{{item.id}}">{{item.label}}</option>
+                </select>
+            </mee-select>
+        </div>
+    </div>
+    <div ng-if="$ctrl.isMsaSiteIdVisible()">
+        <mee-text-field kind="flex"
+                        data-required-field="true"
+                        data-error-id="{{$ctrl.errorCategory}}.msa-site-id">
+            <label data-use-cms>MSA site ID (number)</label>
+            <input ng-model="$ctrl.connectionDetails.msaSiteId"
+                   ng-disabled="$ctrl.areConnectionDetailsReadOnly()"
+                   ng-change="$ctrl.msaSiteIdChanged()"
+                   placeholder="e.g. 123456"
+                   data-use-cms
+                   type="number"
+                   min="1">
+        </mee-text-field>
+        <mee-inline-error error-id="{{$ctrl.errorCategory}}.msa-site-id"></mee-inline-error>
+        <div class="pcd-connection-hint" data-use-cms>
+            <p mee-paragraph>
+                Site/application ID assigned to your site by MSA.
+                <a mee-hyperlink href="https://identitydocs.azurewebsites.net/static/msa/server_to_server.html#site-based-authentication" target="_blank">
+                    Learn more about MSA site-based authentication onboarding process for your application.
+                </a>
+            </p>
+            <p mee-paragraph>                
+                Please use different site IDs for pre-production and production environments.
+            </p>
+        </div>
+    </div>
+    <div ng-if="$ctrl.isAadAppIdVisible()">
+        <mee-text-field kind="flex"
+                        ng-if ="!$ctrl.isMultipleAppIdRequired()"
+                        data-required-field="true"
+                        data-error-id="{{$ctrl.errorCategory}}.aad-app-id">
+                        <label data-use-cms>AAD app ID</label>
+            <input ng-model="$ctrl.connectionDetails.aadAppId"
+                ng-disabled="$ctrl.areConnectionDetailsReadOnly()"
+                ng-change="$ctrl.aadAppIdChanged()"
+                data-use-cms
+                data-error-id="{{$ctrl.errorCategory}}.aad-app-id"
+                placeholder="e.g. A8BA497A-F2E6-432C-889A-B255F2F9A4FA">
+        </mee-text-field>
+        <div kind="flex"
+            ng-if ="$ctrl.isMultipleAppIdRequired()"
+            data-error-id="{{$ctrl.errorCategory}}.aad-app-id">
+            
+            <pcd-directory-resource-selector
+                data-use-cms
+                data-required-field="true"
+                ng-model="$ctrl.appIdModel"
+                ng-disabled="$ctrl.areConnectionDetailsReadOnly()"
+                ng-change="$ctrl.aadAppIdChanged()"
+                data-error-id="{{$ctrl.errorCategory}}"
+                pcd-error-id="{{$ctrl.errorCategory}}"
+                pcd-resource-type="named-resource"
+                pcd-selector-label="AAD app ID"
+                pcd-placeholder="e.g. A8BA497A-F2E6-432C-889A-B255F2F9A4FA">
+        </div>
+        <mee-inline-error error-id="{{$ctrl.errorCategory}}.aad-app-id"></mee-inline-error>
+        <div class="pcd-connection-hint" data-use-cms>
+            <p mee-paragraph>
+                GUID that identifies your application in Azure AD.
+                <a mee-hyperlink href="https://identitydocs.azurewebsites.net/static/v2/quick-links.html" target="_blank">
+                    Learn more about AAD onboarding process for your application.
+                </a>
+            </p>
+            <p mee-paragraph>
+                Please use different app IDs for pre-production and production environments.
+            </p>
+        </div>
+    </div>
+
+    <mee-radio-group ng-show="$ctrl.isActiveConnectionDetailProd()"
+                     ng-model="$ctrl.prodReadinessState"
+                     ng-change="$ctrl.prodReadinessChanged()"
+                     is-legend-visible="true"
+                     legend="Production readiness" data-use-cms>
+        <mee-radio ng-disabled="$ctrl.disableProdReadyMode()" data-use-cms value="ProdReady">
+            Production ready
+            <span data-use-cms
+                  ng-show="$ctrl.showProdUpgradeWarning()"
+                  ng-class="{ 'mee-error-color': $ctrl.showProdUpgradeWarningInRed() }"
+                  class="prod-upgrade-warning">
+                Warning: Setting an agent to Production Ready is a permanent transition. Please make sure your agent is production quality.<br><br>
+                Warning: Agents in production must meet basic service development requirements including a Security Development Lifecycle (<a mee-hyperlink href="https://www.microsoft.com/en-us/securityengineering/sdl/" target="_blank">SDL</a>) review with security assurance compliance team.
+            </span>
+            <span data-use-cms
+                  ng-show="$ctrl.showProdUpgradeDisabledWarning()"
+                  class="prod-upgrade-warning mee-error-color">
+                {{$ctrl.getProdUpgradeDisabledWarning()}}
+            </span>
+        </mee-radio>
+        <mee-radio ng-disabled="$ctrl.disableTestInProdMode()" data-use-cms value="TestInProd">
+            Testing in production
+        </mee-radio>
+    </mee-radio-group>
+
+</div>

@@ -1,0 +1,24 @@
+﻿{
+  "Values": {
+    "AidQueuesStorageAccounts": [
+      {
+        "StorageAccountName": "aidstorageonebox",
+        "QueueName": "paf-anaheimid-qn-01"
+      },
+      {
+        "StorageAccountName": "aidstorageonebox",
+        "QueueName": "paf-anaheimid-qn-02"
+      }
+    ],
+    "DeploymentEnvironment": "ONEBOX",
+    "AidClientId": "975e1332-de26-4ac9-b120-fe35fa68adf1",
+    "AmeTenantId": "33e01921-4d64-4f8c-a055-5bdaffd5e33d",
+    "CloudTestCertSubjectName": "cloudtest.privacy.microsoft-int.ms",
+    "MessageEncoding": "true",
+    // ideally this should be a private eventhub account
+    "EventHubHostName": "aid-eventhub-onebox",
+    "EventHubName": "anaheimid",
+    "PxsApiHost": "localhost",
+    "PcfApiHost": "localhost"
+  }
+}

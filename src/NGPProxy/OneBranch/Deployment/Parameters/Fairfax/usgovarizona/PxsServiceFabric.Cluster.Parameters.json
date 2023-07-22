@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "usgovarizona"
+    },
+    "keyVaultManagedIdentityName": {
+      "value": "ADGCS-FF-UAMI"
+    },
+    "uamiResourceGroup": {
+      "value": "NGPPROXY-FF-RG"
+    },
+    "clusterName": {
+      "value": "ngpproxyff"
+    },
+    "certificateCommonName": {
+      "value": "adg-cs.cluster.prod.ngpproxy.microsoftonline.us"
+    },
+    "adminUserName": {
+      "value": "a803b4a25de1415fae6"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/ebce915f-ff1f-4faf-be94-35fe15f0673b/resourceGroups/NGPPROXY-FF-RG/providers/Microsoft.KeyVault/vaults/ADG-CS-ARIZONA-KV"
+        },
+        "secretName": "AdminPassword"
+      }
+    },
+    "durabilityLevel": {
+      "value": "Silver"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
+    },
+    "vmImageSku": {
+      "value": "2022-datacenter"
+    },
+    "maxBatchInstancePercent": {
+      "value": 20
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2_V3"
+    },
+    "nt1InstanceCount": {
+      "value": 5
+    },
+    "vmNodeType1Size": {
+      "value": "Standard_D2_v3"
+    },
+    "kvvmextPollingInterval": {
+      "value": "3600"
+    },
+    "kvvmextObservedCertificates": {
+      "value": [
+        "https://adg-cs-arizona-kv.vault.usgovcloudapi.net/secrets/cluster",
+        "https://adg-cs-arizona-kv.vault.usgovcloudapi.net/secrets/geneva"
+      ]
+    },
+    "monitoringTenant": {
+      "value": "ADGCS-FF"
+    },
+    "monitoringRoleForNodeType1": {
+      "value": "NGPProxy.Frontdoor"
+    }
+  }
+}

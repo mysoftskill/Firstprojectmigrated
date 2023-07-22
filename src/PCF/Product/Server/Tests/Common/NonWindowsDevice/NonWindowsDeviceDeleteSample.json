@@ -1,0 +1,94 @@
+{
+  "ver": "3.0",
+  "name": "Microsoft.WebBrowser.AltDelete.DeviceDelete",
+  "time": "2020-06-03T17:20:58.2310000Z",
+  "iKey": "o:85550640968d43079db56fdbd8ce5524",
+  "popSample": 100.0,
+  "flags": 257,
+  "ext": {
+    "ingest": {
+      "time": "2020-06-03T17:20:59.6800000Z",
+      "clientIp": "73.42.141.184",
+      "userAgent": "(x86_64);CFNetwork/902.3.1;Darwin/17.7.0;Microsoft%20Edge/85.534.2005310"
+    },
+    "receipts": {
+      "originalTime": "2020-06-03T17:21:04.0000000Z",
+      "originalName": "Microsoft.WebBrowser.AltDelete.DeviceDelete"
+    },
+    "user": {},
+    "device": {
+      "id": "u:6B0AEB0C-5E6F-5594-AA73-31B97BD789ED",
+      "localId": "u:6B0AEB0C-5E6F-5594-AA73-31B97BD789ED",
+      "make": "Apple",
+      "model": "MacBookPro11,4"
+    },
+    "os": {
+      "name": "Mac OS X",
+      "ver": "10.13.6"
+    },
+    "app": {
+      "id": "M:com.microsoft.edgemac.Canary_85.0.534.0_x86_64!Microsoft Edge Canary",
+      "ver": "85.0.534.0"
+    },
+    "net": {
+      "cost": "Unmetered",
+      "type": "Wired"
+    },
+    "sdk": {
+      "ver": "EVT-MacOSX-C++-No-3.3.64.1",
+      "epoch": "c5c4fe21-497e-0972-6ea6-b48237b9fd06",
+      "seq": 3,
+      "installId": "ec1b1104-54c2-a48c-062a-8bea67a6b369"
+    },
+    "loc": {
+      "country": "US",
+      "tz": "-07:00"
+    },
+    "m365a": {},
+    "metadata": {
+      "f": {
+        "AppInfo": {
+          "f": {
+            "ETag": 1
+          }
+        },
+        "Channel": 4,
+        "ConnectionType": 1,
+        "Etag": 1,
+        "EventInfo": {
+          "f": {
+            "Level": 4
+          }
+        },
+        "PayloadClass": 1,
+        "PayloadGUID": 1,
+        "PayloadLogType": 4,
+        "app_version": 1,
+        "client_id": 4,
+        "pop_sample": 6,
+        "session_id": 4,
+        "utc_flags": 4
+      }
+    }
+  },
+  "data": {
+    "AppInfo": {
+      "ETag": "\"\\\\\"EMclcsPh8zJPaDiJpY6r3LbHQCynxSX528CHlwaoyCg=\\\\\"\""
+    },
+    "Channel": 1,
+    "ConnectionType": "WiFi",
+    "Etag": "\"\\\\\"EMclcsPh8zJPaDiJpY6r3LbHQCynxSX528CHlwaoyCg=\\\\\"\"",
+    "EventInfo": {
+      "Level": 2
+    },
+    "PayloadClass": "ALT_DELETE",
+    "PayloadGUID": "ab19d2ae-f689-4fb9-99c3-442330896bb5",
+    "PayloadLogType": 5,
+    "app_version": "85.0.534.0-64",
+    "client_id": -406607145545526833,
+    "pop_sample": 100.0,
+    "session_id": 3,
+    "utc_flags": 140737488879616,
+    "baseType": "custom"
+  }
+}

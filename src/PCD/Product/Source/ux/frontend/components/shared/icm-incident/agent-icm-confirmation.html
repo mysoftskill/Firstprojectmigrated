@@ -1,0 +1,18 @@
+﻿<h2 mee-heading="subheading2" data-use-cms>IcM Incident</h2>
+
+<p mee-paragraph data-use-cms>
+    Are you sure you want to create a basic Sev 4 IcM Incident on <span class="view-label">{{ $ctrl.owner.name }}</span>
+    that you will need to fill out before the team can act on it?
+</p>
+
+<div class="c-group">
+    <mee-inline-error error-id="{{$ctrl.errorCategory}}.generic"></mee-inline-error>
+    <button data-use-cms 
+            mee-button 
+            ng-click="$ctrl.close()" 
+            mee-progress-disabled="modalOperation">No</button>
+    <button data-use-cms 
+            mee-button="primary" 
+            ng-click="$ctrl.onConfirmClick()" 
+            mee-progress-disabled="modalOperation">Yes</button>
+</div>

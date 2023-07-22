@@ -1,0 +1,87 @@
+#################################################################################
+#                         OneBranch Pipelines - Official                        #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: 
+- master
+
+parameters:
+- name: debug
+  displayName: Enable debug output
+  type: boolean
+  default: false
+
+variables:
+- template: variables.yml
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates 
+  parameters:
+
+    cloudvault:
+      enabled: true
+    featureFlags:
+      ensureArtifactsDirExists: true
+    globalSdl:
+      sbom:
+        enabled: true
+      binskim:
+        break: true
+        analyzeTargetGlob: 
+          '+:file|src\NGPProxy\**\*;-:file|**\IniFlatten.exe;-:file|**\ConvertToPlayableAudio.dll;-:file|**\Microsoft.Azure.DataLake.Store.dll;-:file|**\Microsoft.Azure.KeyVault.Core.dll;-:file|**\Microsoft.IdentityModel.Tokens.JWT.dll;-:file|**\Microsoft.Practices.ServiceLocation.dll;-:file|**\Microsoft.Practices.TransientFaultHandling.Core.dll'
+      credscan:
+        enabled: true
+        suppressionsFile: $(CREDSCAN_SUPPRESSIONFILE)
+      policheck:
+        break: true 
+      tsa:
+        enabled: true
+        configFile: $(TSA_CONFIGFILE)
+      codeql:
+        cadence: 0
+        compiled: 
+          enabled: true
+        tsaEnabled: true # See 'Codeql.TSAEnabled' in the Addition Options section below
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows
+        variables:
+          # More settings at https://aka.ms/obpipelines/yaml/jobs
+          ob_outputDirectory: $(NGPProxyOutputDirectory)
+          ob_sdl_binskim_break: true # https://aka.ms/obpipelines/sdl
+          ob_sdl_codeSignValidation_excludes: -|**\*\Newtonsoft.Json.dll;-|**\*\ServiceFabric.Common.dll;-|**\Test*\**;-|**\FCT*\**;-|**\*.sfpkg\**\*;-|**\*.ps1;-|**\*.psm1;
+        
+        steps:
+          - template: .pipelines/HelperTemplates/version.restore.build.test.yml@self
+            parameters:
+              buildConfiguration: Release
+              productName: NGPProxy
+              pathToRestore: $(NGPProxySolution)
+
+          - task: onebranch.pipeline.signing@1
+            displayName: Sign binaries
+            inputs:
+              command: sign
+              signing_environment: azure-ado
+              signing_profile: internal_azure_service
+              files_to_sign: '**\*.exe;**\*.dll;**\*.ps1;**\*.psm1'
+              search_root: $(NGPProxyBuildRootDirectory)
+
+          - template: .pipelines/HelperTemplates/ngp.proxy.package.yml@self

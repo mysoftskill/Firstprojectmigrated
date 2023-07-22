@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <Platform>x64</Platform>
+    <RootNamespace>Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob</RootNamespace>
+    <AssemblyName>Microsoft.Membership.MemberServices.PrivacyExperience.SyntheticsTests.ExportPersonalDataSyntheticsJob</AssemblyName>
+    <ReleaseSubDir>SyntheticsTests</ReleaseSubDir>
+    <CopyFilesToReleasePathEnabled>true</CopyFilesToReleasePathEnabled>
+    <ExecuteAs64Bit>true</ExecuteAs64Bit>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Geneva.Synthetics.Contracts" />
+    <PackageReference Include="Geneva.Synthetics.Logging.OneDS" />
+    <PackageReference Include="MessagePack" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ExportPersonalDataSyntheticsJobGroup.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+	<None Update="ExportPersonalDataSyntheticsJobGroup-MS.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+	<None Update="ExportPersonalDataSyntheticsJobGroup-FF.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MemberServicesRoot)\Build\core.common.targets" />
+</Project>

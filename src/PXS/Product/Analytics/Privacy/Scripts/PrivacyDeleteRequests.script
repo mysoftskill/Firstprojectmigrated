@@ -1,0 +1,112 @@
+﻿//Script GUID:88c0ac64-0bf8-4763-8762-b0f8e4847ab5
+//Used for tracking history
+
+// Telemetry Asimov stack
+REFERENCE @"/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Microsoft.Telemetry.AsimovInterface.dll";
+REFERENCE @"/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Microsoft.Telemetry.AsimovModuleCosmos.dll";
+REFERENCE @"/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Microsoft.Telemetry.AsimovCosmosExtensions.dll";
+
+// Reference the namespaces 
+USING Microsoft.Telemetry.Asimov; 
+USING Microsoft.Telemetry.Asimov.Cosmos;
+
+// Reference the Asimov (consumption) module 
+MODULE @"/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Asimov.module" AS Asimov;
+
+// Consts
+#DECLARE YMDFormat string = "yyyy/MM/dd";
+#DECLARE YMDHFormat string = "yyyy_MM_dd_HH";
+
+// Set date parameters
+#DECLARE startDate DateTime = DateTime.Parse("@@startDate@@", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).AddHours(-2);
+#DECLARE endDate DateTime = DateTime.Parse("@@endDate@@", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).AddHours(-2);
+#DECLARE eventRetentionCutoff DateTime = @endDate.AddDays(-14);
+
+// Figoure out the input path for previous data based on startDate
+#DECLARE startDateUtc DateTime = @startDate.ToUniversalTime();
+#DECLARE previousHour DateTime = @startDateUtc.AddHours(-1);
+#DECLARE previousPathFormat string = @"@@MemberViewServiceStagingPath@@/PrivacyDeleteRequests/{0}/PrivacyDeleteRequests_{1}.ss";
+#DECLARE previousPath string = string.Format(@previousPathFormat, @previousHour.ToString(@YMDFormat), @previousHour.ToString(@YMDHFormat));
+
+// Figure out the output path based on the endDate (make sure it uses UTC)
+#DECLARE endDateUtc DateTime = @endDate.ToUniversalTime();
+#DECLARE outputPathFormat string = @"@@MemberViewServiceStagingPath@@/PrivacyDeleteRequests/{0}/PrivacyDeleteRequests_{1}.ss";
+#DECLARE outputPath string = string.Format(@outputPathFormat, @endDateUtc.ToString(@YMDFormat), @endDateUtc.ToString(@YMDHFormat));
+#DECLARE snapshotPath string = @"@@MemberViewServiceProcessedPath@@/PrivacyDeleteRequests-Latest.ss";
+
+// Choose pipelines to include in the input set
+#DECLARE eventFlavor string = "Sll";		// Cll,Sll
+#DECLARE eventPipeline string = "Public";	// Public,LowPriority,UserSensitiveUsage
+#DECLARE eventRetention string = "Low";		// Low,Med,High
+#DECLARE incomingEvent string = @"Microsoft.Membership.MemberServices.Common.Logging.PrivacyDataDeletionRequest";
+
+// Declare view
+EventData = Asimov.AsimovEventViewLite (
+  startDate = @startDate, 
+  endDate = @endDate,
+  eventFlavor = @eventFlavor,
+  eventPipeline = @eventPipeline,
+  eventRetention = @eventRetention,
+  disallowSparseStreamset = true
+);
+
+IncomingEvents = 
+SELECT 
+    *
+FROM 
+    EventData
+WHERE
+    // If you want all the events from a provider using > and < is way faster than name.StartsWith(@eventProvider) because the cooked sstream is sorted on name
+    // If you have a short list of events use WHERE name IN ()
+    //name > (@eventProvider + ".") AND (name < @eventProvider + "/");
+    name == @incomingEvent;
+
+DeleteRawEvents =
+SELECT
+    data.GetString("UserId") AS UserId,
+    time AS TimeStamp,
+    data.GetGuid("RequestId") AS RequestId,
+    cV AS Cv,
+    data.GetString("ResourceCollection") AS ResourceCollection,
+    tags != null ? tags["service"] : ext["cloud_name"] AS APEnvironment,
+    tags != null ? tags["roleInstance"] : ext["cloud_roleInstance"] AS RoleInstance,
+    data.GetString("Cv") AS MyCv
+FROM 
+    IncomingEvents;
+
+CombinedStream =
+SELECT
+    *
+FROM
+    DeleteRawEvents
+UNION ALL
+SELECT
+    *
+FROM
+    (SSTREAM  @previousPath);
+
+FilteredStream =
+SELECT
+    *
+FROM
+    CombinedStream
+WHERE
+    TimeStamp > @eventRetentionCutoff;
+
+OUTPUT FilteredStream
+TO SSTREAM @outputPath
+WITH STREAMEXPIRY "@@OutputStreamExpiry@@";
+
+LatestSnapshot = 
+SELECT
+    UserId,
+    TimeStamp,
+    RequestId,
+    Cv,
+    ResourceCollection
+FROM
+    FilteredStream;
+
+OUTPUT LatestSnapshot
+TO SSTREAM @snapshotPath
+WITH STREAMEXPIRY "@@OutputStreamExpiry@@";

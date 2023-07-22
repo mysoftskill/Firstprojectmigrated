@@ -1,0 +1,101 @@
+﻿<h2>Summary</h2>
+<p>
+Please ensure anyone who will be debugging issues for your agent has 
+<a href="https://idwebelements/GroupManagement.aspx?Group=NgpKustoReader&Operation=join">joined the NgpKustoReader security group</a> 
+as soon as possible to avoid delays in agent debugging. Individuals must add themselves to 
+security groups- you will get errors trying to perform this action on behalf of others.
+</p>
+<p>This incident has been filed for:</p>
+<p>
+<table>
+<tr><th style="text-align:right;padding:1px 5px">Team Name</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.TeamName var>]]</td></tr>
+<tr><th style="text-align:right;padding:1px 5px">Agent Name</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentName var>]]</td></tr>
+<tr><th style="text-align:right;padding:1px 5px">Agent Id</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentId var>]]</td></tr>
+<tr><th style="text-align:right;padding:1px 5px">Agent Type</th><td style='padding:1px 5px'>[[<var s:$.AgentInfo.AgentType var>]]</td></tr>
+</table>
+</p>
+<h2>Missing Commands</h2>
+<p>
+You have uncompleted export commands that are due back to customers in the next 7 days. Completion must be recorded 
+even if no data was exported or your agent was mis-configured.<br/>
+Reports indicate that you have [[<var s:$.AgentInfo.CountMissing var>]] pending export commands that are at least [[<var s:$.CommandAge var>]] days old of 
+[[<var s:$.AgentInfo.CountTotal var>]] total export commands sent to your agent for that time period.  This gives you a completion 
+percentage of [[<var s:$.AgentInfo.PercentComplete f:f2 var>]]%.
+</p>
+<p stlye='font-weight: bold'>
+  <b>
+    If your agent is force completed you may receive a sev 1 incident and you will need to review the business risk with legal to
+    determine if the data needs to be deleted since it failed to export to a customer.
+  </b>
+<p>
+The following is a sampling of the ids of export commands that will be force completed and returned to customers without your data.<br/>
+</p>
+<p>
+  <table>
+    <tr>
+      <td>Command Id</td>
+      <td>Request Date</td>
+    </tr>
+    [[<foreach sel:$.AgentInfo.Missing foreach>]]
+      <tr>
+        <td>[[<var s:$.c var>]]</td>
+        <td>[[<var s:$.t f:'yyyy-mm-dd HH:mm:ss' var>]]</td>
+      </tr>
+    [[<foreachend>]]
+  </table>
+</p>
+<p>
+If this is a Cosmos Export agent, these commands are monitored under the PCF Cosmos Export Agent (3134bf67-a6a9-405f-b334-4e5f287f7e87). 
+Your Cosmos Export AgentId will be listed as an AssetGroupId under the PCF Cosmos Export Agent for monitoring purposes.
+This can be helpful when querying Kusto to look at these commands.<br/>
+</p>
+<h2>Background</h2>
+<p>
+NGP Common Infrastructure auditing enables Microsoft to demonstrate delete and export customer 
+promises to a regulatory or audit agency.  The NGP Common Infra team has identified several scenarios 
+where auditing is expecting agents to complete commands based on registration and those agents have large 
+amounts of pending (non-completed) commands.  In order to better debug these issues, we've released 
+the following guidance which require access to Kusto; again, if you have not obtained access, please 
+<a href="https://idwebelements/GroupManagement.aspx?Group=NgpKustoReader&Operation=join">join the NgpKustoReader security group</a> 
+to get access to Kusto.
+</p>
+
+<h2>Incident Workflow</h2>
+<ol>
+<li>If you do not have enough troubleshooting information to investigate this incident yourself, engage the agent owners.</li>
+  <ol>
+  <li>Go to <a href="https://manage.privacy.microsoft.com/data-agents/view/{6}">agent owners</a> where contact aliases are available.</li>
+  </ol>
+<li>Acknowledge the Incident if you are the person investigating it.</li>
+<li>Debug the issues. If you are not sure how to start, see <a href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/SitePages/Export-Agents-Not-Completing-Incidents.aspx">Agents-Not-Completing-Incidents</a>.</li>
+<li>Mitigate the incident when you have published the fix into production.</li>
+<li>Resolve the incident when you verify the fix with the reports at <a href="https://aka.ms/agentdrilldown">https://aka.ms/agentdrilldown</a>.</li>
+  <ol>
+  <li>Here are examples of how <a href="https://microsoft.sharepoint.com/teams/ngphome/SitePages/Healthy%20Data%20Agent%20Examples.aspx">healthy agents</a> look.</li>
+  </ol>
+</ol>
+
+<h2>Resources</h2>
+<ul>
+    <li>
+        Debugging guides:
+        <ul>
+            <li>Export and Delete Pending Command Debugging (<a href="https://aka.ms/ngpCmdDebug">here</a>)</li>
+            <li>Cosmos Delete Pending Command Debugging (<a href="https://aka.ms/ngpCosmosCmdDebug">here</a>)</li>
+        </ul>
+    </li>
+    <li>
+		For CommandFeedV2 (Batch or Continuous Agent) troubleshooting steps, refer to <a href="https://aka.ms/pcfv2troubleshooting" target="_blank">TSG</a>  
+    </li>
+    <li>
+		For CommandFeedV2 (Batch or Continuous Agent) FAQs, refer to <a href="https://aka.ms/pcfv2faq" target="_blank">FAQs</a>
+    </li>
+    <li>For additional support go to <a href="https://aka.ms/ngpsupport" target="_blank">NGP support</a></li>
+    <li>COSMOS Announcements are archived <a href="https://microsoft.sharepoint.com/teams/ngphome/ngpx/execution/Shared Documents/Forms/AllItems.aspx?id=%2Fteams%2Fngphome%2Fngpx%2Fexecution%2FShared%20Documents%2FNGP%20Cosmos%20Announcements">here</a></li>
+    <li>NGP Common Infrastructure Feature Announcements are archived <a href="https://microsoft.sharepoint.com/teams/ngphome/Shared Documents/Forms/AllItems.aspx?id=%2Fteams%2Fngphome%2FShared%20Documents%2FNGP%20Feature%20Announcements">here</a></li>
+</ul>
+
+<hr/>
+<p>
+  If you want to receive data agent updates, please join <a href="https://idweb/identitymanagement/aspx/groups/mydls.aspx?popupFromClipboard=https%3A%2F%2Fidweb%2Fidentitymanagement%2Faspx%2FGroups%2FEditGroup.aspx%3Fid%3D3ceb0f3a-0e0f-46cf-9549-ffca3fed0046">NGP Data Agent Updates</a> DL.
+</p>

@@ -1,0 +1,15 @@
+#
+# Common build steps definition for all OneBranch.*.yml file.
+# 
+parameters:
+  - name: enableSigning
+    type: boolean
+
+steps:
+- task: onebranch.pipeline.version@1 # generates automatic version. For other versioning options check https://aka.ms/obpipelines/versioning
+  displayName: 'Setup BuildNumber'
+  inputs:
+    system: 'RevisionCounter'
+    major: '1'
+    minor: '5'
+    exclude_commit: true

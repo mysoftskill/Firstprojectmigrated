@@ -1,0 +1,68 @@
+# For full annotated example, please visit: https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FPipeline%20Spec%20YAML%20Concepts%2FAnnotated%20Example&wikiVersion=GBwikiMaster&pageId=302
+# YAML File Naming: pipeline.user.<os>.<buildtype>.<tag>.<phase>.<config>.<branch>.yml
+# https://onebranch.visualstudio.com/Pipeline/_wiki/wikis/Pipeline.wiki?pagePath=%2FCDPx%20%252D%20Cross%252DPlatform%20Cloud%20Delivery%20Pipeline%2FUsage%2FMulti%252DPhase%20and%20Multi%252DConfiguration%20Builds&wikiVersion=GBwikiMaster&pageId=291&anchor=yaml-file-naming
+        
+version:
+  tag: 'pcfsdk'                                 # Tag to use for semantic versioning.
+  name: 'PCF SDK'
+  major: 2                                      # The major version number.
+  minor: 5                                      # The minor version number
+  exclude_commit: true                          # Defaults to false, set this to true if you would like to exclude the commit hash from the build number
+  system: 'revisioncounter'                     # https://cloudes.visualstudio.com/CDPX/_wiki/wikis/CDPX.wiki/121/Versioning?anchor=%27revisioncounter%27-version-system-%5Bcoming-soon%5D
+
+restore:
+  commands:
+    - !!defaultcommand
+      name: 'Restore Packages'
+      command: 'src\PCF\OneBranch\Build\restore.cmd'
+    
+build:
+  commands:
+    - !!buildcommand
+      name: 'Build PCF SDK'
+      command: 'src\PCF\OneBranch\Build\build-pcf-sdk.cmd'
+      arguments: 'Release PROD'
+      logs:
+        - from: 'src\PCF\OneBranch\Build'
+          to: 'Build Logs'
+          include:
+            - '**/build*.log'
+      artifacts:
+        - from: 'src\PCF\bin'
+          to: 'bin'
+          include:
+            - '**\*.dll'
+            - '**\*.exe'
+            - '**\*.ps1'
+          signing_options:      # Signing profile defaults can be overridden on the artifacts level
+            sign_inline: true   # Sign immediately after this build command so the next build command can package it!            
+            profile: 'external_distribution'# ESRP KeyCode CP-230012 (Legacy COPS 400 or402) SHA256 Authenticode Standard Microsoft Corporation . "Microsoft Corporation" root
+    - !!buildcommand
+      name: 'Package PCF SDK'
+      command: 'src\PCF\OneBranch\Build\package-pcf-sdk.cmd'
+      arguments: 'PRE Release' # Pre-release package 
+      artifacts:
+        - from: 'src\PCF\nupkgs'
+          to: 'nupkgs'
+          include:
+            - '**/*'
+
+static_analysis_options:
+  policheck_options:
+    scan_comments: false
+    files_to_scan:
+      - from: 'src\PCF'
+  moderncop_options:
+    files_to_scan:
+      - from: 'src\PCF'
+        exclude:                         
+          - '**/FlushAgentQueue.js'
+          - '**/PopFromQueue.js'
+          - '**/GetQueueStat.js'
+  binskim_options:
+    files_to_scan:
+      - from: '**/AutopilotRelease'
+        exclude:                         
+          - '**/Microsoft.IdentityModel.dll'
+          - '**/MicrosoftMicrosoft.Internal.APMoetUtilities.dll'
+          - '**/CommonSetup/*'

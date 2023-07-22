@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.Frontdoor</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.Frontdoor</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+    <OutputType>Exe</OutputType>
+    <OutputPath>$(OutputPath)\..\AutopilotRelease\$(MSBuildProjectName)</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\$(Platform)\Pcf.Frontdoor.xml</DocumentationFile>
+    <PostBuildEvent>del $(OutDir)\extracted.txt</PostBuildEvent>
+    <RpsVersion>7.1.6819</RpsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Common\Owin\NoSniffXContentTypeOptionsMiddleware.cs" Link="NoSniffXContentTypeOptionsMiddleware.cs" />
+    <Compile Include="..\..\..\..\Common\Owin\StrictTransportSecurityMiddleware.cs" Link="StrictTransportSecurityMiddleware.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\app.config" Link="app.config" />
+    <None Include="config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="start.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ServiceConfig.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+    <PackageReference Include="Microsoft.Owin" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" />
+    <PackageReference Include="Microsoft.Owin.Hosting" />
+    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Client" />
+    <PackageReference Include="Microsoft.Windows.Services.AuthN.Server" />
+    <PackageReference Include="RPS.Official.amd64.MSA">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>    
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PXS\Product\Contracts\PCFContracts\PXS.Command.Contracts.csproj" />
+    <ProjectReference Include="..\BackgroundTasks\BackgroundTasks.csproj" />
+    <ProjectReference Include="..\CommandHistory\CommandHistory.csproj" />
+    <ProjectReference Include="..\CommandLifecycle\CommandLifecycleNotifications.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\NonWindowsDeviceDeleteWorker\NonWindowsDeviceDeleteWorker.csproj" />
+    <ProjectReference Include="..\SLL\Instrumentation.csproj" />
+    <ProjectReference Include="..\TelemetryLibrary\TelemetryLibrary.csproj" />
+  </ItemGroup>
+
+  <!-- The RPS nuget package doesn't work well and add the reference we care about. -->
+  <ItemGroup>
+    <Reference Include="Microsoft.Passport.RPS">
+      <HintPath>$(NugetPackageRoot)\rps.official.amd64.msa\$(RpsVersion)\lib\net20\Microsoft.Passport.RPS.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Microsoft.Passport.RPS.Native">
+      <HintPath>$(NugetPackageRoot)\rps.official.amd64.msa\$(RpsVersion)\lib\net20\Microsoft.Passport.RPS.Native.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="OpenApiDocument.OpenApi3_0.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

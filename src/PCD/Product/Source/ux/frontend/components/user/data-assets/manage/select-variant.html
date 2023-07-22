@@ -1,0 +1,21 @@
+<h2 data-use-cms>Select a variant to link</h2>
+<div class="select-variant-area">
+    <pcd-directory-resource-selector
+        mee-auto-focus
+        data-error-id="{{$ctrl.errorCategory}}.variants"
+        pcd-error-id="{{$ctrl.errorCategory}}.variants"
+        pcd-resource-type="variant"
+        pcd-selector-label="Variant" data-use-cms
+        pcd-add-on-blur="false"
+        pcd-add-on-enter="true"
+        ng-model="$ctrl.variantSelectorData"></pcd-directory-resource-selector>
+</div>
+<div class="c-group">
+    <button mee-button="primary"
+            ng-click="$ctrl.next()"
+            ng-disabled="$ctrl.noVariantsSelected()"
+            data-use-cms>Next</button>
+    <button mee-button
+            ng-click="$ctrl.cancel()"
+            data-use-cms>Cancel</button>
+</div>

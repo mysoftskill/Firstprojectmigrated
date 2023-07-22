@@ -1,0 +1,35 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar></pcd-sidebar>
+
+    <pcd-content>
+        <section class="pcd-manage-section">
+            <div>
+                <a ui-sref="manual-requests.delete"
+                   data-glyph="cancel"
+                   mee-action-trigger="align-margin"
+                   i9n-delete-link
+                   data-use-cms>Delete</a>
+            </div>
+            <div>
+                <a ui-sref="manual-requests.export"
+                   data-glyph="download"
+                   mee-action-trigger="align-margin"
+                   i9n-export-link
+                   data-use-cms>Export</a>
+            </div>
+            <div>
+                <a ui-sref="manual-requests.status"
+                   data-glyph="info"
+                   mee-action-trigger="align-margin"
+                   i9n-status-link
+                   data-use-cms>Status</a>
+            </div>
+        </section>
+    </pcd-content>
+
+</pcd-default-page-layout>

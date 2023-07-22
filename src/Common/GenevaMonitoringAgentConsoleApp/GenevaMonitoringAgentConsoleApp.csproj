@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProjectGuid>{E1910490-0CC4-4CB1-A2FF-019FB1314EAE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GenevaMonitoringAgentConsoleApp</RootNamespace>
+    <AssemblyName>GenevaMonitoringAgentConsoleApp</AssemblyName>
+    <TargetPackageName>ExecutionCluster.Windows.Monitoring</TargetPackageName>
+    <MAPkgVersion>44.10.3</MAPkgVersion>
+    <MonitoringAppPkgVersion>8.0.1565.4</MonitoringAppPkgVersion>
+    <TargetFramework>net472</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Package.ps1" />
+    <None Include="Scripts\IncrementManifestVersions.ps1" />
+    <None Include="Tenants\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Remove="MAConfig\**" />
+    <None Remove="MAConfig\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GenevaMonitoringAgent" />
+    <PackageReference Include="Microsoft.ServiceFabric.Geneva" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Drop\" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <PostBuildEvent>powershell -ExecutionPolicy Bypass -File "$(MSBuildProjectDirectory)\Package.ps1" -OutputPath $(MSBuildProjectDirectory)\$(OutputPath) -PackagesDir "%userprofile%\.nuget\packages" -DropPath "$(MSBuildProjectDirectory)\Drop" -TargetPackageName "$(AssemblyName)" -MAPkgVersion "$(MAPkgVersion)" -MonitoringAppPkgVersion "$(MonitoringAppPkgVersion)" </PostBuildEvent>
+  </PropertyGroup>
+
+</Project>

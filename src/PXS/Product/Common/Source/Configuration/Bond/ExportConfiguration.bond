@@ -1,0 +1,29 @@
+﻿namespace Microsoft.Membership.MemberServices.Configuration
+
+[Multiplicity("Singleton")]
+struct IExportConfiguration
+{
+	[UniquenessRule("Invariant")]
+	3 : required int32 IdlePollingMilliseconds;
+
+	[UniquenessRule("Invariant")]
+	4 : required int32 MaxStorageAgeForCleanupInDays;
+
+	[UniquenessRule("Invariant")]
+	5 : required int32 MaxBlobsToCleanupPerIteration;
+
+	[UniquenessRule("Invariant")]
+	6 : required int32 MaxCleanupIterations;
+
+	[UniquenessRule("Invariant")]
+	7 : required int32 CleanupIterationDelayMilliseconds;
+
+	[UniquenessRule("Invariant")]
+	8 : required int32 ExportcleanupCompleteRunIntervalSeconds;
+
+	[UniquenessRule("Invariant")]
+	9 : required int32 ExportcleanupCompleteWorkExpirationSeconds;
+
+	[UniquenessRule("Invariant")]
+	10 : required int32 ExportcleanupCompleteWorkUtcOffsetSeconds;
+};

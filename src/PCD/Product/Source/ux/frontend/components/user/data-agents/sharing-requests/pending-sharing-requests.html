@@ -1,0 +1,89 @@
+<pcd-default-page-layout>
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="Sharing requests" pcd-breadcrumbs="$ctrl.breadcrumbs"></pcd-breadcrumb-heading>
+    </pcd-heading>
+    <pcd-sidebar>
+        <p mee-paragraph data-use-cms>
+            On this page, you will be able to accept or deny linking requests for your data agent.
+            This is the result of you indicating this agent as being shared. These requests represents
+            other teams who have data assets they want your agent to cover.
+        </p>
+        <p mee-paragraph data-use-cms>
+            By accepting the linking request, you will be responsible for the privacy action (capability) specified on the
+            data assets they own. Denying the request will indicate you do not want to cover their
+            data asset. Once you accept a request, you'll be able to see the data assets (that another
+            team owns) linked to your data agent under <span class="view-label">Linked data assets</span>.
+        </p>
+    </pcd-sidebar>
+    <pcd-content>
+        <mee-progress-view watch-operation="loadingSharingRequests">
+            <inert-view></inert-view>
+
+            <inprogress-view>
+                <pcd-default-progress-spinner></pcd-default-progress-spinner>
+            </inprogress-view>
+
+            <failed-view>
+                <p mee-paragraph data-use-cms>
+                    Failed
+                </p>
+            </failed-view>
+
+            <finished-view>
+                <pcd-default-page-context pcd-agent-id="$ctrl.agentId"></pcd-default-page-context>
+
+                <div class="c-table f-divided" data-grid="col-12">
+                    <table data-f-sort="false">
+                        <thead>
+                            <tr>
+                                <th data-use-cms></th>
+                                <th data-use-cms>Requests</th>
+                                <th data-use-cms>Capabilities</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-if="$ctrl.hasSharingRequests()"
+                               ng-repeat="requestContainer in $ctrl.requestContainers track by $index">
+                            <tr>
+                                <td>
+                                    <mee-checkbox ng-model="requestContainer.isChecked"></mee-checkbox>
+                                </td>
+                                <td>
+                                    <pcd-modal-link-trigger pcd-modal-data="requestContainer.ownerViewModalTriggerData"
+                                                            pcd-label="{{requestContainer.request.ownerName}}"
+                                                            pcd-modal-state-name="data-agents.manage.pending-sharing-requests.owner-contact"></pcd-modal-link-trigger>
+                                </td>
+                                <td>
+                                    <a mee-no-href
+                                       ng-click="$ctrl.toggleExpandCollapse(requestContainer)"
+                                       ng-class="['c-glyph', { 'glyph-chevron-down' : requestContainer.isCollapsed, 'glyph-chevron-up': !requestContainer.isCollapsed }]"
+                                       mee-action-trigger="align-margin">{{ $ctrl.getToggleLabel(requestContainer.isCollapsed) }}</a>
+                                </td>
+                            </tr>
+
+                            <tr ng-repeat="relationship in requestContainer.request.relationships track by $index"
+                                ng-hide="requestContainer.isCollapsed">
+                                <td></td>
+                                <td class="force-wrapped">
+                                    <pcd-asset-group-qualifier-view pcd-qualifier="relationship.assetGroupQualifier"></pcd-asset-group-qualifier-view>
+                                </td>
+                                <td>
+                                    {{ $ctrl.getCapabilities(relationship.capabilities) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-if="!$ctrl.hasSharingRequests()">
+                            <tr>
+                                <td colspan="3" class="f-sub-categorical" data-use-cms>You currently don't have any sharing requests on this data agent.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="c-group">
+                        <button data-use-cms mee-button ng-disabled="!$ctrl.hasCheckedRequest()" ng-click="$ctrl.approveSharingRequests()">Approve</button>
+                        <button data-use-cms mee-button ng-disabled="!$ctrl.hasCheckedRequest()" ng-click="$ctrl.denySharingRequests()">Deny</button>
+                    </div>
+                </div>
+            </finished-view>
+        </mee-progress-view>
+    </pcd-content>
+</pcd-default-page-layout>

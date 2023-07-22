@@ -1,0 +1,14 @@
+{
+  "version": "2.0",
+  "logging": {
+    "fileLoggingMode": "always",
+    "console": {
+      "isEnabled": "true"
+    },
+    "logLevel": {
+      "default": "Trace"
+    }
+  }
+  // By default, Azure functions expects messages in the queue are Base64 encoded! 
+  // "extensions": { "queues": { "messageEncoding": "none" } }
+}

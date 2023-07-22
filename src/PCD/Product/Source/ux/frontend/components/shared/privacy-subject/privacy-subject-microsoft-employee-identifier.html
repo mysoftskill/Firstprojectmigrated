@@ -1,0 +1,39 @@
+<section>
+    <div data-grid="col-12">
+        <div data-grid="col-6">
+            <pcd-directory-resource-selector data-required-field="true"
+                                             data-error-id="{{$ctrl.errorCategory}}.email-account"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.email-account"
+                                             pcd-added-resource-padding="true"
+                                             pcd-resource-type="named-resource"
+                                             pcd-selector-label="Email account" data-use-cms
+                                             pcd-placeholder="e.g., REDMOND\jdoe or jdoe@microsoft.com"
+                                             pcd-add-on-blur="true"
+                                             pcd-add-on-enter="true"
+                                             i9n-email-selector
+                                             ng-model="$ctrl.emailAccountsSelectorData"></pcd-directory-resource-selector>
+
+            <mee-text-field data-required-field="true"
+                            data-error-id="{{$ctrl.errorCategory}}.employee-id"
+                            i9n-employee-number>
+                <label data-use-cms>Employee number</label>
+                <input ng-model="$ctrl.identifierFormData.employeeId" placeholder="e.g., 1155555" data-use-cms>
+            </mee-text-field>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.employee-id"></mee-inline-error>
+
+            <mee-text-field data-required-field="true"
+                            i9n-start-date
+                            data-error-id="{{$ctrl.errorCategory}}.employment-start-date">
+                <label data-use-cms>Employment start date (MM-DD-YYYY)</label>
+                <input ng-model="$ctrl.identifierFormData.employmentStartDate" placeholder="e.g., 01-31-2015" data-use-cms>
+            </mee-text-field>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.employment-start-date"></mee-inline-error>
+
+            <mee-text-field data-error-id="{{$ctrl.errorCategory}}.employment-end-date" i9n-end-date>
+                <label data-use-cms>Employment end date (MM-DD-YYYY)</label>
+                <input ng-model="$ctrl.identifierFormData.employmentEndDate" placeholder="e.g., 01-31-2015" data-use-cms>
+            </mee-text-field>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.employment-end-date"></mee-inline-error>
+        </div>
+    </div>
+</section>

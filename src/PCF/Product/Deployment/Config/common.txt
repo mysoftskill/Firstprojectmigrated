@@ -1,0 +1,7 @@
+# This is used for all environments (prod and not prod), so make sure you don't put any prod-specific config here.
+
+# If you need to override one of these values in a specific environment, please create a new .dat file for that environment.
+
+%PdmsOnDiskCacheDirectory%|D:\data\PcfCache\Pdms\
+%DefenderFileDownloadTempDirectory%|D:\exportaggregationtemp
+%LocalLogDir%|D:\Data\Logs\Local\PCF

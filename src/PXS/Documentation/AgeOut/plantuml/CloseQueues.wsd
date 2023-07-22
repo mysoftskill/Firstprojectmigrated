@@ -1,0 +1,82 @@
+@startuml QueueChanges
+
+node MSA
+
+node AQS {
+    folder "Account Notifications" {
+        database CloseNotifications
+    }
+}
+
+node MSARVS
+
+node "NGP Components" {
+    component AqsPrivacyWorker {
+        [AqsWorker] #SeaGreen
+        [BatcherWorker] #SkyBlue
+        [MsaCloseQueueWorker] #SkyBlue
+
+        database AccountCloseQueue #SkyBlue
+        database AgeOut24Queue #SkyBlue
+        database AgeOut60Queue #SkyBlue
+        database BatchQueue #SkyBlue
+
+    }
+
+    node PCF #SeaGreen
+
+    cloud "Cosmos" {
+        database RawSignalStream
+        database RawAgeOutStream #SkyBlue
+        database CookedSignalStream
+        database CookedAgeOutStream #SkyBlue
+    }
+}
+
+node Xbox
+
+cloud "Agents" {
+    node DeleteAgents #SeaGreen
+}
+
+cloud "Cosmos Agents" {
+    node CosmosDeleteAgents #SeaGreen
+}
+
+MSA -> CloseNotifications : Add account close event
+CloseNotifications --> AqsWorker : Batch dequeue of account close events
+
+Xbox --> AqsWorker : Get Xuids for closed accounts using batch API
+MSARVS --> AqsWorker : Exchange pre verifier for verifier
+
+AqsWorker --> AccountCloseQueue : Queue regular account close events
+AqsWorker --> AgeOut24Queue : Queue age out event for age out with 24 months
+AqsWorker --> AgeOut60Queue : Queue age out event for age out with 60 months
+
+AccountCloseQueue --> MsaCloseQueueWorker : Dequeue at max rate of 10 RPS
+
+AgeOut24Queue --> BatcherWorker : Dequeue and form batches
+AgeOut60Queue --> BatcherWorker : Dequeue and form batches
+BatcherWorker --> BatchQueue : Enqueue batches
+BatchQueue --> MsaCloseQueueWorker : Dequeue at max rate of 3 batches per second
+
+MsaCloseQueueWorker --> PCF : Post account close commands
+MsaCloseQueueWorker --> PCF : Post age out batch commands
+
+PCF --> DeleteAgents : Send commands to applicable non cosmos agents
+
+PCF --> RawSignalStream : Write account close signal stream
+PCF --> RawAgeOutStream : Write age out signals stream separate from other signals
+RawSignalStream --> CookedSignalStream : "Cook" signals into structured stream for cosmos agents
+RawAgeOutStream --> CookedAgeOutStream : "Cook" age out signals into structured stream for cosmos agents
+
+CookedSignalStream --> CosmosDeleteAgents : Agents consume regular delete signals
+CookedAgeOutStream --> CosmosDeleteAgents : Agents consume age out signals if applicable
+
+legend
+|= |= Type |
+|<back:SeaGreen>   </back>| Updated |
+|<back:SkyBlue>   </back>| New |
+endlegend
+
+@enduml

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestJobGroup>
+  <ResourceSpec>
+    <Resource SKU="Standard_DS4_V2" Image="VS2019EnterpriseWS2019"/>
+  </ResourceSpec>
+  <Setup>
+    <BuildFiles>
+      <Copy Src="[BuildRoot]\outputs\build\fct\PAF\*" Dest="[WorkingDirectory]\pafFct\PAF" IsRecursive="true" />
+    </BuildFiles>
+  </Setup>
+  <TestJob Name="RunFct">
+    <Execution Type="MsTest" 
+               Path="[WorkingDirectory]\pafFct\PAF\Functions.FunctionalTests.dll" 
+               Args="/InIsolation /Logger:trx /Platform:x64" />
+  </TestJob>
+</TestJobGroup>

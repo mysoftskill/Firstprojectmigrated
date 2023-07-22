@@ -1,0 +1,153 @@
+<pcd-default-page-layout>
+
+    <pcd-heading>
+        <pcd-breadcrumb-heading text="{{$ctrl.pageHeading}}"></pcd-breadcrumb-heading>
+    </pcd-heading>
+
+    <pcd-sidebar>
+        <p mee-paragraph class="view-label" data-use-cms>
+            PCD now supports linking to teams in Service Tree!
+        </p>
+        <p mee-paragraph data-use-cms>
+            A team provides the ownership info for specific data assets and data agents.
+        </p>
+        <p mee-paragraph data-use-cms>
+            If your team is already registered in Service Tree, you may simply link to it here.
+        </p>
+    </pcd-sidebar>
+
+    <pcd-content>
+        <mee-alert ng-if="$ctrl.showSuccessfulLinkBanner()" kind="use-glyph info">
+            <alert-content data-use-cms>
+                You have successfully linked your team to Service Tree!
+            </alert-content>
+        </mee-alert>
+
+        <div ng-if="$ctrl.isOrphanServiceTreeTeam()">
+            <mee-alert kind="use-glyph error">
+                <alert-content data-use-cms>
+                    Your team appears to be linked to an orphaned Service Tree record. Please link this team to a valid record.
+                </alert-content>
+            </mee-alert>
+            <a mee-call-to-action class="service-tree-cta" mee-no-href ng-click="$ctrl.showLinkToServiceTreeModalDialog()" data-use-cms>Change service tree team</a>
+        </div>
+
+        <p mee-paragraph data-use-cms>Using the following team info from Service Tree:</p>
+        <pcd-service-tree-summary pcd-service="$ctrl.serviceTreeData"></pcd-service-tree-summary>
+        <p mee-paragraph>
+            <a mee-hyperlink mee-no-href ng-click="$ctrl.showLinkToServiceTreeModalDialog()" data-use-cms>Change service tree team</a>, if the current listed team
+            is no longer accurate.
+        </p>
+        <p mee-paragraph data-use-cms>
+            <a mee-hyperlink mee-no-href ng-click="$ctrl.requestMoveTeamAssets()" data-use-cms>Contact us</a>, if you have any difficulties changing the Service Tree team,
+            or would like to merge the data assets and agents from this team to another one (make sure to specify target team ID in the request).
+        </p>
+        <div data-grid="col-12">
+            <h3 mee-heading="heading4" data-use-cms>IcM</h3>
+            <p mee-paragraph data-use-cms>
+                IcM Connector to route to your team regarding services associated with your team's agents or assets.
+                Can be overridden by new connector ID or agent connector ID.
+            </p>
+            <mee-text-field kind="flex"
+                            data-error-id="{{$ctrl.errorCategory}}.icm-connector"
+                            data-grid="col-6"
+                            i9n-icm-connector-text-field
+                            class="icm-connector-text-field">
+                <label data-use-cms>IcM connector ID</label>
+                <input ng-model="$ctrl.owner.icmConnectorId" placeholder="e.g., 97CC177C-4531-4D1E-BE76-0E6E058F1CFB" mee-auto-focus>
+            </mee-text-field>
+            <mee-inline-error error-id="{{$ctrl.errorCategory}}.icm-connector"></mee-inline-error>
+        </div>
+
+        <div data-grid="col-12">
+            <h3 mee-heading="heading4" data-use-cms>Sharing Request Contacts</h3>
+            <p mee-paragraph data-use-cms>
+                A point of contact is required to share your registered data agents with other teams. Once you have
+                set this and enabled an agent to be shared, the contacts will be notified of the
+                request and will be able to allow or reject that request.
+            </p>
+            <pcd-directory-resource-selector data-grid="col-6"
+                                             data-required-field="false"
+                                             data-error-id="{{$ctrl.errorCategory}}.sharing-request-contacts"
+                                             pcd-resource-type="contact"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.sharing-request-contacts"
+                                             pcd-selector-label="{{$ctrl.sharingRequestContactsLabel}}"
+                                             ng-model="$ctrl.sharingRequestContactsSelectorData"></pcd-directory-resource-selector>
+        </div>
+
+        <div data-grid="col-12">
+            <h3 mee-heading="heading4" data-use-cms>Permissions</h3>
+            <p mee-paragraph data-use-cms>
+                A security group is required to control who has access to this team's configuration. Members of this
+                group will be able to modify configuration data in PCD. You must be a member of at least one of the security groups.
+                It will not affect permissions in Service Tree.
+            </p>
+            <pcd-directory-resource-selector data-grid="col-6"
+                                             pcd-resource-type="security-group"
+                                             pcd-selector-label="{{$ctrl.writeGroupsLabel}}"
+                                             ng-model="$ctrl.securityGroupSelectorData"
+                                             data-required-field="true"
+                                             pcd-error-id="{{$ctrl.errorCategory}}.write-security-groups"
+                                             data-error-id="{{$ctrl.errorCategory}}.write-security-groups"></pcd-directory-resource-selector>
+        </div>
+
+        <div data-grid="col-12">
+            <h3 mee-heading="heading4" data-use-cms>Tagging permissions</h3>
+            <p mee-paragraph data-use-cms>
+                Security groups used by DataGrid to authorize tagging. If this is empty, DataGrid
+                falls back to the write security groups.
+            </p>
+            <div data-grid="col-12">
+                <pcd-directory-resource-selector data-grid="col-6"
+                                                 pcd-resource-type="security-group"
+                                                 pcd-selector-label="{{$ctrl.tagGroupsLabel}}"
+                                                 ng-model="$ctrl.tagGroupSelectorData"
+                                                 data-required-field="false"
+                                                 pcd-error-id="{{$ctrl.errorCategory}}.tag-security-groups"
+                                                 data-error-id="{{$ctrl.errorCategory}}.tag-security-groups"></pcd-directory-resource-selector>
+            </div>
+
+            <div data-grid="col-12">
+                <pcd-directory-resource-selector data-grid="col-6"
+                                                 pcd-resource-type="application"
+                                                 pcd-selector-label="{{$ctrl.tagApplicationsLabel}}"
+                                                 ng-model="$ctrl.tagApplicationSelectorData"
+                                                 data-required-field="false"
+                                                 pcd-error-id="{{$ctrl.errorCategory}}.tag-application-ids"
+                                                 data-error-id="{{$ctrl.errorCategory}}.tag-application-ids"></pcd-directory-resource-selector>
+            </div>
+        </div>
+
+        <div data-grid="col-12 pad-2x">
+            <h3 mee-heading="heading4" data-use-cms>Delete team</h3>
+            <p mee-paragraph data-use-cms>
+                You can delete the team, if it was created by mistake or no longer needed. The 'Delete' option will be enabled if your team 
+                has no asset groups or data agents linked to it. For removing the linked asset groups and data agents, refer to <a mee-hyperlink href="https://aka.ms/ngpoffboard" target="_blank">aka.ms/ngpoffboard</a>.
+            </p>
+            <div>
+                <div ng-if="!$ctrl.isDeleteEnabled">
+                    <button mee-action-trigger ng-click="$ctrl.deleteTeamClicked()"
+                            disabled
+                            title="'Delete' option will be enabled once your team has no asset groups or data agents linked to it."
+                            class="delete-team-button"
+                            i9n-delete-team-button
+                            data-use-cms>Delete</button>
+                </div>
+                <div ng-if="$ctrl.isDeleteEnabled">
+                    <button mee-action-trigger ng-click="$ctrl.deleteTeamClicked()"
+                            class="delete-team-button"
+                            i9n-delete-team-button
+                            data-use-cms>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <pcd-commit-request-button data-use-cms
+            pcd-button-label="Save"
+            pcd-error-id="{{$ctrl.errorCategory}}.save"
+            pcd-operation-name="serviceTreeOwnerUpdate"
+            pcd-button-on-click-operation="$ctrl.saveClicked()">
+        </pcd-commit-request-button>
+    </pcd-content>
+
+</pcd-default-page-layout>

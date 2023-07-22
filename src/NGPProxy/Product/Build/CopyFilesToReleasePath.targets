@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+	<NewProperty>$(WebProjectOutputDir)</NewProperty>
+  </PropertyGroup>
+
+  <Target Name="CopyParallaxFiles">
+	<ItemGroup>
+	  <ParallaxInterfacesToCopy Include="$(OutDir)**\*.ParallaxInterfaces.dll" />
+    </ItemGroup>
+    <Message Importance="high" Text="Copying files from output path to output" />
+    <Copy SourceFiles="@(ParallaxInterfacesToCopy)" DestinationFiles="@(ParallaxInterfacesToCopy->'$(OutDir)%(FileName)%(Extension)')" />
+  </Target>
+  
+  <Target Name="CopyFilesToRelease" AfterTargets="Build" DependsOnTargets="CopyParallaxFiles" Condition="'$(CopyFilesToReleasePathEnabled)'=='true'">
+    <PropertyGroup>
+      <ReleaseDestination>$(EnlistmentRoot)\Bin\$(Configuration)\$(Platform)\$(ReleaseSubDir)</ReleaseDestination>
+    </PropertyGroup>
+    <ItemGroup>
+      <AllFiles Include="$(OutDir)**\*" />
+	  <FilesToCopy Include="@(AllFiles)" Exclude="$(OutDir)$(BaseIntermediateOutputPath)**\*" />
+	</ItemGroup>
+    <Message Importance="high" Text="Copying files from output path to $(ReleaseDestination)" />
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFiles="@(FilesToCopy->'$(ReleaseDestination)\%(RecursiveDir)%(FileName)%(Extension)')" />
+  </Target>
+</Project>

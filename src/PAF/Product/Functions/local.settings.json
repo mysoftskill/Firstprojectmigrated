@@ -1,0 +1,45 @@
+﻿{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "VariantRequestStorage": "UseDevelopmentStorage=true",
+    "VariantRequestQueueName": "paf-variantrequests-int",
+    "VariantRemoveTiming": "0 0 * * * *",
+    "VariantUpdateTiming": "0 0 * * * *",
+
+    // Geneva settings
+    "MonitoringTenant": "ADGCS-Development",
+    "MonitoringRole": "PAF.Function",
+    "MetricAccount": "DevAccount",
+    "MetricPrefixName": "PAF.Function",
+    "AppName": "VariantProcessor-Development",
+
+    // Core settings
+    "AMETenantId": "33e01921-4d64-4f8c-a055-5bdaffd5e33d",
+    "AzureDevOpsProjectName": "NGP-Test",
+    "AzureDevOpsProjectUrl": "https://dev.azure.com/nextgenpriv",
+    "EnableNonProdFunctionality": "true",
+    "MSTenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+    "PafUamiId": "9396613a-ec0d-4102-83a2-b079b69566f9",
+    "PdmsResourceId": "ff3a41f1-6748-48fa-ba46-d19a123ae965",
+    "PdmsBaseUrl": "https://management.privacy.microsoft-int.com",
+
+    // Local settings
+    "AdoSecretName": "VsoAccessToken",
+    "AdoAppSecretName": "NGPVariantLinkingBotAppSecret",
+    "CertificateSubjectName": "cloudtest.privacy.microsoft-int.ms",
+    "PafClientId": "4794dc3f-7c09-428e-9ee6-32e9a653242f", // app: paf-cloudtest-int
+    "PafKeyVaultUrl": "https://paf-ci1-ame.vault.azure.net/",
+    "PafFunctionUrl": "http://localhost:7071",
+    "PdmsClientId": "5fda7238-1512-46b9-9aa0-97c7fc7e576d", // app: NGP PDMS Test
+    "PdmsCertName": "aadclient2",
+    "PdmsKeyVaultUrl": "https://pdms-int-ame.vault.azure.net/",
+
+    // AAD App Registration settings
+    "AadClientId": "083f2d6f-6fb8-4896-840d-00854dec8473",
+    "NGPVariantLinkingBotCertName": "ngpvariantlinkingbotcert",
+    "NGPVariantLinkingBotCertSubjectName": "ngpvariantlinkingbot.compliance-services.microsoft.com",
+    "ShouldUseAADToken": true
+  }
+}

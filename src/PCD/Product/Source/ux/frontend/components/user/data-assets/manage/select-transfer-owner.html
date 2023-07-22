@@ -1,0 +1,36 @@
+<h2 data-use-cms>Select a team to transfer to</h2>
+<div class="select-owner-area">
+    <mee-text-action mee-text-action-kind="search"
+                     mee-display-type="flex"
+                     mee-auto-suggest="true"
+                     mee-auto-suggest-scrollable="true"
+                     mee-auto-suggest-act-on-select="true"
+                     mee-perform-action="$ctrl.getOwner($ctrl.textBoxContent)"
+                     mee-debounce-timeout="$ctrl.debounceTimeoutMsec"
+                     mee-get-suggestions="$ctrl.getSuggestion($ctrl.textBoxContent)"
+                     mee-no-suggestion-label="{{$ctrl.searchNoSuggestionLabel}}"
+                     mee-auto-focus>
+        <label>{{$ctrl.searchDisplayLabel}}</label>
+        <input mee-progress-disabled="ownerSave"
+               placeholder="{{$ctrl.searchPlaceholderLabel}}"
+               ng-model="$ctrl.textBoxContent">
+        <button disabled="disabled" aria-label="$ctrl.searchAriaLabel"></button>
+    </mee-text-action>
+    <mee-progress-ants-mwf class="search-progress"
+                           mee-progress-visible="ownerSearch getOwner"
+                           kind="local"></mee-progress-ants-mwf>
+</div>
+<div class="c-group">
+    <button mee-button="primary"
+            ng-click="$ctrl.next()"
+            ng-disabled="!$ctrl.isOwnerSelected()"
+            mee-progress-disabled="loadDataOwners getOwner ownerSearch"
+            data-use-cms>
+        Next
+    </button>
+    <button mee-button
+            ng-click="$ctrl.cancel()"
+            data-use-cms>
+        Cancel
+    </button>
+</div>

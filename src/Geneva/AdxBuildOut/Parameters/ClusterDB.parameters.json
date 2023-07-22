@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "__SUBID__"
+        },
+        "resourceGroup": {
+            "value": "__RESOURCEGROUP__"
+        },
+        "clusterName": {
+            "value": "__CLUSTERNAME__"
+        },
+        "databaseNameNonProd": {
+            "value": "__DBNAMENONPROD__"
+        },
+        "databaseNameProd": {
+            "value": "__DBNAMEPROD__"
+        },			
+        "clusterLocation": {
+            "value": "__LOCATION__"
+        },
+        "principalIdForCluster": {
+            "value": "__APPID__"
+        },
+        "roleForClusterPrincipal": {
+            "value": "AllDatabasesAdmin"
+        },
+        "tenantIdForClusterPrincipal": {
+            "value": "__TENANTID__"
+        },
+        "principalTypeForCluster": {
+            "value": "App"
+        }
+    }
+}

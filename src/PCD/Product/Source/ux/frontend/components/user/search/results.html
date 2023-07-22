@@ -1,0 +1,158 @@
+<mee-progress-view watch-operation="searching">
+    <inert-view></inert-view>
+
+    <inprogress-view>
+        <pcd-default-progress-spinner></pcd-default-progress-spinner>
+    </inprogress-view>
+
+    <failed-view>
+        <p mee-paragraph data-use-cms>
+            Failed to retrieve search results. Please try again later.
+        </p>
+    </failed-view>
+
+    <finished-view>
+
+        <section ng-if="$ctrl.hasErrors()">
+            <mee-alert kind="use-glyph error">
+                <alert-content data-use-cms>
+                    There were errors while searching, not all results may be shown. Please try again later.
+                </alert-content>
+            </mee-alert>
+        </section>
+
+        <section ng-if="$ctrl.noResults()">
+            <mee-alert kind="use-glyph info">
+                <alert-content data-use-cms>
+                    We were unable to find anything.
+                </alert-content>
+            </mee-alert>
+        </section>
+
+        <section ng-if="$ctrl.hasSearchResultsFor($ctrl.searchResults.owners)">
+            <div ng-repeat="entity in $ctrl.searchResults.owners.entities">
+                <h4 mee-heading="heading6" class="entity-name">{{entity.name}}</h4>
+                <p mee-paragraph ng-if="entity.description">
+                    {{entity.description}}
+                </p>
+                <ul class="horizontal-nav">
+                    <li>
+                        <pcd-modal-link-trigger data-use-cms
+                                                pcd-modal-data="{ ownerId: entity.id }"
+                                                pcd-label="Contact"
+                                                pcd-modal-state-name=".owner-contact"></pcd-modal-link-trigger>
+                    </li>
+                    <li>
+                        <a mee-hyperlink
+                           data-use-cms
+                           ui-sref="^({ q: entity.id })"
+                           ui-sref-opts="{ reload: true }">Search by ID</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section ng-if="$ctrl.hasSearchResultsFor($ctrl.searchResults.dataAgents)">
+            <div ng-repeat="entity in $ctrl.searchResults.dataAgents.entities">
+                <h4 mee-heading="heading6" class="entity-name">{{entity.name}}</h4>
+                <p mee-paragraph ng-if="entity.description">
+                    {{entity.description}}
+                </p>
+                <ul class="horizontal-nav">
+                    <li>
+                        <a mee-hyperlink
+                           data-use-cms
+                           target="_blank"
+                           ui-sref="data-agents.view({ agentId: entity.id })"
+                           ui-sref-opts="{ reload: true }">View</a>
+                    </li>
+                    <li>
+                        <pcd-modal-link-trigger data-use-cms
+                                                pcd-modal-data="{ ownerId: entity.ownerId }"
+                                                pcd-label="Contact owner"
+                                                pcd-modal-state-name=".owner-contact"></pcd-modal-link-trigger>
+                    </li>
+                    <li>
+                        <a mee-hyperlink
+                           data-use-cms
+                           ui-sref="^({ q: entity.id })"
+                           ui-sref-opts="{ reload: true }">Search by ID</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section ng-if="$ctrl.hasSearchResultsFor($ctrl.searchResults.variants)">
+            <div ng-repeat="entity in $ctrl.searchResults.variants.entities">
+                <h4 mee-heading="heading6" class="entity-name">{{entity.name}}</h4>
+                <p mee-paragraph>
+                    ID: {{entity.id}}
+                </p>
+                <p mee-paragraph ng-if="entity.description">
+                    {{entity.description}}
+                </p>
+            </div>
+        </section>
+
+        <section ng-if="$ctrl.hasSearchResultsFor($ctrl.searchResults.variantRequests)">
+            <div ng-repeat="entity in $ctrl.searchResults.variantRequests.entities">
+                <h4 mee-heading="heading6" class="entity-name">{{$ctrl.getVariantRequestName(entity)}}</h4>
+                <p mee-paragraph>
+                    ID: {{entity.id}}
+                </p>
+            </div>
+        </section>
+
+        <section ng-if="$ctrl.hasSearchResultsFor($ctrl.searchResults.sharingRequests)">
+            <div ng-repeat="entity in $ctrl.searchResults.sharingRequests.entities">
+                <h4 mee-heading="heading6" class="entity-name">{{$ctrl.getSharingRequestName(entity)}}</h4>
+                <p mee-paragraph>
+                    ID: {{entity.id}}
+                </p>
+            </div>
+        </section>
+
+        <section ng-if="$ctrl.hasSearchResultsFor($ctrl.searchResults.assetGroups)">
+            <div ng-repeat="entity in $ctrl.searchResults.assetGroups.entities">
+                <h4 mee-heading="heading6" class="entity-name">
+                    <pcd-asset-group-qualifier-view pcd-qualifier="entity.qualifier" pcd-hide-data-grid-link="true" pcd-asset-group-id="entity.id"></pcd-asset-group-qualifier-view>
+                </h4>
+                <ul class="horizontal-nav">
+                    <li>
+                        <pcd-modal-link-trigger data-use-cms
+                                                pcd-modal-data="{ ownerId: entity.ownerId }"
+                                                pcd-label="Contact owner"
+                                                pcd-modal-state-name=".owner-contact"></pcd-modal-link-trigger>
+                    </li>
+                    <li ng-if="entity.deleteAgentId">
+                        <a mee-hyperlink
+                           data-use-cms
+                           target="_blank"
+                           ui-sref="data-agents.view({ agentId: entity.deleteAgentId })"
+                           ui-sref-opts="{ reload: true }">View delete agent</a>
+                    </li>
+                    <li ng-if="entity.exportAgentId">
+                        <a mee-hyperlink
+                           data-use-cms
+                           target="_blank"
+                           ui-sref="data-agents.view({ agentId: entity.exportAgentId })"
+                           ui-sref-opts="{ reload: true }">View export agent</a>
+                    </li>
+                    <li ng-if="entity.qualifier.dataGridLink">
+                        <a mee-hyperlink
+                           target="_blank"
+                           ng-href="{{entity.qualifier.dataGridLink}}"
+                           data-use-cms>Find in DataGrid</a>
+                    </li>
+                    <li>
+                        <a mee-hyperlink
+                           data-use-cms
+                           ui-sref="^({ q: entity.id })"
+                           ui-sref-opts="{ reload: true }">Search by ID</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </finished-view>
+</mee-progress-view>

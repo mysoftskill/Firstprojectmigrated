@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest version="1.0"
+          cosmosVcRoot="https://cosmos11.osdinfra.net/cosmos/asimov.partner.jobs/"
+          numberOfParallelStreams="25"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dataMarts>
+    <dataMart name ="UsageMart">
+      <connection>
+        <sql connectionString="Data Source=dmquality;Initial Catalog=MemberViewAnalytics;Integrated Security=SSPI;Connection Timeout=60;Asynchronous Processing=true;"
+					 batchSize="100000"/>
+      </connection>
+      <entities>
+        <entity startDate="@@sqlizerStartDate@@" name="MemberViewQosAggregation" version="1.0">
+          <cosmos downloadType="StructuredStream"
+					streamSetLocation="@@MemberViewServiceProcessedPath@@/@@MemberViewServiceQosStreamName@@/%Y/%m/%d/@@MemberViewServiceQosStreamName@@_%Y_%m_%d_%h.ss">
+          </cosmos>
+          <table name="dbo.MemberViewQos" includeStreamDateColumn="true">
+            <partitionScheme partitionSchemeType="Hourly" columnName="SQLizerStreamDateId"/>
+          </table>
+          <load loadType="DateAligned"/>
+        </entity>
+      </entities>
+    </dataMart>
+  </dataMarts>
+</manifest>

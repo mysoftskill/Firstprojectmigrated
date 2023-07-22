@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props" Condition="Exists('$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), core.build.props))\core.build.props')" />
+
+  <PropertyGroup>
+    <AssemblyName>Pcf.CommandQueue</AssemblyName>
+    <RootNamespace>Microsoft.PrivacyServices.CommandFeed.Service.CommandQueue</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CacheManager.Core" />
+    <PackageReference Include="CacheManager.Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="System.Net.Http" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="StoredProcedures\PopUnExpiredFromQueue.js" />
+    <EmbeddedResource Include="StoredProcedures\PopFromQueue.js" />
+    <EmbeddedResource Include="StoredProcedures\GetQueueStat.js" />
+    <EmbeddedResource Include="StoredProcedures\FlushAgentQueue.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+  <Import Project="$(CommandFeedBuildPath)\core.common.targets" />
+</Project>

@@ -1,0 +1,17 @@
+<nav>
+    <ol class="c-breadcrumb">
+        <li>
+            <a mee-hyperlink ui-sref="landing" data-use-cms>Home</a>
+        </li>
+        <li ng-repeat="page in $ctrl.breadcrumbs track by $index">
+            <a mee-hyperlink ui-sref="{{page.state}}" data-use-cms>{{page.headingText}}</a>
+        </li>
+        <li data-use-cms>
+            {{$ctrl.text}}
+        </li>
+    </ol>
+</nav>
+
+<h2 class="c-heading-3">
+    {{$ctrl.text}}
+</h2>

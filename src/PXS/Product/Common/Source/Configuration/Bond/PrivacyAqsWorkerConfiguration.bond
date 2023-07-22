@@ -1,0 +1,115 @@
+import "CommonConfiguration.bond"
+import "PartnerConfiguration.bond"
+import "AzureEventHubConfiguration.bond"
+import "AzureStorageConfiguration.bond"
+
+namespace Microsoft.Membership.MemberServices.Configuration
+
+struct IAqsQueueProcessorConfiguration
+{
+    // Name of the queue to take work from, typically assigned by AQS
+    1 : required string QueueName;
+
+    // Amount of work items to take per request.
+    2 : required int16 GroupsToTake;
+
+    // Amount of time we request to lease a batch for.
+    3 : required int32 LeaseTimeoutSeconds;
+
+    // Amount of time before a queue item should be visible again if we failed to process it.
+    4 : required int32 ReleaseWaitIntervalSeconds;
+
+    // Delay between critical errors or when the queue returns no work.
+    5 : required int32 WaitOnQueueEmptyMilliseconds;
+
+    // Requester ID that's sent to PCF.
+    6 : required string RequesterId;
+
+    // Flag that indicates MSA verifier errors should be ignored.
+    8 : optional bool IgnoreVerifierErrors = false;
+};
+
+struct IMsaUserDeleteQueueConfiguration
+{
+    1 : required IServicePointConfiguration ServicePointConfiguration;
+    2 : required int32 QueueSizeLengthCounterRefreshSeconds;
+};
+
+struct IAqsConfiguration
+{
+    // AQS Uri to connect to.
+    1 : required string Endpoint;
+
+    // Certificate used for communicating with the endpoint.
+    2 : required ICertificateConfiguration CertificateConfiguration;
+
+    // Queue specific configuration
+    3 : required IAqsQueueProcessorConfiguration AqsQueueProcessorConfiguration;
+
+    // Number of parallel work "processors" to spin up.
+    4 : required int32 ProcessorCount;
+
+    // Max number of connections to allow in parallel to the endpoint
+    5 : required int32 ConnectionLimit;
+
+    // Flag indicating use of REST client for calling partner mock - default false
+    6 : optional bool UseRestClient;
+};
+
+struct IPuidMappingConfig : ICosmosVcConfig
+{
+    // Subsequent paths to the file
+    1 : required string LogPath;
+
+    // File name prefix
+    2 : required string StreamNamePrefix;
+
+    // File extension
+    3 : required string StreamExtension;
+
+    4 : required string CosmosAdlsAccountName;
+    5 : optional string RootDir;
+};
+struct IMsaAccountDeleteQueueProcessorConfiguration
+{
+    1 : required int32 ProcessorCount;
+    2 : required list<IAzureStorageConfiguration> AzureQueueStorageConfigurations;
+    3 : required int32 GetMessagesDequeueCount;
+    4 : required IServicePointConfiguration ServicePointConfiguration;
+    
+    // Requester ID that's sent to PCF.
+    5 : required string RequesterId;
+
+    // Flag that indicates MSA verifier errors should be ignored.
+    6 : optional bool IgnoreVerifierErrors = false;
+};
+
+struct IPrivacyAqsWorkerConfiguration
+{
+    // Collection of aqs endpoints to connect to and how.
+    1 : required list<IAqsConfiguration> AqsConfiguration;
+
+    // Cosmos configuration for uploading account creation data.
+    2 : required IPuidMappingConfig MappingConfig;
+
+    // Service Point manager conneciton limit for writing to cosmos.
+    3 : required int32 CosmosConnectionLimit;
+
+    // Enable verbose logging.
+    4 : required bool EnableExtraLogging;
+
+    // Storage configuration for dead lettering and lease blobs.
+    5 : required IAzureStorageConfiguration AzureStorageConfiguration;
+
+    // Number of locks we will create when writing to cosmos (cosmos does not provide protection for multiple writers to a single stream).
+    6 : required int32 CosmosWriterLimit;
+
+    // Lease container to create locks in.
+    7 : required string LeaseContainerName;
+
+    8 : required IMsaAccountDeleteQueueProcessorConfiguration MsaAccountDeleteQueueProcessorConfiguration;
+
+    9 : required IMsaUserDeleteQueueConfiguration MsaUserDeleteQueueConfiguration;
+	
+	10 : required IAdlsConfiguration AdlsConfiguration;
+};

@@ -1,0 +1,40 @@
+let maxDate = startofday(ago(14d));      // adjust for the age of commands you want to look for
+let minPercentComplete = todouble(0.95); // adjust for the % complete you want to target
+//
+let minDate = startofday(max_of(datetime(2018-05-25T00:00:00Z), ago(30d)));
+let minPendingCommands = 10;
+//
+let ExcludedAgentsRaw = datatable(AgentId: string, Expires: datetime)
+[
+    // list agent id, expire date (or null for no expire date) that you want excluded from the query
+];
+//
+let ExcludedAgents = ExcludedAgentsRaw 
+| where isnull(Expires) or Expires > now() 
+| project AgentId;
+//
+let OutOfSlaAgents = materialize
+(
+    cluster("Ngpreporting").database('NGPReporting').NonCosmosAgentHealthFullRollupByDay
+    | where DeleteRequestDate >= minDate and DeleteRequestDate < maxDate
+    | where AgentId !in (ExcludedAgents)
+    | join kind=inner
+        (
+            cluster("Ngpreporting").database('NgpInfo').fcnDataAgentOwnerInfo()
+            | where AgentReadiness == "ProdReady" and AgentType == "Non-Cosmos"
+        )
+        on AgentId
+    | summarize          
+        CountTotal = sum(TotalRequestCount), 
+        CountCompleted = sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount), 
+        CompletionPct = sum(AcknowledgedDeleteWithinSLACount + AcknowledgedDeleteOutOfSLACount).todouble() / sum(TotalRequestCount).todouble() 
+        by AgentId, AgentName, AgentType
+    | where CompletionPct < minPercentComplete and CountTotal > 10
+    | extend CountMissing = CountTotal - CountCompleted
+    | where CountMissing > minPendingCommands
+    | project AgentId, AgentName, AgentType, CountTotal, CountCompleted, CountMissing
+);
+//
+OutOfSlaAgents
+| project AgentId, AgentName, AgentType, CountTotal, CountCompleted, CountMissing
+| order by AgentId asc

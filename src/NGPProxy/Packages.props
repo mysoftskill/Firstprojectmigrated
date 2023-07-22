@@ -1,0 +1,12 @@
+<Project>
+  <!--
+    Set all package versions here. 
+	Microsoft.Build.CentralPackageVersions will read this file and update the version in each individual csproj file.
+	Redefining PackageReference version in csproj will cause build error
+
+    Ensure all packages are sorted alphabetically by their name
+	Ensure versions are locked by wrapping them in square brackets, otherwise local or lab builds might unexpectedly upgrade.
+  -->
+
+  <Import Project="..\Build\Directory.Build.props" />
+</Project>

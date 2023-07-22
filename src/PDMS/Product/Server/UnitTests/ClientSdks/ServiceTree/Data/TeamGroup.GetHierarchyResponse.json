@@ -1,0 +1,35 @@
+﻿{
+	"@odata.context": "https://servicetree.msftcloudes.com/api/$metadata#OrganizationHierarchy",
+	"value": [{
+		"Id": "ecf3aa0e-d692-4300-b19b-9e1cd96d74ab",
+		"Name": "WDG",
+		"NodeType": "Division",
+		"Path": null,
+		"Tags": null,
+		"Status": "Draft"
+	},
+	{
+		"Id": "efab8c59-3cd4-4eb2-8e8a-77b687f93843",
+		"Name": "Universal Store",
+		"NodeType": "Organization",
+		"Path": null,
+		"Tags": null,
+		"Status": "Draft"
+	},
+	{
+		"Id": "a81edd6c-bee1-4dd3-830c-ad027dc9134d",
+		"Name": "Membership",
+		"NodeType": "ServiceGroup",
+		"Path": null,
+		"Tags": null,
+		"Status": "Draft"
+	},
+    {
+      "Id": "05d1a8fe-cb2a-4fba-8ca2-dbc1fc0e25aa",
+      "Name": "Member Experiences and Engagement",
+      "NodeType": "TeamGroup",
+      "Path": null,
+      "Tags": null,
+      "Status": "Draft"
+    }]
+}

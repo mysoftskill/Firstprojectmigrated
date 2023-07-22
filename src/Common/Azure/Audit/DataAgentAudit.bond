@@ -1,0 +1,11 @@
+﻿import "Ifx.bond"
+
+namespace Microsoft.PrivacyServices.Common.Azure
+
+struct DataAgentAudit : Ifx.AuditSchema
+{
+    10: required wstring Id;
+    20: required wstring Capabilities;
+    30: required wstring OwnerId;
+}
+

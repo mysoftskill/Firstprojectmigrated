@@ -1,0 +1,13 @@
+﻿<h2 mee-heading="subheading2" data-use-cms>Sharing Request Contacts</h2>
+
+<p mee-paragraph data-use-cms>Please set your sharing request contacts to share your data agent</p>
+
+<pcd-directory-resource-selector data-required-field="true"
+                                 data-error-id="{{$ctrl.errorCategory}}.sharing-request-contacts"
+                                 pcd-resource-type="contact"
+                                 pcd-error-id="{{$ctrl.errorCategory}}.sharing-request-contacts"
+                                 pcd-selector-label="{{$ctrl.sharingRequestContactsLabel}}"
+                                 ng-model="$ctrl.sharingRequestContactsSelectorData"></pcd-directory-resource-selector>
+
+<mee-inline-error error-id="{{$ctrl.errorCategory}}.save"></mee-inline-error>
+<button data-use-cms mee-button="primary" ng-click="$ctrl.onSave()" mee-progress-disabled="modalOperation">Save</button>

@@ -1,0 +1,2540 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+      "type": "string",
+      "metadata": "Name of Data Factory for Delete and Export pipeline"
+    },
+    "SecretNameForAgentBlobStorageConnectionString": {
+      "type": "string",
+      "metadata": "Secret name in Keyvault that has connection string for Blob Storage associated with Batch Account"
+    },
+    "SecretNameForBatchAccountAccessKey": {
+      "type": "string",
+      "metadata": "Secret name in Keyvault that has access key for Azure Batch account"
+    },
+    "SampleAgentAzureBatchUri": {
+      "type": "string",
+      "metadata": "Url of the batch account used in the custom activity"
+    },
+    "SampleAgentAzureBatchPoolName": {
+      "type": "string",
+      "metadata": "Name of the batch pool within the batch account"
+    },
+    "SampleAgentAzureBatchAccountName": {
+      "type": "string",
+      "metadata": "Name of the batch account used in custom activity"
+    },
+    "SecretNameForDataAssetsBlobConnectionString": {
+      "type": "string",
+      "metadata": "Secret name in Keyvault that has connection string for Blob Storage which contains the DataAssets upon which DSRs must be applied"
+    },
+    "AgentKeyVaultBaseUrl": {
+      "type": "string",
+      "metadata": "Base url of the Keyvault that has certificate and secrets needed for ADF pipline"
+    }
+  },
+  "variables": {
+    "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+  },
+  "resources": [
+    {
+      "name": "[concat(parameters('factoryName'), '/Assets')]",
+      "type": "Microsoft.DataFactory/factories/datasets",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "linkedServiceName": {
+          "referenceName": "DataAssets",
+          "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+          "location": {
+            "type": "AzureBlobStorageLocation",
+            "container": "dataassets"
+          },
+          "columnDelimiter": ",",
+          "escapeChar": "\"",
+          "firstRowAsHeader": true,
+          "quoteChar": "\""
+        },
+        "schema": [
+          {
+            "name": "ObjectId",
+            "type": "String"
+          },
+          {
+            "name": "TenantId",
+            "type": "String"
+          },
+          {
+            "name": "Data",
+            "type": "String"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/DataAssets')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/CommandsDataset')]",
+      "type": "Microsoft.DataFactory/factories/datasets",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "linkedServiceName": {
+          "referenceName": "AzureBlobStorageForAgent",
+          "type": "LinkedServiceReference"
+        },
+        "parameters": {
+          "containerName": {
+            "type": "string"
+          }
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+          "location": {
+            "type": "AzureBlobStorageLocation",
+            "container": {
+              "value": "@dataset().containerName",
+              "type": "Expression"
+            }
+          },
+          "columnDelimiter": "\t",
+          "escapeChar": "\"",
+          "firstRowAsHeader": true,
+          "quoteChar": "\""
+        },
+        "schema": [
+          {
+            "name": "CommandId",
+            "type": "String"
+          },
+          {
+            "name": "OperationType",
+            "type": "String"
+          },
+          {
+            "name": "CommandCapability",
+            "type": "String"
+          },
+          {
+            "name": "CommandTypeId",
+            "type": "String"
+          },
+          {
+            "name": "CommandProperties",
+            "type": "String"
+          },
+          {
+            "name": "Timestamp",
+            "type": "String"
+          },
+          {
+            "name": "StartTimeRange",
+            "type": "String"
+          },
+          {
+            "name": "EndTimeRange",
+            "type": "String"
+          },
+          {
+            "name": "RowPredicate",
+            "type": "String"
+          },
+          {
+            "name": "Subject",
+            "type": "String"
+          },
+          {
+            "name": "Verifier",
+            "type": "String"
+          },
+          {
+            "name": "ProcessorApplicable",
+            "type": "String"
+          },
+          {
+            "name": "ControllerApplicable",
+            "type": "String"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AssetGroupsDataset')]",
+      "type": "Microsoft.DataFactory/factories/datasets",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "linkedServiceName": {
+          "referenceName": "AzureBlobStorageForAgent",
+          "type": "LinkedServiceReference"
+        },
+        "parameters": {
+          "containerName": {
+            "type": "string"
+          }
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+          "location": {
+            "type": "AzureBlobStorageLocation",
+            "container": {
+              "value": "@dataset().containerName",
+              "type": "Expression"
+            }
+          },
+          "columnDelimiter": "\t",
+          "escapeChar": "\"",
+          "firstRowAsHeader": true,
+          "quoteChar": "\""
+        },
+        "schema": [
+          {
+            "name": "AssetGroupId\tResourceSetUri\tTags\tApplicableCommandTypes\tPartitionUri",
+            "type": "String"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AssetsAfterExport')]",
+      "type": "Microsoft.DataFactory/factories/datasets",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "linkedServiceName": {
+          "referenceName": "DataAssets",
+          "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+          "location": {
+            "type": "AzureBlobStorageLocation",
+            "container": "exporteddataassets"
+          },
+          "columnDelimiter": ",",
+          "escapeChar": "\\",
+          "quoteChar": "\""
+        },
+        "schema": []
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/DataAssets')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AzureBlobStorageForAgent')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureBlobStorage",
+        "typeProperties": {
+          "connectionString": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "[parameters('SecretNameForAgentBlobStorageConnectionString')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AzureBatchForSampleAgent')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureBatch",
+        "typeProperties": {
+          "batchUri": "[parameters('SampleAgentAzureBatchUri')]",
+          "poolName": "[parameters('SampleAgentAzureBatchPoolName')]",
+          "accountName": "[parameters('SampleAgentAzureBatchAccountName')]",
+          "linkedServiceName": {
+            "referenceName": "AzureBlobStorageForAgent",
+            "type": "LinkedServiceReference"
+          },
+          "accessKey": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "[parameters('SecretNameForBatchAccountAccessKey')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/DataAssets')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureBlobStorage",
+        "typeProperties": {
+          "connectionString": {
+            "type": "AzureKeyVaultSecret",
+            "store": {
+              "referenceName": "AgentClientCertKV",
+              "type": "LinkedServiceReference"
+            },
+            "secretName": "[parameters('SecretNameForDataAssetsBlobConnectionString')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AgentClientCertKV')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/AgentClientCertKV')]",
+      "type": "Microsoft.DataFactory/factories/linkedServices",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "type": "AzureKeyVault",
+        "typeProperties": {
+          "baseUrl": "[parameters('AgentKeyVaultBaseUrl')]"
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/DeletePipelineForAgents')]",
+      "type": "Microsoft.DataFactory/factories/pipelines",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "activities": [
+          {
+            "name": "GetDeleteBatchCommands",
+            "type": "Custom",
+            "dependsOn": [],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://customactivityoutputs.blob.core.windows.net/",
+                "outputBlobContainerName": {
+                  "value": "@pipeline().parameters.outputBlobContainerName",
+                  "type": "Expression"
+                },
+                "customActivityType": {
+                  "value": "GetCommands",
+                  "type": "Expression"
+                },
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "ApplyDsrToAadAsset",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetDeleteBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyDsrDF",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'assets.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsAfterDeletion": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          },
+          {
+            "name": "ApplyDsrToMsaAsset",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetDeleteBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyDsrForMsaAssets",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "AssetFileName": {
+                    "value": "'@{'msaAsset.txt'}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsAfterDeletion": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          },
+          {
+            "name": "ApplyDsrToNonWindowsDeviceAsset",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetDeleteBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyDsrForNonWindowsAssets",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'macDeviceAsset.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsAfterDeletion": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          },
+          {
+            "name": "CheckpointBatchCommands",
+            "type": "Custom",
+            "dependsOn": [
+              {
+                "activity": "ApplyDsrToNonWindowsDeviceAsset",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              },
+              {
+                "activity": "ApplyDsrToMsaAsset",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              },
+              {
+                "activity": "ApplyDsrToAadAsset",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              },
+              {
+                "activity": "ApplyDsrToMixedSubjectAssets",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://customactivityoutputs.blob.core.windows.net/",
+                "outputBlobContainerName": {
+                  "value": "@pipeline().parameters.outputBlobContainerName",
+                  "type": "Expression"
+                },
+                "customActivityType": {
+                  "value": "CompleteCommands",
+                  "type": "Expression"
+                },
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "ApplyDsrToMixedSubjectAssets",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetDeleteBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyDsrForMixedSubjectAssets",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'mixedSubjectsAsset.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsAfterDeletion": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          }
+        ],
+        "policy": {
+          "elapsedTimeMetric": {},
+          "cancelAfter": {}
+        },
+        "parameters": {
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "assetGroupId": {
+            "type": "string"
+          },
+          "outputBlobContainerName": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          }
+        },
+        "annotations": [],
+        "lastPublishTime": "2022-05-18T20:35:00Z"
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AzureBatchForSampleAgent')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyDsrDF')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyDsrForMsaAssets')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyDsrForNonWindowsAssets')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyDsrForMixedSubjectAssets')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ExportPipelineForAgents')]",
+      "type": "Microsoft.DataFactory/factories/pipelines",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "activities": [
+          {
+            "name": "GetExportBatchCommands",
+            "type": "Custom",
+            "dependsOn": [],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://customactivityoutputs.blob.core.windows.net/",
+                "outputBlobContainerName": "output",
+                "customActivityType": "GetCommands",
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                }
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "CheckpointBatchCommands",
+            "type": "Custom",
+            "dependsOn": [
+              {
+                "activity": "ApplyExportDsrToMixedSubjectAssets",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              },
+              {
+                "activity": "ApplyExportDsrToAadAsset",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              },
+              {
+                "activity": "ApplyExportDsrToMsaAsset",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              },
+              {
+                "activity": "ApplyExportDsrToNonWindowsDeviceAsset",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "command": {
+                "value": "PrivacyCommandCustomActivity.exe",
+                "type": "Expression"
+              },
+              "resourceLinkedService": {
+                "referenceName": "AzureBlobStorageForAgent",
+                "type": "LinkedServiceReference"
+              },
+              "folderPath": "customactivity",
+              "extendedProperties": {
+                "agentId": {
+                  "value": "@pipeline().parameters.agentId",
+                  "type": "Expression"
+                },
+                "assetGroupId": {
+                  "value": "@pipeline().parameters.assetGroupId",
+                  "type": "Expression"
+                },
+                "startTime": {
+                  "value": "@pipeline().parameters.startTime",
+                  "type": "Expression"
+                },
+                "endTime": {
+                  "value": "@pipeline().parameters.endTime",
+                  "type": "Expression"
+                },
+                "clientCertAKV": "https://sampleagentkv.vault.azure.net/",
+                "clientCertName": "sampleagentclient",
+                "clientAadAppId": "fb9f9d15-8fd7-4495-850f-8f5cb676555a",
+                "endpoint": "ppe",
+                "outputBlobUrl": "https://customactivityoutputs.blob.core.windows.net/",
+                "outputBlobContainerName": "output",
+                "customActivityType": "CompleteCommands",
+                "operation": {
+                  "value": "@pipeline().parameters.operation",
+                  "type": "Expression"
+                },
+                "exportStagingContainerUri": "https://dataassetsforsampleagent.blob.core.windows.net/exporteddataassets",
+                "exportStagingRootFolder": "89ab6813-f98f-49e8-947d-9747f5658949/2022-04-18T110000_2022-04-18T140000"
+              },
+              "referenceObjects": {
+                "linkedServices": [],
+                "datasets": []
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureBatchForSampleAgent",
+              "type": "LinkedServiceReference"
+            }
+          },
+          {
+            "name": "ApplyExportDsrToAadAsset",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetExportBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyExportDsrDF",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'assets.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  },
+                  "ProductId": {
+                    "value": "'@{'ProductA'}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsExported": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          },
+          {
+            "name": "ApplyExportDsrToMsaAsset",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetExportBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyExportDsrForMsaAssets",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'msaAsset.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  },
+                  "ProductId": {
+                    "value": "'@{'ProductA'}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsExported": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          },
+          {
+            "name": "ApplyExportDsrToNonWindowsDeviceAsset",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetExportBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyExportDsrForNonWindowsDeviceAssets",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'macDeviceAsset.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss')}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss')}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  },
+                  "ProductId": {
+                    "value": "'@{'ProductA'}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsExported": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          },
+          {
+            "name": "ApplyExportDsrToMixedSubjectAssets",
+            "type": "ExecuteDataFlow",
+            "dependsOn": [
+              {
+                "activity": "GetExportBatchCommands",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "1.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false,
+              "secureInput": false
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "dataflow": {
+                "referenceName": "ApplyExportDsrForMixedSubjectAssets",
+                "type": "DataFlowReference",
+                "parameters": {
+                  "AssetFileName": {
+                    "value": "'@{'mixedSubjectsAsset.txt'}'",
+                    "type": "Expression"
+                  },
+                  "AssetGroupId": {
+                    "value": "'@{pipeline().parameters.assetGroupId}'",
+                    "type": "Expression"
+                  },
+                  "StartTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.startTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "EndTime": {
+                    "value": "'@{substring(formatDateTime(pipeline().parameters.endTime, 'yyyy-MM-ddTHH:mm:ss'), 0, 19)}'",
+                    "type": "Expression"
+                  },
+                  "Operation": {
+                    "value": "'@{pipeline().parameters.operation}'",
+                    "type": "Expression"
+                  },
+                  "ProductId": {
+                    "value": "'@{'ProductA'}'",
+                    "type": "Expression"
+                  }
+                },
+                "datasetParameters": {
+                  "Commands": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "SourceDataset": {},
+                  "AssetGroupDetailsSource": {
+                    "containerName": {
+                      "value": "@pipeline().parameters.outputBlobContainerName",
+                      "type": "Expression"
+                    }
+                  },
+                  "AssetsExported": {}
+                }
+              },
+              "staging": {},
+              "compute": {
+                "coreCount": 8,
+                "computeType": "General"
+              },
+              "traceLevel": "Fine"
+            }
+          }
+        ],
+        "policy": {
+          "elapsedTimeMetric": {},
+          "cancelAfter": {}
+        },
+        "parameters": {
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "assetGroupId": {
+            "type": "string"
+          },
+          "exportDestinationUrl": {
+            "type": "string"
+          },
+          "outputBlobContainerName": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          }
+        },
+        "annotations": [],
+        "lastPublishTime": "2022-05-19T00:04:28Z"
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageForAgent')]",
+        "[concat(variables('factoryId'), '/linkedServices/AzureBatchForSampleAgent')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyExportDsrDF')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyExportDsrForMsaAssets')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyExportDsrForNonWindowsDeviceAssets')]",
+        "[concat(variables('factoryId'), '/dataflows/ApplyExportDsrForMixedSubjectAssets')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyDsrDF')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsAfterDeletion"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseSubjectIdentifiers"
+            },
+            {
+              "name": "FilterOutRowsThatMatchWithIdentifierInCommands"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[($AssetGroupId+'/'+$StartTime+'_'+$EndTime+'/'+initCap($Operation)+'/'+initCap($Operation)+'Commands*.txt')]) ~> Commands",
+            "source(output(",
+            "          ObjectId as string,",
+            "          TenantId as string,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetFileName)]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (aadObjectId as string,",
+            "          aadHomeTenantId as string,",
+            "          aadResourceTenantId as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSubjectIdentifiers",
+            "SourceDataset, ParseSubjectIdentifiers exists(ObjectId == ParsedSubject.aadObjectId",
+            "     && TenantId == ParsedSubject.aadHomeTenantId,",
+            "     negate:true,",
+            "     broadcast: 'auto')~> FilterOutRowsThatMatchWithIdentifierInCommands",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "FilterOutRowsThatMatchWithIdentifierInCommands sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     input(",
+            "          ObjectId as string,",
+            "          TenantId as string,",
+            "          Data as string",
+            "     ),",
+            "     partitionFileNames:[($AssetFileName)],",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true,",
+            "     partitionBy('hash', 1)) ~> AssetsAfterDeletion"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyExportDsrDF')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "AssetsAfterExport",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsExported"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseIdentifiers"
+            },
+            {
+              "name": "SelectAssetsThatMatchIdentifierInCommands"
+            },
+            {
+              "name": "SelectColumnsForOutput"
+            },
+            {
+              "name": "AddFileNameColumn"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string,",
+            "     ProductId as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[($AssetGroupId+'/'+$StartTime+'_'+ $EndTime+'/'+initCap($Operation)+'/'+initCap($Operation)+'Commands*.txt')]) ~> Commands",
+            "source(output(",
+            "          ObjectId as string,",
+            "          TenantId as string,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetFileName)]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (aadObjectId as string,",
+            "          aadResourceTenantId as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseIdentifiers",
+            "SourceDataset, ParseIdentifiers join(ObjectId == ParsedSubject.aadObjectId",
+            "     && TenantId == ParsedSubject.aadResourceTenantId,",
+            "     joinType:'inner',",
+            "     broadcast: 'auto')~> SelectAssetsThatMatchIdentifierInCommands",
+            "SelectAssetsThatMatchIdentifierInCommands select(mapColumn(",
+            "          ObjectId,",
+            "          TenantId,",
+            "          Data,",
+            "          CommandId",
+            "     ),",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> SelectColumnsForOutput",
+            "SelectColumnsForOutput derive(CommandId = $AssetGroupId+'/'+replace($StartTime+'_'+$EndTime, ':', '')+'/'+CommandId+'/'+$ProductId+'/'+$AssetFileName) ~> AddFileNameColumn",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "AddFileNameColumn sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     rowUrlColumn:'CommandId',",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> AssetsExported"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/AssetsAfterExport')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyDsrForMsaAssets')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsAfterDeletion"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseSubjectIdentifiers"
+            },
+            {
+              "name": "FilterOutRowsThatMatchWithIdentifierInCommands"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetGroupId as string,",
+            "     AssetFileName as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[('89ab6813-f98f-49e8-947d-9747f5658949/2022-05-01T01:00:00_2022-05-02T23:00:00/Delete/'+'DeleteCommands*.txt')]) ~> Commands",
+            "source(output(",
+            "          Anid as string,",
+            "          Cid as long,",
+            "          Opid as string,",
+            "          Puid as long,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (msaPuid as long,",
+            "          msaCid as long),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSubjectIdentifiers",
+            "SourceDataset, ParseSubjectIdentifiers exists(Puid == ParsedSubject.msaPuid",
+            "     && Cid == ParsedSubject.msaCid,",
+            "     negate:true,",
+            "     broadcast: 'auto')~> FilterOutRowsThatMatchWithIdentifierInCommands",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "FilterOutRowsThatMatchWithIdentifierInCommands sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     input(",
+            "          ObjectId as string,",
+            "          TenantId as string,",
+            "          Data as string",
+            "     ),",
+            "     partitionFileNames:[(\"msaAsset.txt\")],",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true,",
+            "     partitionBy('hash', 1)) ~> AssetsAfterDeletion"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyDsrForNonWindowsAssets')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsAfterDeletion"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseSubjectIdentifiers"
+            },
+            {
+              "name": "FilterOutRowsThatMatchWithIdentifierInCommands"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[('89ab6813-f98f-49e8-947d-9747f5658949/2022-05-01T01:00:00_2022-05-02T23:00:00/Delete/'+'DeleteCommands*.txt')]) ~> Commands",
+            "source(output(",
+            "          DeviceId as string,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[('macDeviceAsset*.txt')]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (macOsPlatformDeviceId as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSubjectIdentifiers",
+            "SourceDataset, ParseSubjectIdentifiers exists(DeviceId == ParsedSubject.macOsPlatformDeviceId,",
+            "     negate:true,",
+            "     broadcast: 'auto')~> FilterOutRowsThatMatchWithIdentifierInCommands",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "FilterOutRowsThatMatchWithIdentifierInCommands sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     input(",
+            "          ObjectId as string,",
+            "          TenantId as string,",
+            "          Data as string",
+            "     ),",
+            "     partitionFileNames:[(\"macDeviceAsset.txt\")],",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true,",
+            "     partitionBy('hash', 1)) ~> AssetsAfterDeletion"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyExportDsrForMsaAssets')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "AssetsAfterExport",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsExported"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseIdentifiers"
+            },
+            {
+              "name": "SelectAssetsThatMatchIdentifierInCommands"
+            },
+            {
+              "name": "SelectColumnsForOutput"
+            },
+            {
+              "name": "AddFileNameColumn"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string,",
+            "     ProductId as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[($AssetGroupId+'/'+$StartTime+'_'+ $EndTime+'/'+initCap($Operation)+'/'+initCap($Operation)+'Commands*.txt')]) ~> Commands",
+            "source(output(",
+            "          Anid as string,",
+            "          Cid as long,",
+            "          Opid as string,",
+            "          Puid as long,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     inferDriftedColumnTypes: true,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetFileName)]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (msaPuid as long,",
+            "          msaCid as long),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseIdentifiers",
+            "SourceDataset, ParseIdentifiers join(Puid == ParsedSubject.msaPuid",
+            "     && Cid == ParsedSubject.msaCid,",
+            "     joinType:'inner',",
+            "     broadcast: 'auto')~> SelectAssetsThatMatchIdentifierInCommands",
+            "SelectAssetsThatMatchIdentifierInCommands select(mapColumn(",
+            "          ObjectId = Anid,",
+            "          TenantId = Cid,",
+            "          Data = Opid,",
+            "          Puid,",
+            "          Data,",
+            "          CommandId",
+            "     ),",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> SelectColumnsForOutput",
+            "SelectColumnsForOutput derive(CommandId = $AssetGroupId+'/'+replace($StartTime+'_'+$EndTime, ':', '')+'/'+CommandId+'/'+$ProductId+'/'+$AssetFileName) ~> AddFileNameColumn",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "AddFileNameColumn sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     rowUrlColumn:'CommandId',",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> AssetsExported"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/AssetsAfterExport')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyExportDsrForNonWindowsDeviceAssets')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "AssetsAfterExport",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsExported"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseIdentifiers"
+            },
+            {
+              "name": "SelectAssetsThatMatchIdentifierInCommands"
+            },
+            {
+              "name": "SelectColumnsForOutput"
+            },
+            {
+              "name": "AddFileNameColumn"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string,",
+            "     ProductId as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[($AssetGroupId+'/'+$StartTime+'_'+ $EndTime+'/'+initCap($Operation)+'/'+initCap($Operation)+'Commands*.txt')]) ~> Commands",
+            "source(output(",
+            "          DeviceId as string,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     inferDriftedColumnTypes: true,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetFileName)]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (macOsPlatformDeviceId as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseIdentifiers",
+            "SourceDataset, ParseIdentifiers join(DeviceId == ParsedSubject.macOsPlatformDeviceId,",
+            "     joinType:'inner',",
+            "     broadcast: 'auto')~> SelectAssetsThatMatchIdentifierInCommands",
+            "SelectAssetsThatMatchIdentifierInCommands select(mapColumn(",
+            "          DeviceId,",
+            "          Data,",
+            "          CommandId",
+            "     ),",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> SelectColumnsForOutput",
+            "SelectColumnsForOutput derive(CommandId = $AssetGroupId+'/'+replace($StartTime+'_'+$EndTime, ':', '')+'/'+CommandId+'/'+$ProductId+'/'+$AssetFileName) ~> AddFileNameColumn",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "AddFileNameColumn sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     rowUrlColumn:'CommandId',",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> AssetsExported"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/AssetsAfterExport')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyDsrForMixedSubjectAssets')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsAfterDeletion"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseSubjectIdentifiers"
+            },
+            {
+              "name": "FilterOutRowsWithIdsMatch"
+            },
+            {
+              "name": "SelectRowsToOutput"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[($AssetGroupId+'/'+$StartTime+'_'+$EndTime+'/'+initCap($Operation)+'/'+initCap($Operation)+'commands*.txt')]) ~> Commands",
+            "source(output(",
+            "          Anid as string,",
+            "          Cid as long,",
+            "          Opid as string,",
+            "          Puid as long,",
+            "          DeviceId as string,",
+            "          BrowserId as string,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetFileName)]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (aadObjectId as string,",
+            "          aadHomeTenantId as string,",
+            "          aadResourceTenantId as string,",
+            "          msaPuid as long,",
+            "          msaCid as long,",
+            "          macOsPlatformDeviceId as string,",
+            "          edgeBrowserId as string,",
+            "          demographicEmailAddresses as string[]),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSubjectIdentifiers",
+            "SourceDataset, ParseSubjectIdentifiers exists(or(DeviceId == ParsedSubject.macOsPlatformDeviceId, or(BrowserId == ParsedSubject.edgeBrowserId, (Puid == ParsedSubject.msaPuid && Cid == ParsedSubject.msaCid))),",
+            "     negate:true,",
+            "     broadcast: 'auto')~> FilterOutRowsWithIdsMatch",
+            "FilterOutRowsWithIdsMatch select(mapColumn(",
+            "          Anid,",
+            "          Cid,",
+            "          Opid,",
+            "          Puid,",
+            "          DeviceId,",
+            "          BrowserId,",
+            "          Data",
+            "     ),",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> SelectRowsToOutput",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "SelectRowsToOutput sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     input(",
+            "          ObjectId as string,",
+            "          TenantId as string,",
+            "          Data as string",
+            "     ),",
+            "     partitionFileNames:[($AssetFileName)],",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true,",
+            "     partitionBy('hash', 1)) ~> AssetsAfterDeletion"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('factoryName'), '/ApplyExportDsrForMixedSubjectAssets')]",
+      "type": "Microsoft.DataFactory/factories/dataflows",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+          "sources": [
+            {
+              "dataset": {
+                "referenceName": "CommandsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "Commands"
+            },
+            {
+              "dataset": {
+                "referenceName": "Assets",
+                "type": "DatasetReference"
+              },
+              "name": "SourceDataset"
+            },
+            {
+              "dataset": {
+                "referenceName": "AssetGroupsDataset",
+                "type": "DatasetReference"
+              },
+              "name": "AssetGroupDetailsSource"
+            }
+          ],
+          "sinks": [
+            {
+              "dataset": {
+                "referenceName": "AssetsAfterExport",
+                "type": "DatasetReference"
+              },
+              "name": "AssetsExported"
+            }
+          ],
+          "transformations": [
+            {
+              "name": "ParseIdentifiers"
+            },
+            {
+              "name": "SelectAssetsWithMsaIdMatch"
+            },
+            {
+              "name": "SelectColumnsForOutput"
+            },
+            {
+              "name": "AddFileNameColumn"
+            },
+            {
+              "name": "SelectAssetsWithDeviceIdMatch"
+            },
+            {
+              "name": "SelectAssetsWithBrowserIdMatch"
+            },
+            {
+              "name": "UnionRowsForOutput"
+            },
+            {
+              "name": "FilterAssetGroupDetailRows"
+            },
+            {
+              "name": "ParseSignalTypes"
+            },
+            {
+              "name": "AddSignalIdsColumn"
+            },
+            {
+              "name": "FilterRelevantCommandIds"
+            }
+          ],
+          "scriptLines": [
+            "parameters{",
+            "     AssetFileName as string,",
+            "     AssetGroupId as string,",
+            "     StartTime as string,",
+            "     EndTime as string,",
+            "     Operation as string,",
+            "     ProductId as string",
+            "}",
+            "source(output(",
+            "          CommandId as string,",
+            "          OperationType as string,",
+            "          CommandCapability as string,",
+            "          CommandTypeId as string,",
+            "          CommandProperties as string,",
+            "          Timestamp as string,",
+            "          StartTimeRange as string,",
+            "          EndTimeRange as string,",
+            "          RowPredicate as string,",
+            "          Subject as string,",
+            "          Verifier as string,",
+            "          ProcessorApplicable as string,",
+            "          ControllerApplicable as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: true,",
+            "     wildcardPaths:[($AssetGroupId+'/'+$StartTime+'_'+ $EndTime+'/'+initCap($Operation)+'/'+initCap($Operation)+'Commands*.txt')]) ~> Commands",
+            "source(output(",
+            "          Anid as string,",
+            "          Cid as long,",
+            "          Opid as string,",
+            "          Puid as long,",
+            "          DeviceId as string,",
+            "          BrowserId as string,",
+            "          Data as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     inferDriftedColumnTypes: true,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetFileName)]) ~> SourceDataset",
+            "source(output(",
+            "          AssetGroupId as string,",
+            "          ResourceSetUri as string,",
+            "          Tags as string,",
+            "          ApplicableCommandTypes as string,",
+            "          PartitionUri as string",
+            "     ),",
+            "     allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     ignoreNoFilesFound: false,",
+            "     wildcardPaths:[($AssetGroupId+'/'+'AssetGroupDetails*.txt')]) ~> AssetGroupDetailsSource",
+            "FilterRelevantCommandIds parse(ParsedSubject = Subject ? (aadObjectId as string,",
+            "          aadHomeTenantId as string,",
+            "          aadResourceTenantId as string,",
+            "          msaPuid as long,",
+            "          msaCid as long,",
+            "          macOsPlatformDeviceId as string,",
+            "          edgeBrowserId as string,",
+            "          demographicEmailAddresses as string[]),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseIdentifiers",
+            "SourceDataset, ParseIdentifiers join(Puid == ParsedSubject.msaPuid",
+            "     && Cid == ParsedSubject.msaCid,",
+            "     joinType:'inner',",
+            "     broadcast: 'auto')~> SelectAssetsWithMsaIdMatch",
+            "UnionRowsForOutput select(mapColumn(",
+            "          Anid,",
+            "          Cid,",
+            "          Opid,",
+            "          Puid,",
+            "          DeviceId,",
+            "          BrowserId,",
+            "          Data,",
+            "          CommandId",
+            "     ),",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> SelectColumnsForOutput",
+            "SelectColumnsForOutput derive(CommandId = $AssetGroupId+'/'+replace($StartTime+'_'+$EndTime, ':', '')+'/'+CommandId+'/'+$ProductId+'/'+$AssetFileName) ~> AddFileNameColumn",
+            "SourceDataset, ParseIdentifiers join(DeviceId == ParsedSubject.macOsPlatformDeviceId,",
+            "     joinType:'inner',",
+            "     broadcast: 'auto')~> SelectAssetsWithDeviceIdMatch",
+            "SourceDataset, ParseIdentifiers join(BrowserId == ParsedSubject.edgeBrowserId,",
+            "     joinType:'inner',",
+            "     broadcast: 'auto')~> SelectAssetsWithBrowserIdMatch",
+            "SelectAssetsWithDeviceIdMatch, SelectAssetsWithMsaIdMatch, SelectAssetsWithBrowserIdMatch union(byName: true)~> UnionRowsForOutput",
+            "AssetGroupDetailsSource filter(equals(slice(split(PartitionUri, '/'), size(split(PartitionUri, '/')), 1)[1],$AssetFileName)) ~> FilterAssetGroupDetailRows",
+            "FilterAssetGroupDetailRows parse(SignalTypes = ApplicableCommandTypes ? (signalTypes as string,",
+            "          version as string),",
+            "     format: 'json',",
+            "     documentForm: 'singleDocument') ~> ParseSignalTypes",
+            "ParseSignalTypes derive(signalIds = split(rtrim(ltrim(replace(SignalTypes.signalTypes, '\"', ''),'['),']'), ',')) ~> AddSignalIdsColumn",
+            "Commands, AddSignalIdsColumn exists(in(signalIds, CommandTypeId),",
+            "     negate:false,",
+            "     broadcast: 'auto')~> FilterRelevantCommandIds",
+            "AddFileNameColumn sink(allowSchemaDrift: true,",
+            "     validateSchema: false,",
+            "     rowUrlColumn:'CommandId',",
+            "     skipDuplicateMapInputs: true,",
+            "     skipDuplicateMapOutputs: true) ~> AssetsExported"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat(variables('factoryId'), '/datasets/CommandsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/Assets')]",
+        "[concat(variables('factoryId'), '/datasets/AssetGroupsDataset')]",
+        "[concat(variables('factoryId'), '/datasets/AssetsAfterExport')]"
+      ]
+    }
+  ]
+}

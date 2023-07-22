@@ -1,0 +1,88 @@
+{
+  "OperationType": "Delete",
+  "Operation": "AccountClose",
+  "CommandTypeId": 3,
+  "PageId": 1,
+  "CommandProperties": [
+    {
+      "Property": "DataType",
+      "Values": [ "All" ]
+    },
+    {
+      "Property": "SubjectType",
+      "Values": [ "AADUser-Public" ]
+    }
+  ],
+  "Commands": [
+    {
+      "commandId": "7be023d8-19dd-4589-9513-230b9564c486",
+      "timeRangePredicate": null,
+      "verifier": "",
+      "rowPredicate": null,
+      "timestamp": "2022-03-16 13:10:17",
+      "subject": {
+        "aadObjectId": "5674b2a1-61ac-4c05-86c7-2b7d4843851c",
+        "aadResourceTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d",
+        "aadPuid": "1154012207270968108",
+        "aadTenantIdType": "Home",
+        "aadHomeTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d"
+      }
+    },
+    {
+      "commandId": "7be023d8-19dd-4589-9513-230b9564c486",
+      "timeRangePredicate": null,
+      "verifier": "",
+      "rowPredicate": null,
+      "timestamp": "2022-03-16 13:10:17",
+      "subject": {
+        "aadObjectId": "5674b2a1-61ac-4c05-86c7-2b7d4843851c",
+        "aadResourceTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d",
+        "aadPuid": "1154012207270968108",
+        "aadTenantIdType": "Home",
+        "aadHomeTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d"
+      }
+    },
+    {
+      "commandId": "7be023d8-19dd-4589-9513-230b9564c486",
+      "timeRangePredicate": null,
+      "verifier": "",
+      "rowPredicate": null,
+      "timestamp": "2022-03-16 13:10:17",
+      "subject": {
+        "aadObjectId": "5674b2a1-61ac-4c05-86c7-2b7d4843851c",
+        "aadResourceTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d",
+        "aadPuid": "1154012207270968108",
+        "aadTenantIdType": "Home",
+        "aadHomeTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d"
+      }
+    },
+    {
+      "commandId": "fe59f069-31f9-4ef2-8a55-bbbc0202d11d",
+      "timeRangePredicate": null,
+      "verifier": "",
+      "rowPredicate": null,
+      "timestamp": "2022-03-16 13:10:17",
+      "subject": {
+        "aadObjectId": "71c86771-9b5a-407a-ab51-8f1e5c562bed",
+        "aadResourceTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d",
+        "aadPuid": "1154012207270965231",
+        "aadTenantIdType": "Home",
+        "aadHomeTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d"
+      }
+    },
+    {
+      "commandId": "fe59f069-31f9-4ef2-8a55-bbbc0202d11d",
+      "timeRangePredicate": null,
+      "verifier": "",
+      "rowPredicate": null,
+      "timestamp": "2022-03-16 13:10:17",
+      "subject": {
+        "aadObjectId": "71c86771-9b5a-407a-ab51-8f1e5c562bed",
+        "aadResourceTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d",
+        "aadPuid": "1154012207270965231",
+        "aadTenantIdType": "Home",
+        "aadHomeTenantId": "a80aafff-2a2a-4099-8fd4-bcbe5bcaff6d"
+      }
+    }
+  ]
+}

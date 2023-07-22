@@ -1,0 +1,43 @@
+<mee-progress-view watch-operation="fetchAgentHealth">
+    <inert-view></inert-view>
+
+    <inprogress-view>
+        <pcd-default-progress-spinner></pcd-default-progress-spinner>
+    </inprogress-view>
+
+    <failed-view>
+        <p mee-paragraph data-use-cms>
+            Failed
+        </p>
+    </failed-view>
+
+    <finished-view>
+        <mee-alert ng-if="$ctrl.isAgentUnhealthy()" kind="use-glyph error">
+            <alert-content data-use-cms>
+                This agent is registered incorrectly and will not work properly with the NGP systems. Please refer to resources on the sidebar
+                for troubleshooting.
+            </alert-content>
+        </mee-alert>
+
+        <mee-pivot>
+            <mee-tab active="$ctrl.isFilterByAll()">
+                <mee-tab-title ng-click="$ctrl.filterViewHealth('all')" data-use-cms>
+                    Full report
+                </mee-tab-title>
+                <mee-tab-content>
+                </mee-tab-content>
+            </mee-tab>
+            <mee-tab active="$ctrl.isFilterByIssues()">
+                <mee-tab-title ng-click="$ctrl.filterViewHealth('issues')" data-use-cms>
+                    Issues
+                </mee-tab-title>
+                <mee-tab-content>
+                    <p ng-if="$ctrl.agentHealth.registrationStatus.isComplete" mee-paragraph data-use-cms>
+                        No issues found.
+                    </p>
+                </mee-tab-content>
+            </mee-tab>
+        </mee-pivot>
+        <pcd-view-agent-health agent-health="$ctrl.agentHealth" display-by-status="{{$ctrl.displayByStatus}}">
+    </finished-view>
+</mee-progress-view>

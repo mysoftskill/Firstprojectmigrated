@@ -1,0 +1,23 @@
+<mee-select data-required-field="true"
+            ng-model="$ctrl.privacySubjectPickerModel.selectedId"
+            menu-style="border">
+    <label data-use-cms>Identifier type</label>
+    <select>
+        <option ng-repeat="item in $ctrl.privacySubjectPickerModel.items"
+                value="{{item.id}}">{{item.label}}</option>
+    </select>
+</mee-select>
+
+<div>
+    <div ng-if="$ctrl.isMsaFormVisible()">
+        <pcd-privacy-subject-msa-identifier pcd-error-category="{{$ctrl.errorCategory}}"></pcd-privacy-subject-msa-identifier>
+    </div>
+
+    <div ng-if="$ctrl.isMicrosoftEmployeeFormVisible()">
+        <pcd-privacy-subject-microsoft-employee-identifier pcd-error-category="{{$ctrl.errorCategory}}"></pcd-privacy-subject-microsoft-employee-identifier>
+    </div>
+
+    <div ng-if="$ctrl.isDemographicFormVisible()">
+        <pcd-privacy-subject-demographic-identifier pcd-error-category="{{$ctrl.errorCategory}}"></pcd-privacy-subject-demographic-identifier>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+﻿@import "../../../styles/utilities/mixins.scss";
+
+pcd-agent-view {
+    display: block;
+
+    @include resource-view-attributes();
+}

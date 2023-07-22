@@ -1,0 +1,12 @@
+DataOwnersV2
+    | summarize arg_max(SQLizerStreamDateId, *) by DataOwnerId
+    | project 
+    DataOwnerId,
+    OwnerName = iff(isempty( OwnerName), "(Blank)", OwnerName),
+    DivisionName = iff(isempty( DivisionName), "(Blank)", DivisionName),
+    OrganizationName = iff(isempty( OrganizationName), "(Blank)", OrganizationName),
+    ServiceGroupName = iff(isempty( ServiceGroupName), "(Blank)", ServiceGroupName),
+    ServiceName = iff(isempty( ServiceName), "(Blank)", ServiceName),
+    TeamGroupName = iff(isempty( TeamGroupName), "(Blank)", TeamGroupName),
+    GCTag,
+    GCEmail

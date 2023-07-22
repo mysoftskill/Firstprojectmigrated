@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    "appPackageUrl"
+  ],
+  "parameters": {
+    "clusterName": {
+      "value": "pxsci2-testcluster"
+    },
+    "applicationTypeName": {
+      "value": "PxsPartnerMockAppType"
+    },
+    "applicationTypeVersion": {
+      "value": "__Version__"
+    },
+    "appPackageUrl": {
+      "value": "Bin\\PxsPartnerMockApp.sfpkg"
+    },
+    "applicationName": {
+      "value": "PxsPartnerMockApp"
+    },
+    "applicationParameters": {
+      "value": {
+        "EnvironmentName": "ci2",
+        "AzureServicesAuthConnectionString": "RunAs=App",
+        "Svc_PlacementConstraints": "(NodeTypeName==Frontdoor)"
+      }
+    }
+  }
+}

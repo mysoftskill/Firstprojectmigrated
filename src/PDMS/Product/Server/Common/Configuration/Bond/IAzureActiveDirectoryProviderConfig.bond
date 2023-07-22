@@ -1,0 +1,18 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct IAzureActiveDirectoryProviderConfig 
+{
+    1   :   required    bool            Enabled;
+    2   :   required    string          Tenant;
+    3   :   required    list<string>    ValidAudiences;
+    4   :   required    bool            EnableIntegrationTestOverrides;
+    5   :   required    string          IntegrationTestUserName;
+    6   :   required    list<string>    IntegrationTestSecurityGroups;
+    7   :   required    string          UAMISubscriptionId;
+    8   :   required    list<string>    ValidIssuers;
+    9   :   required    bool            EnableIssuerValidation;
+    10  :   optional    bool            TokenEncryptionEnabled = false;
+    12  :   optional    string          TokenEncryptionKeyName = null;
+    13  :   required    string          ClientId;
+    15  :   required    string          Instance;
+};

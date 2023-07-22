@@ -1,0 +1,153 @@
+﻿//Script GUID:7327b63c-fbbd-4559-8e1b-bdec2f560e8d
+//Used for tracking history
+
+// XFLOW Parameters
+// - General XFlow parameters:
+//      __vc                = @@__vc@@
+//      _startDate          = @@_startDate@@
+//      _endDate            = @@_endDate@@
+//      _scopePath          = @@_scopePath@@ ($(SCRIPT_DIR);$(CLUSTER_ROOT);$(SCOPE_DIR);$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov/Schema;$(CLUSTER_ROOT)/shares/asimov.prod.data/Public/Resources/Latest/Asimov)
+//
+// - Recurrent task XFlow paramters:
+//      _trackerFolder      = @@_trackerFolder@@
+//      _recurrence         = @@_recurrence@@
+//      _lookBehind         = @@_lookBehind@@
+//      _dependencyStreams  = @@_dependencyStreams@@  
+//      _useLittleDelta     = @@_useLittleDelta@@
+//      _dependencyCheckMissingAction = @@_dependencyCheckMissingAction@@
+//      _maxJobs            = @@_maxJobs@@
+//      _customProperties   = @@_customProperties@@
+//      _scheduleOrder      = @@_scheduleOrder@@
+//      _tokenAllocation    = @@_tokenAllocation@@
+//
+// - PCF parameters:
+//      pcfEnv              = @@pcfEnv@@ (PROD | vNext)
+//      cloudEnv            = @@cloudEnv@@ (Production | PPE)
+//      version             = @@version@@
+
+// Asimov References:
+MODULE "Asimov.Batch.vNext.module" AS Asimov;
+MODULE "/shares/PXSCosmos15.Prod/PXS.DeleteSignal.PROD/PrivacyAnnotation/PrivacyAnnotation.module";
+USING Privacy;
+
+// Variables
+#DECLARE startDate DateTime =IF("@@startDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@startDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+#DECLARE endDate DateTime = IF("@@endDate@@".StartsWith("@@"),DateTime.UtcNow.Date.AddHours(-5),DateTime.Parse("@@endDate@@", null, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime());
+
+#DECLARE environment string = IF("@@pcfEnv@@".StartsWith("@@"), "prod", "@@pcfEnv@@");
+#DECLARE version string = IF("@@version@@".StartsWith("@@"),"v1","@@version@@");
+#DECLARE cloud_env string = IF("@@cloudEnv@@".StartsWith("@@"), "Production", "@@cloudEnv@@");
+#DECLARE cloud_name string = IF("@@cloudName@@".StartsWith("@@"), "ADGCS","@@cloudName@@");
+
+// True if the script will consume local bits and views.
+#DECLARE localRun bool = IF("@@localRun@@".StartsWith("@@"), false, Boolean.Parse("@@localRun@@"));
+#DECLARE outputRootFolderName string = "FilterRouteComparison";
+#DECLARE outputPathFormat string = String.Format(@"/shares/asimov.prod.data/PublicPartner/Processed/PrivacyCommandFeed/{0}/{1}/{2}/%Y/%m/%d", @environment.ToLower(), @outputRootFolderName, @version.ToLower());
+#DECLARE outputFileFormat string = @"/{0}_%Y_%m_%d_%h.ss?date={1:yyyy-MM-dd}&hour={1:HH}";
+
+#DECLARE fullDifferenceOutput string = string.Concat(@outputPathFormat, string.Format(@outputFileFormat, "FullDifferences.ss", @startDate));
+#DECLARE simpleDifferenceOutput string = string.Concat(@outputPathFormat, string.Format(@outputFileFormat, "SimpleDifferences.ss", @startDate));
+#DECLARE statsOutput string = string.Concat(@outputPathFormat, string.Format(@outputFileFormat, "Stats.ss", @startDate));
+#DECLARE differenceSummary string = string.Concat(@outputPathFormat, string.Format(@outputFileFormat, "DifferenceSummary.ss", @startDate));
+#DECLARE streamExpiry string = "14";
+
+//output for test
+#IF (@localRun)
+    #SET fullDifferenceOutput = string.Concat("/my", string.Format(@outputFileFormat, "FullDifferences.ss", @startDate));
+    #SET simpleDifferenceOutput = string.Concat("/my", string.Format(@outputFileFormat, "SimpleDifferences.ss", @startDate));
+    #SET statsOutput = string.Concat("/my", string.Format(@outputFileFormat, "Stats.ss", @startDate));
+    #SET differenceSummary = string.Concat("/my", string.Format(@outputFileFormat, "DifferenceSummary.ss", @startDate));
+    #SET streamExpiry = "7";
+#ENDIF
+
+SllBaseQuery =
+    SELECT *
+    FROM Asimov.SllCloudR1 (isolation = "Osg", firstHour = @startDate, lastHour = @endDate)
+    WHERE cloud_name == @cloud_name
+    AND cloud_environment == @cloud_env;
+
+// Define JsonObjectProcessor for different SLL events
+allEvents = 
+    PROCESS SllBaseQuery
+    USING JsonObjectProcessor
+    (
+        "data",
+        "targetUri:TargetUri:string",
+        "CheckpointRequestLeaseReceipt:LeaseReceipt:string",
+        "SentToAgent:SentToAgent:string",
+        "ApplicabilityCode:ApplicabilityCode:string",
+        "VariantsApplied:VariantsApplied:string",
+        "DataTypes:DataTypes:string",
+        "SubjectType:SubjectType:string",
+        "CommandType:CommandType:string",
+        "IsWhatIfMode:IsWhatIfMode:string",
+        "CloudInstance:CloudInstance:string",
+        "SALVersion:SALVersion:string",
+        "PDMSVersion:PDMSVersion:string",
+        "AgentId:AgentId:string",
+        "AssetGroupId:AssetGroupId:string",
+        "CommandId:CommandId:string",
+        "LifecycleEventNames:LifecycleEventNames:string"
+    )
+    WHERE name == "Microsoft.PrivacyServices.CommandFeed.Service.Instrumentation.CommandFilteredEvent";
+
+[LOWDISTINCTNESS(AgentId,AssetGroupId,IsWhatIfMode,PDMSVersion,SALVersion)]
+allEvents = SELECT
+    AgentId,
+    AssetGroupId,
+    CommandId,
+    IsWhatIfMode.ToLower() AS IsWhatIfMode,
+    SALVersion,
+    PDMSVersion,
+    string.Format("SentToAgent={0},ApplicabilityCode={1},VariantsApplied={2},LifecycleEventNames={3}", SentToAgent, ApplicabilityCode, VariantsApplied, LifecycleEventNames) AS FullStatus,
+    string.Format("SentToAgent={0},VariantsApplied={1},LifecycleEventNames={2}", SentToAgent, VariantsApplied, LifecycleEventNames) AS SimpleStatus
+FROM allEvents;
+
+allEvents = SELECT DISTINCT * FROM allEvents;
+normalEvents = SELECT * FROM allEvents WHERE IsWhatIfMode != "true";
+whatIfEvents = SELECT * FROM allEvents WHERE IsWhatIfMode == "true";
+
+joinResult = 
+    SELECT 
+        left.AgentId AS AgentId,
+        left.AssetGroupId AS AssetGroupId,
+        left.CommandId AS CommandId,
+        left.PDMSVersion AS PDMSVersion,
+        left.SALVersion AS BaselineSAL,
+        right.SALVersion AS WhatIfSAL,
+        left.FullStatus AS BaselineStatus,
+        right.FullStatus AS WhatIfStatus,
+        left.FullStatus == right.FullStatus AS FullMatch,
+        left.SimpleStatus == right.SimpleStatus AS SimpleMatch
+    FROM normalEvents AS left
+         INNER JOIN
+             whatIfEvents AS right
+         ON
+         left.AgentId == right.AgentId &&
+         left.AssetGroupId == right.AssetGroupId &&
+         left.CommandId == right.CommandId &&
+         left.PDMSVersion == right.PDMSVersion;
+
+stats = SELECT FullMatch, SimpleMatch, COUNT(*) AS Count FROM joinResult;
+
+simpleDifferences = SELECT * FROM joinResult WHERE SimpleMatch == false;
+fullDifferences = SELECT * FROM joinResult WHERE FullMatch == false;
+
+differenceSummary = SELECT BaselineStatus, WhatIfStatus, COUNT(*) AS Count FROM fullDifferences;
+
+// OUTPUT
+[Privacy.Asset.NonPersonal]
+OUTPUT stats TO SSTREAM @statsOutput 
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT simpleDifferences TO SSTREAM @simpleDifferenceOutput
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT fullDifferences TO SSTREAM @fullDifferenceOutput 
+WITH STREAMEXPIRY @streamExpiry;
+
+[Privacy.Asset.NonPersonal]
+OUTPUT differenceSummary TO SSTREAM @differenceSummary 
+WITH STREAMEXPIRY @streamExpiry;

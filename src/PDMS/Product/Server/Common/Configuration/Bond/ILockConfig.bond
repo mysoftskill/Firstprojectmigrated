@@ -1,0 +1,8 @@
+﻿namespace Microsoft.PrivacyServices.DataManagement.Common.Configuration
+
+struct ILockConfig
+{
+    1   :   required    bool            EnableChangeFeedReaderLock;
+    4   :   required    bool            EnableDataOwnerWorkerLock;
+    9   :   required    bool            EnableServiceTreeMetadataWorkerLock;
+};

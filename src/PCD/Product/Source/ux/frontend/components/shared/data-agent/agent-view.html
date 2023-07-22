@@ -1,0 +1,54 @@
+<div ng-if="$ctrl.agent" data-grid="col-12">
+    <h2 mee-heading="subheading2" ng-hide="$ctrl.hideTitle">{{$ctrl.agent.name}}</h2>
+
+    <div data-grid="col-6">
+        <div>
+            <label mee-label data-use-cms>ID</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>
+                <span>{{$ctrl.agent.id}}</span>
+                <pcd-permalink pcd-url="{{$ctrl.getViewLink()}}"></pcd-permalink>
+            </p>
+        </div>
+
+        <div ng-if="$ctrl.agent.icmConnectorId">
+            <div>
+                <label mee-label data-use-cms>IcM connector ID</label>
+            </div>
+            <div class="resource-view-attributes">
+                <p mee-paragraph>{{$ctrl.agent.icmConnectorId}}</p>
+            </div>
+        </div>
+
+        <div>
+            <label mee-label data-use-cms>Description</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph ng-repeat="line in $ctrl.description track by $index">{{line}}</p>
+        </div>
+    </div>
+
+    <div data-grid="col-3">
+
+        <div>
+            <label mee-label data-use-cms>Deployment location</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>{{$ctrl.agent.deploymentLocation}}</p>
+        </div>
+
+        <pcd-directory-resource-view data-use-cms
+                                     ng-model="$ctrl.agent.supportedClouds"
+                                     type="named-resource"
+                                     resource-label="Supported clouds"></pcd-directory-resource-view>
+    </div>
+    <div data-grid="col-3">
+        <div>
+            <label mee-label data-use-cms>Agent Residency</label>
+        </div>
+        <div class="resource-view-attributes">
+            <p mee-paragraph>{{$ctrl.agent.dataResidencyBoundary}}</p>
+        </div>
+    </div>
+</div>
