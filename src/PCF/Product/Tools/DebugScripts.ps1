@@ -20,6 +20,9 @@ function SelfServeReplayByCommandIds
         Write-Output "Elapsed: $($sw.Elapsed.ToString())"
 
         return "SelfServeReplay requested"
+
+
+
     }
 
     $parsedResponse = ConvertFrom-Json $response.Content
