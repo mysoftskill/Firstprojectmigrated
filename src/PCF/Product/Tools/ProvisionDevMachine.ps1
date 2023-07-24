@@ -17,6 +17,11 @@ function SetCertificatePermissionsForNetworkService
 {
     param($cert)
 
+
+
+
+
+
     try
     {
         $keyName  = (($cert.PrivateKey).CspKeyContainerInfo).UniqueKeyContainerName
