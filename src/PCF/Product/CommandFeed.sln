@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33516.290
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33801.447
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{52926C2F-B072-4047-8461-376822DF0CC2}"
 EndProject
@@ -66,6 +66,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B5B42DDB-8165-476E-ABA1-E28F3C3704A8}"
 	ProjectSection(SolutionItems) = preProject
 		Tools\DebugScripts.ps1 = Tools\DebugScripts.ps1
+		Tools\DebugScripts_added.ps1 = Tools\DebugScripts_added.ps1
 		Tools\ProvisionDevMachine.ps1 = Tools\ProvisionDevMachine.ps1
 		Tools\Request-AssetGroupQualifierReplayFromTsv.ps1 = Tools\Request-AssetGroupQualifierReplayFromTsv.ps1
 		Tools\RunAllTestsWithCoverage.ps1 = Tools\RunAllTestsWithCoverage.ps1
